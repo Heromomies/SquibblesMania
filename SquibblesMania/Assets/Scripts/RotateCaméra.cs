@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using DG.Tweening;
 using UnityEngine;
 
 public class RotateCaméra : MonoBehaviour
@@ -10,7 +11,7 @@ public class RotateCaméra : MonoBehaviour
 
     public float rotationAmount = 90f;
 
-    //public float damping = 2f;
+    public float rotateTime = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,10 +28,12 @@ public class RotateCaméra : MonoBehaviour
         canRotate = true;
         if (canRotate)
         {
+            anchorPoint.transform.DORotate(new Vector3(0, anchorPoint.transform.eulerAngles.y + rotationAmount, 0),
+                rotateTime);
             canRotate = false;
-            anchorPoint.localEulerAngles = new Vector3(0, anchorPoint.localEulerAngles.y + rotationAmount, 0);
         }
     }
+
 
     public void RotateCamLeftOnstarted()
     {
@@ -38,7 +41,10 @@ public class RotateCaméra : MonoBehaviour
         if (canRotate)
         {
             canRotate = false;
-            anchorPoint.localEulerAngles = new Vector3(0, anchorPoint.localEulerAngles.y - rotationAmount, 0);
+
+            anchorPoint.transform.DORotate(new Vector3(0, anchorPoint.transform.eulerAngles.y - rotationAmount, 0),
+                rotateTime);
+            canRotate = false;
         }
     }
 }
