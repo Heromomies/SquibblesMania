@@ -6,12 +6,10 @@ using UnityEngine;
 
 public class RotateCaméra : MonoBehaviour
 {
-    public bool canRotate;
-    public Transform anchorPoint;
-
-    public float rotationAmount = 90f;
-
-    public float rotateTime = 0.5f;
+    [SerializeField] private bool canRotate;
+    [SerializeField] private Transform anchorPoint;
+    [SerializeField] private float rotationAmount = 90f;
+    [SerializeField] private float rotateTime = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +21,7 @@ public class RotateCaméra : MonoBehaviour
     {
     }
 
-    public void RotateCamRightOncanceled()
+    public void RotateCamRight()
     {
         canRotate = true;
         if (canRotate)
@@ -35,7 +33,7 @@ public class RotateCaméra : MonoBehaviour
     }
 
 
-    public void RotateCamLeftOnstarted()
+    public void RotateCamLeft()
     {
         canRotate = true;
         if (canRotate)
