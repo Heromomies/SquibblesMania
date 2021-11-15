@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using DigitalRubyShared;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -15,7 +19,14 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Transform ground;
 
     [SerializeField] private Material[] cubeMaterials;
+   
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        FingersScript.Instance.ShowTouches = false;
+    }
+
     void Start()
     {
         GenerateMap();
@@ -24,6 +35,7 @@ public class MapGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
     }
 
     public void GenerateMap()
@@ -46,10 +58,10 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < mapSize.y; y++)
             {
-                Vector3 cubePosition = new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y) * cubeSize;
-                Transform cube = Instantiate(cubePrefab, cubePosition, cubePrefab.rotation);
+                Transform cube = Instantiate(cubePrefab);
+
                 cube.localScale = GetRandomScale(cube);
-                
+                cube.position = new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y) + Vector3.up * cube.localScale.y/2;
                 int randomMaterial = Random.Range(0, 3 + 1);
                 cube.GetComponent<Renderer>().material = GetRandomMaterial(randomMaterial);
               
@@ -69,4 +81,5 @@ public class MapGenerator : MonoBehaviour
     {
         return cubeMaterials[numberRandom];
     }
+   
 }

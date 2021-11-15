@@ -329,6 +329,7 @@ namespace DigitalRubyShared
                 Quaternion currentRotation = Orbiter.transform.rotation;
                 Orbiter.transform.rotation = Quaternion.Lerp(currentRotation, lookAtRotation, ZoomLookAtSpeed * Time.deltaTime);
             }
+           
             Orbiter.transform.position += (Orbiter.transform.forward * zoomSpeed * Time.deltaTime);
         }
 
