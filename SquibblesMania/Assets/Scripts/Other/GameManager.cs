@@ -26,4 +26,12 @@ public class GameManager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
     }
+    
+    public List<string> userId = new List<string>();
+
+    private void Start()
+    {
+        Debug.Log("UserId=" + PhotonNetwork.AuthValues.UserId);
+        userId.Add(PhotonNetwork.AuthValues.UserId);
+    }
 }
