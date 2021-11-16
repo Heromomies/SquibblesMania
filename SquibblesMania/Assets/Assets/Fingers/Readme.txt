@@ -189,7 +189,7 @@ A: In Player Settings > Other Settings > Turn on Prebake Collision Meshes. Turn 
 
 Q: Help / I'm lost!?!?
 A: I'm available to answer your questions or feedback at support@digitalruby.com
-
+0
 Thank you.
 
 - Jeff Johnson, creator of Fingers - Gestures for Unity

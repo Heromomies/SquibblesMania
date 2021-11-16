@@ -35,37 +35,38 @@ namespace DigitalRubyShared
         public BoxCollider ClampBounds;
 
         /// <summary>The minimium distance to move to the orbit target, 0 for no minimum.</summary>
-        [Tooltip("The minimium distance to move to the orbit target, 0 for no minimum.")]
-        [Range(0.1f, 100.0f)]
+        [Tooltip("The minimium distance to move to the orbit target, 0 for no minimum.")] [Range(0.1f, 100.0f)]
         public float MinimumDistance = 5.0f;
 
         /// <summary>The maximum distance to move away from the orbit target, 0 for no maximum.</summary>
-        [Tooltip("The maximum distance to move away from the orbit target, 0 for no maximum.")]
-        [Range(0.1f, 1000.0f)]
+        [Tooltip("The maximum distance to move away from the orbit target, 0 for no maximum.")] [Range(0.1f, 1000.0f)]
         public float MaximumDistance = 1000.0f;
 
         /// <summary>The zoom speed</summary>
-        [Tooltip("The zoom speed")]
-        [Range(0.01f, 100.0f)]
+        [Tooltip("The zoom speed")] [Range(0.01f, 100.0f)]
         public float ZoomSpeed = 20.0f;
 
         /// <summary>The speed at which the orbiter looks at the orbit target is it has panned away from looking direclty at the orbit target.</summary>
-        [Tooltip("The speed at which the orbiter looks at the orbit target is it has panned away from looking direclty at the orbit target.")]
+        [Tooltip(
+            "The speed at which the orbiter looks at the orbit target is it has panned away from looking direclty at the orbit target.")]
         [Range(0.0f, 10.0f)]
         public float ZoomLookAtSpeed = 1.0f;
 
         /// <summary>The threshold in units before zooming begins to happen. Start distance must change this much in order to start the gesture.</summary>
-        [Tooltip("The threshold in units before zooming begins to happen. Start distance must change this much in order to start the gesture.")]
+        [Tooltip(
+            "The threshold in units before zooming begins to happen. Start distance must change this much in order to start the gesture.")]
         [Range(0.0f, 3.0f)]
         public float ZoomThresholdUnits = 0.15f;
 
         /// <summary>The speed (degrees per second) at which to orbit using x delta pan gesture values. Negative or positive values will cause orbit in the opposite direction.</summary>
-        [Tooltip("The speed (degrees per second) at which to orbit using x delta pan gesture values. Negative or positive values will cause orbit in the opposite direction.")]
+        [Tooltip(
+            "The speed (degrees per second) at which to orbit using x delta pan gesture values. Negative or positive values will cause orbit in the opposite direction.")]
         [Range(-100.0f, 100.0f)]
         public float OrbitXSpeed = -30.0f;
 
         /// <summary>The maximum degrees to orbit on the x axis from the starting x rotation. 0 for no limit. Set OrbitXSpeed to 0 to disable x orbit.</summary>
-        [Tooltip("The maximum degrees to orbit on the x axis from the starting x rotation. 0 for no limit. Set OrbitXSpeed to 0 to disable x orbit.")]
+        [Tooltip(
+            "The maximum degrees to orbit on the x axis from the starting x rotation. 0 for no limit. Set OrbitXSpeed to 0 to disable x orbit.")]
         [Range(0.0f, 360.0f)]
         public float OrbitXMaxDegrees = 0.0f;
 
@@ -74,22 +75,22 @@ namespace DigitalRubyShared
         public PanOrbitMovementType XAxisMovementType = PanOrbitMovementType.Orbit;
 
         /// <summary>Speed if OrbitXPan is true</summary>
-        [Tooltip("Speed if OrbitXPan is true")]
-        [Range(-10.0f, 10.0f)]
+        [Tooltip("Speed if OrbitXPan is true")] [Range(-10.0f, 10.0f)]
         public float OrbitXPanSpeed = 1.0f;
 
         /// <summary>Set a movement limit from orbit target if OrbitXPan is true. 0 for no limit.</summary>
-        [Tooltip("Set a movement limit from orbit target if OrbitXPan is true. 0 for no limit.")]
-        [Range(0.0f, 1000.0f)]
+        [Tooltip("Set a movement limit from orbit target if OrbitXPan is true. 0 for no limit.")] [Range(0.0f, 1000.0f)]
         public float OrbitXPanLimit = 100.0f;
 
         /// <summary>The speed (degrees per second) at which to orbit using y delta pan gesture values. Negative or positive values will cause orbit in the opposite direction.</summary>
-        [Tooltip("The speed (degrees per second) at which to orbit using y delta pan gesture values. Negative or positive values will cause orbit in the opposite direction.")]
+        [Tooltip(
+            "The speed (degrees per second) at which to orbit using y delta pan gesture values. Negative or positive values will cause orbit in the opposite direction.")]
         [Range(-100.0f, 100.0f)]
         public float OrbitYSpeed = -30.0f;
 
         /// <summary>The maximum degrees to orbit on the y axis from the starting y rotation. 0 for no limit. Set OrbitYSpeed to 0 to disable y orbit.</summary>
-        [Tooltip("The maximum degrees to orbit on the y axis from the starting y rotation. 0 for no limit. Set OrbitYSpeed to 0 to disable y orbit.")]
+        [Tooltip(
+            "The maximum degrees to orbit on the y axis from the starting y rotation. 0 for no limit. Set OrbitYSpeed to 0 to disable y orbit.")]
         [Range(0.0f, 360.0f)]
         public float OrbitYMaxDegrees = 0.0f;
 
@@ -98,36 +99,40 @@ namespace DigitalRubyShared
         public PanOrbitMovementType YAxisMovementType = PanOrbitMovementType.Orbit;
 
         /// <summary>Speed if OrbitYPan is true.</summary>
-        [Tooltip("Speed if OrbitYPan is true.")]
-        [Range(-10.0f, 10.0f)]
+        [Tooltip("Speed if OrbitYPan is true.")] [Range(-10.0f, 10.0f)]
         public float OrbitYPanSpeed = 1.0f;
 
         /// <summary>Set a movement limit from orbit target if OrbitYPan is true. 0 for no limit.</summary>
-        [Tooltip("Set a movement limit from orbit target if OrbitYPan is true. 0 for no limit.")]
-        [Range(0.0f, 1000.0f)]
+        [Tooltip("Set a movement limit from orbit target if OrbitYPan is true. 0 for no limit.")] [Range(0.0f, 1000.0f)]
         public float OrbitYPanLimit = 100.0f;
 
         /// <summary>Whether to allow orbit while zooming.</summary>
         [Tooltip("Whether to allow orbit while zooming.")]
         public bool AllowOrbitWhileZooming = true;
+
         private bool allowOrbitWhileZooming;
 
         /// <summary>Whether to allow orbit and/or pan on both axis at the same time or to only pick the axis with the greatest movement.</summary>
-        [Tooltip("Whether to allow orbit and/or pan on both axis at the same time or to only pick the axis with the greatest movement.")]
+        [Tooltip(
+            "Whether to allow orbit and/or pan on both axis at the same time or to only pick the axis with the greatest movement.")]
         public bool AllowMovementOnBothAxisSimultaneously = true;
+
         private int lockedAxis = 0; // 0 = none, 1 = x, 2 = y
 
         /// <summary>How much the velocity of the orbit will cause additional orbit after the gesture stops. 1 for no inertia (orbits forever) or 0 for immediate stop.</summary>
-        [Tooltip("How much the velocity of the orbit will cause additional orbit after the gesture stops. 1 for no inertia (orbits forever) or 0 for immediate stop.")]
+        [Tooltip(
+            "How much the velocity of the orbit will cause additional orbit after the gesture stops. 1 for no inertia (orbits forever) or 0 for immediate stop.")]
         [Range(0.0f, 1.0f)]
         public float OrbitInertia = 0.925f;
 
         /// <summary>The max size for the orbit or pan. An x,y or z value larget than this away from orbit target will be clamped in. Set to 0 for no limit.</summary>
-        [Tooltip("The max size for the orbit or pan. An x,y or z value larget than this away from orbit target will be clamped in. Set to 0 for no limit.")]
+        [Tooltip(
+            "The max size for the orbit or pan. An x,y or z value larget than this away from orbit target will be clamped in. Set to 0 for no limit.")]
         public Vector3 OrbitMaximumSize;
 
         /// <summary>Whether the pan and rotate orbit gestures must start on the orbit target to orbit. The tap gesture always requires that it be on the orbit target.</summary>
-        [Tooltip("Whether the pan and rotate orbit gestures must start on the orbit target to orbit. The tap gesture always requires that it be on the orbit target.")]
+        [Tooltip(
+            "Whether the pan and rotate orbit gestures must start on the orbit target to orbit. The tap gesture always requires that it be on the orbit target.")]
         public bool RequireOrbitGesturesToStartOnTarget;
 
         /// <summary>
@@ -234,6 +239,7 @@ namespace DigitalRubyShared
                     ScaleGesture.DisallowSimultaneousExecution(PanGesture);
                 }
             }
+
             Vector3 startPos = Orbiter.transform.position;
             UpdateOrbit(panVelocity.x, panVelocity.y);
             UpdateZoom();
@@ -249,7 +255,8 @@ namespace DigitalRubyShared
             }
         }
 
-        private bool IntersectRaySphere(Vector3 rayOrigin, Vector3 rayDir, Vector3 sphereCenter, float sphereRadius, out float distanceToSphere, out Vector3 intersectPos)
+        private bool IntersectRaySphere(Vector3 rayOrigin, Vector3 rayDir, Vector3 sphereCenter, float sphereRadius,
+            out float distanceToSphere, out Vector3 intersectPos)
         {
             Vector3 m = rayOrigin - sphereCenter;
             float b = Vector3.Dot(m, rayDir);
@@ -262,6 +269,7 @@ namespace DigitalRubyShared
                 intersectPos = Vector3.zero;
                 return false;
             }
+
             float discr = (b * b) - c;
 
             // A negative discriminant corresponds to ray missing sphere 
@@ -293,11 +301,13 @@ namespace DigitalRubyShared
                 float distanceToSphere;
 
                 // check if moved through min distance sphere, if so put back to start
-                if (MinimumDistance > 0.0f && IntersectRaySphere(startPos, (orbitPos - startPos).normalized, targetPos, MinimumDistance, out distanceToSphere, out intersectPos) &&
+                if (MinimumDistance > 0.0f && IntersectRaySphere(startPos, (orbitPos - startPos).normalized, targetPos,
+                        MinimumDistance, out distanceToSphere, out intersectPos) &&
                     distanceToSphere <= 0.0f)
                 {
                     // position orbiter at sphere intersection point plus a tiny bit extra
-                    Orbiter.transform.position = targetPos + (dirFromTarget * (MinimumDistance * (1.0f + Mathf.Epsilon)));
+                    Orbiter.transform.position =
+                        targetPos + (dirFromTarget * (MinimumDistance * (1.0f + Mathf.Epsilon)));
                     panVelocity = Vector3.zero;
                     zoomSpeed = 0.0f;
                 }
@@ -327,9 +337,11 @@ namespace DigitalRubyShared
                 Vector3 lookAtDir = (OrbitTarget.transform.position - Orbiter.transform.position).normalized;
                 Quaternion lookAtRotation = Quaternion.LookRotation(lookAtDir, Orbiter.transform.up);
                 Quaternion currentRotation = Orbiter.transform.rotation;
-                Orbiter.transform.rotation = Quaternion.Lerp(currentRotation, lookAtRotation, ZoomLookAtSpeed * Time.deltaTime);
+                Orbiter.transform.rotation =
+                    Quaternion.Lerp(currentRotation, lookAtRotation, ZoomLookAtSpeed * Time.deltaTime);
             }
-           
+
+            Debug.Log("Hello world");
             Orbiter.transform.position += (Orbiter.transform.forward * zoomSpeed * Time.deltaTime);
         }
 
@@ -352,7 +364,9 @@ namespace DigitalRubyShared
             // orbit the target in either direction depending on pan gesture delta x and y
             if (OrbitXSpeed != 0.0f && yVelocity != 0.0f)
             {
-                if (YAxisMovementType == PanOrbitMovementType.Pan || (YAxisMovementType == PanOrbitMovementType.OrbitWithTwoFingerPan && PanGesture.CurrentTrackedTouches.Count > 1))
+                if (YAxisMovementType == PanOrbitMovementType.Pan ||
+                    (YAxisMovementType == PanOrbitMovementType.OrbitWithTwoFingerPan &&
+                     PanGesture.CurrentTrackedTouches.Count > 1))
                 {
                     PerformPan(new Vector3(0.0f, yVelocity * (OrbitYPanSpeed) * Time.deltaTime, 0.0f), OrbitYPanLimit);
                 }
@@ -371,13 +385,17 @@ namespace DigitalRubyShared
                             addAngle = -OrbitXMaxDegrees - xDegrees;
                         }
                     }
+
                     xDegrees += addAngle;
                     Orbiter.RotateAround(OrbitTarget.transform.position, Orbiter.transform.right, addAngle);
                 }
             }
+
             if (OrbitYSpeed != 0.0f && xVelocity != 0.0f)
             {
-                if (XAxisMovementType == PanOrbitMovementType.Pan || (XAxisMovementType == PanOrbitMovementType.OrbitWithTwoFingerPan && PanGesture.CurrentTrackedTouches.Count > 1))
+                if (XAxisMovementType == PanOrbitMovementType.Pan ||
+                    (XAxisMovementType == PanOrbitMovementType.OrbitWithTwoFingerPan &&
+                     PanGesture.CurrentTrackedTouches.Count > 1))
                 {
                     PerformPan(new Vector3(xVelocity * (OrbitXPanSpeed) * Time.deltaTime, 0.0f, 0.0f), OrbitXPanLimit);
                 }
@@ -396,6 +414,7 @@ namespace DigitalRubyShared
                             addAngle = -OrbitYMaxDegrees - yDegrees;
                         }
                     }
+
                     yDegrees += addAngle;
                     Orbiter.RotateAround(OrbitTarget.transform.position, Vector3.up, addAngle);
                 }
@@ -428,6 +447,7 @@ namespace DigitalRubyShared
                         {
                             panVelocity.x = 0.0f;
                         }
+
                         if (OrbitYSpeed == 0.0f)
                         {
                             panVelocity.y = 0.0f;
@@ -438,6 +458,7 @@ namespace DigitalRubyShared
                 {
                     panVelocity = Vector2.zero;
                 }
+
                 return;
             }
             else
@@ -487,6 +508,7 @@ namespace DigitalRubyShared
                 xVelocity = 0.0f;
                 return true;
             }
+
             return false;
         }
     }
