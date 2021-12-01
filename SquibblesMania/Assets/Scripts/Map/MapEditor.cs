@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MapGenerator))]
-public class MapEditor : Editor
+
+/*public class MapEditor : Editor
 {
     public override void OnInspectorGUI()
     {
@@ -23,4 +23,4 @@ public class MapEditor : Editor
 
       
     }
-}
+}*/

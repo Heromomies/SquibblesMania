@@ -82,7 +82,7 @@ public class TouchManager : MonoBehaviour
                     platform = result.gameObject.transform;
                     
                     _platformBaseColor = platform.gameObject.GetComponent<Renderer>().material.color;
-                    platform.gameObject.GetComponent<Renderer>().material.color = Color.white;
+                    result.gameObject.GetComponent<Renderer>().material.color = Color.white;
                     foreach (GameObject gameObject in uiButtonScale)
                     {
                         gameObject.SetActive(true);

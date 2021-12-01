@@ -2,71 +2,38 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class Player : MonoBehaviour
 {
-  //  private PlayerInputsActions _playerInputsActions;
-
-
-//    [SerializeField] private CinemachineVirtualCamera[] cinemachineVirtualCameraPlayers;
-
-    public bool isChangedCam;
-
-    public int indexChangeCam;
-   
-
-    // Start is called before the first frame update
+    [SerializeField] private TextMeshProUGUI actionPointPlayerText;
+    [SerializeField] private int randomCardNumber;
     void Awake()
     {
-    
-     
     }
 
-   
-
- /*   private void RotateCaméraOnstarted(InputAction.CallbackContext context)
-    {
-        isChangedCam = context.ReadValueAsButton();
-    }*/
 
     // Update is called once per frame
     void Update()
     {
-        //ChangeViewCam();
-    }
-
-/*    public void ChangeViewCam()
-    {
-        if (isChangedCam)
+        if (randomCardNumber > 0)
         {
-            isChangedCam = false;
-
-            foreach (CinemachineVirtualCamera camera in cinemachineVirtualCameraPlayers)
-            {
-                camera.Priority = 0;
-            }
-
-            int changeCamPlayerIndex = indexChangeCam;
-            cinemachineVirtualCameraPlayers[changeCamPlayerIndex].Priority = 1;
-
-            indexChangeCam++;
-
-            if (indexChangeCam > cinemachineVirtualCameraPlayers.Length - 1)
-            {
-                indexChangeCam = 0;
-            }
+            Transform playerNextPos =  MapGenerator.Instance.GetPlatformFromPosition(new Vector3(randomCardNumber, 1, randomCardNumber));
+            transform.DOMove(playerNextPos.position, 0.5f);
         }
+      
+
     }
 
-    private void OnEnable()
+    public void RandomCardUse()
     {
-        _playerInputsActions.Enable();
+        //On choisit un nombre aléatoire pour les points d'action
+        randomCardNumber = Random.Range(1, 5+1);
+        actionPointPlayerText.text = randomCardNumber.ToString("0");
+        
     }
-
-    private void OnDisable()
-    {
-        _playerInputsActions.Disable();
-    }*/
 }
