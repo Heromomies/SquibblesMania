@@ -15,7 +15,9 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private Transform platform;
     [SerializeField] private GameObject[] uiButtonScale;
 
-    private Color _platformBaseColor;   
+    private Color _platformBaseColor;
+
+    private Vector3 startpos;
     
     private void OnEnable()
     {
@@ -72,9 +74,31 @@ public class TouchManager : MonoBehaviour
             raycast.Clear();
             EventSystem.current.RaycastAll(p, raycast);
 
-            foreach (RaycastResult result in raycast)
+            var ray = Camera.main.ScreenPointToRay(p.position);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                
+                Debug.DrawLine(ray.origin, hit.point, Color.red, 3);
+                if (hit.transform.gameObject.CompareTag("Platform"))
+                {
+                    //On reset la platform précédente
+                    ResetPreviewPlatform();
+                    platform = hit.transform.gameObject.transform;
+                    
+                    _platformBaseColor = platform.gameObject.GetComponent<Renderer>().material.color;
+                    hit.transform.gameObject.GetComponent<Renderer>().material.color = Color.white;
+                    foreach (GameObject gameObject in uiButtonScale)
+                    {
+                        gameObject.SetActive(true);
+                    }
+                    
+                }
+            }
+
+            /*foreach (RaycastResult result in raycast)
+            {
+                startpos = result.screenPosition;
+                Debug.DrawLine(result.screenPosition, result.worldPosition, Color.red, 3);
                 if (result.gameObject.CompareTag("Platform"))
                 {
                     //On reset la platform précédente
@@ -90,7 +114,7 @@ public class TouchManager : MonoBehaviour
                     
                 }
               
-            }
+            }*/
 
             if (platform == null)
             {
@@ -136,5 +160,11 @@ public class TouchManager : MonoBehaviour
         
         ResetPreviewPlatform();
         platform = null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(startpos, 0.3f);
     }
 }
