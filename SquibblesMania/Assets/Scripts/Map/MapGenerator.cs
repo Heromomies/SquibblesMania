@@ -82,12 +82,12 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        for (int i = 0; i <= numberOfMeteorite; i++)
+        /*for (int i = 1; i <= numberOfMeteorite; i++)
         {
-            Debug.Log($"Je passe ici {i} fois");
             int placeOfCube = Random.Range(placeOfMeteoriteX, placeOfMeteoriteY);
             RandomEvent(placeOfCube);
-        }
+        }*/
+        CompactEvent();
     }
 
     public void RandomEvent(int i)
@@ -99,7 +99,14 @@ public class MapGenerator : MonoBehaviour
             Debug.Log("This block was already black");
         }
     }
-    
+
+    public void CompactEvent()
+    {
+        for (int i = 1; i <= numberOfMeteorite; i++)
+        {
+            cubeOnMap[i].GetComponent<Renderer>().material.color = Color.black;
+        }
+    }
     Vector3Int GetRandomScale(Transform gameObj)
     {
         return new Vector3Int((int)gameObj.localScale.x, Random.Range(minYScale, maxYScale + 1),
