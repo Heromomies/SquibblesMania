@@ -20,6 +20,13 @@ public class MapGenerator : MonoBehaviour
 
     [SerializeField] private Material[] cubeMaterials;
 
+    [Header("EVENT")]
+    public List<GameObject> cubeOnMap;
+
+    [SerializeField] private int numberOfMeteorite;
+    [SerializeField] private int placeOfMeteoriteX;
+    [SerializeField] private int placeOfMeteoriteY;
+
     private static MapGenerator mapGenerator;
 
     public static MapGenerator Instance => mapGenerator;
@@ -62,6 +69,8 @@ public class MapGenerator : MonoBehaviour
             for (int y = 0; y < mapSize.y; y++)
             {
                 Transform cube = Instantiate(cubePrefab);
+                
+                cubeOnMap.Add(cube.gameObject);
 
                 cube.localScale = GetRandomScale(cube);
                 cube.position = new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y) +
@@ -72,8 +81,25 @@ public class MapGenerator : MonoBehaviour
                 cube.parent = mapHolder;
             }
         }
+
+        for (int i = 0; i <= numberOfMeteorite; i++)
+        {
+            Debug.Log($"Je passe ici {i} fois");
+            int placeOfCube = Random.Range(placeOfMeteoriteX, placeOfMeteoriteY);
+            RandomEvent(placeOfCube);
+        }
     }
 
+    public void RandomEvent(int i)
+    {
+        if(cubeOnMap[i].GetComponent<Renderer>().material.color != Color.black)
+            cubeOnMap[i].GetComponent<Renderer>().material.color = Color.black;
+        else
+        {
+            Debug.Log("This block was already black");
+        }
+    }
+    
     Vector3Int GetRandomScale(Transform gameObj)
     {
         return new Vector3Int((int)gameObj.localScale.x, Random.Range(minYScale, maxYScale + 1),
