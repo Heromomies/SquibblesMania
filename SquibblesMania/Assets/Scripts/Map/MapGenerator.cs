@@ -102,9 +102,13 @@ public class MapGenerator : MonoBehaviour
 
     public void CompactEvent()
     {
-        for (int i = 1; i <= numberOfMeteorite; i++)
+        int heightOfMap = (mapSize.x * mapSize.y) / 10;
+        int cubeToChange = Random.Range(0, placeOfMeteoriteY - 20);
+
+        for (int i = 1; i <= numberOfMeteorite -1; i++)
         {
-            cubeOnMap[i].GetComponent<Renderer>().material.color = Color.black;
+            cubeOnMap[cubeToChange + i].GetComponent<Renderer>().material.color = Color.black;
+            cubeOnMap[cubeToChange+ i +heightOfMap].GetComponent<Renderer>().material.color = Color.black;
         }
     }
     Vector3Int GetRandomScale(Transform gameObj)
