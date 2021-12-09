@@ -9,114 +9,89 @@ using UnityEngine.EventSystems;
 public class TouchManager : MonoBehaviour
 {
     private readonly List<RaycastResult> raycast = new List<RaycastResult>();
-    [SerializeField] private Canvas canvas;
-    public PanGestureRecognizer platformeMoveGesture { get; private set; }
 
-    [SerializeField] private Transform platform;
-    [SerializeField] private GameObject[] uiButtonScale;
 
-    private Color _platformBaseColor;
+    public PanGestureRecognizer PlayerTouchGesture { get; private set; }
 
-    private Vector3 startpos;
-    
+    [SerializeField] private GameObject uiButtonScale;
+
+
+    [SerializeField] private RectTransform canvasTransform;
+    [SerializeField] private Vector3 offsetPos;
+    [SerializeField] GameObject interactionParentObject;
+
+    public LayerMask touchLayersMask;
+    private Camera _cam;
+    private RaycastHit hit;
+
+    private void Start()
+    {
+        _cam = Camera.main;
+    }
+
     private void OnEnable()
     {
-        platformeMoveGesture = new PanGestureRecognizer();
-
-        platformeMoveGesture.ThresholdUnits = 0.0f; // start right away
+        PlayerTouchGesture = new PanGestureRecognizer();
+        PlayerTouchGesture.ThresholdUnits = 0.0f; // start right away
         //On ajoute une nouvelle gesture
-        platformeMoveGesture.StateUpdated += PlatformeGestureUpdated;
-        platformeMoveGesture.AllowSimultaneousExecutionWithAllGestures();
+        PlayerTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
+        PlayerTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
-        FingersScript.Instance.AddGesture(platformeMoveGesture);
+        FingersScript.Instance.AddGesture(PlayerTouchGesture);
         //On permet a la gesture de fonctionner à travers certains objets
-        foreach (GameObject gameObject in uiButtonScale)
-        {
-            FingersScript.Instance.PassThroughObjects.Add(gameObject);
-        }
+        FingersScript.Instance.PassThroughObjects.Add(uiButtonScale);
+        FingersScript.Instance.PassThroughObjects.Add(interactionParentObject);
     }
 
     private void OnDisable()
     {
         if (FingersScript.HasInstance)
         {
-            FingersScript.Instance.RemoveGesture(platformeMoveGesture);
+            FingersScript.Instance.RemoveGesture(PlayerTouchGesture);
         }
 
-        foreach (GameObject gameObject in uiButtonScale)
-        {
-            FingersScript.Instance.PassThroughObjects.Remove(gameObject);
-            FingersScript.Instance.PassThroughObjects.Clear();
-        }
+
+        FingersScript.Instance.PassThroughObjects.Remove(uiButtonScale);
+        FingersScript.Instance.PassThroughObjects.Remove(interactionParentObject);
+        FingersScript.Instance.PassThroughObjects.Clear();
     }
 
-    private void ResetPreviewPlatform()
+    /* private void ResetPreviewPlatform()
+     {
+         if (platform != null)
+         {
+             platform.gameObject.GetComponent<Renderer>().material.color = _platformBaseColor;
+             
+             foreach (GameObject gameObject in uiButtonScale)
+             {
+                 gameObject.SetActive(false);
+             }
+         }
+         
+     }*/
+    private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
     {
-        if (platform != null)
-        {
-            platform.gameObject.GetComponent<Renderer>().material.color = _platformBaseColor;
-            
-            foreach (GameObject gameObject in uiButtonScale)
-            {
-                gameObject.SetActive(false);
-            }
-        }
-        
-    }
-    private void PlatformeGestureUpdated(GestureRecognizer gesture)
-    {
-        Debug.Log(gesture.State);
-
         if (gesture.State == GestureRecognizerState.Began)
         {
             PointerEventData p = new PointerEventData(EventSystem.current);
             p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+
             raycast.Clear();
             EventSystem.current.RaycastAll(p, raycast);
 
-            var ray = Camera.main.ScreenPointToRay(p.position);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            Ray ray = _cam.ScreenPointToRay(p.position);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchLayersMask))
             {
-                Debug.DrawLine(ray.origin, hit.point, Color.red, 3);
-                if (hit.transform.gameObject.CompareTag("Platform"))
+                if (hit.transform.gameObject.GetComponent<Node>())
                 {
-                    //On reset la platform précédente
-                    ResetPreviewPlatform();
-                    platform = hit.transform.gameObject.transform;
-                    
-                    _platformBaseColor = platform.gameObject.GetComponent<Renderer>().material.color;
-                    hit.transform.gameObject.GetComponent<Renderer>().material.color = Color.white;
-                    foreach (GameObject gameObject in uiButtonScale)
-                    {
-                        gameObject.SetActive(true);
-                    }
-                    
+                    canvasTransform.position = hit.transform.position + offsetPos;
+                    interactionParentObject.SetActive(true);
                 }
             }
 
-            /*foreach (RaycastResult result in raycast)
-            {
-                startpos = result.screenPosition;
-                Debug.DrawLine(result.screenPosition, result.worldPosition, Color.red, 3);
-                if (result.gameObject.CompareTag("Platform"))
-                {
-                    //On reset la platform précédente
-                    ResetPreviewPlatform();
-                    platform = result.gameObject.transform;
-                    
-                    _platformBaseColor = platform.gameObject.GetComponent<Renderer>().material.color;
-                    result.gameObject.GetComponent<Renderer>().material.color = Color.white;
-                    foreach (GameObject gameObject in uiButtonScale)
-                    {
-                        gameObject.SetActive(true);
-                    }
-                    
-                }
-              
-            }*/
 
-            if (platform == null)
+            else
             {
                 gesture.Reset();
             }
@@ -128,43 +103,54 @@ public class TouchManager : MonoBehaviour
         }
         else if (gesture.State == GestureRecognizerState.Ended)
         {
-            
         }
+    }
+
+    public void ButtonGoToBlock()
+    {
+        PlayerController.Instance.currentTouchBlock = hit.transform;
+        PlayerController.Instance.StartPathFinding();
+        interactionParentObject.SetActive(false);
+    }
+
+    public void ButtonUpDown()
+    {
+        interactionParentObject.SetActive(false);
+        uiButtonScale.SetActive(true);
     }
 
     public void PlatformeUp()
     {
-        if (platform.localScale.y >= 4)
+        Transform blockParent = hit.collider.gameObject.transform.parent;
+
+        if (blockParent.localScale.y >= 4)
         {
             return;
         }
 
 
-        platform.DOScaleY(platform.localScale.y + 1, 0.25f);
-        platform.DOMove(new Vector3(platform.position.x, platform.position.y + 0.5f, platform.position.z), 0.25f);
-        
-        ResetPreviewPlatform();
-        platform = null;
+        Vector3 positionBlockParent = blockParent.position;
+        blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
+            0.25f);
+
+
+        blockParent = null;
     }
 
     public void PlatformeDown()
     {
-        if (platform.localScale.y <= 1)
+        Transform blockParent = hit.collider.gameObject.transform.parent;
+        if (blockParent.localScale.y <= 1)
         {
             return;
         }
 
-        platform.DOScaleY(platform.localScale.y - 1, 0.25f);
-        platform.DOMove(new Vector3(platform.position.x, platform.position.y - 0.5f, platform.position.z), 0.25f);
-
         
-        ResetPreviewPlatform();
-        platform = null;
-    }
+        var positionBlockParent = blockParent.position;
+        blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
+            0.25f);
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(startpos, 0.3f);
+
+        blockParent = null;
     }
 }
