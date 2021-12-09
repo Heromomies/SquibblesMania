@@ -28,7 +28,8 @@ public class PowerManager : MonoBehaviour
     public void AttractPlayer()
     {
         var transformPosition = player.transform.position;
-        transformPosition.y += transformPosition.y + _height; 
         player.transform.position += Vector3.back;
+        transformPosition.y += transformPosition.y + _height; 
+        
     }
 }
