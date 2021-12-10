@@ -9,16 +9,20 @@ public class Node : MonoBehaviour
 
     public Transform previousBlock;
     public List<GamePath> possiblePath;
+
+    public GroupBlockDetection groupBlockParent;
+
     // Start is called before the first frame update
     void Start()
     {
+        groupBlockParent = gameObject.transform.parent.GetComponent<GroupBlockDetection>();
     }
 
     // Update is called once per frame
     void Update()
     {
     }
-    
+
     public Vector3 GetWalkPoint()
     {
         //On récupère la position central du block
@@ -30,9 +34,9 @@ public class Node : MonoBehaviour
         Gizmos.color = Color.grey;
         Gizmos.DrawSphere(GetWalkPoint(), 0.1f);
     }
-   
-   
+    
 }
+
 [Serializable]
 public class GamePath
 {

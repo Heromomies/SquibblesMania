@@ -26,6 +26,14 @@ public class PlayerController : MonoBehaviour
         _playerController = this;
     }
 
+    private void Start()
+    {
+        DetectBlockBelowPlayer();
+        //On assigne le player dans une list pour savoir sur quel group de block il est actuellement
+        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
+    }
+
 
     private void Update()
     {
@@ -101,7 +109,11 @@ public class PlayerController : MonoBehaviour
     {
         //Le block actuellement selectionner par le joueur
         Transform block = currentTouchBlock;
-
+        
+        //On enleve le player de la list du group de block ou il est actuellement (pour éviter qu'il reste sur 2 group de block différent)
+        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        groupBlockDetection.playersOnGroupBlock.Remove(gameObject.transform);
+        
         //Tant que le block sélectionner par le joueur n'est pas égale au block ou le joueur est censer etre 
         while (block != currentBlockPlayerOn)
         {
@@ -120,6 +132,7 @@ public class PlayerController : MonoBehaviour
         }
 
         finalPathFinding.Insert(0, currentTouchBlock);
+
 
         if (!walking)
         {
@@ -143,6 +156,10 @@ public class PlayerController : MonoBehaviour
 
     private void Clear()
     {
+        //On assigne le player dans une list pour savoir sur quel group de block il est actuellement
+        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
+
         //Pour chaque cube dans notre pathfinding on remet reset les previous block a la fin du calcul
         foreach (Transform t in finalPathFinding)
         {

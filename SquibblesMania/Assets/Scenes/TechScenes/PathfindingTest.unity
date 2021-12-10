@@ -240,6 +240,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 1215463439}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &38543731
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +383,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 178965793}
+  - component: {fileID: 178965794}
   m_Layer: 3
   m_Name: BlockGroup1
   m_TagString: Untagged
@@ -409,6 +411,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &178965794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178965792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b752ba61bb6a52e4da187472181188e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playersOnGroupBlock: []
 --- !u!1 &215821191
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,6 +805,7 @@ MonoBehaviour:
   possiblePath:
   - nextPath: {fileID: 478838489}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &450824422
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,6 +1054,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 311728649}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &659794612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,6 +1505,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 2018200976}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &1011750378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,6 +1969,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 478838489}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &1276159117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2066,6 +2085,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 6707069}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &1279540352
 GameObject:
   m_ObjectHideFlags: 0
@@ -2483,6 +2503,7 @@ MonoBehaviour:
   possiblePath:
   - nextPath: {fileID: 1655336737}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &1655336736
 GameObject:
   m_ObjectHideFlags: 0
@@ -2598,6 +2619,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 997878558}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &1672320006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2607,6 +2629,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1672320007}
+  - component: {fileID: 1672320008}
   m_Layer: 3
   m_Name: BlockGroup2 (1)
   m_TagString: Untagged
@@ -2632,6 +2655,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1672320008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672320006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b752ba61bb6a52e4da187472181188e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playersOnGroupBlock: []
 --- !u!1 &1781111335
 GameObject:
   m_ObjectHideFlags: 0
@@ -2745,6 +2781,7 @@ MonoBehaviour:
   possiblePath:
   - nextPath: {fileID: 1276159121}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &1992823055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2953,6 +2990,7 @@ MonoBehaviour:
     isActive: 1
   - nextPath: {fileID: 6707069}
     isActive: 1
+  groupBlockParent: {fileID: 0}
 --- !u!1 &2070196409
 GameObject:
   m_ObjectHideFlags: 0
@@ -3097,10 +3135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83021912f59515a4e93267e49835393c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiButtonScale: {fileID: 1158477999}
+  uiScaleBlockParentObject: {fileID: 1158477999}
   canvasTransform: {fileID: 2070196413}
   offsetPos: {x: 0, y: 3, z: 0}
-  interactionParentObject: {fileID: 1318427749}
+  uiInteractionParentObject: {fileID: 1318427749}
   touchLayersMask:
     serializedVersion: 2
     m_Bits: 8

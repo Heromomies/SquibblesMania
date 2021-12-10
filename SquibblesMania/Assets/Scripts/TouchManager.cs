@@ -13,12 +13,12 @@ public class TouchManager : MonoBehaviour
 
     public PanGestureRecognizer PlayerTouchGesture { get; private set; }
 
-    [SerializeField] private GameObject uiButtonScale;
+    [SerializeField] private GameObject uiScaleBlockParentObject;
 
-
+    private Transform _blockParent;
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Vector3 offsetPos;
-    [SerializeField] GameObject interactionParentObject;
+    [SerializeField] GameObject uiInteractionParentObject;
 
     public LayerMask touchLayersMask;
     private Camera _cam;
@@ -39,8 +39,8 @@ public class TouchManager : MonoBehaviour
 
         FingersScript.Instance.AddGesture(PlayerTouchGesture);
         //On permet a la gesture de fonctionner à travers certains objets
-        FingersScript.Instance.PassThroughObjects.Add(uiButtonScale);
-        FingersScript.Instance.PassThroughObjects.Add(interactionParentObject);
+        FingersScript.Instance.PassThroughObjects.Add(uiScaleBlockParentObject);
+        FingersScript.Instance.PassThroughObjects.Add(uiInteractionParentObject);
     }
 
     private void OnDisable()
@@ -51,24 +51,19 @@ public class TouchManager : MonoBehaviour
         }
 
 
-        FingersScript.Instance.PassThroughObjects.Remove(uiButtonScale);
-        FingersScript.Instance.PassThroughObjects.Remove(interactionParentObject);
+        FingersScript.Instance.PassThroughObjects.Remove(uiScaleBlockParentObject);
+        FingersScript.Instance.PassThroughObjects.Remove(uiInteractionParentObject);
         FingersScript.Instance.PassThroughObjects.Clear();
     }
 
-    /* private void ResetPreviewPlatform()
-     {
-         if (platform != null)
-         {
-             platform.gameObject.GetComponent<Renderer>().material.color = _platformBaseColor;
-             
-             foreach (GameObject gameObject in uiButtonScale)
-             {
-                 gameObject.SetActive(false);
-             }
-         }
-         
-     }*/
+    private void ResetPreviewPlatform()
+    {
+        if (_blockParent != null)
+        {
+            uiScaleBlockParentObject.SetActive(false);
+        }
+    }
+
     private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
     {
         if (gesture.State == GestureRecognizerState.Began)
@@ -83,26 +78,19 @@ public class TouchManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchLayersMask))
             {
-                if (hit.transform.gameObject.GetComponent<Node>())
+                if (hit.transform.gameObject.GetComponent<Node>() && !PlayerController.Instance.walking)
                 {
+                    
                     canvasTransform.position = hit.transform.position + offsetPos;
-                    interactionParentObject.SetActive(true);
+                    uiInteractionParentObject.SetActive(true);
+                    uiScaleBlockParentObject.SetActive(false);
                 }
             }
-
 
             else
             {
                 gesture.Reset();
             }
-        }
-
-
-        if (gesture.State == GestureRecognizerState.Executing)
-        {
-        }
-        else if (gesture.State == GestureRecognizerState.Ended)
-        {
         }
     }
 
@@ -110,47 +98,75 @@ public class TouchManager : MonoBehaviour
     {
         PlayerController.Instance.currentTouchBlock = hit.transform;
         PlayerController.Instance.StartPathFinding();
-        interactionParentObject.SetActive(false);
+        uiInteractionParentObject.SetActive(false);
     }
 
     public void ButtonUpDown()
     {
-        interactionParentObject.SetActive(false);
-        uiButtonScale.SetActive(true);
+        uiInteractionParentObject.SetActive(false);
+        uiScaleBlockParentObject.SetActive(true);
     }
 
     public void PlatformeUp()
     {
-        Transform blockParent = hit.collider.gameObject.transform.parent;
+        _blockParent = hit.collider.gameObject.transform.parent;
 
-        if (blockParent.localScale.y >= 4)
+        GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
+
+
+        if (_blockParent.position.y >= 4)
         {
             return;
         }
 
 
-        Vector3 positionBlockParent = blockParent.position;
-        blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
+        Vector3 positionBlockParent = _blockParent.position;
+        _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
             0.25f);
+        if (groupBlockDetection.playersOnGroupBlock.Count > 0)
+        {
+            foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
+            {
+                Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
+                playerOnGroupBlock.DOMove(
+                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), 0.25f);
+            }
+        }
 
+        ResetPreviewPlatform();
 
-        blockParent = null;
+        _blockParent = null;
     }
 
     public void PlatformeDown()
     {
-        Transform blockParent = hit.collider.gameObject.transform.parent;
-        if (blockParent.localScale.y <= 1)
+        _blockParent = hit.collider.gameObject.transform.parent;
+
+        GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
+        if (_blockParent.position.y <= 0)
         {
             return;
         }
 
-        
-        var positionBlockParent = blockParent.position;
-        blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
+
+        var positionBlockParent = _blockParent.position;
+        _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
             0.25f);
 
+        if (groupBlockDetection.playersOnGroupBlock.Count > 0)
+        {
+            foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
+            {
+                Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
+                playerOnGroupBlock.DOMove(
+                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), 0.25f);
+            }
+        }
 
-        blockParent = null;
+
+        ResetPreviewPlatform();
+
+
+        _blockParent = null;
     }
 }
