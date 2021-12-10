@@ -23,7 +23,7 @@ public class MapGenerator : MonoBehaviour
     [Header("EVENT")]
     public List<GameObject> cubeOnMap;
 
-    [SerializeField] private int numberOfMeteorite;
+    public int numberOfMeteorite;
 
     private static MapGenerator mapGenerator;
 
@@ -85,7 +85,7 @@ public class MapGenerator : MonoBehaviour
             int placeOfCube = Random.Range(placeOfMeteoriteX, placeOfMeteoriteY);
             RandomEvent(placeOfCube);
         }*/
-        CompactEvent();
+       // CompactEvent();
     }
 
     public void RandomEvent(int i)
@@ -98,7 +98,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public void CompactEvent()
+   /* public void CompactEvent()
     {
         int heightOfMap = (mapSize.x * mapSize.y) / 10;
         int cubeToChange = Random.Range(0, 80);
@@ -109,7 +109,7 @@ public class MapGenerator : MonoBehaviour
             cubeOnMap[cubeToChange+ i +heightOfMap].GetComponent<Renderer>().material.color = Color.black;
             cubeOnMap[cubeToChange+ i +heightOfMap*2].GetComponent<Renderer>().material.color = Color.black;
         }
-    }
+    }*/
     Vector3Int GetRandomScale(Transform gameObj)
     {
         return new Vector3Int((int)gameObj.localScale.x, Random.Range(minYScale, maxYScale + 1),
