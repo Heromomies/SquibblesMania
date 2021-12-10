@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         DetectBlockBelowPlayer();
-        //On assigne le player dans une list pour savoir sur quel group de block il est actuellement
+        //Assign the player to a list for know on what block group is currently on
         GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
     }
@@ -50,55 +50,59 @@ public class PlayerController : MonoBehaviour
     {
         List<Transform> pastBlocks = new List<Transform>();
         List<Transform> nextBlocks = new List<Transform>();
-        //Pour chaque path possible par rapport au block ou le joueur se trouve actuellement
+
+        //Foreach possible path compared to the block wich player is currently on
 
         foreach (GamePath path in currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
-            //Si on a un path qui est actif alors on l'ajoute a notre list de nextBlocksPath
+            //If we have a path who is activated then we add it to the list of nextBlockPath
             if (path.isActive)
             {
                 nextBlocks.Add(path.nextPath);
-                //Dans notre element path on assigne notre previous block a notre block sur lequel le joueur se trouve actuellement
+                //In our path element we assign our previous block to the block wich player is currently on
                 path.nextPath.GetComponent<Node>().previousBlock = currentBlockPlayerOn;
             }
         }
 
-        //On ajoute dans notre list des anciens blocks, le block où le joueur est actuellement dessus
+
+        //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(currentBlockPlayerOn);
-        //On explore ensuite notre pathfinding
+        //We explore our pathfinding
         ExplorePath(nextBlocks, pastBlocks);
         BuildPath();
     }
 
     private void ExplorePath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath)
     {
-        //Le block ou le joueur est actuellement
+        //The block wich the player is currently on
         Transform currentBlock = nextBlocksPath[0];
 
         nextBlocksPath.Remove(currentBlock);
-        //Si notre current block est = au block que le joueur a sélectionner alors on sors de la boucle
+        //If our current block is = to the player selected block then out of the loop
         if (currentBlock == currentTouchBlock)
         {
             return;
         }
 
-        //Pour chaque passage possible dans notre currentBlock
+
+        //Foreach possible path in our currentBlock
         foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
         {
-            //On regarde si dans notre list de previousBlockPath, elle ne contient pas déjà le prochain block (path.blcokPath) et si celui si est actif
+            //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
             if (!previousBlocksPath.Contains(path.nextPath) && path.isActive)
             {
-                //On ajoute dans notre list de nextPath ce prochain block
+                //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
-                //On assigne ducoup le previous block a notre block actuel
+
+                //We assign the previous block to our currently block
                 path.nextPath.GetComponent<Node>().previousBlock = currentBlock;
             }
         }
 
-        //On ajoute dans notre list de path déjà visité notre currentBlock
+        //We add in our list of path who are already visited, our currently block
         previousBlocksPath.Add(currentBlock);
 
-        //Si dans notre list il reste un element on redemarre la void
+        //If in our list, he stay a element, we restart the void
         if (nextBlocksPath.Any())
         {
             ExplorePath(nextBlocksPath, previousBlocksPath);
@@ -107,20 +111,22 @@ public class PlayerController : MonoBehaviour
 
     private void BuildPath()
     {
-        //Le block actuellement selectionner par le joueur
+        //The block currently selectionned by the player
         Transform block = currentTouchBlock;
-        
-        //On enleve le player de la list du group de block ou il est actuellement (pour éviter qu'il reste sur 2 group de block différent)
+
+        //We remove the player from the list of block group which the player is currently on 
         GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Remove(gameObject.transform);
-        
-        //Tant que le block sélectionner par le joueur n'est pas égale au block ou le joueur est censer etre 
+
+
+        //While the player selected block is != to the block wich player supposed to be 
         while (block != currentBlockPlayerOn)
         {
-            //On ajoute ce block a notre list pathfinding final
+            //We add this block to our list final pathfinding
             finalPathFinding.Add(block);
 
-            //Si dans notre block (le block selectionner par le joueur) le block précedant n'est pas nul alors le block devient le préviousBlock
+
+            //If in our selected block, the precedent block is not nul then the block become the past block
             if (block.GetComponent<Node>().previousBlock != null)
             {
                 block = block.GetComponent<Node>().previousBlock;
@@ -141,7 +147,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Movement du joueur
+    //Movement of player
     private IEnumerator FollowPath()
     {
         for (int i = finalPathFinding.Count - 1; i > 0; i--)
@@ -156,11 +162,11 @@ public class PlayerController : MonoBehaviour
 
     private void Clear()
     {
-        //On assigne le player dans une list pour savoir sur quel group de block il est actuellement
+        //We add the player to the list of block group which the player is currently on 
         GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
 
-        //Pour chaque cube dans notre pathfinding on remet reset les previous block a la fin du calcul
+        //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
         foreach (Transform t in finalPathFinding)
         {
             t.GetComponent<Node>().previousBlock = null;
@@ -183,10 +189,5 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, -transform.up);
-    }
+    
 }

@@ -25,7 +25,8 @@ public class Node : MonoBehaviour
 
     public Vector3 GetWalkPoint()
     {
-        //On récupère la position central du block
+       
+        //The position in the center of the block
         return transform.position + (transform.up * blockSizeOffset);
     }
 
@@ -40,7 +41,7 @@ public class Node : MonoBehaviour
 [Serializable]
 public class GamePath
 {
-    //
+    
     public Transform nextPath;
     public bool isActive;
 }

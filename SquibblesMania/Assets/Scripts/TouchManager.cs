@@ -19,6 +19,7 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Vector3 offsetPos;
     [SerializeField] GameObject uiInteractionParentObject;
+    [SerializeField] private GameObject buttonGoToTheBlock;
 
     public LayerMask touchLayersMask;
     private Camera _cam;
@@ -33,12 +34,13 @@ public class TouchManager : MonoBehaviour
     {
         PlayerTouchGesture = new PanGestureRecognizer();
         PlayerTouchGesture.ThresholdUnits = 0.0f; // start right away
-        //On ajoute une nouvelle gesture
+        //Add new gesture
         PlayerTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
         PlayerTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
         FingersScript.Instance.AddGesture(PlayerTouchGesture);
-        //On permet a la gesture de fonctionner à travers certains objets
+
+        //Allow gesture to work through certain objects
         FingersScript.Instance.PassThroughObjects.Add(uiScaleBlockParentObject);
         FingersScript.Instance.PassThroughObjects.Add(uiInteractionParentObject);
     }
@@ -80,10 +82,23 @@ public class TouchManager : MonoBehaviour
             {
                 if (hit.transform.gameObject.GetComponent<Node>() && !PlayerController.Instance.walking)
                 {
-                    
+                    //Take the block group parent from hit block gameobject
+                    GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
+                    //Take the current player position
+                    Vector3 currentPlayerPos = PlayerController.Instance.gameObject.transform.position;
+                    //Take the current block group selected position
+                    Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
+                    //Change pos of canvas base on the current block selected
                     canvasTransform.position = hit.transform.position + offsetPos;
                     uiInteractionParentObject.SetActive(true);
-                    uiScaleBlockParentObject.SetActive(false);
+                    buttonGoToTheBlock.SetActive(true);
+
+                    //If the current block group if below or above the player pos
+                    if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
+                        blockGroupParentPos.y + 1 < currentPlayerPos.y)
+                    {
+                        buttonGoToTheBlock.SetActive(false);
+                    }
                 }
             }
 
@@ -123,6 +138,7 @@ public class TouchManager : MonoBehaviour
         Vector3 positionBlockParent = _blockParent.position;
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
             0.25f);
+        //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
         {
             foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
@@ -153,6 +169,7 @@ public class TouchManager : MonoBehaviour
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
             0.25f);
 
+        //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
         {
             foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
