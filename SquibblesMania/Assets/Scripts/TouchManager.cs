@@ -5,6 +5,7 @@ using DG.Tweening;
 using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TouchManager : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Vector3 offsetPos;
     [SerializeField] GameObject uiInteractionParentObject;
-    [SerializeField] private GameObject buttonGoToTheBlock;
+    [SerializeField] private Button buttonGoToTheBlock;
 
     public LayerMask touchLayersMask;
     private Camera _cam;
@@ -91,13 +92,13 @@ public class TouchManager : MonoBehaviour
                     //Change pos of canvas base on the current block selected
                     canvasTransform.position = hit.transform.position + offsetPos;
                     uiInteractionParentObject.SetActive(true);
-                    buttonGoToTheBlock.SetActive(true);
+                    buttonGoToTheBlock.interactable = true;
 
                     //If the current block group if below or above the player pos
                     if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
                         blockGroupParentPos.y + 1 < currentPlayerPos.y)
                     {
-                        buttonGoToTheBlock.SetActive(false);
+                        buttonGoToTheBlock.interactable = false;
                     }
                 }
             }
