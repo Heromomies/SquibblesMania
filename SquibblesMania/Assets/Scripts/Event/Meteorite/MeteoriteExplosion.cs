@@ -1,26 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class MeteoriteExplosion : MonoBehaviour
 {
     [Header("EVENT")]
     private List<GameObject> _cubeOnMap;
-    private List<GameObject> _cubeTouched;
+    [SerializeField] private List<GameObject> cubeTouched;
 
-    private int _numberOfMeteorite;
+    public int numberOfMeteorite;
 
     public Rigidbody bulletPrefab;
+    public Transform volcanoTransform;
+ 
     public void OnClick()
     {
-        _numberOfMeteorite = MapGenerator.Instance.numberOfMeteorite;
-       
         #region MeteoriteRandomization
 
         _cubeOnMap = MapGenerator.Instance.cubeOnMap;
 
-        for (int i = 0; i <= _numberOfMeteorite; i++)
+        while (numberOfMeteorite > 0)
         {
+            numberOfMeteorite--;
             int placeOfCube = Random.Range(0, 100);
             RandomEvent(placeOfCube);
         }
@@ -30,30 +32,51 @@ public class MeteoriteExplosion : MonoBehaviour
 
     private void RandomEvent(int placeOfCube)
     {
+        #region ChangeColor
+
         if (_cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color != Color.black)
         {
             _cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
-            _cubeTouched.Add(_cubeOnMap[placeOfCube]);
+           
+            cubeTouched.Add(_cubeOnMap[placeOfCube]);
+            
             MapGenerator.Instance.cubeOnMap.Remove(_cubeOnMap[placeOfCube]);
-        }
-        #region ExplosionFromTheCenter
 
-        for (int i = 0; i < _cubeTouched.Capacity; i++)
-        {
-            Vector3 vo = CalculateVelocity(_cubeTouched[i].transform.position, transform.position, 2);
-            transform.rotation = Quaternion.LookRotation(vo);
-        
-            Rigidbody obj = Instantiate(bulletPrefab, _cubeTouched[i].transform.position, Quaternion.identity);
-            obj.velocity = vo;
-
-            Destroy(obj, 10f);
+            InvokeRepeating(nameof(LaunchBullet), 0.2f, 0.5f);
         }
+
         #endregion
     }
 
+    void LaunchBullet()
+    {
+        #region ExplosionFromTheCenter
+
+        cubeTouched[0].tag = "Black Block";
+        
+        var positionVol = volcanoTransform.position;
+        Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position, positionVol, 2);
+        transform.rotation = Quaternion.LookRotation(vo);
+
+        cubeTouched.Remove(cubeTouched[0]);
+        
+        Rigidbody obj = Instantiate(bulletPrefab, positionVol, Quaternion.identity);
+        obj.velocity = vo;
+
+        #endregion
+    }
+
+    void Update()
+    {
+        if (cubeTouched.Count <= 0)
+        {
+            CancelInvoke();
+        }
+    }
+    
     #region CalculateVelocity
 
-    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float time)
+    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float speed) // Function to make a parabola
     {
         //define the distance x and y first
         Vector3 distance = target - origin;
@@ -68,12 +91,12 @@ public class MeteoriteExplosion : MonoBehaviour
         //calculating initial x velocity
         //Vx = x / t
 
-        float vxz = sxz / time;
+        float vxz = sxz / speed;
         
         ////calculating initial y velocity
         //Vy0 = y/t + 1/2 * g * t
 
-        float vy = sy / time + 0.5f * Mathf.Abs(Physics.gravity.y) * time;
+        float vy = sy / speed + 0.5f * Mathf.Abs(Physics.gravity.y) * speed;
         Vector3 result = distanceXZ * vxz;
         result.y = vy;
         

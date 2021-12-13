@@ -23,7 +23,7 @@ public class MapGenerator : MonoBehaviour
     [Header("EVENT")]
     public List<GameObject> cubeOnMap;
 
-    public int numberOfMeteorite;
+   // public int numberOfMeteorite;
 
     private static MapGenerator mapGenerator;
 
@@ -88,7 +88,7 @@ public class MapGenerator : MonoBehaviour
        // CompactEvent();
     }
 
-    public void RandomEvent(int i)
+   /* public void RandomEvent(int i)
     {
         if(cubeOnMap[i].GetComponent<Renderer>().material.color != Color.black)
             cubeOnMap[i].GetComponent<Renderer>().material.color = Color.black;
@@ -96,7 +96,7 @@ public class MapGenerator : MonoBehaviour
         {
             Debug.Log("This block was already black");
         }
-    }
+    }*/
 
    /* public void CompactEvent()
     {

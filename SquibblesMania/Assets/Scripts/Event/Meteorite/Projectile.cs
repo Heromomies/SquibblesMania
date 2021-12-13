@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public Rigidbody bulletPrefab;
+  /*  public Rigidbody bulletPrefab;
     public Transform transformPoint;
 
     public void OnClick()
@@ -43,5 +43,5 @@ public class Projectile : MonoBehaviour
         result.y = vy;
         
         return result;
-    }   
+    }  */ 
 }
