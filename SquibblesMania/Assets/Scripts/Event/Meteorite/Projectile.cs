@@ -6,46 +6,42 @@ public class Projectile : MonoBehaviour
 {
     public Rigidbody bulletPrefab;
     public Transform transformPoint;
-    
-    
-    // Start is called before the first frame update
-    void Update()
-    {
-        LaunchProjectile();
-    }
 
-    void LaunchProjectile()
+    public void OnClick()
     {
         Vector3 vo = CalculateVelocity(transformPoint.position, transform.position, 2);
         transform.rotation = Quaternion.LookRotation(vo);
+        
+        Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        obj.velocity = vo;
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            obj.velocity = vo;
-        }
+        Destroy(obj, 10f);
     }
     
-    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float time) // Calculate the velocity of the bullet for the parabola
+    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float time)
     {
-        // Define the distance of x and y first
-
+        //define the distance x and y first
         Vector3 distance = target - origin;
         Vector3 distanceXZ = distance;
-        distanceXZ.y = 0f;
+        distanceXZ.Normalize();
+        distanceXZ.y = 0;
+
+        //creating a float that represents our distance 
+        float sy = distance.y;
+        float sxz = distance.magnitude;
         
-        // Create a float that represent our distance
+        //calculating initial x velocity
+        //Vx = x / t
 
-        float sDistanceY = distance.y;
-        float sDistanceXZ = distanceXZ.magnitude;
+        float vxz = sxz / time;
+        
+        ////calculating initial y velocity
+        //Vy0 = y/t + 1/2 * g * t
 
-        float velocityXZ = sDistanceXZ / time;
-        float velocityY = sDistanceY / time * 0.5f * Mathf.Abs(Physics.gravity.y) * time;
-
-        Vector3 result = distanceXZ.normalized;
-        result *= velocityXZ;
-        result.y = velocityY;
+        float vy = sy / time + 0.5f * Mathf.Abs(Physics.gravity.y) * time;
+        Vector3 result = distanceXZ * vxz;
+        result.y = vy;
         
         return result;
-    }
+    }   
 }
