@@ -13,7 +13,10 @@ public class MeteoriteExplosion : MonoBehaviour
 
     public Rigidbody bulletPrefab;
     public Transform volcanoTransform;
- 
+    public Transform secondCam;
+    [Range(0.0f, 3.0f)]
+    public float speed;
+    
     public void OnClick()
     {
         #region MeteoriteRandomization
@@ -52,10 +55,12 @@ public class MeteoriteExplosion : MonoBehaviour
     {
         #region ExplosionFromTheCenter
 
+        //Camera.main.DOShakePosition(1, 1f, 100, 0);
+        
         cubeTouched[0].tag = "Black Block";
         
         var positionVol = volcanoTransform.position;
-        Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position, positionVol, 2);
+        Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position, positionVol, speed);
         transform.rotation = Quaternion.LookRotation(vo);
 
         cubeTouched.Remove(cubeTouched[0]);
@@ -71,12 +76,13 @@ public class MeteoriteExplosion : MonoBehaviour
         if (cubeTouched.Count <= 0)
         {
             CancelInvoke();
+            Camera.main.transform.position = secondCam.position;
         }
     }
     
     #region CalculateVelocity
 
-    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float speed) // Function to make a parabola
+    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola
     {
         //define the distance x and y first
         Vector3 distance = target - origin;
@@ -91,12 +97,12 @@ public class MeteoriteExplosion : MonoBehaviour
         //calculating initial x velocity
         //Vx = x / t
 
-        float vxz = sxz / speed;
+        float vxz = sxz / velocity;
         
         ////calculating initial y velocity
         //Vy0 = y/t + 1/2 * g * t
 
-        float vy = sy / speed + 0.5f * Mathf.Abs(Physics.gravity.y) * speed;
+        float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y) * velocity;
         Vector3 result = distanceXZ * vxz;
         result.y = vy;
         
