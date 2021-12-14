@@ -9,7 +9,8 @@ public class Node : MonoBehaviour
 
     public Transform previousBlock;
     public List<GamePath> possiblePath;
-
+    
+    [HideInInspector]
     public GroupBlockDetection groupBlockParent;
 
     // Start is called before the first frame update
