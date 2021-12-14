@@ -14,7 +14,7 @@ public class Node : MonoBehaviour
     public GroupBlockDetection groupBlockParent;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         groupBlockParent = gameObject.transform.parent.GetComponent<GroupBlockDetection>();
     }

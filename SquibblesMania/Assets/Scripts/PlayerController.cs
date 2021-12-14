@@ -24,14 +24,18 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _playerController = this;
+        DetectBlockBelowPlayer();
     }
 
     private void Start()
     {
-        DetectBlockBelowPlayer();
         //Assign the player to a list for know on what block group is currently on
-        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
-        groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
+
+        if (currentBlockPlayerOn != null)
+        {
+            GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+            groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
+        }
     }
 
 
@@ -189,5 +193,4 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
 }
