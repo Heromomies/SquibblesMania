@@ -1,36 +1,83 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerStateManager : MonoBehaviour
 {
-    
     private PlayerBaseState currentState;
 
     public PlayerActionCardState PlayerActionCardState = new PlayerActionCardState();
     public PlayerCardState PlayerCardState = new PlayerCardState();
     public PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        currentState = PlayerCardState;
-        
-        currentState.EnterState(this);
-    }
+    public Transform currentBlockPlayerOn, currentTouchBlock;
+    public List<Transform> finalPathFinding = new List<Transform>();
+    public bool walking;
+    public float timeMoveSpeed;
 
+    public PlayerTeam playerTeam;
+    public int playerNumber;
+
+    private static PlayerStateManager _playerController;
+    public static PlayerStateManager Instance => _playerController;
+
+    private void Awake()
+    {
+        _playerController = this;
+    }
+    private void Start()
+    {
+        DetectBlockBelowPlayer();
+        //Assign the player to a list for know on what block group is currently on
+        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
+    }
     // Update is called once per frame
     void Update()
     {
-        
+        DetectBlockBelowPlayer();
+        Debug.Log(currentState);
+        currentState.UpdtateState(this);
+       
+    }
+  /*  public void StartPathFinding()
+    {
+        finalPathFinding.Clear();
+        FindPath();
+    }*/
+    public void StartState()
+    {
+        currentState = PlayerCardState;
+        currentState.EnterState(this);
     }
 
-  public  void SwitchState(PlayerBaseState state)
+    public void SwitchState(PlayerBaseState state)
     {
         currentState.ExitState(this);
         //Switch current state to the new "state"
         currentState = state;
-        
+
         state.EnterState(this);
     }
+    private void DetectBlockBelowPlayer()
+    {
+        Ray ray = new Ray(transform.position, -transform.up);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 1f))
+        {
+            if (hit.collider.gameObject.GetComponent<Node>() != null)
+            {
+                currentBlockPlayerOn = hit.transform;
+            }
+        }
+    }
+}
+
+public enum PlayerTeam
+{
+    TeamOne,
+    TeamTwo,
 }
