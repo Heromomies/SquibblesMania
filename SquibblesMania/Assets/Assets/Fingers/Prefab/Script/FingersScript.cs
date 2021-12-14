@@ -1429,7 +1429,6 @@ namespace DigitalRubyShared
             if (DeviceInfo.PixelsPerInch > 0)
             {
                 DeviceInfo.UnitMultiplier = DeviceInfo.PixelsPerInch;
-                Debug.Log("Detected DPI of " + DeviceInfo.PixelsPerInch);
             }
             else
             {

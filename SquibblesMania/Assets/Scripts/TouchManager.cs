@@ -65,7 +65,6 @@ public class TouchManager : MonoBehaviour
     }
     private void PlatformeGestureUpdated(GestureRecognizer gesture)
     {
-        Debug.Log(gesture.State);
 
         if (gesture.State == GestureRecognizerState.Began)
         {
