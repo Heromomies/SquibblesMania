@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 783327321466276194}
   - component: {fileID: 783327321466276193}
   - component: {fileID: 783327321466276192}
-  - component: {fileID: 783327321466276207}
   - component: {fileID: 2624540770698070347}
   m_Layer: 0
   m_Name: Player3Test
@@ -83,23 +82,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &783327321466276207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 783327321466276206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3c763f598c8144aae8f711f1b12fa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentBlockPlayerOn: {fileID: 0}
-  currentTouchBlock: {fileID: 0}
-  finalPathFinding: []
-  walking: 0
-  timeMoveSpeed: 0.2
 --- !u!114 &2624540770698070347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,5 +94,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6ba274fc95673b43a0f0da592d9577a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: Cube3
+  playerActionPoint: 0
+  isUsingCardPower: 0
+  playerPref: {fileID: 783327321466276206}
   playerTeam: 0
+  currentBlockPlayerOn: {fileID: 0}
+  currentTouchBlock: {fileID: 0}
+  finalPathFinding: []
+  walking: 0
+  timeMoveSpeed: 0
   playerNumber: 2

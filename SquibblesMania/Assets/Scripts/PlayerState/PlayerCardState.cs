@@ -10,22 +10,25 @@ public class PlayerCardState : PlayerBaseState
         //Turn of player x
         //Message player turn x "Put a card on the corresponding surface"
         Debug.Log("Player put a card on the Square one");
+        Debug.Log(player.gameObject);
         //Open panel with 2 button for the player
-        
     }
 
     public override void UpdtateState(PlayerStateManager player)
     {
+        // if player touch the power button
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            player.SwitchState(player.PlayerPowerCardState);
+        }
         //if player touch the action point button 
-        player.SwitchState(player.PlayerActionCardState);
-        //else if player touch the power button
-        player.SwitchState(player.PlayerPowerCardState);
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            player.SwitchState(player.PlayerActionCardState);
+        }
     }
 
     public override void ExitState(PlayerStateManager player)
     {
-      
     }
-
-
 }

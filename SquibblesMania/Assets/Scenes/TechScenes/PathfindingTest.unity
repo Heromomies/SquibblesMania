@@ -10074,7 +10074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1864024258
 Transform:
   m_ObjectHideFlags: 0
@@ -10102,13 +10102,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberPlayers: 4
-  players:
-  - {fileID: 2624540770698070347, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
-  - {fileID: 2624540770698070347, guid: 3b9c7c9d55dc7cb428f3fc972c85b37d, type: 3}
-  - {fileID: 2624540770698070347, guid: 1c41d6c377cbfdd48b40879bb9e74d33, type: 3}
-  - {fileID: 2624540770698070347, guid: 49ba03b5340e132479895aa0bf63acbb, type: 3}
-  playersSpawnPoints: []
-  playerPrefab: {fileID: 2624540770698070347, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
+  players: []
+  playersSpawnPoints:
+  - {fileID: 516523466}
+  - {fileID: 1206654174}
+  - {fileID: 142500502}
+  - {fileID: 311728649}
+  playerPref: {fileID: -3814758494985992804, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
 --- !u!1 &1901549491
 GameObject:
   m_ObjectHideFlags: 0
@@ -10955,7 +10955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2081069077
 Transform:
   m_ObjectHideFlags: 0
@@ -11395,8 +11395,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerTest
       objectReference: {fileID: 0}
-    - target: {fileID: 2624540770698070347, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
-      propertyPath: m_Enabled
+    - target: {fileID: 783327321466276206, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

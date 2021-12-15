@@ -4,29 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerStateManager : MonoBehaviour
+public class PlayerStateManager : Player
 {
     private PlayerBaseState currentState;
 
     public PlayerActionCardState PlayerActionCardState = new PlayerActionCardState();
     public PlayerCardState PlayerCardState = new PlayerCardState();
     public PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
-    
+
     public Transform currentBlockPlayerOn, currentTouchBlock;
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
 
-    public PlayerTeam playerTeam;
     public int playerNumber;
 
-    private static PlayerStateManager _playerController;
-    public static PlayerStateManager Instance => _playerController;
 
-    private void Awake()
-    {
-        _playerController = this;
-    }
     private void Start()
     {
         DetectBlockBelowPlayer();
@@ -34,19 +27,18 @@ public class PlayerStateManager : MonoBehaviour
         GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
     }
+
     // Update is called once per frame
     void Update()
     {
         DetectBlockBelowPlayer();
         Debug.Log(currentState);
-        currentState.UpdtateState(this);
-       
+        if (currentState != null)
+        {
+            currentState.UpdtateState(this);
+        }
     }
-  /*  public void StartPathFinding()
-    {
-        finalPathFinding.Clear();
-        FindPath();
-    }*/
+
     public void StartState()
     {
         currentState = PlayerCardState;
@@ -61,6 +53,7 @@ public class PlayerStateManager : MonoBehaviour
 
         state.EnterState(this);
     }
+
     private void DetectBlockBelowPlayer()
     {
         Ray ray = new Ray(transform.position, -transform.up);
@@ -74,10 +67,4 @@ public class PlayerStateManager : MonoBehaviour
             }
         }
     }
-}
-
-public enum PlayerTeam
-{
-    TeamOne,
-    TeamTwo,
 }

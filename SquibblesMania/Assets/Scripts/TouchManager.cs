@@ -25,6 +25,9 @@ public class TouchManager : MonoBehaviour
     public LayerMask touchLayersMask;
     private Camera _cam;
     private RaycastHit hit;
+    
+    private GameObject _blockCurrentlySelected;
+    private Color _blockCurrentlySelectedColor;
 
     private void Start()
     {
@@ -81,6 +84,13 @@ public class TouchManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, touchLayersMask))
             {
+                if (_blockCurrentlySelected != null)
+                {
+                    //Previous selected block get his base color back
+                    Material blockCurrentlyMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
+                    blockCurrentlyMat.color = _blockCurrentlySelectedColor;
+                }
+               
                 if (hit.transform.gameObject.GetComponent<Node>() && !PlayerController.Instance.walking)
                 {
                     //Take the block group parent from hit block gameobject
@@ -93,6 +103,12 @@ public class TouchManager : MonoBehaviour
                     canvasTransform.position = hit.transform.position + offsetPos;
                     uiInteractionParentObject.SetActive(true);
                     buttonGoToTheBlock.interactable = true;
+                
+                    //Change the current block selected color by a white color
+                    _blockCurrentlySelected = hit.transform.gameObject;
+                    Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
+                    _blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
+                    blockCurrentlySelectedMat.color = Color.white;
 
                     //If the current block group if below or above the player pos
                     if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
@@ -105,7 +121,13 @@ public class TouchManager : MonoBehaviour
 
             else
             {
+                //If player OnSelect the block, the block get his color back
+                Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
+                blockCurrentlySelectedMat.color = _blockCurrentlySelectedColor;
+                _blockCurrentlySelected = null;
+
                 gesture.Reset();
+                uiInteractionParentObject.SetActive(false);
             }
         }
     }
@@ -126,7 +148,7 @@ public class TouchManager : MonoBehaviour
     public void PlatformeUp()
     {
         _blockParent = hit.collider.gameObject.transform.parent;
-
+        
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
 
 

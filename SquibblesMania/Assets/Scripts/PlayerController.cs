@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = finalPathFinding.Count - 1; i > 0; i--)
         {
-            Vector3 movePos = finalPathFinding[i].GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
+            Vector3 movePos = finalPathFinding[i].GetComponent<Node>().GetWalkPoint() + new Vector3(0, gameObject.transform.localScale.y/2f, 0);
             transform.DOMove(movePos, timeMoveSpeed);
             yield return new WaitForSeconds(0.4f);
         }

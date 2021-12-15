@@ -13,7 +13,10 @@ public class PlayerActionCardState : PlayerBaseState
 
     public override void UpdtateState(PlayerStateManager player)
     {
-        throw new System.NotImplementedException();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ExitState(player);
+        }
     }
 
     public override void ExitState(PlayerStateManager player)
