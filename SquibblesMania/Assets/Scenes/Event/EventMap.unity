@@ -351,36 +351,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 82536688}
   m_CullTransparentMesh: 1
---- !u!1 &109494662
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 109494663}
-  m_Layer: 0
-  m_Name: TopOfTheVolcano
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &109494663
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109494662}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.69, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1133656150}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &117480672
 GameObject:
   m_ObjectHideFlags: 0
@@ -2709,6 +2679,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &479346652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 479346653}
+  m_Layer: 0
+  m_Name: TopOfVolcano
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &479346653
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479346652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 917462612}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &480962351
 GameObject:
   m_ObjectHideFlags: 0
@@ -4717,7 +4717,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1133656150}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &777444270
 MonoBehaviour:
@@ -5125,7 +5125,6 @@ GameObject:
   - component: {fileID: 917462612}
   - component: {fileID: 917462611}
   - component: {fileID: 917462610}
-  - component: {fileID: 917462609}
   m_Layer: 0
   m_Name: Volcano
   m_TagString: Untagged
@@ -5133,19 +5132,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &917462609
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 917462608}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &917462610
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5203,11 +5189,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917462608}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.83, z: 0}
+  m_LocalPosition: {x: 0, y: 4.27, z: 0}
   m_LocalScale: {x: 1.5, y: 2, z: 1.5}
-  m_Children: []
+  m_Children:
+  - {fileID: 479346653}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &970619486
 GameObject:
@@ -6162,10 +6149,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1453139587}
-  - {fileID: 109494663}
   - {fileID: 777444269}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1179137141
 GameObject:
@@ -8137,16 +8123,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dbafc86a164d346805d66ddeff8a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubeTouched: []
-  numberOfMeteorite: 5
-  bulletPrefab: {fileID: 7390947689630570239, guid: d7dff3febd5faa441b054ed7d2add88e, type: 3}
-  volcanoTransform: {fileID: 109494663}
-  secondCam: {fileID: 1534141865}
-  speed: 2
-  repeatRate: 0.5
-  cube: {fileID: 917462612}
-  durationOfScale: 2
-  duration: 4
+  foldoutValues:
+    cubeOnMap: []
+    cubeTouched: []
+    numberOfMeteorite: 5
+    bulletPrefab: {fileID: 7390947689630570239, guid: d7dff3febd5faa441b054ed7d2add88e, type: 3}
+    volcanoTransform: {fileID: 917462612}
+    speed: 2
+    repeatRate: 0.5
+  foldoutValuesEvent:
+    volcano: {fileID: 917462612}
+    durationOfScale: 0.5
+    durationShake: 0.3
+    strength: {x: 0.1, y: 0.1, z: 0.1}
+    vibrato: 100
+    randomness: 90
 --- !u!1 &1475835223
 GameObject:
   m_ObjectHideFlags: 0
@@ -8660,36 +8651,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1521810204}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1534141859
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1534141865}
-  m_Layer: 0
-  m_Name: SecondCamera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1534141865
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1534141859}
-  m_LocalRotation: {x: 0.2546557, y: 0.36785895, z: -0.10548183, w: 0.8880901}
-  m_LocalPosition: {x: -11.993213, y: 10.598385, z: -11.993211}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 32, y: 45.4, z: 0}
 --- !u!1 &1570917086
 GameObject:
   m_ObjectHideFlags: 0
