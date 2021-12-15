@@ -7,13 +7,11 @@ using Random = UnityEngine.Random;
 
 public class MeteoriteExplosion : MonoBehaviour
 {
-	[Header("EVENT")]
-	[SerializeField] private FoldoutValueHolder foldoutValues;
+	[Header("EVENT")] [SerializeField] private FoldoutValueHolder foldoutValues;
 
-	[Space]
-	[Header("EVENT ANIMATION")]
-	[SerializeField] private FoldoutValueHolderEvent foldoutValuesEvent;
-	
+	[Space] [Header("EVENT ANIMATION")] [SerializeField]
+	private FoldoutValueHolderEvent foldoutValuesEvent;
+
 	IEnumerator AnimationVolcano()
 	{
 		// Create a new Sequence.
@@ -24,12 +22,17 @@ public class MeteoriteExplosion : MonoBehaviour
 		s.Insert(0, foldoutValuesEvent.volcano.DOScaleX(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
 
 		// Add shake to the object
-		s.Insert(foldoutValuesEvent.durationOfScale, foldoutValuesEvent.volcano.DOShakePosition(foldoutValuesEvent.durationShake, foldoutValuesEvent.strength, foldoutValuesEvent.vibrato, foldoutValuesEvent.randomness));
+		s.Insert(foldoutValuesEvent.durationOfScale,
+			foldoutValuesEvent.volcano.DOShakePosition(foldoutValuesEvent.durationShake, foldoutValuesEvent.strength, foldoutValuesEvent.vibrato,
+				foldoutValuesEvent.randomness));
 
 		// Change the scale of the object to make it bigger
-		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f, foldoutValuesEvent.volcano.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
-		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f, foldoutValuesEvent.volcano.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
-		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f, foldoutValuesEvent.volcano.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
+			foldoutValuesEvent.volcano.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
+			foldoutValuesEvent.volcano.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
+			foldoutValuesEvent.volcano.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 
 		yield return new WaitForSeconds(foldoutValuesEvent.durationOfScale * 3.5f);
 
@@ -77,7 +80,8 @@ public class MeteoriteExplosion : MonoBehaviour
 		foldoutValues.cubeTouched[0].tag = "Black Block";
 
 		var positionVol = foldoutValues.volcanoTransform.position;
-		Vector3 vo = CalculateVelocity(foldoutValues.cubeTouched[0].transform.position, positionVol, foldoutValues.speed); // Add the velocity to make an effect of parabola for the bullets
+		Vector3 vo = CalculateVelocity(foldoutValues.cubeTouched[0].transform.position, positionVol,
+			foldoutValues.speed); // Add the velocity to make an effect of parabola for the bullets
 		transform.rotation = Quaternion.LookRotation(vo);
 
 		foldoutValues.cubeTouched.Remove(foldoutValues.cubeTouched[0]);
@@ -132,18 +136,18 @@ public class MeteoriteExplosion : MonoBehaviour
 	{
 		public Transform volcano;
 		public float durationOfScale;
-		
+
 		public float durationShake;
 		public Vector3 strength;
 		public int vibrato;
 		public float randomness;
 	}
-	
+
 	[Serializable]
 	private class FoldoutValueHolder
 	{
-		[HideInInspector]public List<GameObject> cubeOnMap;
-		[HideInInspector]public List<GameObject> cubeTouched;
+		[HideInInspector] public List<GameObject> cubeOnMap;
+		[HideInInspector] public List<GameObject> cubeTouched;
 
 		public int numberOfMeteorite;
 

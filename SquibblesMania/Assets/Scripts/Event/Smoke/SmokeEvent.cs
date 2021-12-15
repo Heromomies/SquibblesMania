@@ -8,9 +8,9 @@ public class SmokeEvent : MonoBehaviour
 	public GameObject eventParticle;
 
 	public int numberOfSmoke;
-	public int heightSpawnParticle;
+	public float heightSpawnParticle;
 
-	public void OnClick()
+	public void OnClick() // On click we launch the compact function
 	{
 		#region MeteoriteRandomization
 
@@ -33,15 +33,15 @@ public class SmokeEvent : MonoBehaviour
 			_cubeOnMap[cubeToChange + i + heightOfMap * 2].GetComponent<Renderer>().material.color = Color.black;
 
 			Instantiate(eventParticle,
-				new Vector3(_cubeOnMap[cubeToChange + i].transform.localPosition.x, _cubeOnMap[cubeToChange + i].transform.localPosition.y + heightSpawnParticle,
+				new Vector3(_cubeOnMap[cubeToChange + i].transform.localPosition.x, _cubeOnMap[cubeToChange + i].transform.localScale.y + heightSpawnParticle,
 					_cubeOnMap[cubeToChange + i].transform.localPosition.z), Quaternion.identity);
 			Instantiate(eventParticle,
 				new Vector3(_cubeOnMap[cubeToChange + i + heightOfMap].transform.localPosition.x,
-					_cubeOnMap[cubeToChange + i].transform.localPosition.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.localPosition.z),
+					_cubeOnMap[cubeToChange + i].transform.localScale.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.localPosition.z),
 				Quaternion.identity);
 			Instantiate(eventParticle,
 				new Vector3(_cubeOnMap[cubeToChange + i + heightOfMap * 2].transform.localPosition.x,
-					_cubeOnMap[cubeToChange + i].transform.localPosition.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.localPosition.z),
+					_cubeOnMap[cubeToChange + i].transform.localScale.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.localPosition.z),
 				Quaternion.identity);
 		}
 	}
