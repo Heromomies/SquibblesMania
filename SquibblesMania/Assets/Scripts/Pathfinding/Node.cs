@@ -6,16 +6,18 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     public float blockSizeOffset = 0.5f;
-
+    
     public Transform previousBlock;
+   
     public List<GamePath> possiblePath;
     
     [HideInInspector]
     public GroupBlockDetection groupBlockParent;
-
+    
     // Start is called before the first frame update
     void Awake()
     {
+       
         groupBlockParent = gameObject.transform.parent.GetComponent<GroupBlockDetection>();
     }
 
@@ -23,7 +25,7 @@ public class Node : MonoBehaviour
     void Update()
     {
     }
-
+    
     public Vector3 GetWalkPoint()
     {
        

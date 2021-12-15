@@ -85,9 +85,9 @@ public class PlayerController : MonoBehaviour
         //If our current block is = to the player selected block then out of the loop
         if (currentBlock == currentTouchBlock)
         {
+            //Player arrive to the destination
             return;
         }
-
 
         //Foreach possible path in our currentBlock
         foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
@@ -128,7 +128,6 @@ public class PlayerController : MonoBehaviour
         {
             //We add this block to our list final pathfinding
             finalPathFinding.Add(block);
-
 
             //If in our selected block, the precedent block is not nul then the block become the past block
             if (block.GetComponent<Node>().previousBlock != null)
