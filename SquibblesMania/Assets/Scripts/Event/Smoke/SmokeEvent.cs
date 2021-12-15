@@ -33,15 +33,15 @@ public class SmokeEvent : MonoBehaviour
 			_cubeOnMap[cubeToChange + i + heightOfMap * 2].GetComponent<Renderer>().material.color = Color.black;
 
 			Instantiate(eventParticle,
-				new Vector3(_cubeOnMap[cubeToChange + i].transform.position.x, _cubeOnMap[cubeToChange + i].transform.position.y + heightSpawnParticle,
-					_cubeOnMap[cubeToChange + i].transform.position.z), Quaternion.identity);
+				new Vector3(_cubeOnMap[cubeToChange + i].transform.localPosition.x, _cubeOnMap[cubeToChange + i].transform.localPosition.y + heightSpawnParticle,
+					_cubeOnMap[cubeToChange + i].transform.localPosition.z), Quaternion.identity);
 			Instantiate(eventParticle,
-				new Vector3(_cubeOnMap[cubeToChange + i + heightOfMap].transform.position.x,
-					_cubeOnMap[cubeToChange + i].transform.position.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.position.z),
+				new Vector3(_cubeOnMap[cubeToChange + i + heightOfMap].transform.localPosition.x,
+					_cubeOnMap[cubeToChange + i].transform.localPosition.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.localPosition.z),
 				Quaternion.identity);
 			Instantiate(eventParticle,
-				new Vector3(_cubeOnMap[cubeToChange + i + heightOfMap * 2].transform.position.x,
-					_cubeOnMap[cubeToChange + i].transform.position.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.position.z),
+				new Vector3(_cubeOnMap[cubeToChange + i + heightOfMap * 2].transform.localPosition.x,
+					_cubeOnMap[cubeToChange + i].transform.localPosition.y + heightSpawnParticle, _cubeOnMap[cubeToChange + i].transform.localPosition.z),
 				Quaternion.identity);
 		}
 	}
