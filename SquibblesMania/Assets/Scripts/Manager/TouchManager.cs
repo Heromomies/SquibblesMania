@@ -14,20 +14,29 @@ public class TouchManager : MonoBehaviour
 
     public PanGestureRecognizer PlayerTouchGesture { get; private set; }
 
-    [SerializeField] private GameObject uiScaleBlockParentObject;
+    public GameObject uiScaleBlockParentObject;
 
     private Transform _blockParent;
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Vector3 offsetPos;
-    [SerializeField] GameObject uiInteractionParentObject;
+    public GameObject uiInteractionParentObject;
     [SerializeField] private Button buttonGoToTheBlock;
 
     public LayerMask touchLayersMask;
     private Camera _cam;
-    private RaycastHit hit;
-    
+    [HideInInspector]
+    public RaycastHit hit;
     private GameObject _blockCurrentlySelected;
     private Color _blockCurrentlySelectedColor;
+
+    private static TouchManager _touchManager;
+
+    public static TouchManager Instance => _touchManager;
+
+    private void Awake()
+    {
+        _touchManager = this;
+    }
 
     private void Start()
     {
@@ -87,44 +96,20 @@ public class TouchManager : MonoBehaviour
                 if (_blockCurrentlySelected != null)
                 {
                     //Previous selected block get his base color back
-                    Material blockCurrentlyMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-                    blockCurrentlyMat.color = _blockCurrentlySelectedColor;
+                    ResetPreviousBlockColor();
                 }
-               
-                if (hit.transform.gameObject.GetComponent<Node>() && !PlayerController.Instance.walking)
-                {
-                    //Take the block group parent from hit block gameobject
-                    GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
-                    //Take the current player position
-                    Vector3 currentPlayerPos = PlayerController.Instance.gameObject.transform.position;
-                    //Take the current block group selected position
-                    Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
-                    //Change pos of canvas base on the current block selected
-                    canvasTransform.position = hit.transform.position + offsetPos;
-                    uiInteractionParentObject.SetActive(true);
-                    buttonGoToTheBlock.interactable = true;
-                
-                    //Change the current block selected color by a white color
-                    _blockCurrentlySelected = hit.transform.gameObject;
-                    Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-                    _blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
-                    blockCurrentlySelectedMat.color = Color.white;
 
-                    //If the current block group if below or above the player pos
-                    if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
-                        blockGroupParentPos.y + 1 < currentPlayerPos.y)
-                    {
-                        buttonGoToTheBlock.interactable = false;
-                    }
-                }
+                PlayerTurnActionStateSelectBlock();
             }
 
             else
             {
                 //If player OnSelect the block, the block get his color back
-                Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-                blockCurrentlySelectedMat.color = _blockCurrentlySelectedColor;
-                _blockCurrentlySelected = null;
+                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+                {
+                    ResetPreviousBlockColor();
+                    _blockCurrentlySelected = null;
+                }
 
                 gesture.Reset();
                 uiInteractionParentObject.SetActive(false);
@@ -132,23 +117,39 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    public void ButtonGoToBlock()
+    void PlayerTurnActionStateSelectBlock()
     {
-        PlayerController.Instance.currentTouchBlock = hit.transform;
-        PlayerController.Instance.StartPathFinding();
-        uiInteractionParentObject.SetActive(false);
+        if (hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
+            GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+        {
+            //Take the block group parent from hit block gameobject
+            GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
+            //Take the current player position
+            Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
+            //Take the current block group selected position
+            Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
+            //Change pos of canvas base on the current block selected
+            canvasTransform.position = hit.transform.position + offsetPos;
+            uiInteractionParentObject.SetActive(true);
+            buttonGoToTheBlock.interactable = true;
+
+            _blockCurrentlySelected = hit.transform.gameObject;
+            SelectedBlockColor(Color.white);
+
+            //If the current block group if below or above the player pos
+            if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
+                blockGroupParentPos.y + 1 < currentPlayerPos.y)
+            {
+                buttonGoToTheBlock.interactable = false;
+            }
+        }
     }
 
-    public void ButtonUpDown()
-    {
-        uiInteractionParentObject.SetActive(false);
-        uiScaleBlockParentObject.SetActive(true);
-    }
 
     public void PlatformeUp()
     {
         _blockParent = hit.collider.gameObject.transform.parent;
-        
+
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
 
 
@@ -208,5 +209,18 @@ public class TouchManager : MonoBehaviour
 
 
         _blockParent = null;
+    }
+
+    void SelectedBlockColor(Color color)
+    {
+        Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
+        _blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
+        blockCurrentlySelectedMat.color = color;
+    }
+
+    void ResetPreviousBlockColor()
+    {
+        Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
+        blockCurrentlySelectedMat.color = _blockCurrentlySelectedColor;
     }
 }

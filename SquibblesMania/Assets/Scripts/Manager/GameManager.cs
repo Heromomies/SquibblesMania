@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     public Transform[] playersSpawnPoints;
 
     public PlayerStateManager playerPref;
-
+    
+    public PlayerStateManager currentPlayerTurn;
     private void Awake()
     {
         _gameManager = this;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
         int numberPlayerToStart = Random.Range(0, players.Count);
         Debug.Log(numberPlayerToStart);
         players[numberPlayerToStart].StartState();
+        currentPlayerTurn = players[numberPlayerToStart];
     }
 
     // Update is called once per frame

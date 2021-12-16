@@ -8,7 +8,7 @@ public class PlayerStateManager : Player
 {
     private PlayerBaseState currentState;
 
-    public PlayerActionCardState PlayerActionCardState = new PlayerActionCardState();
+    public PlayerActionPointCardState PlayerActionPointCardState = new PlayerActionPointCardState();
     public PlayerCardState PlayerCardState = new PlayerCardState();
     public PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
 
@@ -18,7 +18,7 @@ public class PlayerStateManager : Player
     public float timeMoveSpeed;
 
     public int playerNumber;
-
+    public bool isPlayerInActionCardState;
 
     private void Start()
     {
@@ -31,19 +31,31 @@ public class PlayerStateManager : Player
     // Update is called once per frame
     void Update()
     {
-        DetectBlockBelowPlayer();
-        Debug.Log(currentState);
+        
         if (currentState != null)
         {
             currentState.UpdtateState(this);
+            DetectBlockBelowPlayer();
         }
     }
 
     public void StartState()
     {
+        //Start the player turn in the player card state
         currentState = PlayerCardState;
         currentState.EnterState(this);
     }
+    public void StartPathFinding()
+    {
+        //If the current state of the player is when he use his action point
+        if (currentState == PlayerActionPointCardState)
+        {
+            finalPathFinding.Clear();
+            PlayerActionPointCardState.FindPath(this);
+        }
+        
+    }
+
 
     public void SwitchState(PlayerBaseState state)
     {
