@@ -9,4 +9,6 @@ public class ConditionReleaseEvent : ScriptableObject
    public bool actionPoint;
    public bool walkOnCase;
    public bool walkOnColor;
+
+   public int numberOfSteps;
 }
