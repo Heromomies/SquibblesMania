@@ -39,7 +39,7 @@ public class MeteoriteExplosion : MonoBehaviour
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, foldoutValues.repeatRate);
 	}
 
-	public void OnClick() // When we click on the button	
+	public void Start() // When we click on the button	
 	{
 		#region MeteoriteRandomization
 

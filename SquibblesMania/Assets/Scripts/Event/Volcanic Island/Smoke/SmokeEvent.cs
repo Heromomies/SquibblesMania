@@ -12,9 +12,9 @@ public class SmokeEvent : MonoBehaviour
 	public float heightSpawnParticle;
 	private int _cubeToChange;
 	
-	public void OnClick() // On click we launch the compact function
+	public void Start() // On click we launch the compact function
 	{
-		#region MeteoriteRandomization
+		#region LaunchFunctionCompactEvent
 
 		_cubeOnMap = MapGenerator.Instance.cubeOnMap;
 
