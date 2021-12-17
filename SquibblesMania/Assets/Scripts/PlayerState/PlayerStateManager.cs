@@ -28,6 +28,7 @@ public class PlayerStateManager : Player
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
     }
 
+
     // Update is called once per frame
     void Update()
     {
@@ -51,7 +52,9 @@ public class PlayerStateManager : Player
         if (currentState == PlayerActionPointCardState)
         {
             finalPathFinding.Clear();
+            
             PlayerActionPointCardState.FindPath(this);
+          
         }
         
     }

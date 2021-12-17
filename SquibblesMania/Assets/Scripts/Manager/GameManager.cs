@@ -37,11 +37,11 @@ public class GameManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Start() 
     {
         //Choose Randomly a player to start
         int numberPlayerToStart = Random.Range(0, players.Count);
-        Debug.Log(numberPlayerToStart);
+        
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
     }

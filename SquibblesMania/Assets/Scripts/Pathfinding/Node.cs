@@ -17,7 +17,10 @@ public class Node : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-       
+        foreach (var path in possiblePath)
+        {
+            path.currentBlock = gameObject;
+        }
         groupBlockParent = gameObject.transform.parent.GetComponent<GroupBlockDetection>();
     }
 
@@ -44,7 +47,8 @@ public class Node : MonoBehaviour
 [Serializable]
 public class GamePath
 {
-    
+    [HideInInspector]
+    public GameObject currentBlock;
     public Transform nextPath;
     public bool isActive;
 }

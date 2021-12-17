@@ -9,7 +9,38 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-        Debug.Log($"Player have {player.playerNumber} action point");
+        //Debug.Log($"Player have {player.playerActionPoint} action point");
+        //TODO Faire une method qui permet de prévisualiser jusqu'ou le joueur peut aller avec ces points d'actions
+        //PreviewPath(player.playerActionPoint, player);
+    }
+
+
+    private void PreviewPath(int actionPoint, PlayerStateManager player)
+    {
+        List<Transform> possiblePath = new List<Transform>();
+        List<Transform> pastBlocks = new List<Transform>();
+
+        //Foreach possible path compared to the block wich player is currently on
+
+        foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
+        {
+            if (path.isActive)
+            {
+                possiblePath.Add(path.nextPath);
+
+                path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
+            }
+        }
+
+        //We add in our list of past blocks, the block which the player is currently on
+        pastBlocks.Add(player.currentBlockPlayerOn);
+        ExplorePath(possiblePath, pastBlocks, player);
+    }
+
+
+    private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
+        PlayerStateManager player)
+    {
     }
 
     public override void UpdtateState(PlayerStateManager player)
@@ -55,6 +86,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             if (path.isActive)
             {
                 nextBlocks.Add(path.nextPath);
+
                 //In our path element we assign our previous block to the block wich player is currently on
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
             }
@@ -146,12 +178,26 @@ public class PlayerActionPointCardState : PlayerBaseState
     //Movement of player
     private IEnumerator FollowPath(PlayerStateManager player)
     {
+        int movementPlayer = 0;
+
+
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
-            Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
-                              new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
-            player.transform.DOMove(movePos, player.timeMoveSpeed);
-            yield return new WaitForSeconds(0.4f);
+            if (movementPlayer < player.playerActionPoint)
+            {
+                Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
+                                  new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
+                player.transform.DOMove(movePos, player.timeMoveSpeed);
+                movementPlayer++;
+                Debug.Log(movementPlayer);
+                yield return new WaitForSeconds(0.4f);
+            }
+        }
+
+
+        for (int i = player.finalPathFinding.Count - movementPlayer; i > 0; i--)
+        {
+            player.finalPathFinding.Remove(player.finalPathFinding[0]);
         }
 
         Clear(player);
