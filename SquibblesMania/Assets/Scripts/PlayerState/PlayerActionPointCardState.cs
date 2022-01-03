@@ -2,46 +2,111 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
+    private List<Transform> _previewPath = new List<Transform>();
+
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
         //Debug.Log($"Player have {player.playerActionPoint} action point");
         //TODO Faire une method qui permet de prévisualiser jusqu'ou le joueur peut aller avec ces points d'actions
-        //PreviewPath(player.playerActionPoint, player);
+        _previewPath.Clear();
+        PreviewPath(player.playerActionPoint, player);
     }
 
+    #region PREVIEW
 
     private void PreviewPath(int actionPoint, PlayerStateManager player)
     {
         List<Transform> possiblePath = new List<Transform>();
         List<Transform> pastBlocks = new List<Transform>();
+        List<Transform> finalPreviewPath = new List<Transform>();
 
-        //Foreach possible path compared to the block wich player is currently on
+        int currentPlayerMovement = 0;
 
-        foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
+        if (currentPlayerMovement < actionPoint)
         {
-            if (path.isActive)
+            //Foreach possible path compared to the block wich player is currently on
+            foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
             {
-                possiblePath.Add(path.nextPath);
+                if (path.isActive)
+                {
+                    possiblePath.Add(path.nextPath);
 
-                path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
+                    finalPreviewPath.Add(path.nextPath);
+                    currentPlayerMovement++;
+                    path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
+                }
             }
         }
 
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
-        ExplorePath(possiblePath, pastBlocks, player);
-    }
 
+        ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, currentPlayerMovement, actionPoint);
+    }
 
     private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
-        PlayerStateManager player)
+        List<Transform> finalPreviewPath, int currentPlayerMovement, int actionPoint)
     {
+        
+        //The block wich the player is currently on
+        Transform currentBlock = nextBlocksPath[0];
+
+        // Debug.Log(currentBlock);
+        //Debug.Log(currentPlayerMovement);
+
+        nextBlocksPath.Remove(currentBlock);
+
+        //If our current block is > to the player selected block then out of the loop
+        if (currentPlayerMovement > actionPoint)
+        {
+            
+            foreach (var block in finalPreviewPath)
+            {
+                block.gameObject.GetComponent<Renderer>().material.color = Color.white;
+            }
+
+            _previewPath = finalPreviewPath;
+            //Player arrive to the destination
+            return;
+        }
+
+
+        //Foreach possible path in our currentBlock
+        foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
+        {
+            //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
+            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive)
+            {
+                //We add in our list the next block
+                nextBlocksPath.Add(path.nextPath);
+                //Debug.Log(path.nextPath);
+                finalPreviewPath.Add(path.nextPath);
+                //We assign the previous block to our currently block
+                path.nextPath.GetComponent<Node>().previousBlock = currentBlock;
+            }
+        }
+
+        //We add in our list of path who are already visited, our currently block
+        previousBlocksPath.Add(currentBlock);
+        currentPlayerMovement++;
+
+
+        //If in our list, he stay a element, we restart the void
+        if (nextBlocksPath.Any())
+        {
+            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, currentPlayerMovement,
+                actionPoint);
+        }
     }
+
+    #endregion
+
 
     public override void UpdtateState(PlayerStateManager player)
     {
@@ -55,20 +120,19 @@ public class PlayerActionPointCardState : PlayerBaseState
         switch (player.playerNumber)
         {
             case 0:
-                GameManager.Instance.players[1].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[1];
+                GameManager.Instance.ChangePlayerTurn(1);
+
                 break;
             case 1:
-                GameManager.Instance.players[2].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[2];
+                GameManager.Instance.ChangePlayerTurn(2);
+
                 break;
             case 2:
-                GameManager.Instance.players[3].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[3];
+                GameManager.Instance.ChangePlayerTurn(3);
+
                 break;
             case 3:
-                GameManager.Instance.players[0].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[0];
+                GameManager.Instance.ChangePlayerTurn(0);
                 break;
         }
     }
@@ -105,6 +169,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         //The block wich the player is currently on
         Transform currentBlock = nextBlocksPath[0];
+
 
         nextBlocksPath.Remove(currentBlock);
         //If our current block is = to the player selected block then out of the loop
@@ -188,17 +253,13 @@ public class PlayerActionPointCardState : PlayerBaseState
                 Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
+                player.finalPathFinding.Remove(player.finalPathFinding[i]);
+
                 movementPlayer++;
-                Debug.Log(movementPlayer);
                 yield return new WaitForSeconds(0.4f);
             }
         }
 
-
-        for (int i = player.finalPathFinding.Count - movementPlayer; i > 0; i--)
-        {
-            player.finalPathFinding.Remove(player.finalPathFinding[0]);
-        }
 
         Clear(player);
     }
@@ -215,9 +276,31 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
+        foreach (var previewBlock in _previewPath)
+        {
+            previewBlock.gameObject.GetComponent<Renderer>().material.color = Color.grey;
+        }
+
         player.finalPathFinding.Clear();
         player.walking = false;
         //Switch to the next player
-        player.SwitchState(player.PlayerCardState);
+        switch (player.playerNumber)
+        {
+            case 0:
+                GameManager.Instance.ChangePlayerTurn(1);
+
+                break;
+            case 1:
+                GameManager.Instance.ChangePlayerTurn(2);
+
+                break;
+            case 2:
+                GameManager.Instance.ChangePlayerTurn(3);
+
+                break;
+            case 3:
+                GameManager.Instance.ChangePlayerTurn(0);
+                break;
+        }
     }
 }

@@ -46,6 +46,11 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
     }
 
+    public void ChangePlayerTurn(int playerNumberTurn)
+    {
+        players[playerNumberTurn].StartState();
+        currentPlayerTurn = players[playerNumberTurn];
+    }
     // Update is called once per frame
     void Update()
     {

@@ -134,7 +134,7 @@ public class TouchManager : MonoBehaviour
             buttonGoToTheBlock.interactable = true;
 
             _blockCurrentlySelected = hit.transform.gameObject;
-            SelectedBlockColor(Color.white);
+            SelectedBlockColor(Color.black);
 
             //If the current block group if below or above the player pos
             if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
