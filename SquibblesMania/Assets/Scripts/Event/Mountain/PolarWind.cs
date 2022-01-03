@@ -12,16 +12,23 @@ public class PolarWind : MonoBehaviour
 	public float xRadius = 5;
 	[Range(0,5)]
 	public float yRadius = 5;
-	LineRenderer line;
+
+	public float startAngle = 20f;
+
+	public int heightWind;
+	
 	[Tooltip("Attention ne pas faire de bêtises avec, demandez à Loann")] public Mesh meshOfLine;
 	
+	private LineRenderer _line;
 	void Start ()
 	{
-		line = gameObject.GetComponent<LineRenderer>();
-
-		line.SetVertexCount (segments + 1);
-		line.useWorldSpace = false;
-		CreatePoints ();
+		transform.position = new Vector3(transform.position.x, transform.position.y + heightWind, transform.position.z);
+		
+		_line = gameObject.GetComponent<LineRenderer>();
+		_line.SetVertexCount (segments + 1);
+		_line.useWorldSpace = false;
+		
+		StartCoroutine(CreatePoints ());
 	}
 
 	private void Update()
@@ -31,39 +38,33 @@ public class PolarWind : MonoBehaviour
 		if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
 		{
 			Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-			Debug.Log("Did Hit");
 		}
 	}
 
-	void CreatePoints ()
+	IEnumerator CreatePoints ()
 	{
 		float x;
 		float z;
 
-		float angle = 20f;
-
 		for (int i = 0; i < (segments + 1); i++)
 		{
-			x = Mathf.Sin (Mathf.Deg2Rad * angle) * xRadius;
-			z = Mathf.Cos (Mathf.Deg2Rad * angle) * yRadius;
+			yield return new WaitForSeconds(0.5f);
+			
+			x = Mathf.Sin (Mathf.Deg2Rad * startAngle) * xRadius;
+			z = Mathf.Cos (Mathf.Deg2Rad * startAngle) * yRadius;
 
-			line.SetPosition (i,new Vector3(x,0,z) );
+			_line.SetPosition (i,new Vector3(x,0,z) );
 
-			angle += (360f / segments);
+			startAngle += (360f / segments);
+
+			_line.BakeMesh(meshOfLine);
 		}
-		
-		line.BakeMesh(meshOfLine);
 	}
-	//TODO Wind on horizontal axis
 
-	//TODO Stun player if they are touched by it
-	
-
-	/*private void OnDrawGizmos()
+	private void OnApplicationQuit()
 	{
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawSphere(transform.position, radius);
-		Gizmos.DrawWireSphere(transform.position, radius);
-		Gizmos.DrawWireCube(transform.position, new Vector3(10, 10, 10));
-	}*/
+		Debug.Log("I'm going through this debug");
+		meshOfLine.Clear();
+	}
+	//TODO Stun player if they are touched by it
 }

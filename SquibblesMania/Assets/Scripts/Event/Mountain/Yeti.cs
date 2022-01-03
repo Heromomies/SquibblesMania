@@ -15,7 +15,7 @@ public class Yeti : MonoBehaviour
         GetTransformPlayer();
     }
 
-    void GetTransformPlayer()
+    void GetTransformPlayer() // Check the distance between each players launch a bullet to the nearest player
     {
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
@@ -37,8 +37,6 @@ public class Yeti : MonoBehaviour
 
         Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         obj.velocity = vo;
-        
-        Debug.Log(obj);
     }
     // Update is called once per frame
     void Update()

@@ -18,17 +18,6 @@ public class EventManager : MonoBehaviour
         int random = Random.Range(0, conditionReleaseEvents.Count);
         _conditionSO = conditionReleaseEvents[random];
         conditionReleaseEvents.Remove(conditionReleaseEvents[random]);
-        
-        //Debug.Log(_conditionSO);
-        
-        /*for (int i = 0; i < components.Length; i++)
-        {
-            components[i] = components[i].GetComponent(typeof(MonoBehaviour));
-        }
-        foreach(var component in components)
-        {
-            Debug.Log(component.ToString());
-        }*/
     }
 
     // Update is called once per frame
