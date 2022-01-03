@@ -12,10 +12,13 @@ public class PolarWind : MonoBehaviour
 	public float xRadius = 5;
 	[Range(0,5)]
 	public float yRadius = 5;
-
+	[Range(0,0.5f)]
+	public float speed;
+	
 	public float startAngle = 20f;
 
 	public int heightWind;
+	
 	
 	[Tooltip("Attention ne pas faire de bêtises avec, demandez à Loann")] public Mesh meshOfLine;
 	
@@ -48,7 +51,7 @@ public class PolarWind : MonoBehaviour
 
 		for (int i = 0; i < (segments + 1); i++)
 		{
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(speed);
 			
 			x = Mathf.Sin (Mathf.Deg2Rad * startAngle) * xRadius;
 			z = Mathf.Cos (Mathf.Deg2Rad * startAngle) * yRadius;
@@ -59,6 +62,12 @@ public class PolarWind : MonoBehaviour
 
 			_line.BakeMesh(meshOfLine);
 		}
+	}
+
+	private void OnCollisionEnter(Collision other)
+	{
+		Debug.Log("I touched a thing and i break the coroutine");
+		StopCoroutine(CreatePoints());
 	}
 
 	private void OnApplicationQuit()
