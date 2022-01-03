@@ -1,15 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Yeti : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<Transform> players; 
+    public Rigidbody bulletPrefab;
+
+    [Range(0.0f, 3.0f)] public float speed;
+
+    public void Start()
     {
-        
+        GetTransformPlayer();
     }
 
+    void GetTransformPlayer()
+    {
+        Transform bestTarget = null;
+        float closestDistanceSqr = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+        foreach (Transform potentialTarget in players)
+        {
+            Vector3 directionToTarget = potentialTarget.position - currentPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                bestTarget = potentialTarget;
+            }
+        }
+        
+        Vector3 vo = CalculateVelocity(bestTarget.position, transform.position,
+            speed); // Add the velocity to make an effect of parabola for the bullets
+        transform.rotation = Quaternion.LookRotation(vo);
+
+        Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        obj.velocity = vo;
+        
+        Debug.Log(obj);
+    }
     // Update is called once per frame
     void Update()
     {
