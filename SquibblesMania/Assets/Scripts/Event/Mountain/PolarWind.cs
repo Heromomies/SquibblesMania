@@ -17,7 +17,7 @@ public class PolarWind : MonoBehaviour
 	
 	public float startAngle = 20f;
 
-	public int heightWind;
+	public float heightWind;
 	
 	
 	[Tooltip("Attention ne pas faire de bêtises avec, demandez à Loann")] public Mesh meshOfLine;
@@ -25,7 +25,7 @@ public class PolarWind : MonoBehaviour
 	private LineRenderer _line;
 	void Start ()
 	{
-		transform.position = new Vector3(transform.position.x, transform.position.y + heightWind, transform.position.z);
+		transform.position = new Vector3(transform.position.x,  heightWind, transform.position.z);
 		
 		_line = gameObject.GetComponent<LineRenderer>();
 		_line.SetVertexCount (segments + 1);
@@ -63,11 +63,14 @@ public class PolarWind : MonoBehaviour
 			_line.BakeMesh(meshOfLine);
 		}
 	}
-
-	private void OnCollisionEnter(Collision other)
+	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("I touched a thing and i break the coroutine");
-		StopCoroutine(CreatePoints());
+		Debug.Log("I'm here");
+		if (other.gameObject.CompareTag("Black Block"))
+		{
+			Debug.Log("I touched a thing and i break the coroutine");
+			StopCoroutine(CreatePoints());
+		}
 	}
 
 	private void OnApplicationQuit()
