@@ -30,10 +30,10 @@ public class PolarWind : MonoBehaviour
 	{
 		transform.position = new Vector3(transform.position.x,  heightWind, transform.position.z);
 	
-		blockAtHeight = GameObject.FindGameObjectsWithTag("Platform");
+		//blockAtHeight = GameObject.FindGameObjectsWithTag("Platform");
 
 		_line = gameObject.GetComponent<LineRenderer>();
-		_line.SetVertexCount (segments + 1);
+		_line.SetVertexCount (segments );
 		_line.useWorldSpace = false;
 		
 		_stopLoop = false;
@@ -43,14 +43,14 @@ public class PolarWind : MonoBehaviour
 
 	private void Update()
 	{
-		for (int i = 0; i < blockAtHeight.Length; i++)
+		/*for (int i = 0; i < blockAtHeight.Length; i++)
 		{
 			if (Math.Abs(blockAtHeight[i].transform.position.y - heightWind) < 0.1f)
 			{
 				dist = Vector3.Distance(transform.position, blockAtHeight[i].transform.position);
 				Debug.Log("The distance between my position and the block is " + dist);
 			}
-		}
+		}*/
 	}
 
 	IEnumerator CreatePoints ()
@@ -58,7 +58,7 @@ public class PolarWind : MonoBehaviour
 		float x;
 		float z;
 
-		for (int i = 0; i < (segments + 1); i++)
+		for (int i = 0; i < (segments ); i++)
 		{
 			if (_stopLoop)
 			{

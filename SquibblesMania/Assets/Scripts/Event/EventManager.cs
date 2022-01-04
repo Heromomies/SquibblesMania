@@ -12,10 +12,12 @@ public class EventManager : MonoBehaviour
    
     private ConditionReleaseEvent _conditionSO;
 
+    private float _release;
+    
     // Start is called before the first frame update
     void Start()
     {
-        int random = Random.Range(0, conditionReleaseEvents.Count);
+        int random = Random.Range(1, conditionReleaseEvents.Count);
         _conditionSO = conditionReleaseEvents[random];
         conditionReleaseEvents.Remove(conditionReleaseEvents[random]);
     }
@@ -24,18 +26,18 @@ public class EventManager : MonoBehaviour
     void Update()
     {
         //TODO search the conditions to activate event with scriptable object
-        bool one = false;
-        
-        if (_conditionSO.numberOfSteps >=7 && !one)
+
+        if (_release >= _conditionSO.numberOfSteps)
         {
-            one = true;
             int random = Random.Range(1, events.Count);
             events[random].SetActive(true);
+
+            _release = 0;
         }
     }
 
     public void OnClick()
     {
-        _conditionSO.numberOfSteps++;
+        _release++;
     }
 }
