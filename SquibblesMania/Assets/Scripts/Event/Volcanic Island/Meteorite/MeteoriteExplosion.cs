@@ -64,11 +64,14 @@ public class MeteoriteExplosion : MonoBehaviour
 		if (foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color != Color.black)
 		{
 			foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
-			foldoutValues.cubeOnMap[placeOfCube].GetComponent<Node>().ChangeBool();
 
 			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
 			EventManager.Instance.cubeOnMap.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+		}
+		else
+		{
+			RandomEvent(Random.Range(0, EventManager.Instance.cubeOnMap.Capacity));
 		}
 
 		#endregion
@@ -78,6 +81,8 @@ public class MeteoriteExplosion : MonoBehaviour
 	{
 		#region ExplosionFromTheCenter
 
+		foldoutValues.cubeTouched[0].tag = "Black Block";
+		
 		var positionVol = foldoutValues.volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(foldoutValues.cubeTouched[0].transform.position, positionVol,
 			foldoutValues.speed); // Add the velocity to make an effect of parabola for the bullets
@@ -121,7 +126,7 @@ public class MeteoriteExplosion : MonoBehaviour
 		////calculating initial y velocity
 		//Vy0 = y/t + 1/2 * g * t
 
-		float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y) * velocity;
+		float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y + 0.5f) * velocity;
 		Vector3 result = distanceXZ * vxz;
 		result.y = vy;
 

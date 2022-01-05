@@ -40,9 +40,6 @@ public class PolarWind : MonoBehaviour
 
 	IEnumerator CreatePoints ()
 	{
-		float x;
-		float z;
-
 		for (int i = 0; i < (segments +1); i++)
 		{
 			if (_stopLoop)
@@ -52,8 +49,8 @@ public class PolarWind : MonoBehaviour
 			gameObject.GetComponent<MeshCollider>().convex = false;
 			yield return new WaitForSeconds(speed);
 			
-			x = Mathf.Sin (Mathf.Deg2Rad * startAngle) * xRadius;
-			z = Mathf.Cos (Mathf.Deg2Rad * startAngle) * yRadius;
+			var x = Mathf.Sin (Mathf.Deg2Rad * startAngle) * xRadius;
+			var z = Mathf.Cos (Mathf.Deg2Rad * startAngle) * yRadius;
 
 			_line.SetPosition (i,new Vector3(x,0,z) );
 

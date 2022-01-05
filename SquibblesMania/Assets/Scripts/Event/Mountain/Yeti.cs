@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Yeti : MonoBehaviour
 {
-    public List<Transform> players; 
     public Rigidbody bulletPrefab;
 
     [Range(0.0f, 3.0f)] public float speed;
@@ -20,23 +19,26 @@ public class Yeti : MonoBehaviour
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
-        foreach (Transform potentialTarget in players)
+        foreach (PlayerStateManager potentialTarget in GameManager.Instance.players)
         {
-            Vector3 directionToTarget = potentialTarget.position - currentPosition;
+            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)
             {
                 closestDistanceSqr = dSqrToTarget;
-                bestTarget = potentialTarget;
+                bestTarget = potentialTarget.transform;
             }
         }
-        
-        Vector3 vo = CalculateVelocity(bestTarget.position, transform.position,
-            speed); // Add the velocity to make an effect of parabola for the bullets
-        transform.rotation = Quaternion.LookRotation(vo);
 
-        Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        obj.velocity = vo;
+        if (bestTarget != null)
+        {
+            Vector3 vo = CalculateVelocity(bestTarget.position, transform.position,
+                speed); // Add the velocity to make an effect of parabola for the bullets
+            transform.rotation = Quaternion.LookRotation(vo);
+
+            Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            obj.velocity = vo;
+        }
     }
     // Update is called once per frame
     void Update()

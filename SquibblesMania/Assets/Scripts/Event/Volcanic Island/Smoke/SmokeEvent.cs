@@ -5,7 +5,7 @@ using UnityEngine;
 public class SmokeEvent : MonoBehaviour
 {
 	[Header("EVENT")] private List<GameObject> _cubeOnMap;
-	public List<GameObject> _cubeTouched;
+	private List<GameObject> _cubeTouched;
 	public GameObject eventParticle;
 
 	public int numberOfSmoke;
@@ -16,7 +16,7 @@ public class SmokeEvent : MonoBehaviour
 	{
 		#region LaunchFunctionCompactEvent
 
-		_cubeOnMap = MapGenerator.Instance.cubeOnMap;
+		_cubeOnMap = EventManager.Instance.cubeOnMap;
 
 		CompactEvent();
 
@@ -48,7 +48,7 @@ public class SmokeEvent : MonoBehaviour
 
 	void CubeToChange() // Change the value, now the smoke event can be divided by 2
 	{
-		_cubeToChange = Random.Range(0, 80);
+		_cubeToChange = Random.Range(0, _cubeTouched.Count);
 		
 		while (_cubeToChange >= 6 && _cubeToChange <= 10 || _cubeToChange >= 14 && _cubeToChange <= 20 || _cubeToChange >= 24 && _cubeToChange <= 30
 		    || _cubeToChange >= 34 && _cubeToChange <= 40 || _cubeToChange >= 44 && _cubeToChange <= 50 || _cubeToChange >= 54 && _cubeToChange <= 60
