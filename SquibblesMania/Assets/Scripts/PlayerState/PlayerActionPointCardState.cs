@@ -12,7 +12,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-        //Debug.Log($"Player have {player.playerActionPoint} action point");
         //TODO Faire une method qui permet de prévisualiser jusqu'ou le joueur peut aller avec ces points d'actions
         _previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
@@ -41,7 +40,6 @@ public class PlayerActionPointCardState : PlayerBaseState
             }
         }
 
-        indexBlockNearby++;
 
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
@@ -53,66 +51,84 @@ public class PlayerActionPointCardState : PlayerBaseState
         List<Transform> finalPreviewPath, int indexBlockNearby, int actionPoint, PlayerStateManager playerStateManager)
     {
         playerStateManager.nextBlockPath = finalPreviewPath;
-        
 
-        foreach (var block in nextBlocksPath)
+        indexBlockNearby++;
+
+
+        //The blocks we want to check
+        List<Transform> currentCheckedBlocks = new List<Transform>();
+
+        // if we have multiple block around the player
+        if (nextBlocksPath.Count > 1)
         {
-            Debug.Log("Block a checker : " + block);
-        }
-
-        //The block we want to check
-        Transform currentCheckedBlock = nextBlocksPath[0];
-        nextBlocksPath.Remove(currentCheckedBlock);
-
-        //Debug.Log(currentBlock);
-        //Debug.Log(currentPlayerMovement);
-
-
-        //If our current block is > to the player selected block then out of the loop
-        if (indexBlockNearby >= actionPoint)
-        {
-            foreach (var block in finalPreviewPath)
+            for (int i = 0; i < nextBlocksPath.Count; i++)
             {
-                block.gameObject.GetComponent<Renderer>().material.color = Color.white;
+                currentCheckedBlocks.Add(nextBlocksPath[i]);
             }
 
-            _previewPath = finalPreviewPath;
-            //Player arrive to the destination
+            nextBlocksPath.Remove(currentCheckedBlocks[0]);
+        }
+        else
+        {
+            currentCheckedBlocks.Add(nextBlocksPath[0]);
+            nextBlocksPath.Remove(currentCheckedBlocks[0]);
+        }
+
+        //If our current block is == to the player selected block then out of the loop
+        if (indexBlockNearby == actionPoint)
+        {
+            ColorPossiblePaths(finalPreviewPath);
             return;
         }
 
-        
-        //Foreach possible path in our currentBlock
-        foreach (GamePath path in currentCheckedBlock.GetComponent<Node>().possiblePath)
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath);
+
+        for (int i = 0; i < currentCheckedBlocks.Count; i++)
         {
-            //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive)
-            {
-                //We add in our list the next block
-                nextBlocksPath.Add(path.nextPath);
-                //Debug.Log(path.nextPath);
-                finalPreviewPath.Add(path.nextPath);
-                //We assign the previous block to our currently block
-                path.nextPath.GetComponent<Node>().previousBlock = currentCheckedBlock;
-            }
+            //We add in our list of path who are already visited, our currently checked blocks
+            previousBlocksPath.Add(currentCheckedBlocks[i]);
         }
-
-        indexBlockNearby++;
-        Debug.Log("Nombre de block check: " + indexBlockNearby);
-        //We add in our list of path who are already visited, our currently block
-        previousBlocksPath.Add(currentCheckedBlock);
-
 
         //If in our list, he stay a element, we restart the void
         if (nextBlocksPath.Any())
         {
-            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint,
-                playerStateManager);
+            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint, playerStateManager);
         }
     }
 
     #endregion
 
+    void ColorPossiblePaths(List<Transform> finalPreviewPath)
+    {
+        //Player have a preview of his possible movement
+        foreach (var block in finalPreviewPath)
+        {
+            block.gameObject.GetComponent<Renderer>().material.color = Color.white;
+        }
+
+        _previewPath = finalPreviewPath;
+    }
+
+    void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, List<Transform> nextBlocksPath)
+    {
+        //Foreach currents checked block in our list
+        foreach (Transform checkedBlock in currentCheckedBlocks)
+        {
+            //Foreach possible path in our currentCheckedBlock
+            foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
+            {
+                //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive)
+                {
+                    //We add in our list the next block
+                    nextBlocksPath.Add(path.nextPath);
+                    finalPreviewPath.Add(path.nextPath);
+                    //We assign the previous block to our currently block
+                    path.nextPath.GetComponent<Node>().previousBlock = checkedBlock;
+                }
+            }
+        }
+    }
 
     public override void UpdtateState(PlayerStateManager player)
     {

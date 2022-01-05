@@ -23,7 +23,7 @@ public class PlayerCardState : PlayerBaseState
         //if player touch the action point button 
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            player.playerActionPoint = Random.Range(5, 6);
+            player.playerActionPoint = Random.Range(1, 6);
             UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer();
             player.isPlayerInActionCardState = true;
             player.SwitchState(player.PlayerActionPointCardState);
