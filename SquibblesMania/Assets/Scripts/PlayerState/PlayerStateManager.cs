@@ -20,6 +20,8 @@ public class PlayerStateManager : Player
     public int playerNumber;
     public bool isPlayerInActionCardState;
 
+    [SerializeField]
+    public List<Transform> nextBlockPath;
     private void Start()
     {
         DetectBlockBelowPlayer();
