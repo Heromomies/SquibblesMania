@@ -7,19 +7,16 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class PolarWind : MonoBehaviour
 {
-	public GameObject[] blockAtHeight;
-	
 	[Range(0,50)]
 	public int segments = 50;
-	/*[Range(0,5)]
+	[Range(0,5)]
 	public float xRadius;
 	[Range(0,5)]
-	public float yRadius = 5;*/
+	public float yRadius = 5;
 	[Range(0,0.5f)]
 	public float speed;
 	public float startAngle = 20f;
 	public float heightWind;
-	public float dist;
 
 	[Tooltip("Attention ne pas faire de bêtises avec, demandez à Loann")] public Mesh meshOfLine;
 
@@ -33,7 +30,7 @@ public class PolarWind : MonoBehaviour
 		//blockAtHeight = GameObject.FindGameObjectsWithTag("Platform");
 
 		_line = gameObject.GetComponent<LineRenderer>();
-		_line.SetVertexCount (segments );
+		_line.SetVertexCount (segments + 1);
 		_line.useWorldSpace = false;
 		
 		_stopLoop = false;
@@ -41,24 +38,12 @@ public class PolarWind : MonoBehaviour
 		StartCoroutine(CreatePoints ());
 	}
 
-	private void Update()
-	{
-		/*for (int i = 0; i < blockAtHeight.Length; i++)
-		{
-			if (Math.Abs(blockAtHeight[i].transform.position.y - heightWind) < 0.1f)
-			{
-				dist = Vector3.Distance(transform.position, blockAtHeight[i].transform.position);
-				Debug.Log("The distance between my position and the block is " + dist);
-			}
-		}*/
-	}
-
 	IEnumerator CreatePoints ()
 	{
 		float x;
 		float z;
 
-		for (int i = 0; i < (segments ); i++)
+		for (int i = 0; i < (segments +1); i++)
 		{
 			if (_stopLoop)
 			{
@@ -67,12 +52,12 @@ public class PolarWind : MonoBehaviour
 			gameObject.GetComponent<MeshCollider>().convex = false;
 			yield return new WaitForSeconds(speed);
 			
-			x = Mathf.Sin (Mathf.Deg2Rad * startAngle) * dist;
-			z = Mathf.Cos (Mathf.Deg2Rad * startAngle) * dist;
+			x = Mathf.Sin (Mathf.Deg2Rad * startAngle) * xRadius;
+			z = Mathf.Cos (Mathf.Deg2Rad * startAngle) * yRadius;
 
 			_line.SetPosition (i,new Vector3(x,0,z) );
 
-			startAngle += (360f / segments);
+			startAngle += (360f / segments +1);
 
 			_line.BakeMesh(meshOfLine);
 			
