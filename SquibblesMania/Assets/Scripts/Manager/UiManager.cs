@@ -33,8 +33,8 @@ public class UiManager : MonoBehaviour
         TouchManager.Instance.uiScaleBlockParentObject.SetActive(true);
     }
 
-    public void SetUpCurrentActionPointOfCurrentPlayer()
+    public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
-        currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {GameManager.Instance.currentPlayerTurn.playerActionPoint}";
+        currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {actionPointText}";
     }
 }

@@ -22,7 +22,7 @@ public class PlayerStateManager : Player
 
     [SerializeField]
     public List<Transform> nextBlockPath;
-    private void Start()
+    private void Awake()
     {
         DetectBlockBelowPlayer();
         //Assign the player to a list for know on what block group is currently on

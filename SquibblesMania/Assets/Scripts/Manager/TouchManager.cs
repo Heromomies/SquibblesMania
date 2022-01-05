@@ -24,10 +24,9 @@ public class TouchManager : MonoBehaviour
 
     public LayerMask touchLayersMask;
     private Camera _cam;
-    [HideInInspector]
-    public RaycastHit hit;
+    [HideInInspector] public RaycastHit hit;
     private GameObject _blockCurrentlySelected;
-    private Color _blockCurrentlySelectedColor;
+    public Color blockCurrentlySelectedColor;
 
     private static TouchManager _touchManager;
 
@@ -95,6 +94,7 @@ public class TouchManager : MonoBehaviour
             {
                 if (_blockCurrentlySelected != null)
                 {
+                    
                     //Previous selected block get his base color back
                     ResetPreviousBlockColor();
                 }
@@ -214,13 +214,14 @@ public class TouchManager : MonoBehaviour
     void SelectedBlockColor(Color color)
     {
         Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-        _blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
+        blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
         blockCurrentlySelectedMat.color = color;
     }
 
     void ResetPreviousBlockColor()
     {
         Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-        blockCurrentlySelectedMat.color = _blockCurrentlySelectedColor;
+        
+        blockCurrentlySelectedMat.color = blockCurrentlySelectedColor;
     }
 }

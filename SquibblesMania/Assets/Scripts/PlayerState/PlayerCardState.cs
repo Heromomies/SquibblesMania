@@ -11,6 +11,11 @@ public class PlayerCardState : PlayerBaseState
         //Message player turn x "Put a card on the corresponding surface"
         //Debug.Log("Player have to put a card on the Square one");
         //Open panel with 2 button for the player
+        player.playerActionPoint = Random.Range(1, 6);
+        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
+        player.isPlayerInActionCardState = true;
+        player.SwitchState(player.PlayerActionPointCardState);
+    
     }
 
     public override void UpdtateState(PlayerStateManager player)
@@ -23,10 +28,6 @@ public class PlayerCardState : PlayerBaseState
         //if player touch the action point button 
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            player.playerActionPoint = Random.Range(1, 6);
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer();
-            player.isPlayerInActionCardState = true;
-            player.SwitchState(player.PlayerActionPointCardState);
         }
     }
 

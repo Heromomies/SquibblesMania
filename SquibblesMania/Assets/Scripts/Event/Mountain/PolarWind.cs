@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+
+
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
@@ -33,7 +33,7 @@ public class PolarWind : MonoBehaviour
 		//blockAtHeight = GameObject.FindGameObjectsWithTag("Platform");
 
 		_line = gameObject.GetComponent<LineRenderer>();
-		_line.SetVertexCount (segments );
+//		_line.SetVertexCount (segments );
 		_line.useWorldSpace = false;
 		
 		_stopLoop = false;

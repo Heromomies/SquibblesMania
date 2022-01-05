@@ -28,6 +28,14 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         int indexBlockNearby = 0;
 
+        //Take the base color of the block
+        if (player.currentBlockPlayerOn != null)
+        {
+            Color blockBaseColor = Color.gray;
+            player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().material.color = blockBaseColor;
+            TouchManager.Instance.blockCurrentlySelectedColor = blockBaseColor;
+        }
+       
 
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
@@ -92,7 +100,8 @@ public class PlayerActionPointCardState : PlayerBaseState
         //If in our list, he stay a element, we restart the void
         if (nextBlocksPath.Any())
         {
-            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint, playerStateManager);
+            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint,
+                playerStateManager);
         }
     }
 
@@ -267,6 +276,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         int movementPlayer = 0;
 
+        int actionPointText = player.playerActionPoint;
 
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
@@ -276,13 +286,14 @@ public class PlayerActionPointCardState : PlayerBaseState
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
-
+                actionPointText--;
+                UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
             }
         }
 
-
+        player.playerActionPoint = actionPointText;
         Clear(player);
     }
 
@@ -305,24 +316,33 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-        //Switch to the next player
-        switch (player.playerNumber)
+
+
+        if (player.playerActionPoint > 0)
         {
-            case 0:
-                GameManager.Instance.ChangePlayerTurn(1);
+            EnterState(player);
+        }
+        else
+        {
+            //Switch to the next player
+            switch (player.playerNumber)
+            {
+                case 0:
+                    GameManager.Instance.ChangePlayerTurn(1);
 
-                break;
-            case 1:
-                GameManager.Instance.ChangePlayerTurn(2);
+                    break;
+                case 1:
+                    GameManager.Instance.ChangePlayerTurn(2);
 
-                break;
-            case 2:
-                GameManager.Instance.ChangePlayerTurn(3);
+                    break;
+                case 2:
+                    GameManager.Instance.ChangePlayerTurn(3);
 
-                break;
-            case 3:
-                GameManager.Instance.ChangePlayerTurn(0);
-                break;
+                    break;
+                case 3:
+                    GameManager.Instance.ChangePlayerTurn(0);
+                    break;
+            }
         }
     }
 }
