@@ -9,10 +9,26 @@ public class EventManager : MonoBehaviour
    // public Component[] components;
 
     public List<GameObject> events;
+    
+    public List<GameObject> cubeOnMap;
    
     private ConditionReleaseEvent _conditionSO;
 
     private float _release;
+
+    #region Singleton
+
+    private static EventManager eventManager;
+
+    public static EventManager Instance => eventManager;
+    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        eventManager = this;
+    }
+
+    #endregion
     
     // Start is called before the first frame update
     void Start()

@@ -42,13 +42,13 @@ public class MeteoriteExplosion : MonoBehaviour
 	public void Start() // When we click on the button	
 	{
 		#region MeteoriteRandomization
-
-		foldoutValues.cubeOnMap = MapGenerator.Instance.cubeOnMap;
+		
+		foldoutValues.cubeOnMap = EventManager.Instance.cubeOnMap;
 
 		while (foldoutValues.numberOfMeteorite > 0)
 		{
 			foldoutValues.numberOfMeteorite--;
-			int placeOfCube = Random.Range(0, 100);
+			int placeOfCube = Random.Range(0, EventManager.Instance.cubeOnMap.Capacity);
 			RandomEvent(placeOfCube);
 		}
 
@@ -64,10 +64,11 @@ public class MeteoriteExplosion : MonoBehaviour
 		if (foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color != Color.black)
 		{
 			foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
+			foldoutValues.cubeOnMap[placeOfCube].GetComponent<Node>().ChangeBool();
 
 			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
-			MapGenerator.Instance.cubeOnMap.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+			EventManager.Instance.cubeOnMap.Remove(foldoutValues.cubeOnMap[placeOfCube]);
 		}
 
 		#endregion
@@ -77,12 +78,10 @@ public class MeteoriteExplosion : MonoBehaviour
 	{
 		#region ExplosionFromTheCenter
 
-		foldoutValues.cubeTouched[0].tag = "Black Block";
-
 		var positionVol = foldoutValues.volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(foldoutValues.cubeTouched[0].transform.position, positionVol,
 			foldoutValues.speed); // Add the velocity to make an effect of parabola for the bullets
-		transform.rotation = Quaternion.LookRotation(vo);
+		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1,1,1));
 
 		foldoutValues.cubeTouched.Remove(foldoutValues.cubeTouched[0]);
 
@@ -153,7 +152,7 @@ public class MeteoriteExplosion : MonoBehaviour
 
 		public Rigidbody bulletPrefab;
 		public Transform volcanoTransform;
-
+		
 		[Range(0.0f, 3.0f)] public float speed;
 		[Range(0.0f, 1.0f)] public float repeatRate;
 	}
