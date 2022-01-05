@@ -1,22 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using Wizama;
+using Wizama.Hardware.Antenna;
 using Wizama.Hardware.Light;
 
 public class SquareOneChangeColor : MonoBehaviour
 {
-    public LIGHT_COLOR id;
-    public LIGHT_INDEX li;
-    
-    public void OnClick()
+    void Start()
     {
-        LightController.ColorizeOne(li, id, true);
+        var lightIndex = LIGHT_INDEX.LIGHT_1;
+        lightIndex = (LIGHT_INDEX) LIGHT_COLOR.COLOR_RED;
     }
-
-   /* public static void ColorizeOne(LIGHT_INDEX lightIndexes, LIGHT_COLOR lightColors, bool keepOthersColorized = true)
-    {
-        Debug.Log(lightIndexes);
-        Debug.Log(lightColors);
-    }*/
 }
+

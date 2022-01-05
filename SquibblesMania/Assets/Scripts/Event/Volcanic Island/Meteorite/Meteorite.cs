@@ -16,8 +16,11 @@ public class Meteorite : MonoBehaviour
    {
       if (other.gameObject.CompareTag("Black Block"))
       {
-         Debug.Log("I'm colliding with the blocks");
          _rb.constraints = RigidbodyConstraints.FreezeAll;
+         float localY = transform.localScale.y / 4;
+         transform.position = new Vector3(other.transform.position.x, other.transform.localScale.y + localY, other.transform.position.z);
+         
+         transform.rotation = other.transform.rotation;
       }
    }
 }
