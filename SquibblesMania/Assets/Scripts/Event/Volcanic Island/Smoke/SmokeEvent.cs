@@ -54,7 +54,7 @@ public class SmokeEvent : MonoBehaviour
 		    || _cubeToChange >= 34 && _cubeToChange <= 40 || _cubeToChange >= 44 && _cubeToChange <= 50 || _cubeToChange >= 54 && _cubeToChange <= 60
 		    || _cubeToChange >= 64 && _cubeToChange <= 70 || _cubeToChange >= 74 && _cubeToChange <= 80)
 		{
-			_cubeToChange = Random.Range(0, 80);
+			_cubeToChange = Random.Range(0, _cubeTouched.Count);
 		}
 	}
 }
