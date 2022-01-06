@@ -17,22 +17,22 @@ public class MeteoriteExplosion : MonoBehaviour
 		// Create a new Sequence.
 		Sequence s = DOTween.Sequence();
 		// Change the scale of the object to make it smaller
-		s.Append(foldoutValuesEvent.volcano.DOScaleY(-1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
-		s.Insert(0, foldoutValuesEvent.volcano.DOScaleZ(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
-		s.Insert(0, foldoutValuesEvent.volcano.DOScaleX(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Append(foldoutValues.volcanoTransform.DOScaleY(-1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Insert(0, foldoutValues.volcanoTransform.DOScaleZ(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Insert(0, foldoutValues.volcanoTransform.DOScaleX(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
 
 		// Add shake to the object
 		s.Insert(foldoutValuesEvent.durationOfScale,
-			foldoutValuesEvent.volcano.DOShakePosition(foldoutValuesEvent.durationShake, foldoutValuesEvent.strength, foldoutValuesEvent.vibrato,
+			foldoutValues.volcanoTransform.DOShakePosition(foldoutValuesEvent.durationShake, foldoutValuesEvent.strength, foldoutValuesEvent.vibrato,
 				foldoutValuesEvent.randomness));
 
 		// Change the scale of the object to make it bigger
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValuesEvent.volcano.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValuesEvent.volcano.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValuesEvent.volcano.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 
 		yield return new WaitForSeconds(foldoutValuesEvent.durationOfScale * 3.5f);
 
@@ -138,7 +138,6 @@ public class MeteoriteExplosion : MonoBehaviour
 	[Serializable]
 	private class FoldoutValueHolderEvent
 	{
-		public Transform volcano;
 		public float durationOfScale;
 
 		public float durationShake;
