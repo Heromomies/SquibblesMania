@@ -30,7 +30,6 @@ public class SmokeEvent : MonoBehaviour
 		for (int i = 0; i < numberOfSmoke; i++) // Allow to colorize material to create a compact zone
 		{
 			_cubeOnMap[_cubeToChange + i].GetComponent<Renderer>().material.color = Color.black;
-
 			_cubeTouched.Add(_cubeOnMap[_cubeToChange + i]);
 		} 
 		foreach (var cubeTouched in _cubeTouched) // Instantiate particle on the top of the block

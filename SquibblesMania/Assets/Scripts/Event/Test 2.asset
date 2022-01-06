@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2469e99dff82a14468bc8618c2690c2f, type: 3}
   m_Name: Test 2
   m_EditorClassIdentifier: 
-  actionPoint: 0
-  walkOnCase: 0
-  walkOnColor: 0
-  numberOfSteps: 3
+  conditions:
+  - conditionType: 2
+    colorsToChose: 2
+    numberOfSteps: 8
+    conditionToRelease: "Le nombre de cases qu'il faut d\xE9placer est : "
+  - conditionType: 0
+    colorsToChose: 0
+    numberOfSteps: 10
+    conditionToRelease: "Le nombre de pas \xE0 faire est : "
+  - conditionType: 0
+    colorsToChose: 0
+    numberOfSteps: 59
+    conditionToRelease: 'The number of deplacement to make is : '

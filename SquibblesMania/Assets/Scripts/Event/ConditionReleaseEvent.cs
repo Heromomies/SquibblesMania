@@ -1,14 +1,34 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[CreateAssetMenu (fileName = "Scriptable Object", menuName = "Scriptable Object/Conditions Release Event")]
-public class ConditionReleaseEvent : ScriptableObject
+namespace Event
 {
-   public bool actionPoint;
-   public bool walkOnCase;
-   public bool walkOnColor;
-
+   [CreateAssetMenu (fileName = "Scriptable Object", menuName = "Scriptable Object/Conditions Release Event")]
+   public class ConditionReleaseEvent : ScriptableObject
+   {
+      public Condition[] conditions;
+   }
+}
+[System.Serializable]
+public class Condition
+{
+   public enum ConditionType
+   {
+      NumberOfSteps = 0,
+      WalkOnCase = 1, 
+      MoveCase = 2
+   }
+   public enum ColorToChose
+   {
+      Red = 0,
+      Yellow = 1, 
+      Blue = 2,
+      Green = 3
+   }
+   public ConditionType conditionType;
+   public ColorToChose colorsToChose;
+ 
    public int numberOfSteps;
+   
+   public string conditionToRelease;
 }

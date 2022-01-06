@@ -1,91 +1,117 @@
 using System.Collections;
 using System.Collections.Generic;
+using Event;
+using TMPro;
 using UnityEngine;
 using Wizama.Hardware.Light;
 
 public class EventManager : MonoBehaviour
 {
-    [Header("CONDITION RELEASE EVENT")]
-    public List<ConditionReleaseEvent> conditionReleaseEvents = new List<ConditionReleaseEvent>();
-   // public Component[] components;
-    [Space] [Header("EVENTS")]
-    public List<GameObject> events;
+	[Header("CONDITION RELEASE EVENT")] public List<ConditionReleaseEvent> conditionReleaseEvents;
 
-    [HideInInspector] public List<GameObject> cleanList;
-    
-    [Space] [Header("MAP ZONE")]
-    public List<GameObject> listZoneNorthWest;
-    public List<GameObject> listZoneNorthEst;
-    public List<GameObject> listZoneSouthWest;
-    public List<GameObject> listZoneSouthEst;
+	// public Component[] components;
+	[Space] [Header("EVENTS")] public List<GameObject> events;
 
-    [Space] [Header("CANVAS")]
-    public GameObject canvasButton;
+	[HideInInspector] public List<GameObject> cleanList;
 
-    private ConditionReleaseEvent _conditionSo;
-    private float _release;
+	[Space] [Header("MAP ZONE")] public List<GameObject> listZoneNorthWest;
+	public List<GameObject> listZoneNorthEst;
+	public List<GameObject> listZoneSouthWest;
+	public List<GameObject> listZoneSouthEst;
 
-    #region Singleton
+	[Space] [Header("CANVAS")] public GameObject canvasButton;
+	public List<TextMeshProUGUI> textToReleaseEvent;
 
-    private static EventManager eventManager;
+	private ConditionReleaseEvent _condition;
+	private float _release;
+	private int _numberOfTheCondition;
 
-    public static EventManager Instance => eventManager;
-    // Start is called before the first frame update
+	#region Singleton
 
-    private void Awake()
-    {
-        eventManager = this;
-    }
+	private static EventManager eventManager;
 
-    #endregion
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        int random = Random.Range(1, conditionReleaseEvents.Count);
-        _conditionSo = conditionReleaseEvents[random];
-        conditionReleaseEvents.Remove(conditionReleaseEvents[random]);
-    }
+	public static EventManager Instance => eventManager;
+	// Start is called before the first frame update
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (_release >= _conditionSo.numberOfSteps)
-        {
-            canvasButton.SetActive(true);
-            _release = 0;
-        }
-    }
+	private void Awake()
+	{
+		eventManager = this;
+	}
 
-    public void AddPointToReleaseEvent()
-    {
-        _release++;
-    }
+	#endregion
 
-    public void ClickButton(int numberButton)
-    {
-        switch (numberButton)
-        {
-            case 0:
-                cleanList = listZoneNorthWest;
-                Debug.Log(cleanList);
-                break;
-            case 1:
-                cleanList = listZoneNorthEst;
-                Debug.Log(cleanList);
-                break;
-            case 2:
-                cleanList = listZoneSouthWest;
-                Debug.Log(cleanList);
-                break;
-            case 3:
-                cleanList = listZoneSouthEst;
-                Debug.Log(cleanList);
-                break;
-        }
-        canvasButton.SetActive(false);
-        events[1].SetActive(true);
-       /* int random = Random.Range(0, events.Count);
-        events[random].SetActive(true);*/
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		DefineCondition();
+	}
+
+	void DefineCondition() // Define the condition to activate event
+	{
+		_numberOfTheCondition = Random.Range(0, conditionReleaseEvents.Count);
+		_condition = conditionReleaseEvents[_numberOfTheCondition];
+		
+		Debug.Log(_numberOfTheCondition);
+		
+		for (int i = 0; i < textToReleaseEvent.Count; i++)
+		{
+			Debug.Log(i);
+			textToReleaseEvent[i].text = conditionReleaseEvents[_numberOfTheCondition].conditions[i].conditionToRelease + conditionReleaseEvents[_numberOfTheCondition].conditions[i].numberOfSteps;
+			
+		}
+		conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfTheCondition]);
+	}
+	
+	// Update is called once per frame
+	void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
+	{
+		if (_release >= _condition.conditions[_numberOfTheCondition].numberOfSteps)
+		{
+			canvasButton.SetActive(true);
+			_release = 0;
+		}
+	}
+
+	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
+	{
+		
+	}
+
+	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
+	{
+		
+	}
+	
+	public void AddPointToReleaseEvent()
+	{
+		_release++;
+	}
+
+	public void ClickButton(int numberButton)
+	{
+		switch (numberButton)
+		{
+			case 0:
+				cleanList = listZoneNorthWest;
+				Debug.Log(cleanList);
+				break;
+			case 1:
+				cleanList = listZoneNorthEst;
+				Debug.Log(cleanList);
+				break;
+			case 2:
+				cleanList = listZoneSouthWest;
+				Debug.Log(cleanList);
+				break;
+			case 3:
+				cleanList = listZoneSouthEst;
+				Debug.Log(cleanList);
+				break;
+		}
+
+		canvasButton.SetActive(false);
+		events[1].SetActive(true);
+		/* int random = Random.Range(0, events.Count);
+		 events[random].SetActive(true);*/
+	}
 }
