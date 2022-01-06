@@ -173,10 +173,13 @@ public class TouchManager : MonoBehaviour
             Math.Abs(_blockParentStartPos.y - positionBlockParent.y) < 0.1f)
         {
             //We want to substract action point from the current player if he move up/down the block
-            if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+
+            if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
             {
-                GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+                GameManager.Instance.currentPlayerTurn.playerActionPoint = 0;
             }
+
 
             UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
                 .playerActionPoint);
@@ -229,9 +232,11 @@ public class TouchManager : MonoBehaviour
             Math.Abs(_blockParentStartPos.y - positionBlockParent.y) > 0.1f)
         {
             //We want to substract action point from the current player if he move up/down the block
-            if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+
+            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+            if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
             {
-                GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+                GameManager.Instance.currentPlayerTurn.playerActionPoint = 0;
             }
 
             UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
