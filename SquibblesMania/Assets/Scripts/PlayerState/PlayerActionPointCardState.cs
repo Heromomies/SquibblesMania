@@ -23,7 +23,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         List<Transform> possiblePath = new List<Transform>();
         List<Transform> pastBlocks = new List<Transform>();
-
         List<Transform> finalPreviewPath = new List<Transform>();
 
         int indexBlockNearby = 0;
@@ -35,7 +34,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().material.color = blockBaseColor;
             TouchManager.Instance.blockCurrentlySelectedColor = blockBaseColor;
         }
-       
+
 
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
@@ -85,7 +84,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
-            ColorPossiblePaths(finalPreviewPath);
+            ColorPossiblePaths(finalPreviewPath, Color.white);
             return;
         }
 
@@ -107,18 +106,20 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     #endregion
 
-    void ColorPossiblePaths(List<Transform> finalPreviewPath)
+    void ColorPossiblePaths(List<Transform> finalPreviewPath, Color color)
     {
         //Player have a preview of his possible movement
         foreach (var block in finalPreviewPath)
         {
-            block.gameObject.GetComponent<Renderer>().material.color = Color.white;
+            block.gameObject.GetComponent<Renderer>().material.color = color;
         }
 
         previewPath = finalPreviewPath;
+        
     }
 
-    void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, List<Transform> nextBlocksPath)
+    void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
+        List<Transform> finalPreviewPath, List<Transform> nextBlocksPath)
     {
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
@@ -141,17 +142,20 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public override void UpdtateState(PlayerStateManager player)
     {
+        //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
-            EnterState(player);
             GameManager.Instance.isPathRefresh = false;
+            ColorPossiblePaths(previewPath, Color.grey);
+            EnterState(player);
+            
         }
     }
 
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-
+        ColorPossiblePaths(player.finalPathFinding, Color.grey);
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {
@@ -329,25 +333,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
         else
         {
-            //Switch to the next player
-            switch (player.playerNumber)
-            {
-                case 0:
-                    GameManager.Instance.ChangePlayerTurn(1);
-
-                    break;
-                case 1:
-                    GameManager.Instance.ChangePlayerTurn(2);
-
-                    break;
-                case 2:
-                    GameManager.Instance.ChangePlayerTurn(3);
-
-                    break;
-                case 3:
-                    GameManager.Instance.ChangePlayerTurn(0);
-                    break;
-            }
+            ExitState(player);
         }
     }
 }
