@@ -67,11 +67,11 @@ public class MeteoriteExplosion : MonoBehaviour
 
 			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
-			EventManager.Instance.lOne.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+			EventManager.Instance.listZoneNorthWest.Remove(foldoutValues.cubeOnMap[placeOfCube]);
 		}
 		else
 		{
-			RandomEvent(Random.Range(0, EventManager.Instance.lOne.Capacity));
+			RandomEvent(Random.Range(0, EventManager.Instance.listZoneNorthWest.Capacity));
 		}
 
 		#endregion

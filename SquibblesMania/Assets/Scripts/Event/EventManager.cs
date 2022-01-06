@@ -5,22 +5,24 @@ using Wizama.Hardware.Light;
 
 public class EventManager : MonoBehaviour
 {
+    [Header("CONDITION RELEASE EVENT")]
     public List<ConditionReleaseEvent> conditionReleaseEvents = new List<ConditionReleaseEvent>();
    // public Component[] components;
-
+    [Space] [Header("EVENTS")]
     public List<GameObject> events;
 
-     public List<GameObject> cleanList;
+    [HideInInspector] public List<GameObject> cleanList;
     
-    public List<GameObject> lOne;
-    public List<GameObject> lTwo;
-    public List<GameObject> lThree;
-    public List<GameObject> lFour;
+    [Space] [Header("MAP ZONE")]
+    public List<GameObject> listZoneNorthWest;
+    public List<GameObject> listZoneNorthEst;
+    public List<GameObject> listZoneSouthWest;
+    public List<GameObject> listZoneSouthEst;
 
+    [Space] [Header("CANVAS")]
     public GameObject canvasButton;
 
-    private ConditionReleaseEvent _conditionSO;
-
+    private ConditionReleaseEvent _conditionSo;
     private float _release;
 
     #region Singleton
@@ -41,14 +43,14 @@ public class EventManager : MonoBehaviour
     void Start()
     {
         int random = Random.Range(1, conditionReleaseEvents.Count);
-        _conditionSO = conditionReleaseEvents[random];
+        _conditionSo = conditionReleaseEvents[random];
         conditionReleaseEvents.Remove(conditionReleaseEvents[random]);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_release >= _conditionSO.numberOfSteps)
+        if (_release >= _conditionSo.numberOfSteps)
         {
             canvasButton.SetActive(true);
             _release = 0;
@@ -65,24 +67,24 @@ public class EventManager : MonoBehaviour
         switch (numberButton)
         {
             case 0:
-                cleanList = lOne;
+                cleanList = listZoneNorthWest;
                 Debug.Log(cleanList);
                 break;
             case 1:
-                cleanList = lTwo;
+                cleanList = listZoneNorthEst;
                 Debug.Log(cleanList);
                 break;
             case 2:
-                cleanList = lThree;
+                cleanList = listZoneSouthWest;
                 Debug.Log(cleanList);
                 break;
             case 3:
-                cleanList = lFour;
+                cleanList = listZoneSouthEst;
                 Debug.Log(cleanList);
                 break;
         }
         canvasButton.SetActive(false);
-        events[0].SetActive(true);
+        events[1].SetActive(true);
        /* int random = Random.Range(0, events.Count);
         events[random].SetActive(true);*/
     }
