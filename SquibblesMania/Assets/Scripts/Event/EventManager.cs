@@ -1,15 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Event;
 using TMPro;
 using UnityEngine;
 using Wizama.Hardware.Light;
+using Random = UnityEngine.Random;
 
 public class EventManager : MonoBehaviour
 {
 	[Header("CONDITION RELEASE EVENT")] public List<ConditionReleaseEvent> conditionReleaseEvents;
-
-	// public Component[] components;
+	
 	[Space] [Header("EVENTS")] public List<GameObject> events;
 
 	[HideInInspector] public List<GameObject> cleanList;
@@ -50,18 +51,22 @@ public class EventManager : MonoBehaviour
 	{
 		_numberOfTheCondition = Random.Range(0, conditionReleaseEvents.Count);
 		_condition = conditionReleaseEvents[_numberOfTheCondition];
-		
-		Debug.Log(_numberOfTheCondition);
-		
+
 		for (int i = 0; i < textToReleaseEvent.Count; i++)
 		{
-			Debug.Log(i);
 			textToReleaseEvent[i].text = conditionReleaseEvents[_numberOfTheCondition].conditions[i].conditionToRelease + conditionReleaseEvents[_numberOfTheCondition].conditions[i].numberOfSteps;
 			
 		}
 		conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfTheCondition]);
 	}
-	
+
+	private void Update()
+	{
+		NumberOfSteps();
+		MoveCase();
+		ColorToWalkOn();
+	}
+
 	// Update is called once per frame
 	void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
 	{
@@ -73,14 +78,10 @@ public class EventManager : MonoBehaviour
 	}
 
 	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
-	{
-		
-	}
+	{ }
 
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
-	{
-		
-	}
+	{ }
 	
 	public void AddPointToReleaseEvent()
 	{
