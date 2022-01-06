@@ -31,6 +31,7 @@ public class UiManager : MonoBehaviour
     {
         TouchManager.Instance.uiInteractionParentObject.SetActive(false);
         TouchManager.Instance.uiScaleBlockParentObject.SetActive(true);
+        
     }
 
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)

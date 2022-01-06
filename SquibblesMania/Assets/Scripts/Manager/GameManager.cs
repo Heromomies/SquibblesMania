@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager playerPref;
     
     public PlayerStateManager currentPlayerTurn;
+    public bool isPathRefresh;
     private void Awake()
     {
         _gameManager = this;

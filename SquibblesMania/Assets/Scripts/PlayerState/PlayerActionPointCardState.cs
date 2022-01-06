@@ -7,13 +7,13 @@ using UnityEngine;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
-    private List<Transform> _previewPath = new List<Transform>();
+    public List<Transform> previewPath = new List<Transform>();
 
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
         //TODO Faire une method qui permet de prévisualiser jusqu'ou le joueur peut aller avec ces points d'actions
-        _previewPath.Clear();
+        previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
     }
 
@@ -115,7 +115,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             block.gameObject.GetComponent<Renderer>().material.color = Color.white;
         }
 
-        _previewPath = finalPreviewPath;
+        previewPath = finalPreviewPath;
     }
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, List<Transform> nextBlocksPath)
@@ -141,6 +141,11 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public override void UpdtateState(PlayerStateManager player)
     {
+        if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
+        {
+            EnterState(player);
+            GameManager.Instance.isPathRefresh = false;
+        }
     }
 
     public override void ExitState(PlayerStateManager player)
@@ -309,7 +314,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        foreach (var previewBlock in _previewPath)
+        foreach (var previewBlock in previewPath)
         {
             previewBlock.gameObject.GetComponent<Renderer>().material.color = Color.grey;
         }

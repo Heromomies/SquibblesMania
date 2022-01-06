@@ -26,8 +26,9 @@ public class TouchManager : MonoBehaviour
     private Camera _cam;
     [HideInInspector] public RaycastHit hit;
     private GameObject _blockCurrentlySelected;
-    public Color blockCurrentlySelectedColor;
+    [HideInInspector] public Color blockCurrentlySelectedColor;
 
+    private Vector3 _blockParentStartPos;
     private static TouchManager _touchManager;
 
     public static TouchManager Instance => _touchManager;
@@ -94,7 +95,6 @@ public class TouchManager : MonoBehaviour
             {
                 if (_blockCurrentlySelected != null)
                 {
-                    
                     //Previous selected block get his base color back
                     ResetPreviousBlockColor();
                 }
@@ -122,25 +122,28 @@ public class TouchManager : MonoBehaviour
         if (hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
             GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
         {
-            //Take the block group parent from hit block gameobject
-            GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
-            //Take the current player position
-            Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
-            //Take the current block group selected position
-            Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
-            //Change pos of canvas base on the current block selected
-            canvasTransform.position = hit.transform.position + offsetPos;
-            uiInteractionParentObject.SetActive(true);
-            buttonGoToTheBlock.interactable = true;
-
-            _blockCurrentlySelected = hit.transform.gameObject;
-            SelectedBlockColor(Color.black);
-
-            //If the current block group if below or above the player pos
-            if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
-                blockGroupParentPos.y + 1 < currentPlayerPos.y)
+            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(hit.transform))
             {
-                buttonGoToTheBlock.interactable = false;
+                //Take the block group parent from hit block gameobject
+                GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
+                _blockParentStartPos = hit.transform.parent.position;
+                //Take the current player position
+                Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
+                //Take the current block group selected position
+                Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
+                //Change pos of canvas base on the current block selected
+                canvasTransform.position = hit.transform.position + offsetPos;
+                uiInteractionParentObject.SetActive(true);
+                buttonGoToTheBlock.interactable = true;
+
+                _blockCurrentlySelected = hit.transform.gameObject;
+                SelectedBlockColor(Color.black);
+
+                //If the current block group if below or above the player pos
+                if (blockGroupParentPos.y + 1 > currentPlayerPos.y || blockGroupParentPos.y + 1 < currentPlayerPos.y)
+                {
+                    buttonGoToTheBlock.interactable = false;
+                }
             }
         }
     }
@@ -153,15 +156,35 @@ public class TouchManager : MonoBehaviour
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
 
 
+        Vector3 positionBlockParent = _blockParent.position;
+
         if (_blockParent.position.y >= 4)
         {
             return;
         }
 
 
-        Vector3 positionBlockParent = _blockParent.position;
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
             0.25f);
+
+        positionBlockParent = _blockParent.position;
+        
+        if (_blockParentStartPos.y > positionBlockParent.y || Math.Abs(_blockParentStartPos.y - positionBlockParent.y) < 0.1f)
+        {
+            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
+        else
+        {
+            GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
+
+
         //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
         {
@@ -189,9 +212,26 @@ public class TouchManager : MonoBehaviour
         }
 
 
-        var positionBlockParent = _blockParent.position;
+        Vector3 positionBlockParent = _blockParent.position;
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
             0.25f);
+
+        positionBlockParent = _blockParent.position;
+
+        if (positionBlockParent.y > _blockParentStartPos.y || Math.Abs(_blockParentStartPos.y - positionBlockParent.y) > 0.1f)
+        {
+            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
+        else
+        {
+            GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
 
         //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
@@ -221,7 +261,7 @@ public class TouchManager : MonoBehaviour
     void ResetPreviousBlockColor()
     {
         Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-        
+
         blockCurrentlySelectedMat.color = blockCurrentlySelectedColor;
     }
 }
