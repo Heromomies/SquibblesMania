@@ -43,12 +43,12 @@ public class MeteoriteExplosion : MonoBehaviour
 	{
 		#region MeteoriteRandomization
 		
-		foldoutValues.cubeOnMap = EventManager.Instance.cubeOnMap;
+		foldoutValues.cubeOnMap = EventManager.Instance.cleanList;
 
 		while (foldoutValues.numberOfMeteorite > 0)
 		{
 			foldoutValues.numberOfMeteorite--;
-			int placeOfCube = Random.Range(0, EventManager.Instance.cubeOnMap.Capacity);
+			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
 			RandomEvent(placeOfCube);
 		}
 
@@ -67,11 +67,11 @@ public class MeteoriteExplosion : MonoBehaviour
 
 			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
-			EventManager.Instance.cubeOnMap.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+			EventManager.Instance.lOne.Remove(foldoutValues.cubeOnMap[placeOfCube]);
 		}
 		else
 		{
-			RandomEvent(Random.Range(0, EventManager.Instance.cubeOnMap.Capacity));
+			RandomEvent(Random.Range(0, EventManager.Instance.lOne.Capacity));
 		}
 
 		#endregion

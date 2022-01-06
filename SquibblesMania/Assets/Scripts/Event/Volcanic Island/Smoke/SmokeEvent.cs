@@ -16,7 +16,7 @@ public class SmokeEvent : MonoBehaviour
 	{
 		#region LaunchFunctionCompactEvent
 
-		_cubeOnMap = EventManager.Instance.cubeOnMap;
+		_cubeOnMap = EventManager.Instance.cleanList;
 
 		CompactEvent();
 

@@ -9,9 +9,16 @@ public class EventManager : MonoBehaviour
    // public Component[] components;
 
     public List<GameObject> events;
+
+     public List<GameObject> cleanList;
     
-    public List<GameObject> cubeOnMap;
-   
+    public List<GameObject> lOne;
+    public List<GameObject> lTwo;
+    public List<GameObject> lThree;
+    public List<GameObject> lFour;
+
+    public GameObject canvasButton;
+
     private ConditionReleaseEvent _conditionSO;
 
     private float _release;
@@ -41,19 +48,42 @@ public class EventManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TODO search the conditions to activate event with scriptable object
-
         if (_release >= _conditionSO.numberOfSteps)
         {
-            int random = Random.Range(1, events.Count);
-            events[random].SetActive(true);
-
+            canvasButton.SetActive(true);
             _release = 0;
         }
     }
 
-    public void OnClick()
+    public void AddPointToReleaseEvent()
     {
         _release++;
+    }
+
+    public void ClickButton(int numberButton)
+    {
+        switch (numberButton)
+        {
+            case 0:
+                cleanList = lOne;
+                Debug.Log(cleanList);
+                break;
+            case 1:
+                cleanList = lTwo;
+                Debug.Log(cleanList);
+                break;
+            case 2:
+                cleanList = lThree;
+                Debug.Log(cleanList);
+                break;
+            case 3:
+                cleanList = lFour;
+                Debug.Log(cleanList);
+                break;
+        }
+        canvasButton.SetActive(false);
+        events[0].SetActive(true);
+       /* int random = Random.Range(0, events.Count);
+        events[random].SetActive(true);*/
     }
 }
