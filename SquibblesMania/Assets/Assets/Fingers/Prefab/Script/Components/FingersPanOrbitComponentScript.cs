@@ -347,7 +347,7 @@ namespace DigitalRubyShared
             }
 
 
-            cameraSize += (zoomSpeed * Time.deltaTime);
+            cameraSize -= (zoomSpeed * Time.deltaTime);
             cameraSize = Mathf.Clamp(cameraSize, MinimumDistance, MaximumDistance);
             Camera.main.orthographicSize = cameraSize;
             camUI.orthographicSize = cameraSize;

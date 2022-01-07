@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool isPathRefresh;
 
+    public int turnCount;
     private void Awake()
     {
         _gameManager = this;
@@ -44,13 +45,16 @@ public class GameManager : MonoBehaviour
     {
         //Choose Randomly a player to start
         int numberPlayerToStart = Random.Range(0, players.Count);
-
+        turnCount++;
+        UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)
     {
+        turnCount++;
+        UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
     }
