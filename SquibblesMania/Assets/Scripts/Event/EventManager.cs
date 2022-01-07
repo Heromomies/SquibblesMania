@@ -28,6 +28,7 @@ public class EventManager : MonoBehaviour
 	private int _numberOfCondition;
 	private PlayerStateManager _player;
 	private bool _eventOne;
+	private int _numberEvent;
 	#region Singleton
 
 	private static EventManager eventManager;
@@ -98,7 +99,7 @@ public class EventManager : MonoBehaviour
 	{
 		NumberOfSteps();
 		MoveCase();
-		ColorToWalkOn();
+		//ColorToWalkOn();
 	}
 
 	// Update is called once per frame
@@ -109,6 +110,7 @@ public class EventManager : MonoBehaviour
 			textToReleaseEvent[0].color = Color.green;
 			textToReleaseEvent[0].text = "Le nombre de case a été atteint";
 			canvasButton.SetActive(true);
+			_numberEvent = 0;
 		}
 	}
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
@@ -121,6 +123,7 @@ public class EventManager : MonoBehaviour
 			textToReleaseEvent[2].color = Color.green;
 			textToReleaseEvent[2].text = "Le nombre de case déplacée a été atteint";
 			canvasButton.SetActive(true);
+			_numberEvent = 2;
 		}
 	}
 	public void ClickButton(int numberButton)
@@ -140,18 +143,17 @@ public class EventManager : MonoBehaviour
 				cleanList = listZoneSouthEst;
 				break;
 		}
-
-		_condition.conditions[0].numberOfSteps = Mathf.Infinity;
-		
+		LaunchEvent(_numberEvent);
 		canvasButton.SetActive(false);
-		events[1].SetActive(true);
-
-		_eventOne = true;
-
-
-		/* int random = Random.Range(0, events.Count);
-		 events[random].SetActive(true);*/
 	}
+
+	void LaunchEvent(int numberEvent)
+	{
+		_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
+		events[numberEvent].SetActive(true);
+		_eventOne = true;
+	}
+	
 	public void OnApplicationQuit()
 	{
 		_condition.conditions[0].numberOfSteps = Random.Range(5, 10);
