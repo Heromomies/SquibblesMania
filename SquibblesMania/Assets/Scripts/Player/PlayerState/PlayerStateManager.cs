@@ -20,7 +20,7 @@ public class PlayerStateManager : Player
 
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
-    [SerializeField] public List<Transform> nextBlockPath;
+    public List<Transform> nextBlockPath;
 
     private void Awake()
     {
