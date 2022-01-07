@@ -24,7 +24,7 @@ public class UiManager : MonoBehaviour
     public void ButtonPathFindingBlock()
     {
         
-        GameManager.Instance.currentPlayerTurn.currentTouchBlock = TouchManager.Instance.hit.transform;
+        GameManager.Instance.currentPlayerTurn.currentTouchBlock = TouchManager.Instance.Hit.transform;
 
         GameManager.Instance.currentPlayerTurn.StartPathFinding();
         TouchManager.Instance.uiInteractionParentObject.SetActive(false);
@@ -33,8 +33,8 @@ public class UiManager : MonoBehaviour
     public void ButtonUpDownBlock()
     {
         TouchManager.Instance.uiInteractionParentObject.SetActive(false);
-        TouchManager.Instance.uiScaleBlockParentObject.SetActive(true);
-        TouchManager.Instance.isMovingBlock = true;
+        MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(true);
+        MovementBlockManager.Instance.isMovingBlock = true;
     }
 
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
