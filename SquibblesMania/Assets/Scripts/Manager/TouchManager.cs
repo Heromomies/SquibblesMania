@@ -26,7 +26,6 @@ public class TouchManager : MonoBehaviour
     private GameObject _blockCurrentlySelected;
     public Color blockCurrentlySelectedColor;
 
-    private Vector3 _blockParentStartPos;
     private static TouchManager _touchManager;
     public bool isMovingBlock;
     public static TouchManager Instance => _touchManager;
@@ -123,12 +122,12 @@ public class TouchManager : MonoBehaviour
         if (hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
             GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
         {
-            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(hit.transform))
+            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(hit.transform) && GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
             {
                 uiScaleBlockParentObject.SetActive(false);
                 //Take the block group parent from hit block gameobject
                 GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
-                _blockParentStartPos = hit.transform.parent.position;
+
                 //Take the current player position
                 Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
                 //Take the current block group selected position
@@ -151,6 +150,11 @@ public class TouchManager : MonoBehaviour
 
     public void PlatformeUp()
     {
+        if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+        {
+            return;
+        }
+
         _blockParent = hit.collider.gameObject.transform.parent;
 
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
@@ -164,35 +168,14 @@ public class TouchManager : MonoBehaviour
         }
 
 
-        _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
-            0.25f);
-
-        positionBlockParent = _blockParent.position;
-        //We compare if the startPos of the block parent is bigger than his actual pos
-        if (_blockParentStartPos.y > positionBlockParent.y ||
-            Math.Abs(_blockParentStartPos.y - positionBlockParent.y) < 0.1f)
-        {
-            //We want to substract action point from the current player if he move up/down the block
-            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-
-            if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-            {
-                GameManager.Instance.currentPlayerTurn.playerActionPoint = 0;
-            }
+        _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z), 0.25f);
 
 
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
-                .playerActionPoint);
-            GameManager.Instance.isPathRefresh = true;
-        }
-        else
-        {
-            //If the block going back to his initial pos we add action point to the player (it's as if he nullify his action)
-            GameManager.Instance.currentPlayerTurn.playerActionPoint++;
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
-                .playerActionPoint);
-            GameManager.Instance.isPathRefresh = true;
-        }
+        //We want to substract action point from the current player if he move up/down the block
+        GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+            .playerActionPoint);
+        GameManager.Instance.isPathRefresh = true;
 
 
         //Move the player with block
@@ -213,6 +196,11 @@ public class TouchManager : MonoBehaviour
 
     public void PlatformeDown()
     {
+        if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+        {
+            return;
+        }
+
         _blockParent = hit.collider.gameObject.transform.parent;
 
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
@@ -226,31 +214,13 @@ public class TouchManager : MonoBehaviour
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
             0.25f);
 
-        positionBlockParent = _blockParent.position;
-        //We compare if the parent block position its bigger than his lastPos or equal 
-        if (positionBlockParent.y > _blockParentStartPos.y ||
-            Math.Abs(_blockParentStartPos.y - positionBlockParent.y) > 0.1f)
-        {
-            //We want to substract action point from the current player if he move up/down the block
 
-            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-            if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-            {
-                GameManager.Instance.currentPlayerTurn.playerActionPoint = 0;
-            }
+        GameManager.Instance.currentPlayerTurn.playerActionPoint--;
 
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
-                .playerActionPoint);
-            GameManager.Instance.isPathRefresh = true;
-        }
-        else
-        {
-            //If the block going back to his initial pos we add action point to the player (it's as if he nullify his action)
-            GameManager.Instance.currentPlayerTurn.playerActionPoint++;
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
-                .playerActionPoint);
-            GameManager.Instance.isPathRefresh = true;
-        }
+        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+            .playerActionPoint);
+        GameManager.Instance.isPathRefresh = true;
+
 
         //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)

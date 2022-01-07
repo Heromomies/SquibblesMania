@@ -39,4 +39,9 @@ public class UiManager : MonoBehaviour
     {
         currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {actionPointText}";
     }
+
+    public void ButtonNextTurn()
+    {
+        GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
+    }
 }
