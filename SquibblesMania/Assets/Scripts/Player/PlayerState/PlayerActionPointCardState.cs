@@ -295,7 +295,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 if (EventManager.Instance != null)
                 {
-                    EventManager.Instance.AddPoint(1);
+                    EventManager.Instance.AddPointForNumberOfSteps(1);
                 }
                
                 Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +

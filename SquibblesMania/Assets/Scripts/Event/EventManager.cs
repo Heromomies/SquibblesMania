@@ -99,8 +99,10 @@ public class EventManager : MonoBehaviour
 		}
 	}
 
-	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
-	{ }
+	public void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
+	{
+		
+	}
 
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
 	{ }
