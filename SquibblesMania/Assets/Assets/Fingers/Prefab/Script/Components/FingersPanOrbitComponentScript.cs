@@ -181,6 +181,8 @@ namespace DigitalRubyShared
         /// </summary>
         public event System.Action OrbitTargetTapped;
 
+        public float cameraSize;
+
         private void OnEnable()
         {
             // create a scale gesture to zoom orbiter in and out
@@ -213,6 +215,8 @@ namespace DigitalRubyShared
             FingersScript.Instance.AddGesture(ScaleGesture);
             FingersScript.Instance.AddGesture(PanGesture);
             FingersScript.Instance.AddGesture(TapGesture);
+
+            cameraSize = Camera.main.orthographicSize;
         }
 
         private void OnDisable()
@@ -341,8 +345,10 @@ namespace DigitalRubyShared
                     Quaternion.Lerp(currentRotation, lookAtRotation, ZoomLookAtSpeed * Time.deltaTime);
             }
 
-            Debug.Log("Hello world");
-            Orbiter.transform.position += (Orbiter.transform.forward * zoomSpeed * Time.deltaTime);
+
+            cameraSize += (zoomSpeed * Time.deltaTime);
+            cameraSize = Mathf.Clamp(cameraSize, MinimumDistance, MaximumDistance);
+            Camera.main.orthographicSize = cameraSize;
         }
 
         private void PerformPan(Vector3 pan, float limit)
