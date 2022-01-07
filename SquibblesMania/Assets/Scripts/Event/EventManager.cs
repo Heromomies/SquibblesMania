@@ -25,6 +25,7 @@ public class EventManager : MonoBehaviour
 
 	private ConditionReleaseEvent _condition;
 	private float _release;
+	private float _numberOfSteps;
 	private int _numberOfTheCondition;
 	private PlayerStateManager _player;
 	#region Singleton
@@ -60,10 +61,16 @@ public class EventManager : MonoBehaviour
 		conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfTheCondition]);
 	}
 
+	public void AddPoint(int i)
+	{
+		Debug.Log(i);
+	}
 	private void Update()
 	{
 		_player = GameManager.Instance.currentPlayerTurn;
-		Debug.Log(_player.PlayerActionPointCardState.actionPointText);
+		_numberOfSteps = Mathf.Clamp(0.8f, 0, _player.PlayerActionPointCardState.actionPointText);
+		Debug.Log(_player.PlayerActionPointCardState.actionPoint);
+		
 		NumberOfSteps();
 		MoveCase();
 		ColorToWalkOn();
