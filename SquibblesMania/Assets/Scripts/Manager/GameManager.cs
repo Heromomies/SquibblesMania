@@ -60,16 +60,5 @@ public class GameManager : MonoBehaviour
     {
     }
 
-
-    /* public struct Player
-     {
-         public PlayerStateManager playerStateManager;
-         public int playerNumber;
- 
-         public enum Team
-         {
-             Team1,
-             Team2
-         };
-     }*/
+    
 }

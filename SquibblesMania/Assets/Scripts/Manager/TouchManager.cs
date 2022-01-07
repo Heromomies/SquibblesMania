@@ -122,7 +122,8 @@ public class TouchManager : MonoBehaviour
         if (hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
             GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
         {
-            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(hit.transform) && GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(hit.transform) &&
+                GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
             {
                 uiScaleBlockParentObject.SetActive(false);
                 //Take the block group parent from hit block gameobject
@@ -150,11 +151,6 @@ public class TouchManager : MonoBehaviour
 
     public void PlatformeUp()
     {
-        if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-        {
-            return;
-        }
-
         _blockParent = hit.collider.gameObject.transform.parent;
 
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
@@ -168,7 +164,8 @@ public class TouchManager : MonoBehaviour
         }
 
 
-        _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z), 0.25f);
+        _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
+            0.25f);
 
 
         //We want to substract action point from the current player if he move up/down the block
@@ -192,15 +189,14 @@ public class TouchManager : MonoBehaviour
         ResetPreviewPlatform();
         isMovingBlock = false;
         _blockParent = null;
+        if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+        {
+            UiManager.Instance.buttonNextTurn.SetActive(true);
+        }
     }
 
     public void PlatformeDown()
     {
-        if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-        {
-            return;
-        }
-
         _blockParent = hit.collider.gameObject.transform.parent;
 
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
@@ -238,6 +234,10 @@ public class TouchManager : MonoBehaviour
 
         isMovingBlock = false;
         _blockParent = null;
+        if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+        {
+            UiManager.Instance.buttonNextTurn.SetActive(true);
+        }
     }
 
     /* void SelectedBlockColor(Color color)

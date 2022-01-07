@@ -9,15 +9,17 @@ public class UiManager : MonoBehaviour
     //Manager for simple button Ui
     [Header("MANAGER UI")]
     public TextMeshProUGUI currentActionPointsOfCurrentPlayerTurn;
-
+    
     private static UiManager _uiManager;
 
     public static UiManager Instance => _uiManager;
-
+    public GameObject buttonNextTurn;
     private void Awake()
     {
         _uiManager = this;
+       
     }
+    
 
     public void ButtonPathFindingBlock()
     {
