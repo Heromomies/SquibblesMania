@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerStateManager : Player
 {
-    private PlayerBaseState currentState;
+    public PlayerBaseState CurrentState;
 
     public PlayerActionPointCardState PlayerActionPointCardState = new PlayerActionPointCardState();
     public PlayerCardState PlayerCardState = new PlayerCardState();
@@ -34,9 +34,9 @@ public class PlayerStateManager : Player
     // Update is called once per frame
     void Update()
     {
-        if (currentState != null)
+        if (CurrentState != null)
         {
-            currentState.UpdtateState(this);
+            CurrentState.UpdtateState(this);
             DetectBlockBelowPlayer();
         }
     }
@@ -44,14 +44,14 @@ public class PlayerStateManager : Player
     public void StartState()
     {
         //Start the player turn in the player card state
-        currentState = PlayerCardState;
-        currentState.EnterState(this);
+        CurrentState = PlayerCardState;
+        CurrentState.EnterState(this);
     }
 
     public void StartPathFinding()
     {
         //If the current state of the player is when he use his action point
-        if (currentState == PlayerActionPointCardState)
+        if (CurrentState == PlayerActionPointCardState)
         {
             finalPathFinding.Clear();
 
@@ -59,12 +59,12 @@ public class PlayerStateManager : Player
         }
     }
 
-
+    
     public void SwitchState(PlayerBaseState state)
     {
-        currentState.ExitState(this);
+        CurrentState.ExitState(this);
         //Switch current state to the new "state"
-        currentState = state;
+        CurrentState = state;
 
         state.EnterState(this);
     }
