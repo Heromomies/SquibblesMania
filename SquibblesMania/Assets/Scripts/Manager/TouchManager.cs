@@ -13,9 +13,7 @@ public class TouchManager : MonoBehaviour
 
 
     public PanGestureRecognizer PlayerTouchGesture { get; private set; }
-
-    public GameObject uiScaleBlockParentObject;
-
+    [Header("TOUCH MANAGER")] public GameObject uiScaleBlockParentObject;
     private Transform _blockParent;
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Vector3 offsetPos;
@@ -24,13 +22,13 @@ public class TouchManager : MonoBehaviour
 
     public LayerMask touchLayersMask;
     private Camera _cam;
-    [HideInInspector]
-    public RaycastHit hit;
+    [HideInInspector] public RaycastHit hit;
     private GameObject _blockCurrentlySelected;
-    private Color _blockCurrentlySelectedColor;
+    public Color blockCurrentlySelectedColor;
 
+    private Vector3 _blockParentStartPos;
     private static TouchManager _touchManager;
-
+    public bool isMovingBlock;
     public static TouchManager Instance => _touchManager;
 
     private void Awake()
@@ -96,7 +94,9 @@ public class TouchManager : MonoBehaviour
                 if (_blockCurrentlySelected != null)
                 {
                     //Previous selected block get his base color back
+
                     ResetPreviousBlockColor();
+                    GameManager.Instance.isPathRefresh = true;
                 }
 
                 PlayerTurnActionStateSelectBlock();
@@ -105,9 +105,10 @@ public class TouchManager : MonoBehaviour
             else
             {
                 //If player OnSelect the block, the block get his color back
-                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState && isMovingBlock)
                 {
                     ResetPreviousBlockColor();
+                    GameManager.Instance.isPathRefresh = true;
                     _blockCurrentlySelected = null;
                 }
 
@@ -122,25 +123,27 @@ public class TouchManager : MonoBehaviour
         if (hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
             GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
         {
-            //Take the block group parent from hit block gameobject
-            GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
-            //Take the current player position
-            Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
-            //Take the current block group selected position
-            Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
-            //Change pos of canvas base on the current block selected
-            canvasTransform.position = hit.transform.position + offsetPos;
-            uiInteractionParentObject.SetActive(true);
-            buttonGoToTheBlock.interactable = true;
-
-            _blockCurrentlySelected = hit.transform.gameObject;
-            SelectedBlockColor(Color.black);
-
-            //If the current block group if below or above the player pos
-            if (blockGroupParentPos.y + 1 > currentPlayerPos.y ||
-                blockGroupParentPos.y + 1 < currentPlayerPos.y)
+            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(hit.transform))
             {
-                buttonGoToTheBlock.interactable = false;
+                uiScaleBlockParentObject.SetActive(false);
+                //Take the block group parent from hit block gameobject
+                GroupBlockDetection blockGroupParent = hit.transform.parent.GetComponent<GroupBlockDetection>();
+                _blockParentStartPos = hit.transform.parent.position;
+                //Take the current player position
+                Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
+                //Take the current block group selected position
+                Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
+                //Change pos of canvas base on the current block selected
+                canvasTransform.position = hit.transform.position + offsetPos;
+                uiInteractionParentObject.SetActive(true);
+                buttonGoToTheBlock.interactable = true;
+
+                _blockCurrentlySelected = hit.transform.gameObject;
+                //If the current block group if below or above the player pos
+                if (blockGroupParentPos.y + 1 > currentPlayerPos.y || blockGroupParentPos.y + 1 < currentPlayerPos.y)
+                {
+                    buttonGoToTheBlock.interactable = false;
+                }
             }
         }
     }
@@ -153,15 +156,45 @@ public class TouchManager : MonoBehaviour
         GroupBlockDetection groupBlockDetection = _blockParent.GetComponent<GroupBlockDetection>();
 
 
+        Vector3 positionBlockParent = _blockParent.position;
+
         if (_blockParent.position.y >= 4)
         {
             return;
         }
 
 
-        Vector3 positionBlockParent = _blockParent.position;
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
             0.25f);
+
+        positionBlockParent = _blockParent.position;
+        //We compare if the startPos of the block parent is bigger than his actual pos
+        if (_blockParentStartPos.y > positionBlockParent.y ||
+            Math.Abs(_blockParentStartPos.y - positionBlockParent.y) < 0.1f)
+        {
+            //We want to substract action point from the current player if he move up/down the block
+            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+
+            if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+            {
+                GameManager.Instance.currentPlayerTurn.playerActionPoint = 0;
+            }
+
+
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
+        else
+        {
+            //If the block going back to his initial pos we add action point to the player (it's as if he nullify his action)
+            GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
+
+
         //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
         {
@@ -174,7 +207,7 @@ public class TouchManager : MonoBehaviour
         }
 
         ResetPreviewPlatform();
-
+        isMovingBlock = false;
         _blockParent = null;
     }
 
@@ -189,9 +222,35 @@ public class TouchManager : MonoBehaviour
         }
 
 
-        var positionBlockParent = _blockParent.position;
+        Vector3 positionBlockParent = _blockParent.position;
         _blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
             0.25f);
+
+        positionBlockParent = _blockParent.position;
+        //We compare if the parent block position its bigger than his lastPos or equal 
+        if (positionBlockParent.y > _blockParentStartPos.y ||
+            Math.Abs(_blockParentStartPos.y - positionBlockParent.y) > 0.1f)
+        {
+            //We want to substract action point from the current player if he move up/down the block
+
+            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+            if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+            {
+                GameManager.Instance.currentPlayerTurn.playerActionPoint = 0;
+            }
+
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
+        else
+        {
+            //If the block going back to his initial pos we add action point to the player (it's as if he nullify his action)
+            GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+                .playerActionPoint);
+            GameManager.Instance.isPathRefresh = true;
+        }
 
         //Move the player with block
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
@@ -207,20 +266,21 @@ public class TouchManager : MonoBehaviour
 
         ResetPreviewPlatform();
 
-
+        isMovingBlock = false;
         _blockParent = null;
     }
 
-    void SelectedBlockColor(Color color)
-    {
-        Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-        _blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
-        blockCurrentlySelectedMat.color = color;
-    }
+    /* void SelectedBlockColor(Color color)
+     {
+         Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
+         blockCurrentlySelectedColor = blockCurrentlySelectedMat.color;
+         blockCurrentlySelectedMat.color = color;
+     }*/
 
     void ResetPreviousBlockColor()
     {
         Material blockCurrentlySelectedMat = _blockCurrentlySelected.GetComponent<Renderer>().material;
-        blockCurrentlySelectedMat.color = _blockCurrentlySelectedColor;
+
+        blockCurrentlySelectedMat.color = blockCurrentlySelectedColor;
     }
 }

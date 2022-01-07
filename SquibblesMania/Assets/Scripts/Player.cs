@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Player : MonoBehaviour
 {
+    [Header("BASE PARAMETERS")]
     public string playerName;
     public int playerActionPoint;
     public bool isUsingCardPower;

@@ -12,17 +12,17 @@ public class PlayerStateManager : Player
     public PlayerCardState PlayerCardState = new PlayerCardState();
     public PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
 
-    public Transform currentBlockPlayerOn, currentTouchBlock;
+    [Header("PLAYER BLOCKS VIEW")] public Transform currentBlockPlayerOn;
+    public Transform currentTouchBlock;
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
 
-    public int playerNumber;
+    [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
+    [SerializeField] public List<Transform> nextBlockPath;
 
-    [SerializeField]
-    public List<Transform> nextBlockPath;
-    private void Start()
+    private void Awake()
     {
         DetectBlockBelowPlayer();
         //Assign the player to a list for know on what block group is currently on
@@ -34,7 +34,6 @@ public class PlayerStateManager : Player
     // Update is called once per frame
     void Update()
     {
-        
         if (currentState != null)
         {
             currentState.UpdtateState(this);
@@ -48,17 +47,16 @@ public class PlayerStateManager : Player
         currentState = PlayerCardState;
         currentState.EnterState(this);
     }
+
     public void StartPathFinding()
     {
         //If the current state of the player is when he use his action point
         if (currentState == PlayerActionPointCardState)
         {
             finalPathFinding.Clear();
-            
+
             PlayerActionPointCardState.FindPath(this);
-          
         }
-        
     }
 
 

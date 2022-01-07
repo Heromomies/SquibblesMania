@@ -10,15 +10,18 @@ public class GameManager : MonoBehaviour
     private static GameManager _gameManager;
 
     public static GameManager Instance => _gameManager;
-    public int numberPlayers;
+   
 
-    public List<PlayerStateManager> players;
+    [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
 
     public Transform[] playersSpawnPoints;
-
+    public int numberPlayers;
     public PlayerStateManager playerPref;
-    
+
     public PlayerStateManager currentPlayerTurn;
+    [HideInInspector]
+    public bool isPathRefresh;
+
     private void Awake()
     {
         _gameManager = this;
@@ -37,11 +40,11 @@ public class GameManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start() 
+    void Start()
     {
         //Choose Randomly a player to start
         int numberPlayerToStart = Random.Range(0, players.Count);
-        
+
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
     }
@@ -51,6 +54,7 @@ public class GameManager : MonoBehaviour
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
     }
+
     // Update is called once per frame
     void Update()
     {

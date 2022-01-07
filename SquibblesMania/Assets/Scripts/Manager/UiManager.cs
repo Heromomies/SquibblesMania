@@ -7,6 +7,7 @@ using UnityEngine;
 public class UiManager : MonoBehaviour
 {
     //Manager for simple button Ui
+    [Header("MANAGER UI")]
     public TextMeshProUGUI currentActionPointsOfCurrentPlayerTurn;
 
     private static UiManager _uiManager;
@@ -31,10 +32,11 @@ public class UiManager : MonoBehaviour
     {
         TouchManager.Instance.uiInteractionParentObject.SetActive(false);
         TouchManager.Instance.uiScaleBlockParentObject.SetActive(true);
+        TouchManager.Instance.isMovingBlock = true;
     }
 
-    public void SetUpCurrentActionPointOfCurrentPlayer()
+    public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
-        currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {GameManager.Instance.currentPlayerTurn.playerActionPoint}";
+        currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {actionPointText}";
     }
 }
