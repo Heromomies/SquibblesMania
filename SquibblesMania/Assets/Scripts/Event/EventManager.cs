@@ -61,16 +61,12 @@ public class EventManager : MonoBehaviour
 		conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfTheCondition]);
 	}
 
-	public void AddPoint(int i)
+	public void AddPointForNumberOfSteps(int i)
 	{
 		Debug.Log(i);
 	}
 	private void Update()
 	{
-		_player = GameManager.Instance.currentPlayerTurn;
-		_numberOfSteps = Mathf.Clamp(0.8f, 0, _player.PlayerActionPointCardState.actionPointText);
-		Debug.Log(_player.PlayerActionPointCardState.actionPoint);
-		
 		NumberOfSteps();
 		MoveCase();
 		ColorToWalkOn();
