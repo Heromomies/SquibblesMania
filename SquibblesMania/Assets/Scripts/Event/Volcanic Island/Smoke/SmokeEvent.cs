@@ -25,7 +25,7 @@ public class SmokeEvent : MonoBehaviour
 
 	private void CompactEvent() // Compact event is equal to the smoke event
 	{
-		_cubeToChange = Random.Range(0, _cubeOnMap.Count);
+		_cubeToChange = Random.Range(0, _cubeOnMap.Count - numberOfSmoke);
 
 		for (int i = 0; i < numberOfSmoke; i++) // Allow to colorize material to create a compact zone
 		{

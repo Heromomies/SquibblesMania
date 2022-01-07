@@ -24,10 +24,10 @@ public class EventManager : MonoBehaviour
 	public List<TextMeshProUGUI> textToReleaseEvent;
 
 	private ConditionReleaseEvent _condition;
-	private float _release;
 	private float _numberOfSteps;
 	private int _numberOfCondition;
 	private PlayerStateManager _player;
+	private bool _eventOne;
 	#region Singleton
 
 	private static EventManager eventManager;
@@ -75,9 +75,11 @@ public class EventManager : MonoBehaviour
 
 	public void AddPointForNumberOfSteps(int i)
 	{
-		_condition.conditions[0].numberOfSteps -= i;
-		textToReleaseEvent[0].text = _condition.conditions[0].conditionToRelease + _condition.conditions[0].numberOfSteps;
-		Debug.Log(_condition.conditions[0].conditionToRelease+ (_condition.conditions[0].numberOfSteps -i));
+		if(!_eventOne)
+		{
+			_condition.conditions[0].numberOfSteps -= i;
+			textToReleaseEvent[0].text = _condition.conditions[0].conditionToRelease + _condition.conditions[0].numberOfSteps;
+		}
 	}
 	private void Update()
 	{
@@ -89,10 +91,11 @@ public class EventManager : MonoBehaviour
 	// Update is called once per frame
 	void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
 	{
-		if (_release >= _condition.conditions[_numberOfCondition].numberOfSteps)
+		if (_condition.conditions[0].numberOfSteps <= 0)
 		{
+			textToReleaseEvent[0].color = Color.green;
+			textToReleaseEvent[0].text = "Le nombre de case a été atteint";
 			canvasButton.SetActive(true);
-			_release = 0;
 		}
 	}
 
@@ -101,11 +104,6 @@ public class EventManager : MonoBehaviour
 
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
 	{ }
-	
-	public void AddPointToReleaseEvent()
-	{
-		_release++;
-	}
 
 	public void ClickButton(int numberButton)
 	{
@@ -113,25 +111,31 @@ public class EventManager : MonoBehaviour
 		{
 			case 0:
 				cleanList = listZoneNorthWest;
-				Debug.Log(cleanList);
 				break;
 			case 1:
 				cleanList = listZoneNorthEst;
-				Debug.Log(cleanList);
 				break;
 			case 2:
 				cleanList = listZoneSouthWest;
-				Debug.Log(cleanList);
 				break;
 			case 3:
 				cleanList = listZoneSouthEst;
-				Debug.Log(cleanList);
 				break;
 		}
 
+		_condition.conditions[0].numberOfSteps = Mathf.Infinity;
+		
 		canvasButton.SetActive(false);
 		events[1].SetActive(true);
+
+		_eventOne = true;
+
+
 		/* int random = Random.Range(0, events.Count);
 		 events[random].SetActive(true);*/
+	}
+	public void OnApplicationQuit()
+	{
+		_condition.conditions[0].numberOfSteps = Random.Range(5, 10);
 	}
 }
