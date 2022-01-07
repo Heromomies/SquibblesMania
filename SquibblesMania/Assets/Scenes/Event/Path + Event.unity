@@ -271,8 +271,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1198056435}
   - {fileID: 1263104352}
+  - {fileID: 1198056435}
   - {fileID: 170818306}
   m_Father: {fileID: 1251349576}
   m_RootOrder: 0
@@ -4357,7 +4357,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 462f74d040dba2144948c577d0960f17, type: 2}
     - target: {fileID: 2252317347802425191, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2252317347802425191, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10178,7 +10178,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8885060723732602601, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8885060723732602601, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10237,9 +10237,17 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
+      propertyPath: foldoutValuesEvent.particleSystem
+      value: 
+      objectReference: {fileID: 5123500826265043806, guid: 7d34824224cc8ad499617e003f22e2e9, type: 3}
+    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: foldoutValues.speedCurve.m_Curve.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
+      propertyPath: foldoutValuesEvent.transformToSpawnParticles
+      value: 
+      objectReference: {fileID: 170818306}
     - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: foldoutValues.speedCurve.m_Curve.Array.data[1].time
       value: 1
@@ -10677,7 +10685,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5419626292892989450, guid: f039bbf246dad504481d8efe463f9ef4, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5419626292892989450, guid: f039bbf246dad504481d8efe463f9ef4, type: 3}
       propertyPath: m_LocalPosition.x

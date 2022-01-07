@@ -35,7 +35,8 @@ public class MeteoriteExplosion : MonoBehaviour
 			foldoutValues.volcanoTransform.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 
 		yield return new WaitForSeconds(foldoutValuesEvent.durationOfScale * 3.5f);
-
+		Instantiate(foldoutValuesEvent.particleSystem, new Vector3(foldoutValuesEvent.transformToSpawnParticles.position.x,
+			foldoutValuesEvent.transformToSpawnParticles.position.y + 1, foldoutValuesEvent.transformToSpawnParticles.position.z),foldoutValuesEvent.transformToSpawnParticles.rotation );
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, foldoutValues.repeatRate);
 	}
 
@@ -144,6 +145,9 @@ public class MeteoriteExplosion : MonoBehaviour
 		public Vector3 strength;
 		public int vibrato;
 		public float randomness;
+
+		public GameObject particleSystem;
+		public Transform transformToSpawnParticles;
 	}
 
 	[Serializable]
