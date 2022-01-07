@@ -62,11 +62,8 @@ public class EventManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			_player = GameManager.Instance.currentPlayerTurn;
-			
-		}
+		_player = GameManager.Instance.currentPlayerTurn;
+		Debug.Log(_player.PlayerActionPointCardState.actionPointText);
 		NumberOfSteps();
 		MoveCase();
 		ColorToWalkOn();
@@ -91,7 +88,6 @@ public class EventManager : MonoBehaviour
 	public void AddPointToReleaseEvent()
 	{
 		_release++;
-		Debug.Log(_player.playerActionPoint);
 	}
 
 	public void ClickButton(int numberButton)

@@ -8,7 +8,7 @@ using UnityEngine;
 public class PlayerActionPointCardState : PlayerBaseState
 {
     public List<Transform> previewPath = new List<Transform>();
-
+    [HideInInspector] public int actionPointText;
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -285,7 +285,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         int movementPlayer = 0;
 
-        int actionPointText = player.playerActionPoint;
+        actionPointText = player.playerActionPoint;
 
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {

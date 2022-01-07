@@ -14091,15 +14091,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7fa4c8d885c784aa6b34f925c827c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberPlayers: 4
   players: []
   playersSpawnPoints:
   - {fileID: 516523466}
   - {fileID: 1206654174}
   - {fileID: 142500502}
   - {fileID: 311728649}
+  numberPlayers: 4
   playerPref: {fileID: -3814758494985992804, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
   currentPlayerTurn: {fileID: 0}
+  isPathRefresh: 0
 --- !u!1 &1901549491
 GameObject:
   m_ObjectHideFlags: 0
@@ -15128,6 +15129,8 @@ MonoBehaviour:
   touchLayersMask:
     serializedVersion: 2
     m_Bits: 8
+  blockCurrentlySelectedColor: {r: 0, g: 0, b: 0, a: 0}
+  isMovingBlock: 0
 --- !u!1 &2088414820
 GameObject:
   m_ObjectHideFlags: 0
