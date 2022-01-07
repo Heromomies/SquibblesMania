@@ -26,7 +26,7 @@ public class EventManager : MonoBehaviour
 	private ConditionReleaseEvent _condition;
 	private float _release;
 	private float _numberOfSteps;
-	private int _numberOfTheCondition;
+	private int _numberOfCondition;
 	private PlayerStateManager _player;
 	#region Singleton
 
@@ -50,20 +50,34 @@ public class EventManager : MonoBehaviour
 
 	void DefineCondition() // Define the condition to activate event
 	{
-		_numberOfTheCondition = Random.Range(0, conditionReleaseEvents.Count);
-		_condition = conditionReleaseEvents[_numberOfTheCondition];
+		_numberOfCondition = Random.Range(0, conditionReleaseEvents.Count);
+		_condition = conditionReleaseEvents[_numberOfCondition];
 
-		for (int i = 0; i < textToReleaseEvent.Count; i++)
+		if (_condition.conditions[0].conditionType == Condition.ConditionType.NumberOfSteps)
 		{
-			textToReleaseEvent[i].text = conditionReleaseEvents[_numberOfTheCondition].conditions[i].conditionToRelease + conditionReleaseEvents[_numberOfTheCondition].conditions[i].numberOfSteps;
-			
+			textToReleaseEvent[0].text = conditionReleaseEvents[_numberOfCondition].conditions[0].conditionToRelease +
+			                             conditionReleaseEvents[_numberOfCondition].conditions[0].numberOfSteps;
 		}
-		conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfTheCondition]);
+		if (_condition.conditions[1].conditionType == Condition.ConditionType.WalkOnCase)
+		{
+			textToReleaseEvent[1].text = conditionReleaseEvents[_numberOfCondition].conditions[1].conditionToRelease + 
+			                             conditionReleaseEvents[_numberOfCondition].conditions[1].numberOfSteps;;
+
+		}
+		if(_condition.conditions[2].conditionType == Condition.ConditionType.MoveCase)
+		{
+			textToReleaseEvent[2].text = conditionReleaseEvents[_numberOfCondition].conditions[2].conditionToRelease +
+			                             conditionReleaseEvents[_numberOfCondition].conditions[2].numberOfSteps;; 
+
+		}
+		//conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfCondition]);
 	}
 
 	public void AddPointForNumberOfSteps(int i)
 	{
-		Debug.Log(i);
+		_condition.conditions[0].numberOfSteps -= i;
+		textToReleaseEvent[0].text = _condition.conditions[0].conditionToRelease + _condition.conditions[0].numberOfSteps;
+		Debug.Log(_condition.conditions[0].conditionToRelease+ (_condition.conditions[0].numberOfSteps -i));
 	}
 	private void Update()
 	{
@@ -75,7 +89,7 @@ public class EventManager : MonoBehaviour
 	// Update is called once per frame
 	void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
 	{
-		if (_release >= _condition.conditions[_numberOfTheCondition].numberOfSteps)
+		if (_release >= _condition.conditions[_numberOfCondition].numberOfSteps)
 		{
 			canvasButton.SetActive(true);
 			_release = 0;

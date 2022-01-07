@@ -294,6 +294,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             if (movementPlayer < player.playerActionPoint)
             {
                 EventManager.Instance.AddPointForNumberOfSteps(1);
+                Debug.Log("Je passe dans la boucle mon gamin");
                 Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
