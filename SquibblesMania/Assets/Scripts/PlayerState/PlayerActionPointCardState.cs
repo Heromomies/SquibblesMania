@@ -55,10 +55,10 @@ public class PlayerActionPointCardState : PlayerBaseState
         playerStateManager.nextBlockPath = finalPreviewPath;
         
 
-        foreach (var block in nextBlocksPath)
+       /* foreach (var block in nextBlocksPath)
         {
             Debug.Log("Block a checker : " + block);
-        }
+        }*/
 
         //The block we want to check
         Transform currentCheckedBlock = nextBlocksPath[0];
@@ -98,7 +98,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         indexBlockNearby++;
-        Debug.Log("Nombre de block check: " + indexBlockNearby);
+//        Debug.Log("Nombre de block check: " + indexBlockNearby);
         //We add in our list of path who are already visited, our currently block
         previousBlocksPath.Add(currentCheckedBlock);
 

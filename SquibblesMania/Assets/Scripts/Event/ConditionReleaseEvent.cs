@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Event
@@ -18,6 +19,7 @@ public class Condition
       WalkOnCase = 1, 
       MoveCase = 2
    }
+   
    public enum ColorToChose
    {
       Red = 0,
@@ -25,6 +27,7 @@ public class Condition
       Blue = 2,
       Green = 3
    }
+   
    public ConditionType conditionType;
    public ColorToChose colorsToChose;
  

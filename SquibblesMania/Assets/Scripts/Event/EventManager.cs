@@ -26,7 +26,7 @@ public class EventManager : MonoBehaviour
 	private ConditionReleaseEvent _condition;
 	private float _release;
 	private int _numberOfTheCondition;
-
+	private PlayerStateManager _player;
 	#region Singleton
 
 	private static EventManager eventManager;
@@ -62,6 +62,11 @@ public class EventManager : MonoBehaviour
 
 	private void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			_player = GameManager.Instance.currentPlayerTurn;
+			
+		}
 		NumberOfSteps();
 		MoveCase();
 		ColorToWalkOn();
@@ -86,6 +91,7 @@ public class EventManager : MonoBehaviour
 	public void AddPointToReleaseEvent()
 	{
 		_release++;
+		Debug.Log(_player.playerActionPoint);
 	}
 
 	public void ClickButton(int numberButton)
