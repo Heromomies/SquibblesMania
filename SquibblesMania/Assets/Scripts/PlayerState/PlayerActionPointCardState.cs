@@ -8,7 +8,9 @@ using UnityEngine;
 public class PlayerActionPointCardState : PlayerBaseState
 {
     public List<Transform> previewPath = new List<Transform>();
-
+    [HideInInspector] public int actionPointText;
+    [HideInInspector] public int actionPoint;
+    
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -285,12 +287,13 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         int movementPlayer = 0;
 
-        int actionPointText = player.playerActionPoint;
+        actionPointText = player.playerActionPoint;
 
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
             if (movementPlayer < player.playerActionPoint)
             {
+                EventManager.Instance.AddPoint(1);
                 Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);

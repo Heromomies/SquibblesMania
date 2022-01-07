@@ -17,22 +17,22 @@ public class MeteoriteExplosion : MonoBehaviour
 		// Create a new Sequence.
 		Sequence s = DOTween.Sequence();
 		// Change the scale of the object to make it smaller
-		s.Append(foldoutValuesEvent.volcano.DOScaleY(-1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
-		s.Insert(0, foldoutValuesEvent.volcano.DOScaleZ(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
-		s.Insert(0, foldoutValuesEvent.volcano.DOScaleX(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Append(foldoutValues.volcanoTransform.DOScaleY(-1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Insert(0, foldoutValues.volcanoTransform.DOScaleZ(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Insert(0, foldoutValues.volcanoTransform.DOScaleX(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
 
 		// Add shake to the object
 		s.Insert(foldoutValuesEvent.durationOfScale,
-			foldoutValuesEvent.volcano.DOShakePosition(foldoutValuesEvent.durationShake, foldoutValuesEvent.strength, foldoutValuesEvent.vibrato,
+			foldoutValues.volcanoTransform.DOShakePosition(foldoutValuesEvent.durationShake, foldoutValuesEvent.strength, foldoutValuesEvent.vibrato,
 				foldoutValuesEvent.randomness));
 
 		// Change the scale of the object to make it bigger
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValuesEvent.volcano.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValuesEvent.volcano.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValuesEvent.volcano.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 
 		yield return new WaitForSeconds(foldoutValuesEvent.durationOfScale * 3.5f);
 
@@ -42,13 +42,13 @@ public class MeteoriteExplosion : MonoBehaviour
 	public void Start() // When we click on the button	
 	{
 		#region MeteoriteRandomization
-
-		foldoutValues.cubeOnMap = MapGenerator.Instance.cubeOnMap;
+		
+		foldoutValues.cubeOnMap = EventManager.Instance.cleanList;
 
 		while (foldoutValues.numberOfMeteorite > 0)
 		{
 			foldoutValues.numberOfMeteorite--;
-			int placeOfCube = Random.Range(0, 100);
+			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
 			RandomEvent(placeOfCube);
 		}
 
@@ -67,7 +67,11 @@ public class MeteoriteExplosion : MonoBehaviour
 
 			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
-			MapGenerator.Instance.cubeOnMap.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+			EventManager.Instance.listZoneNorthWest.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+		}
+		else
+		{
+			RandomEvent(Random.Range(0, EventManager.Instance.listZoneNorthWest.Capacity));
 		}
 
 		#endregion
@@ -78,11 +82,11 @@ public class MeteoriteExplosion : MonoBehaviour
 		#region ExplosionFromTheCenter
 
 		foldoutValues.cubeTouched[0].tag = "Black Block";
-
+		
 		var positionVol = foldoutValues.volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(foldoutValues.cubeTouched[0].transform.position, positionVol,
 			foldoutValues.speed); // Add the velocity to make an effect of parabola for the bullets
-		transform.rotation = Quaternion.LookRotation(vo);
+		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1,1,1));
 
 		foldoutValues.cubeTouched.Remove(foldoutValues.cubeTouched[0]);
 
@@ -122,7 +126,7 @@ public class MeteoriteExplosion : MonoBehaviour
 		////calculating initial y velocity
 		//Vy0 = y/t + 1/2 * g * t
 
-		float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y) * velocity;
+		float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y + 0.5f) * velocity;
 		Vector3 result = distanceXZ * vxz;
 		result.y = vy;
 
@@ -134,7 +138,6 @@ public class MeteoriteExplosion : MonoBehaviour
 	[Serializable]
 	private class FoldoutValueHolderEvent
 	{
-		public Transform volcano;
 		public float durationOfScale;
 
 		public float durationShake;
@@ -153,7 +156,7 @@ public class MeteoriteExplosion : MonoBehaviour
 
 		public Rigidbody bulletPrefab;
 		public Transform volcanoTransform;
-
+		
 		[Range(0.0f, 3.0f)] public float speed;
 		[Range(0.0f, 1.0f)] public float repeatRate;
 	}

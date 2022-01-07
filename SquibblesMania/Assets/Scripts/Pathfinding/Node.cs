@@ -25,8 +25,10 @@ public class Node : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void ChangeBool()
     {
+        GamePath path = new GamePath();
+        path.isActive = false;
     }
     
     public Vector3 GetWalkPoint()
