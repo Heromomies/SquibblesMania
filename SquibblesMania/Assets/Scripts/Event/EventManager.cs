@@ -73,7 +73,7 @@ public class EventManager : MonoBehaviour
 		//conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfCondition]);
 	}
 
-	public void AddPointForNumberOfSteps(int i)
+	public void AddPointForNumberOfSteps(int i) // Decrease number of steps 
 	{
 		if(!_eventOne)
 		{
@@ -81,6 +81,19 @@ public class EventManager : MonoBehaviour
 			textToReleaseEvent[0].text = _condition.conditions[0].conditionToRelease + _condition.conditions[0].numberOfSteps;
 		}
 	}
+
+	public void AddPointForWalkOnCase(int i)
+	{
+		
+	}
+	
+	public void AddPointForMovingCase(int i)  // Decrease point when moving case
+	{
+		Debug.Log("I'm moving a case");
+		_condition.conditions[2].numberOfSteps -= i;
+		textToReleaseEvent[2].text = _condition.conditions[2].conditionToRelease + _condition.conditions[2].numberOfSteps;
+	}
+	
 	private void Update()
 	{
 		NumberOfSteps();
@@ -98,15 +111,18 @@ public class EventManager : MonoBehaviour
 			canvasButton.SetActive(true);
 		}
 	}
-
-	public void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
-	{
-		
-	}
-
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
 	{ }
 
+	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
+	{
+		if (_condition.conditions[2].numberOfSteps <= 0)
+		{
+			textToReleaseEvent[2].color = Color.green;
+			textToReleaseEvent[2].text = "Le nombre de case déplacée a été atteint";
+			canvasButton.SetActive(true);
+		}
+	}
 	public void ClickButton(int numberButton)
 	{
 		switch (numberButton)
