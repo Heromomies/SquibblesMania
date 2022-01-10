@@ -90,11 +90,16 @@ public class EventManager : MonoBehaviour
 
 	public void AddPointForMovingCase(int i) // Decrease point when moving case
 	{
-		Debug.Log("I'm moving a case");
 		_condition.conditions[2].numberOfSteps -= i;
 		textToReleaseEvent[2].text = _condition.conditions[2].conditionToRelease + _condition.conditions[2].numberOfSteps;
 	}
 
+	public void OnClick()
+	{
+		_condition.conditions[0].numberOfSteps--;
+		Debug.Log(_condition.conditions[0].numberOfSteps);
+	}
+	
 	private void Update()
 	{
 		NumberOfSteps();

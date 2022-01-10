@@ -11,7 +11,8 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	[Space] [Header("EVENT ANIMATION")] [SerializeField]
 	private FoldoutValueHolderEvent foldoutValuesEvent;
-
+	private List<int> _usedValues = new List<int>();
+	
 	IEnumerator AnimationVolcano()
 	{
 		// Create a new Sequence.
@@ -39,7 +40,6 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			foldoutValuesEvent.transformToSpawnParticles.position.y + 1, foldoutValuesEvent.transformToSpawnParticles.position.z), Quaternion.identity);
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, foldoutValues.repeatRate);
 	}
-
 	public void ShowEvent()
 	{
 		foldoutValues.cubeOnMap = EventManager.Instance.cleanList;
@@ -47,7 +47,14 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		while (foldoutValues.numberOfMeteorite > 0)
 		{
 			foldoutValues.numberOfMeteorite--;
+			
 			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
+			while(_usedValues.Contains(placeOfCube))
+			{
+				placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
+				Debug.Log(placeOfCube);
+			}
+			
 			RandomEvent(placeOfCube);
 		}
 	}
