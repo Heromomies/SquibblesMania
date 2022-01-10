@@ -27,6 +27,7 @@ public class EventManager : MonoBehaviour
 	private int _numberOfCondition;
 	private bool _eventOne;
 	private int _numberEvent;
+	private int _turnNumber;
 	#region Singleton
 
 	private static EventManager eventManager;
@@ -98,6 +99,15 @@ public class EventManager : MonoBehaviour
 		NumberOfSteps();
 		MoveCase();
 		//ColorToWalkOn();
+		
+		Debug.Log("Turn Number : " + _turnNumber);
+		Debug.Log("Number Event : " + _numberEvent);
+		
+		if(GameManager.Instance.turnCount >= _turnNumber + 4)
+		{
+			Debug.Log("I'm this function");
+			events[_numberEvent].SetActive(true);
+		}
 	}
 
 	// Update is called once per frame
@@ -107,8 +117,13 @@ public class EventManager : MonoBehaviour
 		{
 			textToReleaseEvent[0].color = Color.green;
 			textToReleaseEvent[0].text = "Le nombre de case a été atteint";
+			
+			_turnNumber = GameManager.Instance.turnCount;
+			
 			canvasButton.SetActive(true);
 			_numberEvent = 0;
+			_eventOne = true;
+			events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
 		}
 	}
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
@@ -141,15 +156,14 @@ public class EventManager : MonoBehaviour
 				cleanList = listZoneSouthEst;
 				break;
 		}
+		
 		LaunchEvent(_numberEvent);
-		canvasButton.SetActive(false);
 	}
 
 	void LaunchEvent(int numberEvent)
 	{
+		canvasButton.SetActive(false);
 		_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
-		events[numberEvent].SetActive(true);
-		_eventOne = true;
 	}
 	
 	public void OnApplicationQuit()

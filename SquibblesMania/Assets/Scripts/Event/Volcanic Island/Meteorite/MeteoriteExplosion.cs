@@ -5,7 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Random = UnityEngine.Random;
 
-public class MeteoriteExplosion : MonoBehaviour
+public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT")] [SerializeField] private FoldoutValueHolder foldoutValues;
 
@@ -68,11 +68,11 @@ public class MeteoriteExplosion : MonoBehaviour
 
 			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
-			EventManager.Instance.listZoneNorthWest.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+			EventManager.Instance.cleanList.Remove(foldoutValues.cubeOnMap[placeOfCube]);
 		}
 		else
 		{
-			RandomEvent(Random.Range(0, EventManager.Instance.listZoneNorthWest.Capacity));
+			RandomEvent(Random.Range(0, EventManager.Instance.cleanList.Capacity));
 		}
 
 		#endregion
@@ -105,6 +105,16 @@ public class MeteoriteExplosion : MonoBehaviour
 		}
 	}
 
+	public void ShowEvent()
+	{
+		
+	}
+
+	public void LaunchEvent()
+	{
+		
+	}
+	
 	#region CalculateVelocity
 
 	Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola
@@ -164,4 +174,6 @@ public class MeteoriteExplosion : MonoBehaviour
 		[Range(0.0f, 3.0f)] public float speed;
 		[Range(0.0f, 1.0f)] public float repeatRate;
 	}
+
+	
 }
