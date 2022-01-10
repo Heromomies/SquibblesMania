@@ -36,7 +36,7 @@ public class MeteoriteExplosion : MonoBehaviour
 
 		yield return new WaitForSeconds(foldoutValuesEvent.durationOfScale * 3.5f);
 		Instantiate(foldoutValuesEvent.particleSystem, new Vector3(foldoutValuesEvent.transformToSpawnParticles.position.x,
-			foldoutValuesEvent.transformToSpawnParticles.position.y + 1, foldoutValuesEvent.transformToSpawnParticles.position.z),foldoutValuesEvent.transformToSpawnParticles.rotation );
+			foldoutValuesEvent.transformToSpawnParticles.position.y + 1, foldoutValuesEvent.transformToSpawnParticles.position.z), Quaternion.identity);
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, foldoutValues.repeatRate);
 	}
 

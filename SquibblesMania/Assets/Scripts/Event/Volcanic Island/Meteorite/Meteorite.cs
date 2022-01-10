@@ -6,7 +6,7 @@ using UnityEngine;
 public class Meteorite : MonoBehaviour
 {
    private Rigidbody _rb;
-
+   public GameObject particleSystem;
    private void Start()
    {
       _rb = GetComponent<Rigidbody>();
@@ -16,6 +16,7 @@ public class Meteorite : MonoBehaviour
    {
       if (other.gameObject.CompareTag("Black Block"))
       {
+         Instantiate(particleSystem, transform.position, Quaternion.identity);
          _rb.constraints = RigidbodyConstraints.FreezeAll;
          transform.position = new Vector3(other.transform.position.x, transform.position.y , other.transform.position.z);
          

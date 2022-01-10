@@ -24,9 +24,7 @@ public class EventManager : MonoBehaviour
 	public List<TextMeshProUGUI> textToReleaseEvent;
 
 	private ConditionReleaseEvent _condition;
-	private float _numberOfSteps;
 	private int _numberOfCondition;
-	private PlayerStateManager _player;
 	private bool _eventOne;
 	private int _numberEvent;
 	#region Singleton
