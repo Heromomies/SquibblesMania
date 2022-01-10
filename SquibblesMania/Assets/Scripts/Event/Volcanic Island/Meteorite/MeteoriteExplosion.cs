@@ -11,8 +11,9 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	[Space] [Header("EVENT ANIMATION")] [SerializeField]
 	private FoldoutValueHolderEvent foldoutValuesEvent;
+
 	private List<int> _usedValues = new List<int>();
-	
+
 	IEnumerator AnimationVolcano()
 	{
 		// Create a new Sequence.
@@ -40,6 +41,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			foldoutValuesEvent.transformToSpawnParticles.position.y + 1, foldoutValuesEvent.transformToSpawnParticles.position.z), Quaternion.identity);
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, foldoutValues.repeatRate);
 	}
+
 	public void ShowEvent()
 	{
 		foldoutValues.cubeOnMap = EventManager.Instance.cleanList;
@@ -47,14 +49,14 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		while (foldoutValues.numberOfMeteorite > 0)
 		{
 			foldoutValues.numberOfMeteorite--;
-			
-			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
-			while(_usedValues.Contains(placeOfCube))
+
+			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity-1);
+			while (_usedValues.Contains(placeOfCube))
 			{
-				placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
+				placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity-1);
 				Debug.Log(placeOfCube);
 			}
-			
+
 			RandomEvent(placeOfCube);
 		}
 	}
@@ -68,18 +70,12 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
-		if (foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color != Color.black)
-		{
-			foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
+		Debug.Log(foldoutValues.cubeOnMap[placeOfCube]);
 
-			foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
+		foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
+		foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
 
-			EventManager.Instance.cleanList.Remove(foldoutValues.cubeOnMap[placeOfCube]);
-		}
-		else
-		{
-			RandomEvent(Random.Range(0, EventManager.Instance.cleanList.Capacity));
-		}
+		//EventManager.Instance.cleanList.Remove(foldoutValues.cubeOnMap[placeOfCube]);
 	}
 
 	#endregion
@@ -110,7 +106,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			CancelInvoke();
 		}
 	}
-	
+
 	#region CalculateVelocity
 
 	Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola

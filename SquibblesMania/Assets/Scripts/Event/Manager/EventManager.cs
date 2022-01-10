@@ -13,7 +13,7 @@ public class EventManager : MonoBehaviour
 
 	[Space] [Header("EVENTS")] public List<GameObject> events;
 
-	[HideInInspector] public List<GameObject> cleanList;
+	 public List<GameObject> cleanList;
 
 	[Space] [Header("MAP ZONE")] public List<GameObject> listZoneNorthWest;
 	public List<GameObject> listZoneNorthEst;
@@ -152,15 +152,23 @@ public class EventManager : MonoBehaviour
 		{
 			case 0:
 				cleanList = listZoneNorthWest;
+				Debug.Log(cleanList.Count);
+				Debug.Log(listZoneNorthWest.Count);
 				break;
 			case 1:
 				cleanList = listZoneNorthEst;
+				Debug.Log(cleanList.Count);
+				Debug.Log(listZoneNorthEst.Count);
 				break;
 			case 2:
 				cleanList = listZoneSouthWest;
+				Debug.Log(cleanList.Count);
+				Debug.Log(listZoneSouthWest.Count);
 				break;
 			case 3:
 				cleanList = listZoneSouthEst;
+				Debug.Log(cleanList.Count);
+				Debug.Log(listZoneSouthEst.Count);
 				break;
 		}
 

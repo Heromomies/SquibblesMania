@@ -8,7 +8,7 @@ public class Node : MonoBehaviour
     public float blockSizeOffset = 0.5f;
     
     public Transform previousBlock;
-   
+
     public List<GamePath> possiblePath;
     
     [HideInInspector]
@@ -27,8 +27,7 @@ public class Node : MonoBehaviour
     // Update is called once per frame
     public void ChangeBool()
     {
-        GamePath path = new GamePath();
-        path.isActive = false;
+        
     }
     
     public Vector3 GetWalkPoint()
@@ -43,7 +42,6 @@ public class Node : MonoBehaviour
         Gizmos.color = Color.grey;
         Gizmos.DrawSphere(GetWalkPoint(), 0.1f);
     }
-    
 }
 
 [Serializable]
