@@ -9,7 +9,8 @@ public class UiManager : MonoBehaviour
     //Manager for simple button Ui
     [Header("MANAGER UI")]
     public TextMeshProUGUI currentActionPointsOfCurrentPlayerTurn;
-    
+
+    public TextMeshProUGUI turnCountText;
     private static UiManager _uiManager;
 
     public static UiManager Instance => _uiManager;
@@ -42,6 +43,10 @@ public class UiManager : MonoBehaviour
         currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {actionPointText}";
     }
 
+    public void UpdateCurrentTurnCount(int turnCount)
+    {
+        turnCountText.text = $"Round number : {turnCount}";
+    }
     public void ButtonNextTurn()
     {
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);

@@ -181,8 +181,9 @@ namespace DigitalRubyShared
         /// </summary>
         public event System.Action OrbitTargetTapped;
 
-        public float cameraSize;
-
+        private float cameraSize;
+        [SerializeField]
+        private Camera camUI;
         private void OnEnable()
         {
             // create a scale gesture to zoom orbiter in and out
@@ -346,11 +347,13 @@ namespace DigitalRubyShared
             }
 
 
-            cameraSize += (zoomSpeed * Time.deltaTime);
+            cameraSize -= (zoomSpeed * Time.deltaTime);
             cameraSize = Mathf.Clamp(cameraSize, MinimumDistance, MaximumDistance);
             Camera.main.orthographicSize = cameraSize;
+            camUI.orthographicSize = cameraSize;
+            
         }
-
+        
         private void PerformPan(Vector3 pan, float limit)
         {
             Vector3 pos = Orbiter.transform.position;
