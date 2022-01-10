@@ -40,10 +40,8 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, foldoutValues.repeatRate);
 	}
 
-	public void Start() // When we click on the button	
+	public void ShowEvent()
 	{
-		#region MeteoriteRandomization
-		
 		foldoutValues.cubeOnMap = EventManager.Instance.cleanList;
 
 		while (foldoutValues.numberOfMeteorite > 0)
@@ -52,16 +50,17 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Capacity);
 			RandomEvent(placeOfCube);
 		}
-
-		StartCoroutine(AnimationVolcano());
-
-		#endregion
 	}
+
+	public void LaunchEvent()
+	{
+		StartCoroutine(AnimationVolcano());
+	}
+
+	#region Highlight Cubes Who Will Be Touched
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
-		#region ChangeColor
-
 		if (foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color != Color.black)
 		{
 			foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
@@ -74,28 +73,28 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			RandomEvent(Random.Range(0, EventManager.Instance.cleanList.Capacity));
 		}
-
-		#endregion
 	}
+
+	#endregion
+
+	#region Explosion From The Center
 
 	void LaunchBullet() // Launch the bullets 
 	{
-		#region ExplosionFromTheCenter
-
 		foldoutValues.cubeTouched[0].tag = "Black Block";
-		
+
 		var positionVol = foldoutValues.volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(foldoutValues.cubeTouched[0].transform.position, positionVol,
 			foldoutValues.speed); // Add the velocity to make an effect of parabola for the bullets
-		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1,1,1));
+		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
 
 		foldoutValues.cubeTouched.Remove(foldoutValues.cubeTouched[0]);
 
 		Rigidbody obj = Instantiate(foldoutValues.bulletPrefab, positionVol, Quaternion.identity);
 		obj.velocity = vo;
-
-		#endregion
 	}
+
+	#endregion
 
 	void Update()
 	{
@@ -103,16 +102,6 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			CancelInvoke();
 		}
-	}
-
-	public void ShowEvent()
-	{
-		
-	}
-
-	public void LaunchEvent()
-	{
-		
 	}
 	
 	#region CalculateVelocity
@@ -170,10 +159,8 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 		public Rigidbody bulletPrefab;
 		public Transform volcanoTransform;
-		
+
 		[Range(0.0f, 3.0f)] public float speed;
 		[Range(0.0f, 1.0f)] public float repeatRate;
 	}
-
-	
 }

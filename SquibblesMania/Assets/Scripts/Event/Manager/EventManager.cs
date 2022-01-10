@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 public class EventManager : MonoBehaviour
 {
 	[Header("CONDITION RELEASE EVENT")] public List<ConditionReleaseEvent> conditionReleaseEvents;
-	
+
 	[Space] [Header("EVENTS")] public List<GameObject> events;
 
 	[HideInInspector] public List<GameObject> cleanList;
@@ -26,8 +26,10 @@ public class EventManager : MonoBehaviour
 	private ConditionReleaseEvent _condition;
 	private int _numberOfCondition;
 	private bool _eventOne;
+	private bool _b;
 	private int _numberEvent;
 	private int _turnNumber;
+
 	#region Singleton
 
 	private static EventManager eventManager;
@@ -58,24 +60,24 @@ public class EventManager : MonoBehaviour
 			textToReleaseEvent[0].text = conditionReleaseEvents[_numberOfCondition].conditions[0].conditionToRelease +
 			                             conditionReleaseEvents[_numberOfCondition].conditions[0].numberOfSteps;
 		}
+
 		if (_condition.conditions[1].conditionType == Condition.ConditionType.WalkOnCase)
 		{
-			textToReleaseEvent[1].text = conditionReleaseEvents[_numberOfCondition].conditions[1].conditionToRelease + 
-			                             conditionReleaseEvents[_numberOfCondition].conditions[1].numberOfSteps;;
-
+			textToReleaseEvent[1].text = conditionReleaseEvents[_numberOfCondition].conditions[1].conditionToRelease +
+			                             conditionReleaseEvents[_numberOfCondition].conditions[1].numberOfSteps;
 		}
-		if(_condition.conditions[2].conditionType == Condition.ConditionType.MoveCase)
+
+		if (_condition.conditions[2].conditionType == Condition.ConditionType.MoveCase)
 		{
 			textToReleaseEvent[2].text = conditionReleaseEvents[_numberOfCondition].conditions[2].conditionToRelease +
-			                             conditionReleaseEvents[_numberOfCondition].conditions[2].numberOfSteps;; 
-
+			                             conditionReleaseEvents[_numberOfCondition].conditions[2].numberOfSteps;
 		}
 		//conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfCondition]);
 	}
 
 	public void AddPointForNumberOfSteps(int i) // Decrease number of steps 
 	{
-		if(!_eventOne)
+		if (!_eventOne)
 		{
 			_condition.conditions[0].numberOfSteps -= i;
 			textToReleaseEvent[0].text = _condition.conditions[0].conditionToRelease + _condition.conditions[0].numberOfSteps;
@@ -84,29 +86,27 @@ public class EventManager : MonoBehaviour
 
 	public void AddPointForWalkOnCase(int i)
 	{
-		
 	}
-	
-	public void AddPointForMovingCase(int i)  // Decrease point when moving case
+
+	public void AddPointForMovingCase(int i) // Decrease point when moving case
 	{
 		Debug.Log("I'm moving a case");
 		_condition.conditions[2].numberOfSteps -= i;
 		textToReleaseEvent[2].text = _condition.conditions[2].conditionToRelease + _condition.conditions[2].numberOfSteps;
 	}
-	
+
 	private void Update()
 	{
 		NumberOfSteps();
 		MoveCase();
 		//ColorToWalkOn();
 		
-		Debug.Log("Turn Number : " + _turnNumber);
-		Debug.Log("Number Event : " + _numberEvent);
-		
-		if(GameManager.Instance.turnCount >= _turnNumber + 4)
+		// Launch The Event
+		if (_turnNumber != 0 && GameManager.Instance.turnCount >= _turnNumber + 4 && !_b)
 		{
-			Debug.Log("I'm this function");
+			_b = true;
 			events[_numberEvent].SetActive(true);
+			events[_numberEvent].GetComponent<IManageEvent>().LaunchEvent();
 		}
 	}
 
@@ -117,17 +117,18 @@ public class EventManager : MonoBehaviour
 		{
 			textToReleaseEvent[0].color = Color.green;
 			textToReleaseEvent[0].text = "Le nombre de case a été atteint";
-			
+
 			_turnNumber = GameManager.Instance.turnCount;
-			
+
 			canvasButton.SetActive(true);
 			_numberEvent = 0;
 			_eventOne = true;
-			events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
 		}
 	}
+
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
-	{ }
+	{
+	}
 
 	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
 	{
@@ -139,6 +140,7 @@ public class EventManager : MonoBehaviour
 			_numberEvent = 2;
 		}
 	}
+
 	public void ClickButton(int numberButton)
 	{
 		switch (numberButton)
@@ -156,16 +158,17 @@ public class EventManager : MonoBehaviour
 				cleanList = listZoneSouthEst;
 				break;
 		}
-		
+
 		LaunchEvent(_numberEvent);
 	}
 
 	void LaunchEvent(int numberEvent)
 	{
+		events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
 		canvasButton.SetActive(false);
 		_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
 	}
-	
+
 	public void OnApplicationQuit()
 	{
 		_condition.conditions[0].numberOfSteps = Random.Range(5, 10);
