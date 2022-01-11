@@ -17,7 +17,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 	private List<int> _usedValues = new List<int>();
 
 	private int _turn;
-	private List<int> _placeOfCube= new List<int>();
+	public List<int> _placeOfCube= new List<int>();
 	private bool _done;
 	
 		IEnumerator AnimationVolcano()
@@ -56,11 +56,13 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			foldoutValues.numberOfMeteorite--;
 
-			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity - 1);
+			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity - 14);
+			Debug.Log("First int"+placeOfCube);
+			_usedValues.Add(placeOfCube);
 			while (_usedValues.Contains(placeOfCube))
 			{
-				placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity - 1);
-				//Debug.Log(placeOfCube);
+				placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity - 14);
+				Debug.Log("Second int"+placeOfCube);
 			}
 		
 			_placeOfCube.Add(placeOfCube); 
@@ -108,9 +110,6 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	void Update()
 	{
-		Debug.Log("Turn is equal to : "+_turn);  
-		Debug.Log("TurnCount is equal to : "+GameManager.Instance.turnCount);  
-		
 		if (_turn < GameManager.Instance.turnCount && !_done)
 		{
 			_turn = GameManager.Instance.turnCount;
@@ -119,8 +118,6 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			{
 				foldoutValues.cubeTouched[i].GetComponent<Renderer>().material.color =Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
 			}
-			
-			//TODO do the thing
 		}
 
 
