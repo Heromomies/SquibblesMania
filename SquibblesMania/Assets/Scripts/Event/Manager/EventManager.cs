@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Event;
 using TMPro;
 using UnityEngine;
-using Wizama.Hardware.Light;
 using Random = UnityEngine.Random;
 
 public class EventManager : MonoBehaviour
@@ -93,7 +90,9 @@ public class EventManager : MonoBehaviour
 		_condition.conditions[2].numberOfSteps -= i;
 		textToReleaseEvent[2].text = _condition.conditions[2].conditionToRelease + _condition.conditions[2].numberOfSteps;
 	}
-
+ 
+	
+	//TODO Remove the function on build
 	public void OnClick()
 	{
 		_condition.conditions[0].numberOfSteps--;

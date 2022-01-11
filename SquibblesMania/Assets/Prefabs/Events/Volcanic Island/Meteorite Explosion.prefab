@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8885060723732602600}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -46,15 +46,18 @@ MonoBehaviour:
   foldoutValues:
     cubeOnMap: []
     cubeTouched: []
-    numberOfMeteorite: 5
+    numberOfMeteorite: 3
     bulletPrefab: {fileID: 7390947689630570239, guid: d7dff3febd5faa441b054ed7d2add88e, type: 3}
     volcanoTransform: {fileID: 0}
-    speed: 2
+    speed: 1.75
     repeatRate: 0.5
   foldoutValuesEvent:
-    volcano: {fileID: 0}
     durationOfScale: 0.5
     durationShake: 0.3
     strength: {x: 0.1, y: 0.1, z: 0.1}
     vibrato: 100
     randomness: 90
+    particleSystem: {fileID: 5123500826265043806, guid: 7d34824224cc8ad499617e003f22e2e9, type: 3}
+    transformToSpawnParticles: {fileID: 0}
+  colorOne: {r: 1, g: 0.51320755, b: 0.51320755, a: 0}
+  colorTwo: {r: 0.5188679, g: 0, b: 0, a: 0}

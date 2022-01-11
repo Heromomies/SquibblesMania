@@ -20,8 +20,6 @@ public class Meteorite : MonoBehaviour
 		if (other.gameObject.CompareTag("Black Block"))
 		{
 			other.gameObject.GetComponent<Node>().isActive = false;
-
-			Debug.Log(other.gameObject.name);
 			
 			Instantiate(particleSystem, transform.position, Quaternion.identity);
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
