@@ -33,30 +33,51 @@ public class TeamInventoryManager : MonoBehaviour
                 switch (ressources.ressourcesTypes)
                 {
                     case Ressources.Types.Wood:
-                        playerTeamInventory.isTeamHasWood = true;
-                        CheckForVictoryConditions(playerTeamInventory);
+                        playerTeamInventory.items[0].isTeamHasObjet = true;
+                        if (CheckForVictoryConditions(playerTeamInventory))
+                        {
+                            GameManager.Instance.isConditionVictory = true;
+                            GameManager.Instance.ShowEndZone();
+                        }
+
                         break;
                     case Ressources.Types.Rock:
-                        playerTeamInventory.isTeamHasRock = true;
-                        CheckForVictoryConditions(playerTeamInventory);
+                       
+                        playerTeamInventory.items[1].isTeamHasObjet = true;
+                        if (CheckForVictoryConditions(playerTeamInventory))
+                        {
+                            GameManager.Instance.isConditionVictory = true;
+                            GameManager.Instance.ShowEndZone();
+                        }
+
                         break;
                     case Ressources.Types.Rope:
-                        playerTeamInventory.isTeamHasRope = true;
-                        CheckForVictoryConditions(playerTeamInventory);
+              
+                        playerTeamInventory.items[2].isTeamHasObjet = true;
+                        if (CheckForVictoryConditions(playerTeamInventory))
+                        {
+                            GameManager.Instance.isConditionVictory = true;
+                            GameManager.Instance.ShowEndZone();
+                        }
+
+
                         break;
                 }
             }
         }
     }
 
-    void CheckForVictoryConditions(Inventory inventory)
+    bool CheckForVictoryConditions(Inventory inventory)
     {
-        if (inventory.isTeamHasRock && inventory.isTeamHasRope && inventory.isTeamHasWood)
+        for (int i = 0; i < inventory.items.Count; i++)
         {
-            GameManager.Instance.isConditionVictory = true;
-            GameManager.Instance.ShowEndZone();
+            if (inventory.items[i].isTeamHasObjet == false)
+            {
+                return false;
+            }
         }
-        
+
+        return true;
     }
 }
 
@@ -64,8 +85,16 @@ public class TeamInventoryManager : MonoBehaviour
 public class Inventory
 {
     public Player.PlayerTeam inventoryTeam;
+    public List<Objet> items = new List<Objet>();
+    
+    [Serializable]
+    public class Objet
+    {
+        public string objetName;
+        public bool isTeamHasObjet;
+    }
 
-    public bool isTeamHasWood;
-    public bool isTeamHasRock;
-    public bool isTeamHasRope;
+    /* public bool isTeamHasWood;
+     public bool isTeamHasRock;
+     public bool isTeamHasRope;*/
 }

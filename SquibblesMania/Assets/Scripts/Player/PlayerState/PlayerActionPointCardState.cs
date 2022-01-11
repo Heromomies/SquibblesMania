@@ -302,9 +302,9 @@ public class PlayerActionPointCardState : PlayerBaseState
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
-                if (EndZoneManager.Instance != null)
+                
+                if (EndZoneManager.Instance != null && !EndZoneManager.Instance.playerInEndZone.Contains(player))
                     EndZoneManager.Instance.PlayersIsOnEndZone(player.finalPathFinding, player);
-
 
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);

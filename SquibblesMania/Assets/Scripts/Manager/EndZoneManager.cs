@@ -7,7 +7,7 @@ public class EndZoneManager : MonoBehaviour
 {
     public List<PlayerStateManager> playerInEndZone;
 
-    private List<Transform> blocksChilds = new List<Transform>();
+    public List<Transform> blocksChilds = new List<Transform>();
     private static EndZoneManager _endZoneManager;
 
     public static EndZoneManager Instance => _endZoneManager;
@@ -37,6 +37,7 @@ public class EndZoneManager : MonoBehaviour
             {
                 playerInEndZone.Add(player);
             }
+         
         }
     }
 
