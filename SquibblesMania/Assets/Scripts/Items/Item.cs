@@ -4,6 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class Item : MonoBehaviour
 {
+    [HideInInspector]
     public GameObject prefab;
     
 }

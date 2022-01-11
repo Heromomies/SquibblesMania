@@ -16,7 +16,7 @@ public class Ressources : Item
 
     public Types ressourcesTypes;
 
-    public int ressourcesCount;
+  
     // Start is called before the first frame update
     void Start()
     {
@@ -27,5 +27,17 @@ public class Ressources : Item
     void Update()
     {
         
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other);
+        if (other.gameObject.GetComponent<PlayerStateManager>())
+        {
+            Debug.Log(other);
+            PlayerStateManager player = other.gameObject.GetComponent<PlayerStateManager>();
+            TeamInventoryManager.Instance.AddRessourcesToInventory(this, player.playerTeam);
+            Destroy(gameObject);
+        }
     }
 }

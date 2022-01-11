@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public bool isPathRefresh;
 
     public int turnCount;
+    [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     private void Awake()
     {
@@ -64,6 +65,18 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
+    }
+
+   public void ShowEndZone()
+    {
+        if (isConditionVictory)
+        {
+            conditionVictory.endZone.gameObject.SetActive(true);
+        }
+    }
+    public void PlayerTeamWin()
+    {
+        //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
     }
 
     // Update is called once per frame

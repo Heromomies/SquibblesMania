@@ -101,8 +101,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //If in our list, he stay a element, we restart the void
         if (nextBlocksPath.Any())
         {
-            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint,
-                playerStateManager);
+            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint, playerStateManager);
         }
     }
 

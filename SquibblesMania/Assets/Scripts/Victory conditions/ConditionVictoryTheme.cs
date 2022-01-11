@@ -23,7 +23,7 @@ public class ConditionVictory
     
     public int objectCount;
     public GameObject[] items;
-    public Transform endPoint;
+    public GameObject endZone;
     
     
     public Transform[] fireCheckPoints;
