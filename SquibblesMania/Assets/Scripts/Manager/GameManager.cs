@@ -23,10 +23,15 @@ public class GameManager : MonoBehaviour
     public bool isPathRefresh;
 
     public int turnCount;
+    public ConditionVictory conditionVictory;
     private void Awake()
     {
         _gameManager = this;
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
@@ -36,13 +41,15 @@ public class GameManager : MonoBehaviour
             PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
+            
             players.Add(player);
         }
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
+        players[0].playerTeam = Player.PlayerTeam.TeamOne;
+        players[1].playerTeam = Player.PlayerTeam.TeamTwo;
+        players[2].playerTeam = Player.PlayerTeam.TeamOne;
+        players[3].playerTeam = Player.PlayerTeam.TeamOne;
+
         //Choose Randomly a player to start
         int numberPlayerToStart = Random.Range(0, players.Count);
         turnCount++;

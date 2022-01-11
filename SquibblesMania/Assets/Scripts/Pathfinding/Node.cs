@@ -8,7 +8,7 @@ public class Node : MonoBehaviour
     public float blockSizeOffset = 0.5f;
     
     public Transform previousBlock;
-   
+    
     public List<GamePath> possiblePath;
     
     [HideInInspector]
