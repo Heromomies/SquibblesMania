@@ -30,4 +30,13 @@ public class Meteorite : MonoBehaviour
 			transform.rotation = other.transform.rotation;
 		}
 	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.CompareTag("Player"))
+		{
+			EventManager.Instance.StunPlayer(other.gameObject);
+			Destroy(gameObject);
+		}
+	}
 }

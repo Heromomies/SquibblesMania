@@ -1,20 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Yeti : MonoBehaviour
+public class Yeti : MonoBehaviour, IManageEvent
 {
     public Rigidbody bulletPrefab;
 
     [Range(0.0f, 3.0f)] public float speed;
 
-    public void Start()
+    public TextMeshProUGUI textPrevention;
+    
+    public void ShowEvent()
     {
-        GetTransformPlayer();
+        textPrevention.text ="The yeti is going to shoot the nearest player !";
     }
 
-    void GetTransformPlayer() // Check the distance between each players launch a bullet to the nearest player
+    public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player
     {
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
@@ -40,13 +44,10 @@ public class Yeti : MonoBehaviour
             obj.velocity = vo;
         }
     }
+    
     // Update is called once per frame
     void Update()
     {
-        //TODO check the position of the players 
-        
-        //TODO Launch a bullet to the nearest player
-        
         //TODO Make the bullet stuns the player touched
     }
    
@@ -80,4 +81,6 @@ public class Yeti : MonoBehaviour
     }
 
     #endregion
+
+  
 }
