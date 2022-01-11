@@ -22,12 +22,7 @@ public class Node : MonoBehaviour
             path.currentBlock = gameObject;
         }
         groupBlockParent = gameObject.transform.parent.GetComponent<GroupBlockDetection>();
-    }
-
-    // Update is called once per frame
-    public void ChangeBool()
-    {
-        
+        isActive = true;
     }
     
     public Vector3 GetWalkPoint()

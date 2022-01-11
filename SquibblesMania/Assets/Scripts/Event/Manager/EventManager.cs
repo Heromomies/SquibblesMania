@@ -97,7 +97,7 @@ public class EventManager : MonoBehaviour
 	public void OnClick()
 	{
 		_condition.conditions[0].numberOfSteps--;
-		Debug.Log(_condition.conditions[0].numberOfSteps);
+		Debug.Log("Le nombre de pas restants à faire est : "+_condition.conditions[0].numberOfSteps);
 	}
 	
 	private void Update()
