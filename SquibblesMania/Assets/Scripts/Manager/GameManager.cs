@@ -71,12 +71,16 @@ public class GameManager : MonoBehaviour
     {
         if (isConditionVictory)
         {
-            conditionVictory.endZone.gameObject.SetActive(true);
+            int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
+            GameObject endZone = Instantiate(conditionVictory.endZone, conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
+            endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
         }
     }
-    public void PlayerTeamWin()
+    public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
+        Time.timeScale = 0f;
+        UiManager.Instance.WinSetUp(playerTeam);
     }
 
     // Update is called once per frame
