@@ -41,7 +41,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
-            if (path.isActive)
+            if (path.isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
             {
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
@@ -130,7 +130,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive)
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && checkedBlock.GetComponent<Node>().isActive)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -189,7 +189,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive)
+            if (path.isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
             {
                 nextBlocks.Add(path.nextPath);
 
@@ -225,7 +225,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
         {
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive)
+            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && currentBlock.GetComponent<Node>().isActive)
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);

@@ -54,7 +54,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			while (_usedValues.Contains(placeOfCube))
 			{
 				placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity-1);
-				Debug.Log(placeOfCube);
+				//Debug.Log(placeOfCube);
 			}
 
 			RandomEvent(placeOfCube);
@@ -70,7 +70,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
-		Debug.Log(foldoutValues.cubeOnMap[placeOfCube]);
+		//Debug.Log(foldoutValues.cubeOnMap[placeOfCube]);
 
 		foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
 		foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);

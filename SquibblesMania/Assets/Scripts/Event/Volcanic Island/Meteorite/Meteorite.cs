@@ -19,20 +19,10 @@ public class Meteorite : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("Black Block"))
 		{
-			foreach (var g in other.gameObject.GetComponent<Node>().possiblePath)
-			{
-				t.Add(g.nextPath);
-				Debug.Log(t);
-			}
+			other.gameObject.GetComponent<Node>().isActive = false;
 
-			for (int i = 0; i < t.Count; i++)
-			{
-				if (t[i].GetComponent<Node>().possiblePath[i].nextPath.gameObject.name == other.gameObject.name)
-				{
-					Debug.Log("I'm here ma boy");
-				}
-			}
-
+			Debug.Log(other.gameObject.name);
+			
 			Instantiate(particleSystem, transform.position, Quaternion.identity);
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);

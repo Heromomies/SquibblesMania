@@ -6,9 +6,9 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     public float blockSizeOffset = 0.5f;
-    
     public Transform previousBlock;
-
+    public bool isActive;
+    
     public List<GamePath> possiblePath;
     
     [HideInInspector]
@@ -32,7 +32,6 @@ public class Node : MonoBehaviour
     
     public Vector3 GetWalkPoint()
     {
-       
         //The position in the center of the block
         return transform.position + (transform.up * blockSizeOffset);
     }
