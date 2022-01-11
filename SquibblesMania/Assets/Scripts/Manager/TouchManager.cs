@@ -50,9 +50,17 @@ public class TouchManager : MonoBehaviour
         FingersScript.Instance.AddGesture(PlayerTouchGesture);
 
         //Allow gesture to work through certain objects
-        FingersScript.Instance.PassThroughObjects.Add(MovementBlockManager.Instance.buttonMoveBlockParentObject);
+        if (MovementBlockManager.Instance != null)
+        {
+            FingersScript.Instance.PassThroughObjects.Add(MovementBlockManager.Instance.buttonMoveBlockParentObject);
+        }
+     
         FingersScript.Instance.PassThroughObjects.Add(uiInteractionParentObject);
-        FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
+        if (UiManager.Instance != null)
+        {
+            FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
+        }
+        
     }
 
     private void OnDisable()

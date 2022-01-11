@@ -14,7 +14,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-        //TODO Faire une method qui permet de prévisualiser jusqu'ou le joueur peut aller avec ces points d'actions
+        
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
     }
@@ -37,7 +37,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             TouchManager.Instance.blockCurrentlySelectedColor = blockBaseColor;
         }
 
-
+        
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
