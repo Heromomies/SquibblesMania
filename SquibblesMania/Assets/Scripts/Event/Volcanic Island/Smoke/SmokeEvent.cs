@@ -2,37 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeEvent : MonoBehaviour
+public class SmokeEvent : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT")] private List<GameObject> _cubeOnMap;
-	public List<GameObject> _cubeTouched;
+	[HideInInspector] public List<GameObject> cubeTouched;
 	public GameObject eventParticle;
 
 	public int numberOfSmoke;
 	public float heightSpawnParticle;
 	private int _cubeToChange;
 	
-	public void Start() // On click we launch the compact function
+	public void ShowEvent() // Show the event
 	{
-		#region LaunchFunctionCompactEvent
-
 		_cubeOnMap = EventManager.Instance.cleanList;
-
-		CompactEvent();
-
-		#endregion
-	}
-
-	private void CompactEvent() // Compact event is equal to the smoke event
-	{
+		Debug.Log(_cubeOnMap.Count);
+		
 		_cubeToChange = Random.Range(0, _cubeOnMap.Count - numberOfSmoke);
 
 		for (int i = 0; i < numberOfSmoke; i++) // Allow to colorize material to create a compact zone
 		{
 			_cubeOnMap[_cubeToChange + i].GetComponent<Renderer>().material.color = Color.black;
-			_cubeTouched.Add(_cubeOnMap[_cubeToChange + i]);
+			cubeTouched.Add(_cubeOnMap[_cubeToChange + i]);
 		} 
-		foreach (var cubeTouched in _cubeTouched) // Instantiate particle on the top of the block
+	}
+
+	public void LaunchEvent() // Launch the event
+	{
+		foreach (var cubeTouched in cubeTouched) // Instantiate particle on the top of the block
 		{
 			float y = cubeTouched.transform.localScale.y;
 			
