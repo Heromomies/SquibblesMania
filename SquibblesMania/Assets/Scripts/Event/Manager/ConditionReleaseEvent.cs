@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -31,7 +32,7 @@ public class Condition
    public ConditionType conditionType;
    public ColorToChose colorsToChose;
  
-   public int numberOfSteps;
+   public float numberOfSteps;
    
    public string conditionToRelease;
 }
