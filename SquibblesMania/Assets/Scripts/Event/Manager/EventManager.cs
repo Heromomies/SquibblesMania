@@ -47,7 +47,7 @@ public class EventManager : MonoBehaviour
 		DefineCondition();
 	}
 
-	void DefineCondition() // Define the condition to activate event
+	private void DefineCondition() // Define the condition to activate event
 	{
 		_numberOfCondition = Random.Range(0, conditionReleaseEvents.Count);
 		_condition = conditionReleaseEvents[_numberOfCondition];
@@ -115,7 +115,7 @@ public class EventManager : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
+	private void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
 	{
 		if (_condition.conditions[0].numberOfSteps <= 0)
 		{
@@ -139,7 +139,7 @@ public class EventManager : MonoBehaviour
 		if (_condition.conditions[2].numberOfSteps <= 0)
 		{
 			textToReleaseEvent[2].color = Color.green;
-			textToReleaseEvent[2].text = "Le nombre de case déplacée a été atteint";
+			textToReleaseEvent[2].text = "Le nombre de cases déplacées a été atteint";
 			canvasButton.SetActive(true);
 			_numberEvent = 2;
 		}
