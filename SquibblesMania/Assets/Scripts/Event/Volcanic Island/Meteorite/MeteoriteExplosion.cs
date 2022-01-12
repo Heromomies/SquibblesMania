@@ -14,8 +14,6 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	public Color colorOne, colorTwo;
 	
-	private List<int> _usedValues = new List<int>();
-
 	private int _turn;
 	public List<int> _placeOfCube= new List<int>();
 	private bool _done;
@@ -109,7 +107,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			
 			for (int i = 0; i < _placeOfCube.Count; i++)
 			{
-				foldoutValues.cubeTouched[i].GetComponent<Renderer>().material.color =Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
+				foldoutValues.cubeTouched[i].GetComponent<Renderer>().material.color = Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
 			}
 		}
 
@@ -141,7 +139,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		////calculating initial y velocity
 		//Vy0 = y/t + 1/2 * g * t
 
-		float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y + 0.5f) * velocity;
+		float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y + 0.7f) * velocity;
 		Vector3 result = distanceXZ * vxz;
 		result.y = vy;
 
