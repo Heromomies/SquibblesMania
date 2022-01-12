@@ -20,6 +20,10 @@ public class EventManager : MonoBehaviour
 	[Space] [Header("CANVAS")] public GameObject canvasButton;
 	public List<TextMeshProUGUI> textToReleaseEvent;
 
+	[Space] [Header("YETI EVENT")] public List<Transform> yetiSpawn;
+	[HideInInspector] public Transform yetiFinalSpawn;
+	
+	
 	private ConditionReleaseEvent _condition;
 	private int _numberOfCondition;
 	private bool _eventOne;
@@ -151,15 +155,19 @@ public class EventManager : MonoBehaviour
 		{
 			case 0:
 				cleanList = listZoneNorthWest;
+				yetiFinalSpawn = yetiSpawn[0];
 				break;
 			case 1:
 				cleanList = listZoneNorthEst;
+				yetiFinalSpawn = yetiSpawn[1];
 				break;
 			case 2:
 				cleanList = listZoneSouthWest;
+				yetiFinalSpawn = yetiSpawn[2];
 				break;
 			case 3:
 				cleanList = listZoneSouthEst;
+				yetiFinalSpawn = yetiSpawn[3];
 				break;
 		}
 

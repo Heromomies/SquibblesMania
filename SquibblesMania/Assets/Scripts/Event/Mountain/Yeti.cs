@@ -12,6 +12,7 @@ public class Yeti : MonoBehaviour, IManageEvent
     public void ShowEvent()
     {
         textPrevention.text ="The yeti is going to shoot the nearest player !";
+        transform.position = EventManager.Instance.yetiFinalSpawn.position;
     }
 
     public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player
@@ -41,12 +42,6 @@ public class Yeti : MonoBehaviour, IManageEvent
         }
     }
     
-    // Update is called once per frame
-    void Update()
-    {
-        //TODO Make the bullet stuns the player touched
-    }
-   
     #region CalculateVelocity
 
     Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola
@@ -69,7 +64,7 @@ public class Yeti : MonoBehaviour, IManageEvent
         ////calculating initial y velocity
         //Vy0 = y/t + 1/2 * g * t
 
-        float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y) * velocity;
+        float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y + 0.7f) * velocity;
         Vector3 result = distanceXZ * vxz;
         result.y = vy;
 
@@ -77,6 +72,4 @@ public class Yeti : MonoBehaviour, IManageEvent
     }
 
     #endregion
-
-  
 }
