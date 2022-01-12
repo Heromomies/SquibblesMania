@@ -14,7 +14,8 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-        
+        Debug.Log("I'm going through EnterState function ");
+        player.nextBlockPath.Clear();
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
     }
@@ -44,6 +45,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             if (path.isActive && path.nextPath.GetComponent<Node>().isActive)
             {
                 Debug.Log(path.nextPath);
+               
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;

@@ -21,8 +21,7 @@ public class Meteorite : MonoBehaviour
 		if (other.gameObject.CompareTag("Black Block"))
 		{
 			other.gameObject.GetComponent<Node>().isActive = false;
-			GameManager.Instance.currentPlayerTurn.StartPathFinding();
-			
+
 			Instantiate(particleSystem, transform.position, Quaternion.identity);
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);

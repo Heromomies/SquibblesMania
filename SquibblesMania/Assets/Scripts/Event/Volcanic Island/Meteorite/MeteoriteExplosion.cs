@@ -56,7 +56,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			foldoutValues.numberOfMeteorite--;
 
-			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Count);
+			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Count-1);
 			EventManager.Instance.cleanList.Remove(EventManager.Instance.cleanList[placeOfCube]);
 
 			_placeOfCube.Add(placeOfCube); 
