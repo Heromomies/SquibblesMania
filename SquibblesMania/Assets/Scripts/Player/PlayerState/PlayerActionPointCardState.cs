@@ -42,10 +42,9 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive)
+            
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
             {
-                Debug.Log(path.nextPath);
-               
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
@@ -133,7 +132,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
                 if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                    checkedBlock.GetComponent<Node>().isActive)
+                    path.nextPath.GetComponent<Node>().isActive)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
