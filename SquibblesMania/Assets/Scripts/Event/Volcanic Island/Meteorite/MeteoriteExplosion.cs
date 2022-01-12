@@ -12,9 +12,15 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 	[Space] [Header("EVENT ANIMATION")] [SerializeField]
 	private FoldoutValueHolderEvent foldoutValuesEvent;
 
+	public Color colorOne, colorTwo;
+	
 	private List<int> _usedValues = new List<int>();
 
-	IEnumerator AnimationVolcano()
+	private int _turn;
+	public List<int> _placeOfCube= new List<int>();
+	private bool _done;
+	
+		IEnumerator AnimationVolcano()
 	{
 		// Create a new Sequence.
 		Sequence s = DOTween.Sequence();
@@ -50,19 +56,17 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			foldoutValues.numberOfMeteorite--;
 
-			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity-1);
-			while (_usedValues.Contains(placeOfCube))
-			{
-				placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity-1);
-				//Debug.Log(placeOfCube);
-			}
+			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Count-1);
+			EventManager.Instance.cleanList.Remove(EventManager.Instance.cleanList[placeOfCube]);
 
+			_placeOfCube.Add(placeOfCube); 
 			RandomEvent(placeOfCube);
 		}
 	}
 
 	public void LaunchEvent()
 	{
+		_done = true;
 		StartCoroutine(AnimationVolcano());
 	}
 
@@ -70,12 +74,10 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
-		//Debug.Log(foldoutValues.cubeOnMap[placeOfCube]);
+		foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = colorOne;
 
-		foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = Color.black;
 		foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
-
-		//EventManager.Instance.cleanList.Remove(foldoutValues.cubeOnMap[placeOfCube]);
+		_turn = GameManager.Instance.turnCount;
 	}
 
 	#endregion
@@ -101,6 +103,16 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	void Update()
 	{
+		if (_turn < GameManager.Instance.turnCount && !_done)
+		{
+			_turn = GameManager.Instance.turnCount;
+			
+			for (int i = 0; i < _placeOfCube.Count; i++)
+			{
+				foldoutValues.cubeTouched[i].GetComponent<Renderer>().material.color =Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
+			}
+		}
+
 		if (foldoutValues.cubeTouched.Count <= 0)
 		{
 			CancelInvoke();

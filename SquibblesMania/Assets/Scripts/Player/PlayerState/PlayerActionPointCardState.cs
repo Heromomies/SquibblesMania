@@ -14,6 +14,8 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
+        Debug.Log("I'm going through EnterState function ");
+        player.nextBlockPath.Clear();
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
     }
@@ -40,8 +42,10 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
-            if (path.isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive)
             {
+                Debug.Log(path.nextPath);
+               
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
@@ -187,7 +191,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive)
             {
                 nextBlocks.Add(path.nextPath);
 

@@ -1,11 +1,9 @@
 using System;
 using System.Collections;
-
-
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class PolarWind : MonoBehaviour
+public class PolarWind : MonoBehaviour, IManageEvent
 {
 	[Range(0,50)]
 	public int segments = 50;
@@ -23,7 +21,7 @@ public class PolarWind : MonoBehaviour
 	private bool _stopLoop;
 	private LineRenderer _line;
 	
-	void Start ()
+	public void ShowEvent()
 	{
 		transform.position = new Vector3(transform.position.x,  heightWind, transform.position.z);
 	
@@ -34,10 +32,12 @@ public class PolarWind : MonoBehaviour
 		_line.useWorldSpace = false;
 		
 		_stopLoop = false;
-		
-		StartCoroutine(CreatePoints ());
 	}
 
+	public void LaunchEvent()
+	{
+		StartCoroutine(CreatePoints ());
+	}
 	IEnumerator CreatePoints ()
 	{
 		for (int i = 0; i < (segments +1); i++)
@@ -69,6 +69,10 @@ public class PolarWind : MonoBehaviour
 			_stopLoop = true;
 			StopCoroutine(CreatePoints());
 		}
+		if(other.gameObject.CompareTag("Player"))
+		{
+			EventManager.Instance.StunPlayer(other.gameObject);
+		}
 	}
 
 	private void OnApplicationQuit()
@@ -76,4 +80,5 @@ public class PolarWind : MonoBehaviour
 		meshOfLine.Clear();
 	}
 	//TODO Stun player if they are touched by it
+
 }
