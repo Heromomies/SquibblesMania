@@ -56,15 +56,9 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			foldoutValues.numberOfMeteorite--;
 
-			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity - 14);
-			Debug.Log("First int"+placeOfCube);
-			_usedValues.Add(placeOfCube);
-			while (_usedValues.Contains(placeOfCube))
-			{
-				placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Capacity - 14);
-				Debug.Log("Second int"+placeOfCube);
-			}
-		
+			int placeOfCube = Random.Range(1, EventManager.Instance.cleanList.Count);
+			EventManager.Instance.cleanList.Remove(EventManager.Instance.cleanList[placeOfCube]);
+
 			_placeOfCube.Add(placeOfCube); 
 			RandomEvent(placeOfCube);
 		}
@@ -83,7 +77,6 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		foldoutValues.cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = colorOne;
 
 		foldoutValues.cubeTouched.Add(foldoutValues.cubeOnMap[placeOfCube]);
-		Debug.Log("I'm in Random Event"); 
 		_turn = GameManager.Instance.turnCount;
 	}
 
@@ -113,13 +106,12 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		if (_turn < GameManager.Instance.turnCount && !_done)
 		{
 			_turn = GameManager.Instance.turnCount;
-			Debug.Log("I'm in function");
+			
 			for (int i = 0; i < _placeOfCube.Count; i++)
 			{
 				foldoutValues.cubeTouched[i].GetComponent<Renderer>().material.color =Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
 			}
 		}
-
 
 		if (foldoutValues.cubeTouched.Count <= 0)
 		{
