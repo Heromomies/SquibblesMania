@@ -10,7 +10,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     public List<Transform> previewPath = new List<Transform>();
     [HideInInspector] public int actionPointText;
     [HideInInspector] public int actionPoint;
-    
+
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -38,14 +38,13 @@ public class PlayerActionPointCardState : PlayerBaseState
             TouchManager.Instance.blockCurrentlySelectedColor = blockBaseColor;
         }
 
-        
+
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive)
+            
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
             {
-                Debug.Log(path.nextPath);
-               
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
@@ -120,7 +119,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         previewPath = finalPreviewPath;
-        
     }
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
@@ -133,7 +131,8 @@ public class PlayerActionPointCardState : PlayerBaseState
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && checkedBlock.GetComponent<Node>().isActive)
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
+                    path.nextPath.GetComponent<Node>().isActive)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -153,7 +152,6 @@ public class PlayerActionPointCardState : PlayerBaseState
             GameManager.Instance.isPathRefresh = false;
             ColorPossiblePaths(previewPath, Color.grey);
             EnterState(player);
-            
         }
     }
 
@@ -228,7 +226,8 @@ public class PlayerActionPointCardState : PlayerBaseState
         foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
         {
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && currentBlock.GetComponent<Node>().isActive)
+            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
+                currentBlock.GetComponent<Node>().isActive)
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
@@ -297,16 +296,19 @@ public class PlayerActionPointCardState : PlayerBaseState
             if (movementPlayer < player.playerActionPoint)
             {
                 if (EventManager.Instance != null)
-                {
                     EventManager.Instance.AddPointForNumberOfSteps(1);
-                }
-               
+
+
                 Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
+                
+                if (EndZoneManager.Instance != null && !EndZoneManager.Instance.playerInEndZone.Contains(player))
+                    EndZoneManager.Instance.PlayersIsOnEndZone(player.finalPathFinding, player);
+
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
             }
@@ -335,7 +337,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-
+        
+        if (EndZoneManager.Instance != null)
+            EndZoneManager.Instance.CheckPlayersTeam();
 
         if (player.playerActionPoint > 0)
         {
@@ -346,6 +350,5 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
         }
-       
     }
 }
