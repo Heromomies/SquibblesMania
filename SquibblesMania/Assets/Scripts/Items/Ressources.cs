@@ -31,13 +31,10 @@ public class Ressources : Item
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other);
         if (other.gameObject.GetComponent<PlayerStateManager>())
         {
-            Debug.Log(other);
             PlayerStateManager player = other.gameObject.GetComponent<PlayerStateManager>();
-            TeamInventoryManager.Instance.AddRessourcesToInventory(this, player.playerTeam);
-            Destroy(gameObject);
+            TeamInventoryManager.Instance.AddResourcesToInventory(this, player.playerTeam);
         }
     }
 }

@@ -24,13 +24,13 @@ public class TeamInventoryManager : MonoBehaviour
     {
     }
 
-    public void AddRessourcesToInventory(Ressources ressources, Player.PlayerTeam playerTeam)
+    public void AddResourcesToInventory(Ressources resources, Player.PlayerTeam playerTeam)
     {
         foreach (Inventory playerTeamInventory in inventory)
         {
             if (playerTeamInventory.inventoryTeam == playerTeam)
             {
-                switch (ressources.ressourcesTypes)
+                switch (resources.ressourcesTypes)
                 {
                     case Ressources.Types.Wood:
                         playerTeamInventory.items[0].isTeamHasObjet = true;
@@ -42,7 +42,7 @@ public class TeamInventoryManager : MonoBehaviour
 
                         break;
                     case Ressources.Types.Rock:
-                       
+
                         playerTeamInventory.items[1].isTeamHasObjet = true;
                         if (CheckForVictoryConditions(playerTeamInventory))
                         {
@@ -52,7 +52,7 @@ public class TeamInventoryManager : MonoBehaviour
 
                         break;
                     case Ressources.Types.Rope:
-              
+
                         playerTeamInventory.items[2].isTeamHasObjet = true;
                         if (CheckForVictoryConditions(playerTeamInventory))
                         {
@@ -86,7 +86,7 @@ public class Inventory
 {
     public Player.PlayerTeam inventoryTeam;
     public List<Objet> items = new List<Objet>();
-    
+
     [Serializable]
     public class Objet
     {
@@ -94,7 +94,5 @@ public class Inventory
         public bool isTeamHasObjet;
     }
 
-    /* public bool isTeamHasWood;
-     public bool isTeamHasRock;
-     public bool isTeamHasRope;*/
+  
 }
