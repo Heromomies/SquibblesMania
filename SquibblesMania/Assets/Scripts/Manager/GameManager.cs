@@ -59,17 +59,18 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
-        cameraScript.OrbitTarget = currentPlayerTurn.transform;
+        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
        
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)
     {
         turnCount++;
+        PowerManager.Instance.isTouched = false;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-        cameraScript.OrbitTarget = currentPlayerTurn.transform;
+        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
         
     }
 

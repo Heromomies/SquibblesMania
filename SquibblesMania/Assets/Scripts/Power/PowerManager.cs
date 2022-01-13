@@ -6,30 +6,53 @@ using UnityEngine.UI;
 
 public class PowerManager : MonoBehaviour
 {
-    public GameObject player;
-    public int maxDistance;
+	public int maxDistance;
+	[Space] [Header("UI")] public Button buttonOne;
+	public Button buttonTwo;
 
-    private float _height;
-    
-    private void Update()
-    {
-        RaycastHit hit;
-        
-        Debug.DrawRay(player.transform.position, Vector3.back * maxDistance, Color.yellow);
-        
-        if (Physics.Raycast(player.transform.position, Vector3.back, out hit, maxDistance))
-        {
-            var position = hit.transform.position;
-            Debug.Log(position.y);
-            _height = position.y;
-        }
-    }
+	[Space] [Header("VECTORS")] public List<Vector3> vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
-    public void AttractPlayer()
-    {
-        var transformPosition = player.transform.position;
-        player.transform.position += Vector3.back;
-        transformPosition.y += transformPosition.y + _height; 
-        
-    }
+	[HideInInspector] public int raycastPos;
+	[HideInInspector] public RaycastHit hitRaycast;
+	[HideInInspector] public bool isTouched;
+	#region Singleton
+
+	private static PowerManager powerManager;
+
+	public static PowerManager Instance => powerManager;
+	// Start is called before the first frame update
+
+	private void Awake()
+	{
+		powerManager = this;
+	}
+
+	#endregion
+
+	private void Update()
+	{
+		RaycastHit hit;
+		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+
+		if(!isTouched)
+		{
+			for (int i = 0; i < vectorRaycast.Count; i++)
+			{
+				if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
+				{
+					raycastPos = i;
+					hitRaycast = hit;
+					buttonOne.interactable = true;
+					buttonTwo.interactable = true;
+				}
+			}
+		}
+	}
+
+	public void ButtonClicked()
+	{
+		buttonOne.interactable = false;
+		buttonTwo.interactable = false;
+		isTouched = true;
+	}
 }
