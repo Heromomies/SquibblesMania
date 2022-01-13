@@ -14,7 +14,7 @@ public class Node : MonoBehaviour
 
     [HideInInspector] public GroupBlockDetection groupBlockParent;
 
-    public float radius = 1f;
+    private float radius = 1f;
 
     // Start is called before the first frame update
     void Awake()
@@ -48,8 +48,8 @@ public class Node : MonoBehaviour
         int count = 0;
         foreach (var collider in colliders)
         {
-            
-            if (Vector3.Distance(collider.transform.position, transform.position) <= radius+0.1f && collider.transform != transform)
+            if (Vector3.Distance(collider.transform.position, transform.position) <= (radius + 0.1f) &&
+                collider.transform != transform)
             {
                 //Create a new element and set possiblePath value
                 possiblePath.Add(new GamePath());

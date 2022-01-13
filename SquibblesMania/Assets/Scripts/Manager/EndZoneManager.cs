@@ -28,6 +28,10 @@ public class EndZoneManager : MonoBehaviour
 
         //Remove this object from the list
         blocksChilds.RemoveAt(blocksChilds.Count - 1);
+        foreach (Transform block in blocksChilds)
+        {
+            block.GetComponent<Renderer>().material.color = Color.green;
+        }
     }
 
     public void PlayersIsOnEndZone()

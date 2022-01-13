@@ -13,7 +13,7 @@ public class InspectorPlacingBlock : Editor
       base.OnInspectorGUI();
 
       Node node = (Node)target;
-
+      
       if (GUILayout.Button("Set Up PossiblePath"))
       {
          node.SetUpPossiblePath();
