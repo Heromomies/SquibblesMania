@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DigitalRubyShared;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -10,7 +11,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _gameManager;
 
     public static GameManager Instance => _gameManager;
-   
+    
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
 
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool isPathRefresh;
 
+    public FingersPanOrbitComponentScript cameraScript;
     public int turnCount;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
@@ -57,6 +59,8 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
+        cameraScript.OrbitTarget = currentPlayerTurn.transform;
+       
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)
@@ -65,6 +69,8 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
+        cameraScript.OrbitTarget = currentPlayerTurn.transform;
+        
     }
 
    public void ShowEndZone()

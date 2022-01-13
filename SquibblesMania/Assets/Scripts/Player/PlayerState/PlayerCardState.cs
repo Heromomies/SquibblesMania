@@ -9,12 +9,49 @@ public class PlayerCardState : PlayerBaseState
     {
         //Turn of player x
         //Message player turn x "Put a card on the corresponding surface"
+
+        if (player.isPlayerStun)
+        {
+            player.stunCount--;
+            PlayerIsStun(player);
+        }
+        
+        
+        
         player.playerActionPoint = Random.Range(1, 6);
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
         player.isPlayerInActionCardState = true;
         UiManager.Instance.buttonNextTurn.SetActive(false);
         player.SwitchState(player.PlayerActionPointCardState);
     
+    }
+
+    void PlayerIsStun(PlayerStateManager player)
+    {
+        //If the stunCount is less than zero player is now not stun
+        if (player.stunCount <= 0)
+        {
+            player.isPlayerStun = false;
+        }
+        
+        switch (player.playerNumber)
+        {
+            case 0:
+                GameManager.Instance.ChangePlayerTurn(1);
+
+                break;
+            case 1:
+                GameManager.Instance.ChangePlayerTurn(2);
+
+                break;
+            case 2:
+                GameManager.Instance.ChangePlayerTurn(3);
+
+                break;
+            case 3:
+                GameManager.Instance.ChangePlayerTurn(0);
+                break;
+        }
     }
 
     public override void UpdtateState(PlayerStateManager player)
@@ -24,13 +61,11 @@ public class PlayerCardState : PlayerBaseState
         {
             player.SwitchState(player.PlayerPowerCardState);
         }
-        //if player touch the action point button 
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-        }
+   
     }
 
     public override void ExitState(PlayerStateManager player)
     {
+        
     }
 }

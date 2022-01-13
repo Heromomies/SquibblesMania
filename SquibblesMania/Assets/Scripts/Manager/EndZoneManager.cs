@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EndZoneManager : MonoBehaviour
 {
-    public List<PlayerStateManager> playerInEndZone;
+    public List<Transform> playerInEndZone;
 
     public List<Transform> blocksChilds = new List<Transform>();
     private static EndZoneManager _endZoneManager;
@@ -26,19 +26,18 @@ public class EndZoneManager : MonoBehaviour
             blocksChilds.Add(tr);
         }
 
+        //Remove this object from the list
         blocksChilds.RemoveAt(blocksChilds.Count - 1);
-    }
-
-    public void PlayersIsOnEndZone(List<Transform> playerActualPathfinding, PlayerStateManager player)
-    {
         foreach (Transform block in blocksChilds)
         {
-            if (playerActualPathfinding.Contains(block) && !playerInEndZone.Contains(player))
-            {
-                playerInEndZone.Add(player);
-            }
-         
+            block.GetComponent<Renderer>().material.color = Color.green;
         }
+    }
+
+    public void PlayersIsOnEndZone()
+    {
+        GroupBlockDetection parent = blocksChilds[0].parent.GetComponent<GroupBlockDetection>();
+        playerInEndZone = parent.playersOnGroupBlock;
     }
 
     public void CheckPlayersTeam()
@@ -48,13 +47,14 @@ public class EndZoneManager : MonoBehaviour
             int playerCountTeamOne = 0;
             int playerCountTeamTwo = 0;
 
-            foreach (PlayerStateManager player in playerInEndZone)
+            foreach (Transform player in playerInEndZone)
             {
-                if (player.playerTeam == Player.PlayerTeam.TeamOne)
+                PlayerStateManager playerStateManager = player.GetComponent<PlayerStateManager>();
+                if (playerStateManager.playerTeam == Player.PlayerTeam.TeamOne)
                 {
                     playerCountTeamOne++;
                 }
-                else if (player.playerTeam == Player.PlayerTeam.TeamTwo)
+                else if (playerStateManager.playerTeam == Player.PlayerTeam.TeamTwo)
                 {
                     playerCountTeamTwo++;
                 }
@@ -62,11 +62,23 @@ public class EndZoneManager : MonoBehaviour
 
             if (playerCountTeamOne >= 2)
             {
-                GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
+                foreach (Inventory playerInventory in TeamInventoryManager.Instance.inventory)
+                {
+                    if (playerInventory.inventoryTeam == Player.PlayerTeam.TeamOne)
+                    {
+                        GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
+                    }
+                }
             }
             else if (playerCountTeamTwo >= 2)
             {
-                GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
+                foreach (Inventory playerInventory in TeamInventoryManager.Instance.inventory)
+                {
+                    if (playerInventory.inventoryTeam == Player.PlayerTeam.TeamTwo)
+                    {
+                        GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
+                    }
+                }
             }
         }
     }

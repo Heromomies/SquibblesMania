@@ -4989,12 +4989,12 @@ MonoBehaviour:
   OrbitXMaxDegrees: 30
   XAxisMovementType: 0
   OrbitXPanSpeed: 1
-  OrbitXPanLimit: 100
-  OrbitYSpeed: -15
+  OrbitXPanLimit: 50
+  OrbitYSpeed: 15
   OrbitYMaxDegrees: 0
   YAxisMovementType: 0
   OrbitYPanSpeed: 1
-  OrbitYPanLimit: 58
+  OrbitYPanLimit: 40
   AllowOrbitWhileZooming: 1
   AllowMovementOnBothAxisSimultaneously: 1
   OrbitInertia: 0.925
@@ -6367,16 +6367,16 @@ MonoBehaviour:
   isActive: 0
   possiblePath:
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 378579551}
+    nextPath: {fileID: 248182948}
     isActive: 1
   - currentBlock: {fileID: 0}
     nextPath: {fileID: 1124617799}
     isActive: 1
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 248182948}
+    nextPath: {fileID: 693613184}
     isActive: 1
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 693613184}
+    nextPath: {fileID: 378579551}
     isActive: 1
   groupBlockParent: {fileID: 0}
 --- !u!65 &1000515058
@@ -6843,10 +6843,10 @@ MonoBehaviour:
   isActive: 0
   possiblePath:
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 1437732604}
+    nextPath: {fileID: 142500502}
     isActive: 1
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 142500502}
+    nextPath: {fileID: 1437732604}
     isActive: 1
   groupBlockParent: {fileID: 0}
 --- !u!65 &1065436745
@@ -9611,10 +9611,13 @@ MonoBehaviour:
     nextPath: {fileID: 1822767962}
     isActive: 1
   - currentBlock: {fileID: 0}
+    nextPath: {fileID: 463863319}
+    isActive: 1
+  - currentBlock: {fileID: 0}
     nextPath: {fileID: 265853028}
     isActive: 1
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 463863319}
+    nextPath: {fileID: 1942249321}
     isActive: 1
   groupBlockParent: {fileID: 0}
 --- !u!65 &1352385765
@@ -9952,10 +9955,10 @@ MonoBehaviour:
   isActive: 0
   possiblePath:
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 1847168700}
+    nextPath: {fileID: 1065436743}
     isActive: 1
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 1065436743}
+    nextPath: {fileID: 1847168700}
     isActive: 1
   groupBlockParent: {fileID: 0}
 --- !u!65 &1437732606
@@ -10204,10 +10207,10 @@ MonoBehaviour:
   isActive: 0
   possiblePath:
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 244044710}
+    nextPath: {fileID: 160875945}
     isActive: 1
   - currentBlock: {fileID: 0}
-    nextPath: {fileID: 160875945}
+    nextPath: {fileID: 244044710}
     isActive: 1
   groupBlockParent: {fileID: 0}
 --- !u!65 &1546274878
@@ -13322,6 +13325,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: cameraScript
+      value: 
+      objectReference: {fileID: 741319949}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 

@@ -14,7 +14,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-        //Debug.Log("I'm going through EnterState function ");
         player.nextBlockPath.Clear();
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
@@ -306,8 +305,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
                 
-                if (EndZoneManager.Instance != null && !EndZoneManager.Instance.playerInEndZone.Contains(player))
-                    EndZoneManager.Instance.PlayersIsOnEndZone(player.finalPathFinding, player);
+              
 
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
@@ -337,6 +335,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
+        
+        if (EndZoneManager.Instance != null && GameManager.Instance.isConditionVictory)
+            EndZoneManager.Instance.PlayersIsOnEndZone();
         
         if (EndZoneManager.Instance != null)
             EndZoneManager.Instance.CheckPlayersTeam();
