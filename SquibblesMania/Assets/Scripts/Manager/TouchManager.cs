@@ -92,7 +92,7 @@ public class TouchManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out Hit, Mathf.Infinity, touchLayersMask))
             {
-                if (blockCurrentlySelected != null)
+                if (blockCurrentlySelected != null && ! GameManager.Instance.currentPlayerTurn.walking)
                 {
                     //Previous selected block get his base color back
 
