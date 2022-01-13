@@ -6,56 +6,81 @@ using UnityEngine.UI;
 
 public class PowerManager : MonoBehaviour
 {
-    public int maxDistance;
+	public int maxDistance;
+	public GameObject buttonOne, buttonTwo;
 
-    private float _height;
-    private bool _isOne, _isTwo, _isThree, _isFour;
-    private void Update()
-    {
-        RaycastHit hit;
-        
-      /*  Debug.DrawRay(transform.position, Vector3.back * maxDistance, Color.yellow);
-        Debug.DrawRay(transform.position, Vector3.forward * maxDistance, Color.yellow);
-        Debug.DrawRay(transform.position, Vector3.left * maxDistance, Color.yellow);
-        Debug.DrawRay(transform.position, Vector3.right * maxDistance, Color.yellow);*/
-        
-        if (Physics.Raycast(transform.position, Vector3.back, out hit, maxDistance) && !_isOne && 
-            Input.GetMouseButtonDown(0) && GameManager.Instance.currentPlayerTurn.name == gameObject.name)
-        {
-            Debug.Log(GameManager.Instance.currentPlayerTurn);
-            _isOne = true;
-            hit.transform.position += Vector3.back;
-            Debug.DrawRay(transform.position, Vector3.back * maxDistance, Color.red);
-            Debug.Log("I'm touching a player from the back");
-        }
-        if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance) && !_isTwo && 
-            Input.GetMouseButtonDown(0) && GameManager.Instance.currentPlayerTurn.name == gameObject.name)
-        {
-            _isTwo = true;
-            hit.transform.position -= Vector3.back;
-            Debug.DrawRay(transform.position, Vector3.forward * maxDistance, Color.red);
-            Debug.Log("I'm touching a player from forward");
-        }
-        if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance) && !_isThree && 
-            Input.GetMouseButtonDown(0)&& GameManager.Instance.currentPlayerTurn.name == gameObject.name)
-        {
-            _isThree = true;
-            hit.transform.position += Vector3.left;
-            Debug.Log("I'm touching a player from the left");
-        }
-        if (Physics.Raycast(transform.position, Vector3.right, out hit, maxDistance) && !_isFour && 
-            Input.GetMouseButtonDown(0)&& GameManager.Instance.currentPlayerTurn.name == gameObject.name)
-        {
-            _isFour = true;
-            hit.transform.position += Vector3.right;
-            Debug.Log("I'm touching a player from the right");
-        }
-    }
+	[HideInInspector] public Transform targetTouched;
 
-    public void AttractPlayer()
-    {
-        var transformPosition = transform.position;
-        transform.position += Vector3.back;
-        transformPosition.y += transformPosition.y + _height;
-    }
+	private int _raycastPos;
+
+	#region Singleton
+
+	private static PowerManager powerManager;
+
+	public static PowerManager Instance => powerManager;
+	// Start is called before the first frame update
+
+	private void Awake()
+	{
+		powerManager = this;
+		targetTouched.position = GameManager.Instance.currentPlayerTurn.transform.position;
+	}
+
+	#endregion
+
+	private void Start()
+	{
+		targetTouched.position = GameManager.Instance.currentPlayerTurn.transform.position;
+	}
+
+	private void Update()
+	{
+		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+
+		Debug.DrawRay(transform.position + new Vector3(0f, 0f, -0.6f), Vector3.back * maxDistance, Color.yellow);
+		Debug.DrawRay(transform.position + new Vector3(0f, 0f, 0.6f), Vector3.forward * maxDistance, Color.yellow);
+		Debug.DrawRay(transform.position + new Vector3(-0.6f, 0f, 0), Vector3.left * maxDistance, Color.yellow);
+		Debug.DrawRay(transform.position + new Vector3(0.6f, 0f, 0), Vector3.right * maxDistance, Color.yellow);
+
+		if (Physics.Raycast(transform.position + new Vector3(0.5f, 0f, 0f), Vector3.back, out var hit, maxDistance))
+		{
+			_raycastPos = 0;
+			targetTouched.position = hit.transform.position;
+
+			buttonOne.SetActive(true);
+			buttonTwo.SetActive(true);
+		}
+
+		if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance))
+		{
+			_raycastPos = 1;
+			targetTouched.position = hit.transform.position;
+
+			buttonOne.SetActive(true);
+			buttonTwo.SetActive(true);
+		}
+
+		if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance))
+		{
+			_raycastPos = 2;
+			targetTouched.position = hit.transform.position;
+
+			buttonOne.SetActive(true);
+			buttonTwo.SetActive(true);
+		}
+
+		if (Physics.Raycast(transform.position, Vector3.right, out hit, maxDistance))
+		{
+			_raycastPos = 3;
+			targetTouched.position = hit.transform.position;
+
+			buttonOne.SetActive(true);
+			buttonTwo.SetActive(true);
+		}
+	}
+
+	public void Attract()
+	{
+		GetComponentInChildren<AttractionPower>().LaunchPower(_raycastPos);
+	}
 }

@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class AttractionPower : MonoBehaviour,IManagePower
 {
-    
-
-    // Start is called before the first frame update
-    void Start()
+	public void LaunchPower(int pos)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void LaunchPower()
-    {
-       
+	    switch (pos)
+	    {
+		    case 0 : 
+			    PowerManager.Instance.targetTouched.position += Vector3.back;
+			    break;
+		    case 1 : 
+			    PowerManager.Instance.targetTouched.position += Vector3.forward;
+			    break;
+		    case 2 : 
+			    PowerManager.Instance.targetTouched.position += Vector3.left;
+			    break;
+		    case 3 : 
+			    PowerManager.Instance.targetTouched.position += Vector3.right;
+			    break;
+	    }
+	    
+	    
     }
 }

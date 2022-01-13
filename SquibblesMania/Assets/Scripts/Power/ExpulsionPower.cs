@@ -4,18 +4,8 @@ using UnityEngine;
 
 public class ExpulsionPower : MonoBehaviour, IManagePower
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public void LaunchPower(int pos)
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void LaunchPower()
     {
        
     }
