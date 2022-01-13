@@ -49,7 +49,7 @@ public class Node : MonoBehaviour
         foreach (var collider in colliders)
         {
             
-            if (Vector3.Distance(collider.transform.position, transform.position) <= radius && collider.transform != transform)
+            if (Vector3.Distance(collider.transform.position, transform.position) <= radius+0.1f && collider.transform != transform)
             {
                 //Create a new element and set possiblePath value
                 possiblePath.Add(new GamePath());

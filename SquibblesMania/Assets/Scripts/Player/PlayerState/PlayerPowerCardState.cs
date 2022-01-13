@@ -22,20 +22,19 @@ public class PlayerPowerCardState : PlayerBaseState
         switch (player.playerNumber)
         {
             case 0:
-                GameManager.Instance.players[1].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[1];
+                GameManager.Instance.ChangePlayerTurn(1);
+
                 break;
             case 1:
-                GameManager.Instance.players[2].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[2];
+                GameManager.Instance.ChangePlayerTurn(2);
+
                 break;
             case 2:
-                GameManager.Instance.players[3].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[3];
+                GameManager.Instance.ChangePlayerTurn(3);
+
                 break;
             case 3:
-                GameManager.Instance.players[0].StartState();
-                GameManager.Instance.currentPlayerTurn = GameManager.Instance.players[0];
+                GameManager.Instance.ChangePlayerTurn(0);
                 break;
         }
     }
