@@ -3486,7 +3486,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1251349576}
+    m_TransformParent: {fileID: 1236012610}
     m_Modifications:
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: canvasButton
@@ -4502,7 +4502,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 462f74d040dba2144948c577d0960f17, type: 2}
     - target: {fileID: 2252317347802425191, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2252317347802425191, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11200,6 +11200,7 @@ Transform:
   - {fileID: 1864024258}
   - {fileID: 1428260382}
   - {fileID: 290089970}
+  - {fileID: 403837177}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11232,7 +11233,6 @@ Transform:
   m_Children:
   - {fileID: 12304897}
   - {fileID: 1346478643}
-  - {fileID: 403837177}
   - {fileID: 2097519943}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -15237,9 +15237,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 15
-  buttonOne: {fileID: 2101336511}
-  buttonTwo: {fileID: 2131548401}
-  targetTouched: {fileID: 0}
+  buttonOne: {fileID: 2101336513}
+  buttonTwo: {fileID: 2131548403}
+  vectorRaycast:
+  - {x: 0, y: 0, z: -1}
+  - {x: 0, y: 0, z: 1}
+  - {x: 1, y: 0, z: 0}
+  - {x: -1, y: 0, z: 0}
+  raycastPos: 0
 --- !u!1 &1925339473
 GameObject:
   m_ObjectHideFlags: 0
@@ -16576,7 +16581,7 @@ Transform:
   - {fileID: 533437296}
   - {fileID: 613222215}
   m_Father: {fileID: 1251349576}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2101336511
 GameObject:
@@ -16656,7 +16661,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2101336514}
   m_OnClick:
     m_PersistentCalls:
@@ -16664,7 +16669,19 @@ MonoBehaviour:
       - m_Target: {fileID: 611351033}
         m_TargetAssemblyTypeName: AttractionPower, Assembly-CSharp
         m_MethodName: LaunchPower
-        m_Mode: 3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1911903393}
+        m_TargetAssemblyTypeName: PowerManager, Assembly-CSharp
+        m_MethodName: ButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -16832,11 +16849,35 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2131548404}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2111447948}
+        m_TargetAssemblyTypeName: ExpulsionPower, Assembly-CSharp
+        m_MethodName: LaunchPower
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1911903393}
+        m_TargetAssemblyTypeName: PowerManager, Assembly-CSharp
+        m_MethodName: ButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2131548404
 MonoBehaviour:
   m_ObjectHideFlags: 0

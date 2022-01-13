@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IManagePower
 {
-	public void LaunchPower(int pos);
+	public void LaunchPower();
 }

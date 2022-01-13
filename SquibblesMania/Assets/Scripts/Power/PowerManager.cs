@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class PowerManager : MonoBehaviour
 {
 	public int maxDistance;
-	public GameObject buttonOne, buttonTwo;
+	[Space] [Header("UI")] public Button buttonOne;
+	public Button buttonTwo;
 
-	[HideInInspector] public Transform targetTouched;
+	[Space] [Header("VECTORS")] public List<Vector3> vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
-	private int _raycastPos;
-
+	[HideInInspector] public int raycastPos;
+	[HideInInspector] public RaycastHit hitRaycast;
+	[HideInInspector] public bool isTouched;
 	#region Singleton
 
 	private static PowerManager powerManager;
@@ -23,64 +25,34 @@ public class PowerManager : MonoBehaviour
 	private void Awake()
 	{
 		powerManager = this;
-		targetTouched.position = GameManager.Instance.currentPlayerTurn.transform.position;
 	}
 
 	#endregion
 
-	private void Start()
-	{
-		targetTouched.position = GameManager.Instance.currentPlayerTurn.transform.position;
-	}
-
 	private void Update()
 	{
+		RaycastHit hit;
 		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 
-		Debug.DrawRay(transform.position + new Vector3(0f, 0f, -0.6f), Vector3.back * maxDistance, Color.yellow);
-		Debug.DrawRay(transform.position + new Vector3(0f, 0f, 0.6f), Vector3.forward * maxDistance, Color.yellow);
-		Debug.DrawRay(transform.position + new Vector3(-0.6f, 0f, 0), Vector3.left * maxDistance, Color.yellow);
-		Debug.DrawRay(transform.position + new Vector3(0.6f, 0f, 0), Vector3.right * maxDistance, Color.yellow);
-
-		if (Physics.Raycast(transform.position + new Vector3(0.5f, 0f, 0f), Vector3.back, out var hit, maxDistance))
+		if(!isTouched)
 		{
-			_raycastPos = 0;
-			targetTouched.position = hit.transform.position;
-
-			buttonOne.SetActive(true);
-			buttonTwo.SetActive(true);
-		}
-
-		if (Physics.Raycast(transform.position, Vector3.forward, out hit, maxDistance))
-		{
-			_raycastPos = 1;
-			targetTouched.position = hit.transform.position;
-
-			buttonOne.SetActive(true);
-			buttonTwo.SetActive(true);
-		}
-
-		if (Physics.Raycast(transform.position, Vector3.left, out hit, maxDistance))
-		{
-			_raycastPos = 2;
-			targetTouched.position = hit.transform.position;
-
-			buttonOne.SetActive(true);
-			buttonTwo.SetActive(true);
-		}
-
-		if (Physics.Raycast(transform.position, Vector3.right, out hit, maxDistance))
-		{
-			_raycastPos = 3;
-			targetTouched.position = hit.transform.position;
-
-			buttonOne.SetActive(true);
-			buttonTwo.SetActive(true);
+			for (int i = 0; i < vectorRaycast.Count; i++)
+			{
+				if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
+				{
+					raycastPos = i;
+					hitRaycast = hit;
+					buttonOne.interactable = true;
+					buttonTwo.interactable = true;
+				}
+			}
 		}
 	}
 
-	public void Attract()
+	public void ButtonClicked()
 	{
-		GetComponentInChildren<AttractionPower>().LaunchPower(_raycastPos);
+		buttonOne.interactable = false;
+		buttonTwo.interactable = false;
+		isTouched = true;
 	}
 }
