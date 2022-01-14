@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     public void ChangePlayerTurn(int playerNumberTurn)
     {
         turnCount++;
-        PowerManager.Instance.isTouched = false;
+        PowerManager.Instance.RaycastEvent();
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];

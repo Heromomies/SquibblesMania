@@ -14,7 +14,7 @@ public class PowerManager : MonoBehaviour
 
 	[HideInInspector] public int raycastPos;
 	[HideInInspector] public RaycastHit hitRaycast;
-	[HideInInspector] public bool isTouched;
+
 	#region Singleton
 
 	private static PowerManager powerManager;
@@ -29,22 +29,19 @@ public class PowerManager : MonoBehaviour
 
 	#endregion
 
-	private void Update()
+	public void RaycastEvent()
 	{
 		RaycastHit hit;
 		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
-
-		if(!isTouched)
+		
+		for (int i = 0; i < vectorRaycast.Count; i++)
 		{
-			for (int i = 0; i < vectorRaycast.Count; i++)
+			if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
 			{
-				if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
-				{
-					raycastPos = i;
-					hitRaycast = hit;
-					buttonOne.interactable = true;
-					buttonTwo.interactable = true;
-				}
+				raycastPos = i;
+				hitRaycast = hit;
+				buttonOne.interactable = true;
+				buttonTwo.interactable = true;
 			}
 		}
 	}
@@ -53,6 +50,5 @@ public class PowerManager : MonoBehaviour
 	{
 		buttonOne.interactable = false;
 		buttonTwo.interactable = false;
-		isTouched = true;
 	}
 }
