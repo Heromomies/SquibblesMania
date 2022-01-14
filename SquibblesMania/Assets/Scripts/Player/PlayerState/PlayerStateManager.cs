@@ -36,7 +36,7 @@ public class PlayerStateManager : Player
     {
         if (CurrentState != null)
         {
-            CurrentState.UpdtateState(this);
+            CurrentState.UpdateState(this);
             DetectBlockBelowPlayer();
         }
     }

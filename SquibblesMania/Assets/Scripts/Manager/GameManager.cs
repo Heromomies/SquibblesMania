@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DigitalRubyShared;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour
 
     public FingersPanOrbitComponentScript cameraScript;
     public int turnCount;
+
+    public TextMeshProUGUI playerPlaying;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     private void Awake()
@@ -59,8 +62,10 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
+        playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
+
         //cameraScript.OrbitTarget = currentPlayerTurn.transform;
-       
+
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)
@@ -69,6 +74,7 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
+        playerPlaying.text = "Player turn : " + players[playerNumberTurn].name;
         //cameraScript.OrbitTarget = currentPlayerTurn.transform;
     }
 

@@ -18,11 +18,7 @@ public class PlayerCardState : PlayerBaseState
         
         
         
-        player.playerActionPoint = Random.Range(1, 6);
-        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
-        player.isPlayerInActionCardState = true;
-        UiManager.Instance.buttonNextTurn.SetActive(false);
-        player.SwitchState(player.PlayerActionPointCardState);
+        
     
     }
 
@@ -54,12 +50,21 @@ public class PlayerCardState : PlayerBaseState
         }
     }
 
-    public override void UpdtateState(PlayerStateManager player)
+    public override void UpdateState(PlayerStateManager player)
     {
         // if player touch the power button
         if (Input.GetKeyDown(KeyCode.A))
         {
             player.SwitchState(player.PlayerPowerCardState);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            player.playerActionPoint = Random.Range(1, 6);
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
+            player.isPlayerInActionCardState = true;
+            UiManager.Instance.buttonNextTurn.SetActive(false);
+            player.SwitchState(player.PlayerActionPointCardState);
         }
    
     }
