@@ -23,6 +23,7 @@ public class PlayerStateManager : Player
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
 
+    private bool _one;
     private void Awake()
     {
         DetectBlockBelowPlayer();
@@ -47,6 +48,7 @@ public class PlayerStateManager : Player
         //Start the player turn in the player card state
         CurrentState = PlayerCardState;
         CurrentState.EnterState(this);
+        _one = false;
     }
 
     public void StartPathFinding()
@@ -82,6 +84,12 @@ public class PlayerStateManager : Player
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
+            }
+
+            if (hit.collider.gameObject.CompareTag("Geyser") && !_one)
+            {
+                Debug.Log("I'm on a geyser");
+                _one = true;
             }
         }
         else
