@@ -54,10 +54,33 @@ MonoBehaviour:
   currentPlayerTurn: {fileID: 0}
   isPathRefresh: 0
   turnCount: 0
+  cameraScript: {fileID: 0}
+  camPreSets:
+  - presetNumber: 1
+    camPos: {x: -2, y: 6, z: -10}
+    camRot: {x: 30, y: 45, z: 0}
+    FingersOrbitYAxis: {x: 0.70710677, y: 0, z: -0.70710677}
+    FingerOrbitXAxis: {x: 0.70710677, y: 0, z: -0.70710677}
+  - presetNumber: 2
+    camPos: {x: 15, y: 15, z: -11}
+    camRot: {x: 135, y: 135, z: 90}
+    FingersOrbitYAxis: {x: 0.35355344, y: 0.8660254, z: 0.35355347}
+    FingerOrbitXAxis: {x: 0, y: -1, z: 0}
+  - presetNumber: 3
+    camPos: {x: -10, y: 26, z: -18}
+    camRot: {x: -230, y: -135, z: -90}
+    FingersOrbitYAxis: {x: 0.35355344, y: 0.8660254, z: 0.35355347}
+    FingerOrbitXAxis: {x: 0, y: -1, z: 0}
+  - presetNumber: 4
+    camPos: {x: 0, y: 0, z: 0}
+    camRot: {x: 0, y: 0, z: 0}
+    FingersOrbitYAxis: {x: 0, y: 0, z: 0}
+    FingerOrbitXAxis: {x: 0, y: 0, z: 0}
   isConditionVictory: 0
   conditionVictory:
     mapTheme: 0
     objectCount: 0
     items: []
     endZone: {fileID: 8259625360898238523, guid: 9c0139fd6f0a5004798a436cfab3729d, type: 3}
+    endZoneSpawnPoints: []
     fireCheckPoints: []

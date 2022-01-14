@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
-
     public Transform[] playersSpawnPoints;
     public int numberPlayers;
     public PlayerStateManager playerPref;
@@ -22,15 +21,44 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager currentPlayerTurn;
     [HideInInspector]
     public bool isPathRefresh;
-
-    public FingersPanOrbitComponentScript cameraScript;
     public int turnCount;
+    [Header("CAMERA PARAMETERS")]
+    public FingersPanOrbitComponentScript cameraScript;
+
+    public CamPreSets[] camPreSets;
+    [Serializable, ]
+    public struct CamPreSets
+    {
+        [SerializeField]
+        private int presetNumber;
+        [Space(2f)]
+        public Vector3 camPos;
+        public Vector3 camRot;
+        [Space(2f)]
+        public Vector3 FingersOrbitYAxis;
+        public Vector3 FingerOrbitXAxis;
+    }
+    
+    
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     private void Awake()
     {
+        
+        
         _gameManager = this;
+        if (cameraScript != null)
+        {
+            cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
+        }
+        
+        
+        camPreSets[0].FingersOrbitYAxis = cameraScript.transform.right;
+        camPreSets[1].FingersOrbitYAxis = cameraScript.transform.up;
+       
     }
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -59,8 +87,17 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
-        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
+        CamConfig(0);
        
+    }
+
+    void CamConfig(int numberOfTheActualPlayer)
+    {
+        cameraScript.transform.position = camPreSets[numberOfTheActualPlayer].camPos;
+        cameraScript.transform.eulerAngles = camPreSets[numberOfTheActualPlayer].camRot;
+        cameraScript.axisX = camPreSets[numberOfTheActualPlayer].FingerOrbitXAxis;
+        cameraScript.axisY = camPreSets[numberOfTheActualPlayer].FingersOrbitYAxis;
+        
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)

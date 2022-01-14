@@ -9,6 +9,7 @@ public class PlayerPowerCardState : PlayerBaseState
     //The state when player use his card power
     public override void EnterState(PlayerStateManager player)
     {
+        
     }
 
     public override void UpdtateState(PlayerStateManager player)
