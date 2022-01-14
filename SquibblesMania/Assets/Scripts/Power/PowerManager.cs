@@ -14,7 +14,7 @@ public class PowerManager : MonoBehaviour
 
 	[HideInInspector] public int raycastPos;
 	[HideInInspector] public RaycastHit hitRaycast;
-	[HideInInspector] public RaycastHit hitRaycasta;
+	private RaycastHit _hitRaycasta;
 
 	#region Singleton
 
@@ -58,7 +58,8 @@ public class PowerManager : MonoBehaviour
 
 	public void ButtonClicked()
 	{
-		hitRaycast = hitRaycasta;
+		hitRaycast = new RaycastHit();
+		
 		buttonOne.interactable = false;
 		buttonTwo.interactable = false;
 	}
