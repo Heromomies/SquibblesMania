@@ -53,7 +53,7 @@ public class PlayerCardState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         // if player touch the power button
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             player.SwitchState(player.PlayerPowerCardState);
         }

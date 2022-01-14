@@ -80,6 +80,10 @@ public class PlayerStateManager : Player
             {
                 currentBlockPlayerOn = hit.transform;
             }
+            else if(hit.collider.gameObject == null)
+            {
+                Debug.Log("Je suis complétement dans le vide là");
+            }
         }
     }
 

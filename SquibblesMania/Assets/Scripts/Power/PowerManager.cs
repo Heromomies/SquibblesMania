@@ -14,6 +14,7 @@ public class PowerManager : MonoBehaviour
 
 	[HideInInspector] public int raycastPos;
 	[HideInInspector] public RaycastHit hitRaycast;
+	[HideInInspector] public RaycastHit hitRaycasta;
 
 	#region Singleton
 
@@ -29,11 +30,20 @@ public class PowerManager : MonoBehaviour
 
 	#endregion
 
+	public void Update()
+	{
+		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+		Debug.DrawRay(transform.position, Vector3.back * maxDistance, Color.yellow);
+		Debug.DrawRay(transform.position, Vector3.forward * maxDistance, Color.yellow);
+		Debug.DrawRay(transform.position, Vector3.right * maxDistance, Color.yellow);
+		Debug.DrawRay(transform.position, Vector3.left * maxDistance, Color.yellow);
+	}
+
 	public void RaycastEvent()
 	{
 		RaycastHit hit;
-		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 		
+
 		for (int i = 0; i < vectorRaycast.Count; i++)
 		{
 			if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
@@ -48,6 +58,7 @@ public class PowerManager : MonoBehaviour
 
 	public void ButtonClicked()
 	{
+		hitRaycast = hitRaycasta;
 		buttonOne.interactable = false;
 		buttonTwo.interactable = false;
 	}
