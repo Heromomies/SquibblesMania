@@ -397,7 +397,22 @@ namespace DigitalRubyShared
                     }
 
                     xDegrees += addAngle;
-                  
+                    switch (GameManager.Instance.actualCamPreset.presetNumber)
+                    {
+                        case 1:
+                            axisX = Orbiter.transform.right;
+                            break;
+                        case 2:
+                            axisX = -Vector3.up;
+                            break;
+                        case 3:
+                            axisX = Vector3.up;
+                            break;
+                        case 4:
+                            axisX = Orbiter.transform.right;
+                            break;
+                    }
+
                     Orbiter.RotateAround(OrbitTarget.transform.position, axisX, addAngle);
                 }
             }
@@ -427,7 +442,22 @@ namespace DigitalRubyShared
                     }
 
                     yDegrees += addAngle;
-                    
+                    switch (GameManager.Instance.actualCamPreset.presetNumber)
+                    {
+                        case 1:
+                            axisY = Vector3.up;
+                            break;
+                        case 2:
+                            axisY = Orbiter.transform.up;
+                            break;
+                        case 3:
+                            axisY = Orbiter.transform.up;
+                            break;
+                        case 4:
+                            axisY = -Vector3.up;
+                            break;
+                    }
+
                     Orbiter.RotateAround(OrbitTarget.transform.position, axisY, addAngle);
                 }
             }
