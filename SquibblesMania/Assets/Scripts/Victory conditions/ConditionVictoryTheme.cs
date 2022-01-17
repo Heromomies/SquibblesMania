@@ -20,7 +20,6 @@ public class ConditionVictory
     };
 
     public Theme mapTheme;
-    
     public int objectCount;
     public GameObject[] items;
     public GameObject endZone;

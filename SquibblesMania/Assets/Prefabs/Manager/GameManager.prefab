@@ -55,19 +55,28 @@ MonoBehaviour:
   isPathRefresh: 0
   turnCount: 0
   cameraScript: {fileID: 0}
+  actualCamPreset:
+    presetNumber: 0
+    camPos: {x: 0, y: 0, z: 0}
+    camRot: {x: 0, y: 0, z: 0}
+    rotateClamp: 0
   camPreSets:
   - presetNumber: 1
     camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 30, y: 45, z: 0}
+    rotateClamp: 30
   - presetNumber: 2
     camPos: {x: 15, y: 15, z: -11}
     camRot: {x: 135, y: 135, z: 90}
+    rotateClamp: 30
   - presetNumber: 3
     camPos: {x: -10, y: 26, z: -18}
     camRot: {x: -230, y: -135, z: -90}
+    rotateClamp: 30
   - presetNumber: 4
     camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 150, y: 225, z: 0}
+    rotateClamp: 30
   isConditionVictory: 0
   conditionVictory:
     mapTheme: 0

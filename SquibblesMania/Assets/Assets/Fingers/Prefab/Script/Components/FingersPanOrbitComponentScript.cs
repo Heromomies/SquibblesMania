@@ -6,6 +6,7 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -232,6 +233,7 @@ namespace DigitalRubyShared
             }
         }
 
+
         private void LateUpdate()
         {
             if (allowOrbitWhileZooming != AllowOrbitWhileZooming)
@@ -397,19 +399,23 @@ namespace DigitalRubyShared
                     }
 
                     xDegrees += addAngle;
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
+                    switch (GameManager.Instance.currentPlayerTurn.playerNumber)
                     {
-                        case 1:
+                        case 0:
                             axisX = Orbiter.transform.right;
+                            // cameraScript.axisY = Vector3.up;
+                            break;
+                        case 1:
+                            axisX = -Vector3.up;
+                            // cameraScript.axisY = cameraScript.Orbiter.transform.up;
                             break;
                         case 2:
-                            axisX = -Vector3.up;
+                            axisX = Vector3.up;
+                            //cameraScript.axisY = cameraScript.Orbiter.transform.up;
                             break;
                         case 3:
-                            axisX = Vector3.up;
-                            break;
-                        case 4:
-                            axisX = Orbiter.transform.right;
+                            axisX = -Orbiter.transform.right;
+                            //cameraScript.axisY = -Vector3.up;
                             break;
                     }
 
@@ -442,18 +448,20 @@ namespace DigitalRubyShared
                     }
 
                     yDegrees += addAngle;
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
+
+                    switch (GameManager.Instance.currentPlayerTurn.playerNumber)
                     {
-                        case 1:
+                        case 0:
                             axisY = Vector3.up;
                             break;
+                        case 1:
+                            axisY = Orbiter.transform.up;
+                            break;
                         case 2:
+
                             axisY = Orbiter.transform.up;
                             break;
                         case 3:
-                            axisY = Orbiter.transform.up;
-                            break;
-                        case 4:
                             axisY = -Vector3.up;
                             break;
                     }

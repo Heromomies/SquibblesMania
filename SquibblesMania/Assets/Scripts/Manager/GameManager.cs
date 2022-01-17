@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _gameManager;
 
     public static GameManager Instance => _gameManager;
-    
+
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
     public Transform[] playersSpawnPoints;
@@ -19,44 +19,36 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
-    [HideInInspector]
-    public bool isPathRefresh;
+    [HideInInspector] public bool isPathRefresh;
     public int turnCount;
-    [Header("CAMERA PARAMETERS")]
-    public FingersPanOrbitComponentScript cameraScript;
+    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraScript;
 
     public CamPreSets actualCamPreset;
-    
-    public CamPreSets[] camPreSets;
-    [Serializable ]
+
+    public List<CamPreSets> camPreSets;
+
+    [Serializable]
     public struct CamPreSets
     {
-        
         public int presetNumber;
-        [Space(2f)]
-        public Vector3 camPos;
+        [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
+        public float rotateClamp;
     }
-    
-    
+
+
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
+
     private void Awake()
     {
-        
-        
         _gameManager = this;
         if (cameraScript != null)
         {
             cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
-        
-        
- 
-       
     }
 
-    
 
     // Start is called before the first frame update
     void Start()
@@ -70,7 +62,7 @@ public class GameManager : MonoBehaviour
             PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
-            
+
             players.Add(player);
         }
 
@@ -83,10 +75,23 @@ public class GameManager : MonoBehaviour
         int numberPlayerToStart = Random.Range(0, players.Count);
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
-        players[numberPlayerToStart].StartState();
-        currentPlayerTurn = players[numberPlayerToStart];
-        CamConfig(numberPlayerToStart);
-       
+        players[0].StartState();
+        currentPlayerTurn = players[0];
+        CamConfig(0);
+        OrderCamList(actualCamPreset);
+    }
+
+    private void OrderCamList(CamPreSets camSet)
+    {
+        switch (camSet.presetNumber)
+        {
+            case 1:
+                camPreSets.Insert(2, camPreSets[3]);
+
+                camPreSets.RemoveAt(camPreSets.Count - 1);
+
+                break;
+        }
     }
 
     void CamConfig(int numberOfTheActualPlayer)
@@ -95,6 +100,15 @@ public class GameManager : MonoBehaviour
         cameraTransform.position = camPreSets[numberOfTheActualPlayer].camPos;
         cameraTransform.eulerAngles = camPreSets[numberOfTheActualPlayer].camRot;
         actualCamPreset = camPreSets[numberOfTheActualPlayer];
+
+        if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
+        {
+            cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
+        }
+        else
+        {
+            cameraScript.OrbitXMaxDegrees = actualCamPreset.rotateClamp;
+        }
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)
@@ -104,22 +118,24 @@ public class GameManager : MonoBehaviour
         {
             PowerManager.Instance.isTouched = false;
         }
-      
+
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
         CamConfig(playerNumberTurn);
     }
 
-   public void ShowEndZone()
+    public void ShowEndZone()
     {
         if (isConditionVictory)
         {
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
-            GameObject endZone = Instantiate(conditionVictory.endZone, conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
+            GameObject endZone = Instantiate(conditionVictory.endZone,
+                conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
         }
     }
+
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
@@ -131,6 +147,4 @@ public class GameManager : MonoBehaviour
     void Update()
     {
     }
-
-    
 }
