@@ -305,8 +305,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
                 
-              
-
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
             }

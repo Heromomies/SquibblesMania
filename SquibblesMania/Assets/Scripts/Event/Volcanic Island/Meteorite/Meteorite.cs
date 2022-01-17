@@ -48,7 +48,7 @@ public class Meteorite : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("Player"))
 		{
-			EventManager.Instance.StunPlayer(other.gameObject);
+			other.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
 			Destroy(gameObject);
 		}
 	}

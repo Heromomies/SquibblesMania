@@ -181,11 +181,6 @@ public class EventManager : MonoBehaviour
 		_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
 	}
 
-	public void StunPlayer(GameObject other)
-	{
-		other.GetComponent<PlayerStateManager>().enabled = false;
-	}
-	
 	public void OnApplicationQuit()
 	{
 		_condition.conditions[0].numberOfSteps = Random.Range(5, 10);

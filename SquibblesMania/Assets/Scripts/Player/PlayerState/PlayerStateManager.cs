@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PlayerStateManager : Player
@@ -22,7 +23,7 @@ public class PlayerStateManager : Player
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-
+    
     private bool _one;
     private void Awake()
     {

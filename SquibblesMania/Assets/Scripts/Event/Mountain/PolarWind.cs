@@ -71,7 +71,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		}
 		if(other.gameObject.CompareTag("Player"))
 		{
-			EventManager.Instance.StunPlayer(other.gameObject);
+			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 3);
 		}
 	}
 
