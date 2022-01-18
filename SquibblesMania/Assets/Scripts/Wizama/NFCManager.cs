@@ -13,20 +13,19 @@ public class NFCManager : MonoBehaviour
 	}   
     
 	void FixedUpdate()  {  
-		Debug.Log(NFC_DEVICE_ID.ANTENNA_1);
+		/*Debug.Log(NFC_DEVICE_ID.ANTENNA_1);
 		Debug.Log(NFCController.CanReadNFC);
-		Debug.Log(NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1));
+		Debug.Log(NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1));*/
 		
-		List<NFCTag> antenna1Tags = NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1);
+		/*List<NFCTag> antenna1Tags = NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1);
 		foreach (NFCTag tag in antenna1Tags)  
-			Debug.Log(tag.Data + " placed on antenna 1");
+			Debug.Log(tag.Data + " placed on antenna 1");*/
         
 		List<NFCTag>[] allAntennaTags = NFCController.GetTags(); 
 		int count = 0;  
 		foreach (List<NFCTag> Tags in allAntennaTags)  
 			count += Tags.Count;   
-            
-		//one.text = "There is " + count + " tags detected in total";  
+		
 		Debug.Log("There is " + count + " tags detected in total");
 		
 	} 
