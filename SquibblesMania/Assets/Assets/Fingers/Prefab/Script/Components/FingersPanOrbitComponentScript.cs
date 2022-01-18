@@ -176,8 +176,8 @@ namespace DigitalRubyShared
         private float yDegrees;
         private Vector2 panVelocity;
         private float zoomSpeed;
-        public Vector3 axisX;
-        public Vector3 axisY;
+        private Vector3 axisX;
+        private Vector3 axisY;
 
         /// <summary>
         /// Fires when the orbit target is tapped

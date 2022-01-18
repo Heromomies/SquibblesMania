@@ -52,21 +52,23 @@ public class GameManager : MonoBehaviour
             cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
 
-        for (int i = 0; i < allBlocks.Count; i++)
-        {
-            int randomLocation = Random.Range(0, 2);
-            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
-                allBlocks[i].transform.position.z);
-            ;
-        }
+       
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
+       
         SpawnPlayers();
         StartGame();
+        for (int i = 0; i < allBlocks.Count; i++)
+        {
+            int randomLocation = Random.Range(0, 2);
+            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
+                allBlocks[i].transform.position.z);
+        }
+        
     }
 
     void SpawnPlayers()
@@ -113,10 +115,13 @@ public class GameManager : MonoBehaviour
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
             cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
+            cameraScript.OrbitXMaxDegrees = 0;
+
         }
         else
         {
             cameraScript.OrbitXMaxDegrees = actualCamPreset.rotateClamp;
+            cameraScript.OrbitYMaxDegrees = 0;
         }
 
         _count++;

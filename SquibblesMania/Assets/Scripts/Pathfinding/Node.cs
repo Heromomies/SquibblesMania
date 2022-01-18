@@ -54,12 +54,7 @@ public class Node : MonoBehaviour
             }
         }
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.grey;
-        Gizmos.DrawSphere(transform.position, radius);
-    }
+    
 }
 
 [Serializable]

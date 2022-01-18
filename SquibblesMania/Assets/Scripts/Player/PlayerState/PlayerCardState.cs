@@ -9,12 +9,18 @@ public class PlayerCardState : PlayerBaseState
 	{
 		//Turn of player x
 		//Message player turn x "Put a card on the corresponding surface"
-
+	
 		if (player.isPlayerStun)
 		{
 			player.stunCount--;
 			PlayerIsStun(player);
 		}
+		
+		player.playerActionPoint = Random.Range(1, 6);
+		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
+		player.isPlayerInActionCardState = true;
+		UiManager.Instance.buttonNextTurn.SetActive(false);
+		player.SwitchState(player.PlayerActionPointCardState);
 	}
 
 	void PlayerIsStun(PlayerStateManager player)
@@ -53,14 +59,8 @@ public class PlayerCardState : PlayerBaseState
 			player.SwitchState(player.PlayerPowerCardState);
 		}
 
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			player.playerActionPoint = Random.Range(1, 6);
-			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
-			player.isPlayerInActionCardState = true;
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-			player.SwitchState(player.PlayerActionPointCardState);
-		}
+		
+		
 	}
 
 	public override void ExitState(PlayerStateManager player)
