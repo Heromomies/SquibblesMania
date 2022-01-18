@@ -143,7 +143,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
     }
 
-    public override void UpdtateState(PlayerStateManager player)
+    public override void UpdateState(PlayerStateManager player)
     {
         //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
@@ -305,8 +305,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
                 
-              
-
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
             }

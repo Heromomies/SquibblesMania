@@ -21,5 +21,6 @@ public class AttractionPower : MonoBehaviour, IManagePower
 				PowerManager.Instance.hitRaycast.transform.position += Vector3.right;
 				break;
 		}
+		//GameManager.Instance.currentPlayerTurn.PlayerPowerCardState.ExitState(GameManager.Instance.currentPlayerTurn);
 	}
 }

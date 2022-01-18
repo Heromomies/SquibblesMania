@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PlayerStateManager : Player
@@ -17,11 +18,13 @@ public class PlayerStateManager : Player
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
-
+    public GameObject particle;
+    
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-
+    
+    private bool _one;
     private void Awake()
     {
         DetectBlockBelowPlayer();
@@ -36,7 +39,7 @@ public class PlayerStateManager : Player
     {
         if (CurrentState != null)
         {
-            CurrentState.UpdtateState(this);
+            CurrentState.UpdateState(this);
             DetectBlockBelowPlayer();
         }
     }
@@ -46,6 +49,7 @@ public class PlayerStateManager : Player
         //Start the player turn in the player card state
         CurrentState = PlayerCardState;
         CurrentState.EnterState(this);
+        _one = false;
     }
 
     public void StartPathFinding()
@@ -74,15 +78,36 @@ public class PlayerStateManager : Player
         Ray ray = new Ray(transform.position, -transform.up);
         RaycastHit hit;
 
+        Debug.DrawRay(transform.position, -transform.up, Color.red);
+          
         if (Physics.Raycast(ray, out hit, 1f))
         {
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
             }
+
+            if (hit.collider.gameObject.CompareTag("Geyser") && !_one)
+            {
+                Debug.Log("I'm on a geyser");
+                _one = true;
+            }
+        }
+        else
+        {
+            StartCoroutine(WaitUntilRespawn());
         }
     }
 
+    IEnumerator WaitUntilRespawn()
+    {
+        yield return new WaitForSeconds(1f);
+        Vector3 p = GameManager.Instance.playersSpawnPoints[playerNumber].position;
+        transform.position = new Vector3(p.x, p.y +1, p.z);
+        GameObject a = Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(a, 1f);
+    }
+    
     public void StunPlayer(PlayerStateManager player, int stunTurnCount)
     {
         player.isPlayerStun = true;
@@ -93,6 +118,5 @@ public class PlayerStateManager : Player
             //Exit current state of current player
             player.CurrentState.ExitState(player);
         }
-        
     }
 }

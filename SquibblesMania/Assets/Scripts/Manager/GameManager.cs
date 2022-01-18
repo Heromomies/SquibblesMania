@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DigitalRubyShared;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -39,8 +40,13 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public FingersPanOrbitComponentScript cameraScript;
+    public int turnCount;
+
+    public TextMeshProUGUI playerPlaying;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
+    public List<GameObject> allBlocks;
 
     private void Awake()
     {
@@ -48,6 +54,11 @@ public class GameManager : MonoBehaviour
         if (cameraScript != null)
         {
             cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
+        }
+        for (int i = 0; i < allBlocks.Count; i++)
+        {
+            int randomLocation = Random.Range(-1, 2);
+            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);;
         }
     }
 
@@ -80,6 +91,10 @@ public class GameManager : MonoBehaviour
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
+        playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
+
+        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
+
     }
 
     void CamConfig(int countTurn)
@@ -126,6 +141,8 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
+        playerPlaying.text = "Player turn : " + players[playerNumberTurn].name;
+        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
         CamConfig(_count);
     }
 
