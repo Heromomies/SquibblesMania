@@ -399,23 +399,22 @@ namespace DigitalRubyShared
                     }
 
                     xDegrees += addAngle;
-                    switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+                    switch (GameManager.Instance.actualCamPreset.presetNumber)
                     {
-                        case 0:
-                            axisX = Orbiter.transform.right;
-                            // cameraScript.axisY = Vector3.up;
-                            break;
                         case 1:
-                            axisX = -Vector3.up;
-                            // cameraScript.axisY = cameraScript.Orbiter.transform.up;
+                            axisX = Orbiter.transform.right;
                             break;
                         case 2:
-                            axisX = Vector3.up;
-                            //cameraScript.axisY = cameraScript.Orbiter.transform.up;
+                            axisX = -Vector3.up;
+                         
                             break;
                         case 3:
+                            axisX = Vector3.up;
+                           
+                            break;
+                        case 4:
                             axisX = -Orbiter.transform.right;
-                            //cameraScript.axisY = -Vector3.up;
+                          
                             break;
                     }
 
@@ -449,19 +448,19 @@ namespace DigitalRubyShared
 
                     yDegrees += addAngle;
 
-                    switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+                    switch (GameManager.Instance.actualCamPreset.presetNumber)
                     {
-                        case 0:
+                        case 1:
                             axisY = Vector3.up;
                             break;
-                        case 1:
-                            axisY = Orbiter.transform.up;
-                            break;
                         case 2:
-
                             axisY = Orbiter.transform.up;
                             break;
                         case 3:
+
+                            axisY = Orbiter.transform.up;
+                            break;
+                        case 4:
                             axisY = -Vector3.up;
                             break;
                     }

@@ -34,12 +34,7 @@ public class Node : MonoBehaviour
         return transform.position + (transform.up * blockSizeOffset);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.grey;
-        Gizmos.DrawSphere(GetWalkPoint(), 0.1f);
-    }
-
+    
     public void SetUpPossiblePath()
     {
         radius = 1f;

@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         public float rotateClamp;
         public List<GameObject> uiGameObjects;
     }
-    
+
     public TextMeshProUGUI playerPlaying;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
@@ -51,16 +51,25 @@ public class GameManager : MonoBehaviour
         {
             cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
+
         for (int i = 0; i < allBlocks.Count; i++)
         {
-            int randomLocation = Random.Range(-1, 2);
-            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);;
+            int randomLocation = Random.Range(0, 2);
+            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
+                allBlocks[i].transform.position.z);
+            ;
         }
     }
 
 
     // Start is called before the first frame update
     void Start()
+    {
+        SpawnPlayers();
+        StartGame();
+    }
+
+    void SpawnPlayers()
     {
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
@@ -79,7 +88,10 @@ public class GameManager : MonoBehaviour
         players[1].playerTeam = Player.PlayerTeam.TeamTwo;
         players[2].playerTeam = Player.PlayerTeam.TeamOne;
         players[3].playerTeam = Player.PlayerTeam.TeamOne;
+    }
 
+    void StartGame()
+    {
         //Choose Randomly a player to start
         int numberPlayerToStart = Random.Range(0, players.Count);
         turnCount++;
@@ -88,21 +100,15 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
         playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
-
-        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
-
     }
 
     void CamConfig(int countTurn)
     {
-       
-
         Transform cameraTransform = cameraScript.transform;
         cameraTransform.position = camPreSets[countTurn].camPos;
         cameraTransform.eulerAngles = camPreSets[countTurn].camRot;
         actualCamPreset = camPreSets[countTurn];
 
-       
 
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
@@ -123,16 +129,11 @@ public class GameManager : MonoBehaviour
     public void ChangePlayerTurn(int playerNumberTurn)
     {
         turnCount++;
-        if (PowerManager.Instance != null)
-        {
-          //  PowerManager.Instance.isTouched = false;
-        }
-
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
         playerPlaying.text = "Player turn : " + players[playerNumberTurn].name;
-        //cameraScript.OrbitTarget = currentPlayerTurn.transform;
+
         CamConfig(_count);
     }
 
