@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public CamPreSets actualCamPreset;
 
     public List<CamPreSets> camPreSets;
+    private int _count;
 
     [Serializable]
     public struct CamPreSets
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public float rotateClamp;
+        public List<GameObject> uiGameObjects;
     }
 
 
@@ -75,31 +77,27 @@ public class GameManager : MonoBehaviour
         int numberPlayerToStart = Random.Range(0, players.Count);
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
-        players[0].StartState();
-        currentPlayerTurn = players[0];
-        CamConfig(0);
-        OrderCamList(actualCamPreset);
+        players[numberPlayerToStart].StartState();
+        currentPlayerTurn = players[numberPlayerToStart];
+        CamConfig(_count);
     }
 
-    private void OrderCamList(CamPreSets camSet)
+    void CamConfig(int countTurn)
     {
-        switch (camSet.presetNumber)
+        foreach (GameObject go in actualCamPreset.uiGameObjects)
         {
-            case 1:
-                camPreSets.Insert(2, camPreSets[3]);
-
-                camPreSets.RemoveAt(camPreSets.Count - 1);
-
-                break;
+            go.SetActive(false);
         }
-    }
 
-    void CamConfig(int numberOfTheActualPlayer)
-    {
         Transform cameraTransform = cameraScript.transform;
-        cameraTransform.position = camPreSets[numberOfTheActualPlayer].camPos;
-        cameraTransform.eulerAngles = camPreSets[numberOfTheActualPlayer].camRot;
-        actualCamPreset = camPreSets[numberOfTheActualPlayer];
+        cameraTransform.position = camPreSets[countTurn].camPos;
+        cameraTransform.eulerAngles = camPreSets[countTurn].camRot;
+        actualCamPreset = camPreSets[countTurn];
+
+        foreach (GameObject go in actualCamPreset.uiGameObjects)
+        {
+            go.SetActive(true);
+        }
 
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
@@ -108,6 +106,12 @@ public class GameManager : MonoBehaviour
         else
         {
             cameraScript.OrbitXMaxDegrees = actualCamPreset.rotateClamp;
+        }
+
+        _count++;
+        if (_count >= camPreSets.Count)
+        {
+            _count = 0;
         }
     }
 
@@ -122,7 +126,7 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-        CamConfig(playerNumberTurn);
+        CamConfig(_count);
     }
 
     public void ShowEndZone()
