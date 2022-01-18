@@ -30,9 +30,16 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI playerPlaying;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
+    public List<GameObject> allBlocks;
+
     private void Awake()
     {
         _gameManager = this;
+        for (int i = 0; i < allBlocks.Count; i++)
+        {
+            int randomLocation = Random.Range(-1, 2);
+            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);;
+        }
     }
 
     // Start is called before the first frame update

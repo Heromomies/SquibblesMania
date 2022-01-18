@@ -30,6 +30,7 @@ public class EventManager : MonoBehaviour
 	private bool _b;
 	private int _numberEvent;
 	private int _turnNumber;
+	
 
 	#region Singleton
 
