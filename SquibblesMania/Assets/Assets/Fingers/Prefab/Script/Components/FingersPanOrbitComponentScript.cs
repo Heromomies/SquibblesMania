@@ -6,6 +6,7 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -175,6 +176,8 @@ namespace DigitalRubyShared
         private float yDegrees;
         private Vector2 panVelocity;
         private float zoomSpeed;
+        public Vector3 axisX;
+        public Vector3 axisY;
 
         /// <summary>
         /// Fires when the orbit target is tapped
@@ -182,8 +185,8 @@ namespace DigitalRubyShared
         public event System.Action OrbitTargetTapped;
 
         private float cameraSize;
-        [SerializeField]
-        private Camera camUI;
+        [SerializeField] private Camera camUI;
+
         private void OnEnable()
         {
             // create a scale gesture to zoom orbiter in and out
@@ -229,6 +232,7 @@ namespace DigitalRubyShared
                 FingersScript.Instance.RemoveGesture(TapGesture);
             }
         }
+
 
         private void LateUpdate()
         {
@@ -351,9 +355,8 @@ namespace DigitalRubyShared
             cameraSize = Mathf.Clamp(cameraSize, MinimumDistance, MaximumDistance);
             Camera.main.orthographicSize = cameraSize;
             camUI.orthographicSize = cameraSize;
-            
         }
-        
+
         private void PerformPan(Vector3 pan, float limit)
         {
             Vector3 pos = Orbiter.transform.position;
@@ -396,7 +399,27 @@ namespace DigitalRubyShared
                     }
 
                     xDegrees += addAngle;
-                    Orbiter.RotateAround(OrbitTarget.transform.position, Orbiter.transform.right, addAngle);
+                    switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+                    {
+                        case 0:
+                            axisX = Orbiter.transform.right;
+                            // cameraScript.axisY = Vector3.up;
+                            break;
+                        case 1:
+                            axisX = -Vector3.up;
+                            // cameraScript.axisY = cameraScript.Orbiter.transform.up;
+                            break;
+                        case 2:
+                            axisX = Vector3.up;
+                            //cameraScript.axisY = cameraScript.Orbiter.transform.up;
+                            break;
+                        case 3:
+                            axisX = -Orbiter.transform.right;
+                            //cameraScript.axisY = -Vector3.up;
+                            break;
+                    }
+
+                    Orbiter.RotateAround(OrbitTarget.transform.position, axisX, addAngle);
                 }
             }
 
@@ -425,7 +448,25 @@ namespace DigitalRubyShared
                     }
 
                     yDegrees += addAngle;
-                    Orbiter.RotateAround(OrbitTarget.transform.position, Vector3.up, addAngle);
+
+                    switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+                    {
+                        case 0:
+                            axisY = Vector3.up;
+                            break;
+                        case 1:
+                            axisY = Orbiter.transform.up;
+                            break;
+                        case 2:
+
+                            axisY = Orbiter.transform.up;
+                            break;
+                        case 3:
+                            axisY = -Vector3.up;
+                            break;
+                    }
+
+                    Orbiter.RotateAround(OrbitTarget.transform.position, axisY, addAngle);
                 }
             }
         }

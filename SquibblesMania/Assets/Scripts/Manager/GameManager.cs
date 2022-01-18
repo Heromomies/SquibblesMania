@@ -12,21 +12,33 @@ public class GameManager : MonoBehaviour
     private static GameManager _gameManager;
 
     public static GameManager Instance => _gameManager;
-    
+
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
-
     public Transform[] playersSpawnPoints;
     public int numberPlayers;
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
-    [HideInInspector]
-    public bool isPathRefresh;
-
-    public FingersPanOrbitComponentScript cameraScript;
+    [HideInInspector] public bool isPathRefresh;
     public int turnCount;
+    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraScript;
 
+    public CamPreSets actualCamPreset;
+
+    public List<CamPreSets> camPreSets;
+    private int _count;
+
+    [Serializable]
+    public struct CamPreSets
+    {
+        public int presetNumber;
+        [Space(2f)] public Vector3 camPos;
+        public Vector3 camRot;
+        public float rotateClamp;
+        public List<GameObject> uiGameObjects;
+    }
+    
     public TextMeshProUGUI playerPlaying;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
@@ -35,12 +47,17 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _gameManager = this;
+        if (cameraScript != null)
+        {
+            cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
+        }
         for (int i = 0; i < allBlocks.Count; i++)
         {
             int randomLocation = Random.Range(-1, 2);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);;
         }
     }
+
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +71,7 @@ public class GameManager : MonoBehaviour
             PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
-            
+
             players.Add(player);
         }
 
@@ -69,31 +86,73 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
+        CamConfig(_count);
         playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
 
         //cameraScript.OrbitTarget = currentPlayerTurn.transform;
 
     }
 
+    void CamConfig(int countTurn)
+    {
+        foreach (GameObject go in actualCamPreset.uiGameObjects)
+        {
+            go.SetActive(false);
+        }
+
+        Transform cameraTransform = cameraScript.transform;
+        cameraTransform.position = camPreSets[countTurn].camPos;
+        cameraTransform.eulerAngles = camPreSets[countTurn].camRot;
+        actualCamPreset = camPreSets[countTurn];
+
+        foreach (GameObject go in actualCamPreset.uiGameObjects)
+        {
+            go.SetActive(true);
+        }
+
+        if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
+        {
+            cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
+        }
+        else
+        {
+            cameraScript.OrbitXMaxDegrees = actualCamPreset.rotateClamp;
+        }
+
+        _count++;
+        if (_count >= camPreSets.Count)
+        {
+            _count = 0;
+        }
+    }
+
     public void ChangePlayerTurn(int playerNumberTurn)
     {
         turnCount++;
+        if (PowerManager.Instance != null)
+        {
+          //  PowerManager.Instance.isTouched = false;
+        }
+
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
         playerPlaying.text = "Player turn : " + players[playerNumberTurn].name;
         //cameraScript.OrbitTarget = currentPlayerTurn.transform;
+        CamConfig(_count);
     }
 
-   public void ShowEndZone()
+    public void ShowEndZone()
     {
         if (isConditionVictory)
         {
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
-            GameObject endZone = Instantiate(conditionVictory.endZone, conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
+            GameObject endZone = Instantiate(conditionVictory.endZone,
+                conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
         }
     }
+
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
@@ -105,6 +164,4 @@ public class GameManager : MonoBehaviour
     void Update()
     {
     }
-
-    
 }
