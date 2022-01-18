@@ -1,6 +1,6 @@
 using System.Collections.Generic; 
 using UnityEngine;
-using Wizama.Hardware.Light;
+using Wizama.Hardware.Antenna;
 
 
 public class SquareOneChangeColor : MonoBehaviour {  

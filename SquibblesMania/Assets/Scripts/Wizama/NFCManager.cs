@@ -17,7 +17,7 @@ public class NFCManager : MonoBehaviour
 		Debug.Log(NFCController.CanReadNFC);
 		Debug.Log(NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1));
 		
-		/*List<NFCTag> antenna1Tags = NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1);
+		List<NFCTag> antenna1Tags = NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1);
 		foreach (NFCTag tag in antenna1Tags)  
 			Debug.Log(tag.Data + " placed on antenna 1");
         
@@ -27,7 +27,7 @@ public class NFCManager : MonoBehaviour
 			count += Tags.Count;   
             
 		//one.text = "There is " + count + " tags detected in total";  
-		Debug.Log("There is " + count + " tags detected in total");*/
+		Debug.Log("There is " + count + " tags detected in total");
 		
 	} 
 }
