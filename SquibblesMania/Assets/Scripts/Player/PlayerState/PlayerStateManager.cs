@@ -25,7 +25,7 @@ public class PlayerStateManager : Player
     public List<Transform> nextBlockPath;
     
     private bool _one;
-    private void Awake()
+    private void Start()
     {
         DetectBlockBelowPlayer();
         //Assign the player to a list for know on what block group is currently on

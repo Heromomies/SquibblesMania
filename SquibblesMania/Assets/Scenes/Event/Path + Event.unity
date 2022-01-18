@@ -10088,6 +10088,8 @@ MonoBehaviour:
   OrbitInertia: 0.925
   OrbitMaximumSize: {x: 0, y: 0, z: 0}
   RequireOrbitGesturesToStartOnTarget: 0
+  axisX: {x: 0, y: 0, z: 0}
+  axisY: {x: 0, y: 0, z: 0}
   camUI: {fileID: 0}
 --- !u!1 &742949106
 GameObject:
@@ -23419,8 +23421,25 @@ MonoBehaviour:
   playerPref: {fileID: -3814758494985992804, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
   currentPlayerTurn: {fileID: 0}
   isPathRefresh: 0
-  cameraScript: {fileID: 0}
   turnCount: 0
+  cameraScript: {fileID: 741319949}
+  actualCamPreset:
+    presetNumber: 0
+    camPos: {x: 0, y: 0, z: 0}
+    camRot: {x: 0, y: 0, z: 0}
+    rotateClamp: 0
+    uiGameObjects: []
+  camPreSets:
+  - presetNumber: 0
+    camPos: {x: 0, y: 0, z: 0}
+    camRot: {x: 0, y: 0, z: 0}
+    rotateClamp: 0
+    uiGameObjects: []
+  - presetNumber: 0
+    camPos: {x: 0, y: 0, z: 0}
+    camRot: {x: 0, y: 0, z: 0}
+    rotateClamp: 0
+    uiGameObjects: []
   playerPlaying: {fileID: 589434753}
   isConditionVictory: 0
   conditionVictory:
@@ -23430,6 +23449,45 @@ MonoBehaviour:
     endZone: {fileID: 0}
     endZoneSpawnPoints: []
     fireCheckPoints: []
+  allBlocks:
+  - {fileID: 178965792}
+  - {fileID: 1183611364}
+  - {fileID: 1962986394}
+  - {fileID: 646500870}
+  - {fileID: 703024297}
+  - {fileID: 1057263687}
+  - {fileID: 1587807186}
+  - {fileID: 1647958851}
+  - {fileID: 1789053726}
+  - {fileID: 252767039}
+  - {fileID: 1146602094}
+  - {fileID: 1056855671}
+  - {fileID: 1324516214}
+  - {fileID: 1269794908}
+  - {fileID: 379391848}
+  - {fileID: 1615642474}
+  - {fileID: 1350544440}
+  - {fileID: 2136985328}
+  - {fileID: 1980012111}
+  - {fileID: 544914904}
+  - {fileID: 906294644}
+  - {fileID: 1010530515}
+  - {fileID: 1398311348}
+  - {fileID: 57445368}
+  - {fileID: 1980287363}
+  - {fileID: 1993056652}
+  - {fileID: 1232291034}
+  - {fileID: 965432253}
+  - {fileID: 1195280317}
+  - {fileID: 17771440}
+  - {fileID: 1412603208}
+  - {fileID: 1262108076}
+  - {fileID: 277582775}
+  - {fileID: 1110667794}
+  - {fileID: 300784493}
+  - {fileID: 396037933}
+  - {fileID: 209512835}
+  - {fileID: 805186612}
 --- !u!1 &1864463982
 GameObject:
   m_ObjectHideFlags: 0

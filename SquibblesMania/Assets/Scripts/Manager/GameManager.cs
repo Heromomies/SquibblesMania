@@ -38,11 +38,7 @@ public class GameManager : MonoBehaviour
         public float rotateClamp;
         public List<GameObject> uiGameObjects;
     }
-
-
-    public FingersPanOrbitComponentScript cameraScript;
-    public int turnCount;
-
+    
     public TextMeshProUGUI playerPlaying;
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
@@ -135,7 +131,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         if (PowerManager.Instance != null)
         {
-            PowerManager.Instance.isTouched = false;
+          //  PowerManager.Instance.isTouched = false;
         }
 
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
