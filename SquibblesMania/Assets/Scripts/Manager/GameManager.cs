@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         {
             //Spawn player at specific location
             Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
-                               new Vector3(0, playerPref.transform.localScale.y / 2f, 0);
+                               new Vector3(0, playerPref.transform.localScale.y/2f, 0);
 
             PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.gameObject.name = "Player " + (i + 1);
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
-        playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
+        //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
     void CamConfig(int countTurn)

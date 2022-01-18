@@ -1,0 +1,930 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WAPI</name>
+    </assembly>
+    <members>
+        <member name="T:Wizama.Hardware.Antenna.NFC_DEVICE_ID">
+            <summary>
+            Ids of  NFC devices
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_1">
+            <summary>
+            Bottom right corner antenna (Wizama logo)
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_2">
+            <summary>
+            Bottom antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_3">
+            <summary>
+            Bottom antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_4">
+            <summary>
+            Bottom antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_5">
+            <summary>
+            Bottom antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_6">
+            <summary>
+            Bottom antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_7">
+            <summary>
+            Bottom antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_8">
+            <summary>
+            Bottom left corner antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_9">
+            <summary>
+            Left antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_10">
+            <summary>
+            Left antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_11">
+            <summary>
+            Left antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_12">
+            <summary>
+            Left antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_13">
+            <summary>
+            Left antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_14">
+            <summary>
+            Top left corner antenna (ONE logo)
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_15">
+            <summary>
+            Top antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_16">
+            <summary>
+            Top antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_17">
+            <summary>
+            Top antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_18">
+            <summary>
+            Top antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_19">
+            <summary>
+            Top antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_20">
+            <summary>
+            Top antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_21">
+            <summary>
+            Top right corner antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_22">
+            <summary>
+            Right antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_23">
+            <summary>
+            Right antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_24">
+            <summary>
+            Right antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_25">
+            <summary>
+            Right antenna
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFC_DEVICE_ID.ANTENNA_26">
+            <summary>
+            Right antenna
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Antenna.NFCController">
+            <summary>
+            Class controlling the NFC antennas features
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCController.GetPolledAntennas">
+            <summary>
+            Get the list of antenna used in the current polling
+            </summary>
+            <returns>List of the active antennas in the current polling (null if no polling running)</returns>
+        </member>
+        <member name="P:Wizama.Hardware.Antenna.NFCController.CanReadNFC">
+            <summary>
+            Is possible to read NFC on this device
+            </summary>
+            <returns>availability of NFC reading on the device</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCController.StartPolling(Wizama.Hardware.Antenna.NFC_DEVICE_ID[])">
+            <summary>
+            Start polling the NFC devices
+            </summary>
+            <param name="deviceIds">Ids of devices to poll</param>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCController.StopPolling">
+            <summary>
+            Stop polling the NFC devices
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCController.GetTags(Wizama.Hardware.Antenna.NFC_DEVICE_ID[])">
+            <summary>
+            Get tags currently on the active NFC devices specified in parameters
+            </summary>
+            <param name="deviceIds">List of device ids to query</param>
+            <returns>List of the tags</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCController.GetTags">
+            <summary>
+            Get all the tags currently on the active NFC devices
+            </summary>
+            <returns>List of the tags sort by device id</returns>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCController.OnNewTag">
+            <summary>
+            Callback triggered when a tag is placed on an active NFC device
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCController.OnTagRemoved">
+            <summary>
+            Callback triggered when a tag is removed from an active NFC device
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCController.StartPollingAsync(Wizama.Hardware.Antenna.NFC_DEVICE_ID[])">
+            <summary>
+            Start polling asynchronously the NFC devices
+            </summary>
+            <param name="deviceIds">Ids of devices to poll</param>
+        </member>
+        <member name="T:Wizama.Hardware.Antenna.NFCTag">
+            <summary>
+            Class representing a NFCTag
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Antenna.NFCTag.TagType">
+            <summary>
+            Type of tag
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.UNDEFINED">
+            <summary>
+            Undefined type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.PAWN">
+            <summary>
+            Pawn type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.DICE">
+            <summary>
+            Dice type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.CARD">
+            <summary>
+            Card type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.TOKEN">
+            <summary>
+            Token type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.RESOURCE">
+            <summary>
+            Resource type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Antenna.NFCTag.TagType.BOARD">
+            <summary>
+            Board type
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Antenna.NFCTag.#ctor(Wizama.Hardware.Antenna.NFCTag.TagType,System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="type">Tag type</param>
+            <param name="id">Tag id</param>
+            <param name="data">Tag data</param>
+        </member>
+        <member name="P:Wizama.Hardware.Antenna.NFCTag.Type">
+            <summary>
+            Accessor on the tag type
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Antenna.NFCTag.Id">
+            <summary>
+            Accessor on the tag id
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Antenna.NFCTag.Data">
+            <summary>
+            Accessor on the tag data
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Dice.DiceType">
+            /// <summary>
+            Type of dice
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.COIN">
+            <summary>
+            Dice with 2 faces like a coin
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_4">
+            <summary>
+            Dice with numerical 4 faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_6">
+            <summary>
+            Dice with numerical 6 faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_8">
+            <summary>
+            Dice with numerical 8 faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_10">
+            <summary>
+            Dice with numerical 10 faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_12">
+            <summary>
+            Dice with numerical 12 faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_20">
+            <summary>
+            Dice with numerical 20 faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceType.NUMERICAL_100">
+            <summary>
+            Dice with numerical 100 faces
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Dice.CoinFaces">
+            <summary>
+            Coin specific faces
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.CoinFaces.HEADS">
+            <summary>
+            Coin face verso
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.CoinFaces.TAILS">
+            <summary>
+            Coin face recto
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Dice.DiceRollMode">
+            <summary>
+            Dice mode available
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceRollMode.DICE_TRACK">
+            <summary>
+            Physical dice track
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceRollMode.SOFT_ROLLING_SYSTEM">
+            <summary>
+            3D rolling dice on screen
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceRollMode.DIRECT_RANDOM">
+            <summary>
+            Result of the random is directly sent in return
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Dice.DiceManager">
+            <summary>
+            Class controlling the Dice track features
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Dice.DiceManager.CanReadPhysicalDices">
+            <summary>
+            Is the Dice manager able and ready to read dice results (readonly)
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Dice.DiceManager.CanReadMultipleDices">
+            <summary>
+            Is the used dice track able to read several dices (readonly)
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceManager.DiceRollActiveMode">
+            <summary>
+            Is the Dice manager should use the physical dices or other method 
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceManager.DiceTrackWarningTime">
+            <summary>
+            Time in seconds before call a warning action if dice result (good number of dices detected) is not yet arrived
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.DiceFaces(Wizama.Hardware.Dice.DiceType)">
+            <summary>
+            Getter to have the available faces for a given dice type
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.DiceNbFaces(Wizama.Hardware.Dice.DiceType)">
+            <summary>
+            Getter of the number of faces for a given dice type
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceManager.OnDieRollOver">
+            <summary>
+            Callback triggered when a die has finished to roll (see dice error code for negative results)
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceManager.OnAllDiceRollOver">
+            <summary>
+            Callback triggered when all dice have finished to roll (see dice error code for negative results)
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Dice.DiceManager.OnDiceRollTimeoutWarning">
+            <summary>
+            Callback triggered when dice result take too long to happen. Give current number of dice detected in parameter
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.StartDiceRoll(Wizama.Hardware.Dice.DiceRollMode,Wizama.Hardware.Dice.DiceType[])">
+            <summary>
+            Method called to Specify the dice roll mode and start the dice roll
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.StartDiceRoll(Wizama.Hardware.Dice.DiceType[])">
+            <summary>
+            Method called to start the dice roll in the current roll mode
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.NotifyExternalDiceResult(System.Int32)">
+            <summary>
+            Method to call to notify the DiceManager of a result in case of an EXTERNAL SOFTWARE DICE ROLL only
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.StopDiceRoll">
+            <summary>
+            Method to call to stop the dice roll
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.IsValid">
+            <summary>
+            Dice Track was create
+            </summary>
+            <returns>Instance is valid</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Dice.DiceManager.CheatValue(System.Int32)">
+            <summary>
+            Use for the simulator. Call only OnAllDiceRollOver.
+            </summary>
+            <param name="value">Value to generate</param>
+        </member>
+        <member name="T:Wizama.Hardware.Light.LIGHT_COLOR">
+            <summary>
+            Ids of light colors
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_BLACK">
+            <summary>
+            White color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_BLUE">
+            <summary>
+            Blue color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_GREEN">
+            <summary>
+            Green color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_CYAN">
+            <summary>
+            Cyan color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_RED">
+            <summary>
+            Red color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_PURPLE">
+            <summary>
+            Purple color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_YELLOW">
+            <summary>
+            Yellow color
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_COLOR.COLOR_WHITE">
+            <summary>
+            Black color
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Light.LIGHT_INDEX">
+            <summary>
+            Ids of light localizations
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_1">
+            <summary>
+            Light between antennas 1 and 2
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_2">
+            <summary>
+            Light between antennas 2 and 3
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_3">
+            <summary>
+            Light between antennas 3 and 4
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_4">
+            <summary>
+            Light between antennas 4 and 5
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_5">
+            <summary>
+            Light between antennas 5 and 6
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_6">
+            <summary>
+            Light between antennas 6 and 7
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_7">
+            <summary>
+            Light between antennas 7 and 8
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_8">
+            <summary>
+            Light between antennas 8 and 9
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_9">
+            <summary>
+            Light between antennas 9 and 10
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_10">
+            <summary>
+            Light between antennas 10 and 11
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_11">
+            <summary>
+            Light between antennas 11 and 12
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_12">
+            <summary>
+            Light between antennas 12 and 13
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_13">
+            <summary>
+            Light between antennas 13 and 14
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_14">
+            <summary>
+            Light between antennas 14 and 15
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_15">
+            <summary>
+            Light between antennas 15 and 16
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_16">
+            <summary>
+            Light between antennas 16 and 17
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_17">
+            <summary>
+            Light between antennas 17 and 18
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_18">
+            <summary>
+            Light between antennas 18 and 19
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_19">
+            <summary>
+            Light between antennas 19 and 20
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_20">
+            <summary>
+            Light between antennas 20 and 21
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_21">
+            <summary>
+            Light between antennas 21 and 22
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_22">
+            <summary>
+            Light between antennas 22 and 23
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_23">
+            <summary>
+            Light between antennas 23 and 24
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_24">
+            <summary>
+            Light between antennas 24 and 25
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_25">
+            <summary>
+            Light between antennas 25 and 26
+            </summary>
+        </member>
+        <member name="F:Wizama.Hardware.Light.LIGHT_INDEX.LIGHT_26">
+            <summary>
+            Light between antennas 26 and 1
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Light.LightController">
+            <summary>
+            Class controlling the Light features
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Light.LightController.Colorize(Wizama.Hardware.Light.LIGHT_INDEX[],Wizama.Hardware.Light.LIGHT_COLOR[],System.Boolean)">
+            <summary>
+            Colorize specified ones with specified colors
+            </summary>
+            <param name="lightIndexes">Ids of light to colorize</param>
+            <param name="lightColors">Colors for lights in same order as lightIndexes</param>
+            <param name="keepOthersColorized">Keep non specified lights in their old color state or switch them off (true by default)</param>
+        </member>
+        <member name="M:Wizama.Hardware.Light.LightController.Colorize(Wizama.Hardware.Light.LIGHT_INDEX[],Wizama.Hardware.Light.LIGHT_COLOR,System.Boolean)">
+            <summary>
+            Colorize specified lights with the same color
+            </summary>
+            <param name="lightIndexes">Ids of light to colorize</param>
+            <param name="lightColor">Color for specified lights</param>
+            <param name="keepOthersColorized">Keep non specified lights in their old color state or switch them off (true by default)</param>
+        </member>
+        <member name="M:Wizama.Hardware.Light.LightController.ColorizeOne(Wizama.Hardware.Light.LIGHT_INDEX,Wizama.Hardware.Light.LIGHT_COLOR,System.Boolean)">
+            <summary>
+            Colorize specified light with specified color
+            </summary>
+            <param name="lightIndex">Id of light to colorize</param>
+            <param name="lightColor">Color for light</param>
+            <param name="keepOthersColorized">Keep non specified lights in their old color state or switch them off (true by default)</param>
+        </member>
+        <member name="M:Wizama.Hardware.Light.LightController.GetColor(Wizama.Hardware.Light.LIGHT_INDEX)">
+            <summary>
+            Get color of specified light
+            </summary>
+            <param name="lightIndex">Target light</param>
+            <returns>Light color</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Light.LightController.ShutdownAllLights">
+            <summary>
+            Switch off all lights
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.MultiTouchEvent">
+            <summary>
+            Class overriding UnityEvent with WizaMultiTouch as parameter
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.Pawn">
+            <summary>
+            Contain and manage touch for detect pawn
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Touches">
+            <summary>
+            Get all points
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Index">
+            <summary>
+            Get Current MultiTouch index
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.PointsCount">
+            <summary>
+            Get NB touch
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Duration">
+            <summary>
+            Get Life time
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Position">
+            <summary>
+            Get Center
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Phase">
+            <summary>
+            Get Current Phase
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Radius">
+            <summary>
+            Get MultiTouch radius
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.Angle">
+            <summary>
+            Get Current angle
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.OnMove">
+            <summary>
+            Get Unity Event On Move
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.OnEnd">
+            <summary>
+            Get Unity Event On End
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.Pawn.StayDual">
+            <summary>
+            MultiTouch dont pass on three touch
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Pawn.#ctor(System.Collections.Generic.List{Wizama.Hardware.Pawn.SimpleTouch})">
+            <summary>
+            Create new multitouch with a list
+            </summary>
+            <param name="touches">List of touch</param>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Pawn.#ctor(Wizama.Hardware.Pawn.Pawn)">
+            <summary>
+            Copy Multitouch
+            </summary>
+            <param name="wizaMultiTouch">Ref</param>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Pawn.CheckMultiTouchMembership(Wizama.Hardware.Pawn.SimpleTouch,System.Single)">
+            <summary>
+            Calcul if on touch can be add un dual touch
+            </summary>
+            <param name="single">Touch to add</param>
+            <param name="radius">Current max radius</param>
+            <returns>To can be add</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Pawn.GetGhostReplacement(UnityEngine.Touch,System.Single,System.Single)">
+            <summary>
+            Replace ghost if possible
+            </summary>
+            <param name="touch">Touch can be a ghost</param>
+            <param name="radius">Max radius</param>
+            <param name="touchEpsilon">Min radius</param>
+            <returns>Return ghost replace if succes</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Pawn.ToString">
+            <summary>
+            Converte in string for debug
+            </summary>
+            <returns>Out value</returns>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.SimulatorEvent">
+            <summary>
+            Used only for the simulator
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.PawnManager">
+            <summary>
+            Manage touch and Multi touch
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.Instance">
+            <summary>
+            Singleton instance
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.MultiPointEnabled">
+            <summary>
+            Is multiTouch Enable
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.SingleTouches">
+            <summary>
+            Get list of single touch
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.MultiTouches">
+            <summary>
+            Get list of multi touch
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.OnNewSingleTouch">
+            <summary>
+            Event trigerred every time a new SingleTouch is detected. (touch point that is alone)
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.OnNewMultiTouch">
+            <summary>
+            Event trigerred every time a new MultiTouch is detected. (group of 2 or 3 touch points)
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.OnSimulator">
+            <summary>
+            Get Unity Event for Simulator
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.SimulatorIsListen">
+            <summary>
+            Get/Set Simualtor have connecte event
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.SimulatorTouch">
+            <summary>
+            Edit Touch by Simulator
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.PawnManager.MultiTouchesBuffer">
+            <summary>
+            Get multi touch buffer
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.TouchEvent">
+            <summary>
+            Class overriding UnityEvent with WizaTouch as parameter
+            </summary>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.SimpleTouch">
+            <summary>
+            Encaplusate Unity Touch
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.UnityTouch">
+            <summary>
+            Update Touch value
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.FingerId">
+            <summary>
+            Get ID
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.Position">
+            <summary>
+            Get Position
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.RawPosition">
+            <summary>
+            Get RawPosition
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.DeltaPosition">
+            <summary>
+            Get Delta Position
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.DeltaTime">
+            <summary>
+            Get DeltaTime
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.TapCount">
+            <summary>
+            Get Tap Count
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.Phase">
+            <summary>
+            Get Phase
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.Radius">
+            <summary>
+            Get Radius
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.RadiusVariance">
+            <summary>
+            Get Radius Variance
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.Duration">
+            <summary>
+            Get Life Time
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.OnMove">
+            <summary>
+            Get Unity Event on Move
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.OnEnd">
+            <summary>
+            Get Unity Event On End
+            </summary>
+        </member>
+        <member name="P:Wizama.Hardware.Pawn.SimpleTouch.IsTerminated">
+            <summary>
+            Touch is ended / canceled
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.SimpleTouch.#ctor(UnityEngine.Touch)">
+            <summary>
+            Create wizaTouch with unity touch
+            </summary>
+            <param name="touch"></param>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.SimpleTouch.#ctor(Wizama.Hardware.Pawn.SimpleTouch)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="wizaTouch">Ref</param>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.SimpleTouch.ToString">
+            <summary>
+            Convert in string for debug
+            </summary>
+            <returns>Out</returns>
+        </member>
+        <member name="T:Wizama.Hardware.Pawn.Tools">
+            <summary>
+            Tools for some calculs
+            </summary>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Tools.IsInferiorToSqrValue(UnityEngine.Vector2,UnityEngine.Vector2,System.Single)">
+            <summary>
+            Radius detection
+            </summary>
+            <param name="A">Position A</param>
+            <param name="B">Position B</param>
+            <param name="value">Max radius</param>
+            <returns>iIs in range</returns>
+        </member>
+        <member name="M:Wizama.Hardware.Pawn.Tools.ScreenToWorld(UnityEngine.Vector2)">
+            <summary>
+            Calcule the touch position in the world
+            </summary>
+            <param name="position">Touch position</param>
+            <returns>World position</returns>
+        </member>
+    </members>
+</doc>
