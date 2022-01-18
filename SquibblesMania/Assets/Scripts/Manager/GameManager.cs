@@ -95,20 +95,14 @@ public class GameManager : MonoBehaviour
 
     void CamConfig(int countTurn)
     {
-        foreach (GameObject go in actualCamPreset.uiGameObjects)
-        {
-            go.SetActive(false);
-        }
+       
 
         Transform cameraTransform = cameraScript.transform;
         cameraTransform.position = camPreSets[countTurn].camPos;
         cameraTransform.eulerAngles = camPreSets[countTurn].camRot;
         actualCamPreset = camPreSets[countTurn];
 
-        foreach (GameObject go in actualCamPreset.uiGameObjects)
-        {
-            go.SetActive(true);
-        }
+       
 
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
