@@ -32,7 +32,7 @@ public class PowerManager : MonoBehaviour
 
 	public void Update()
 	{
-		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+//		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 		Debug.DrawRay(transform.position, Vector3.back * maxDistance, Color.yellow);
 		Debug.DrawRay(transform.position, Vector3.forward * maxDistance, Color.yellow);
 		Debug.DrawRay(transform.position, Vector3.right * maxDistance, Color.yellow);

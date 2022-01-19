@@ -15,12 +15,12 @@ public class PlayerCardState : PlayerBaseState
 			player.stunCount--;
 			PlayerIsStun(player);
 		}
-		
 		player.playerActionPoint = Random.Range(1, 6);
 		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
 		player.isPlayerInActionCardState = true;
 		UiManager.Instance.buttonNextTurn.SetActive(false);
 		player.SwitchState(player.PlayerActionPointCardState);
+	
 	}
 
 	void PlayerIsStun(PlayerStateManager player)
@@ -59,6 +59,11 @@ public class PlayerCardState : PlayerBaseState
 			player.SwitchState(player.PlayerPowerCardState);
 		}
 
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+		
+		}
+	
 		
 		
 	}

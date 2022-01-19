@@ -19,12 +19,12 @@ public class PlayerStateManager : Player
     public bool walking;
     public float timeMoveSpeed;
     public GameObject particle;
-    
+
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-    
-    private void Awake()
+
+    private void Start()
     {
         DetectBlockBelowPlayer();
         //Assign the player to a list for know on what block group is currently on
@@ -48,7 +48,6 @@ public class PlayerStateManager : Player
         //Start the player turn in the player card state
         CurrentState = PlayerCardState;
         CurrentState.EnterState(this);
-      
     }
 
     public void StartPathFinding()
@@ -62,7 +61,7 @@ public class PlayerStateManager : Player
         }
     }
 
-    
+
     public void SwitchState(PlayerBaseState state)
     {
         CurrentState.ExitState(this);
@@ -78,18 +77,17 @@ public class PlayerStateManager : Player
         RaycastHit hit;
 
         Debug.DrawRay(transform.position, -transform.up, Color.red);
-          
-        if (Physics.Raycast(ray, out hit, 1f))
+
+        if (Physics.Raycast(ray, out hit, 1.1f))
         {
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
             }
-            
         }
         else
         {
-           // StartCoroutine(WaitUntilRespawn());
+            // StartCoroutine(WaitUntilRespawn());
         }
     }
 
@@ -97,18 +95,18 @@ public class PlayerStateManager : Player
     {
         yield return new WaitForSeconds(1f);
         Vector3 p = GameManager.Instance.playersSpawnPoints[playerNumber].position;
-        transform.position = new Vector3(p.x, p.y +1, p.z);
+        transform.position = new Vector3(p.x, p.y + 1, p.z);
         GameObject a = Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(a, 1f);
     }
-    
+
     public void StunPlayer(PlayerStateManager player, int stunTurnCount)
     {
         player.isPlayerStun = true;
         player.stunCount = stunTurnCount;
-        
+
         if (GameManager.Instance.currentPlayerTurn == player)
-        {   
+        {
             //Exit current state of current player
             player.CurrentState.ExitState(player);
         }

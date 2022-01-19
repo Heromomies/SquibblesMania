@@ -51,35 +51,35 @@ public class GameManager : MonoBehaviour
         {
             cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
-
-       
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-       
-        SpawnPlayers();
-        StartGame();
         for (int i = 0; i < allBlocks.Count; i++)
         {
             int randomLocation = Random.Range(0, 2);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
                 allBlocks[i].transform.position.z);
         }
-        
+
+        SpawnPlayers();
+        StartGame();
     }
 
     void SpawnPlayers()
     {
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
+          
+           
             //Spawn player at specific location
             Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
-                               new Vector3(0, playerPref.transform.localScale.y/2f, 0);
+                               new Vector3(0, playerPref.transform.localScale.y / 2f, 0);
 
-            PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+            PlayerStateManager player = Instantiate(playerPref, spawnPos , Quaternion.identity);
+            player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
 
@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
         {
             cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
             cameraScript.OrbitXMaxDegrees = 0;
-
         }
         else
         {
