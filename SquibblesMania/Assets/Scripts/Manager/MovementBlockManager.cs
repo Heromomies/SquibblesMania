@@ -46,7 +46,7 @@ public class MovementBlockManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.playerActionPoint--;
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
             .playerActionPoint);
-        GameManager.Instance.isPathRefresh = true;
+       
 
 
         //Move the player with block
@@ -59,10 +59,13 @@ public class MovementBlockManager : MonoBehaviour
                     new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), 0.25f);
             }
         }
-
+       
+        
         ResetPreviewPlatform();
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
+        
+        GameManager.Instance.isPathRefresh = true;
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -99,10 +102,10 @@ public class MovementBlockManager : MonoBehaviour
 
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
             .playerActionPoint);
-        GameManager.Instance.isPathRefresh = true;
-
+  
 
         //Move the player with block
+        
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
         {
             foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
@@ -115,9 +118,11 @@ public class MovementBlockManager : MonoBehaviour
 
 
         ResetPreviewPlatform();
-
+    
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
+        GameManager.Instance.isPathRefresh = true;
+
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -128,6 +133,8 @@ public class MovementBlockManager : MonoBehaviour
             
         }
     }
+
+ 
 
     public void ResetPreviousBlockColor()
     {

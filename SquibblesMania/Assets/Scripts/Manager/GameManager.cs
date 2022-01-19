@@ -5,6 +5,7 @@ using DigitalRubyShared;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -20,14 +21,14 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
-    [HideInInspector] public bool isPathRefresh;
+    public bool isPathRefresh;
     public int turnCount;
     [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraScript;
 
     public CamPreSets actualCamPreset;
 
     public List<CamPreSets> camPreSets;
-    [SerializeField]
+
     private int _count;
 
     [Serializable]
@@ -38,6 +39,8 @@ public class GameManager : MonoBehaviour
         public Vector3 camRot;
         public float rotateClamp;
         public GameObject uiGameObject;
+        public GameObject buttonNextTurn;
+        public TextMeshProUGUI actionPointText;
     }
 
 
@@ -94,9 +97,11 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         //Choose Randomly a player to start
+       
         int numberPlayerToStart = Random.Range(0, players.Count);
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
+     
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
@@ -105,6 +110,12 @@ public class GameManager : MonoBehaviour
 
     void CamConfig(int countTurn)
     {
+        if (actualCamPreset.presetNumber > 0)
+        {
+            actualCamPreset.uiGameObject.SetActive(false);
+            actualCamPreset.buttonNextTurn.SetActive(false);
+        }
+        TouchManager.Instance.RemoveFingerScriptPassThroughObject();
         
         Transform cameraTransform = cameraScript.transform;
 
@@ -114,6 +125,10 @@ public class GameManager : MonoBehaviour
         
         cameraTransform.rotation = target;
         actualCamPreset = camPreSets[countTurn];
+        
+        UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
+        actualCamPreset.uiGameObject.SetActive(true);
+        TouchManager.Instance.AddFingerScriptPassTroughObject();
         
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {

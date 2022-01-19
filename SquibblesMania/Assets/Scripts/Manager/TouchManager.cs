@@ -26,7 +26,7 @@ public class TouchManager : MonoBehaviour
     public Color blockCurrentlySelectedColor;
 
     private static TouchManager _touchManager;
-   
+
     public static TouchManager Instance => _touchManager;
 
     private void Awake()
@@ -54,13 +54,12 @@ public class TouchManager : MonoBehaviour
         {
             FingersScript.Instance.PassThroughObjects.Add(MovementBlockManager.Instance.buttonMoveBlockParentObject);
         }
-     
+
         FingersScript.Instance.PassThroughObjects.Add(uiInteractionParentObject);
         if (UiManager.Instance != null)
         {
             FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
         }
-        
     }
 
     private void OnDisable()
@@ -77,6 +76,19 @@ public class TouchManager : MonoBehaviour
         FingersScript.Instance.PassThroughObjects.Clear();
     }
 
+    public void RemoveFingerScriptPassThroughObject()
+    {
+        FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);
+        FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.currentActionPointsOfCurrentPlayerTurn
+            .gameObject);
+    }
+
+    public void AddFingerScriptPassTroughObject()
+    {
+        FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
+        FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.currentActionPointsOfCurrentPlayerTurn
+            .gameObject);
+    }
 
     private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
     {
@@ -92,7 +104,7 @@ public class TouchManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out Hit, Mathf.Infinity, touchLayersMask))
             {
-                if (blockCurrentlySelected != null && ! GameManager.Instance.currentPlayerTurn.walking)
+                if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
                 {
                     //Previous selected block get his base color back
 
@@ -106,7 +118,8 @@ public class TouchManager : MonoBehaviour
             else
             {
                 //If player OnSelect the block, the block get his color back
-                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState && MovementBlockManager.Instance.isMovingBlock)
+                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState &&
+                    MovementBlockManager.Instance.isMovingBlock)
                 {
                     MovementBlockManager.Instance.ResetPreviousBlockColor();
                     GameManager.Instance.isPathRefresh = true;

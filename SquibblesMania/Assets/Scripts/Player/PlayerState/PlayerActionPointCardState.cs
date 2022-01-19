@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         player.nextBlockPath.Clear();
         previewPath.Clear();
+        
         PreviewPath(player.playerActionPoint, player);
     }
 
@@ -41,8 +43,11 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
-            
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && player.currentBlockPlayerOn.GetComponent<Node>().isActive)
+            Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
+            Vector3 pathParentPos = path.nextPath.transform.parent.position;
+          
+
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && actualNode.isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
             {
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
@@ -91,7 +96,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             return;
         }
 
-        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath);
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
         for (int i = 0; i < currentCheckedBlocks.Count; i++)
         {
@@ -105,6 +110,12 @@ public class PlayerActionPointCardState : PlayerBaseState
             ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint,
                 playerStateManager);
         }
+
+        if (GameManager.Instance.isPathRefresh)
+        {
+            GameManager.Instance.isPathRefresh = false;
+        }
+        
     }
 
     #endregion
@@ -114,14 +125,16 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Player have a preview of his possible movement
         foreach (var block in finalPreviewPath)
         {
+            
             block.gameObject.GetComponent<Renderer>().material.color = color;
         }
 
         previewPath = finalPreviewPath;
+        
     }
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
-        List<Transform> finalPreviewPath, List<Transform> nextBlocksPath)
+        List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
     {
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
@@ -129,9 +142,11 @@ public class PlayerActionPointCardState : PlayerBaseState
             //Foreach possible path in our currentCheckedBlock
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
+                
+                Vector3 pathParentPos = path.nextPath.transform.parent.position;
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
                 if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                    path.nextPath.GetComponent<Node>().isActive)
+                    path.nextPath.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -148,8 +163,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
-            GameManager.Instance.isPathRefresh = false;
-            ColorPossiblePaths(previewPath, Color.grey);
+            ColorPossiblePaths(player.nextBlockPath, Color.grey);
             EnterState(player);
         }
     }
@@ -349,5 +363,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
         }
+
+        
     }
 }

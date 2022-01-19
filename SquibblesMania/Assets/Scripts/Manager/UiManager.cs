@@ -23,7 +23,13 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
        
     }
-    
+
+    public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer, TextMeshProUGUI currentActionPoint)
+    {
+        buttonNextTurn = buttonNextTurnPlayer;
+        currentActionPointsOfCurrentPlayerTurn = currentActionPoint;
+        SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+    }
 
     public void ButtonPathFindingBlock()
     {
