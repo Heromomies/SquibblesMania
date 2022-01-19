@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public CamPreSets actualCamPreset;
 
     public List<CamPreSets> camPreSets;
+    [SerializeField]
     private int _count;
 
     [Serializable]
@@ -36,10 +37,10 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public float rotateClamp;
-        public List<GameObject> uiGameObjects;
+        public GameObject uiGameObject;
     }
 
-    public TextMeshProUGUI playerPlaying;
+
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     public List<GameObject> allBlocks;
@@ -72,13 +73,11 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
-          
-           
             //Spawn player at specific location
             Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
                                new Vector3(0, playerPref.transform.localScale.y / 2f, 0);
 
-            PlayerStateManager player = Instantiate(playerPref, spawnPos , Quaternion.identity);
+            PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
@@ -106,21 +105,25 @@ public class GameManager : MonoBehaviour
 
     void CamConfig(int countTurn)
     {
+        
         Transform cameraTransform = cameraScript.transform;
+
         cameraTransform.position = camPreSets[countTurn].camPos;
-        cameraTransform.eulerAngles = camPreSets[countTurn].camRot;
+
+        Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
+        
+        cameraTransform.rotation = target;
         actualCamPreset = camPreSets[countTurn];
-
-
+        
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
-            cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
-            cameraScript.OrbitXMaxDegrees = 0;
+           cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
+            cameraScript.OrbitXMaxDegrees = 180;
         }
         else
         {
             cameraScript.OrbitXMaxDegrees = actualCamPreset.rotateClamp;
-            cameraScript.OrbitYMaxDegrees = 0;
+            cameraScript.OrbitYMaxDegrees = 180;
         }
 
         _count++;
@@ -136,8 +139,6 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-        playerPlaying.text = "Player turn : " + players[playerNumberTurn].name;
-
         CamConfig(_count);
     }
 
