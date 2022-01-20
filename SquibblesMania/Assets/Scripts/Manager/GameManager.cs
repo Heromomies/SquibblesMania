@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-        CamConfig(_count);
+        //CamConfig(_count);
     }
 
     public void ShowEndZone()

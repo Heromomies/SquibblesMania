@@ -17,13 +17,23 @@ public class MovementBlockManager : MonoBehaviour
         _movementBlockManager = this;
     }
 
-    public void PlatformUp()
+    public void StartUpPlatform()
+    {
+        StartCoroutine(PlatformUp());
+    }
+
+    public void StartDownPlatform()
+    {
+        StartCoroutine(PlatformDown());
+    }
+
+    IEnumerator PlatformUp()
     {
         if (EventManager.Instance != null)
         {
             EventManager.Instance.AddPointForMovingCase(1);
         }
-        
+
         TouchManager.Instance.blockParent = TouchManager.Instance.Hit.collider.gameObject.transform.parent;
 
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
@@ -33,20 +43,19 @@ public class MovementBlockManager : MonoBehaviour
 
         if (TouchManager.Instance.blockParent.position.y >= 4)
         {
-            return;
+            yield break;
         }
 
 
         TouchManager.Instance.blockParent.DOMove(
             new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
             0.25f);
-
+        yield return new WaitForSeconds(0.3f);
 
         //We want to substract action point from the current player if he move up/down the block
         GameManager.Instance.currentPlayerTurn.playerActionPoint--;
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
             .playerActionPoint);
-       
 
 
         //Move the player with block
@@ -58,18 +67,20 @@ public class MovementBlockManager : MonoBehaviour
                 playerOnGroupBlock.DOMove(
                     new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), 0.25f);
             }
+
+            yield return new WaitForSeconds(0.3f);
         }
-       
-        
+
+
         ResetPreviewPlatform();
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
-        
+
         GameManager.Instance.isPathRefresh = true;
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
-            
+
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
                 block.gameObject.GetComponent<Renderer>().material.color = Color.gray;
@@ -77,18 +88,19 @@ public class MovementBlockManager : MonoBehaviour
         }
     }
 
-    public void PlatformDown()
+    IEnumerator PlatformDown()
     {
         if (EventManager.Instance != null)
         {
             EventManager.Instance.AddPointForMovingCase(1);
         }
+
         TouchManager.Instance.blockParent = TouchManager.Instance.Hit.collider.gameObject.transform.parent;
 
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
         if (TouchManager.Instance.blockParent.position.y <= 0)
         {
-            return;
+            yield break;
         }
 
 
@@ -96,16 +108,16 @@ public class MovementBlockManager : MonoBehaviour
         TouchManager.Instance.blockParent.DOMove(
             new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
             0.25f);
-
+        yield return new WaitForSeconds(0.3f);
 
         GameManager.Instance.currentPlayerTurn.playerActionPoint--;
 
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
             .playerActionPoint);
-  
+
 
         //Move the player with block
-        
+
         if (groupBlockDetection.playersOnGroupBlock.Count > 0)
         {
             foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
@@ -114,11 +126,13 @@ public class MovementBlockManager : MonoBehaviour
                 playerOnGroupBlock.DOMove(
                     new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), 0.25f);
             }
+
+            yield return new WaitForSeconds(0.3f);
         }
 
 
         ResetPreviewPlatform();
-    
+
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
         GameManager.Instance.isPathRefresh = true;
@@ -130,11 +144,9 @@ public class MovementBlockManager : MonoBehaviour
             {
                 block.gameObject.GetComponent<Renderer>().material.color = Color.gray;
             }
-            
         }
     }
 
- 
 
     public void ResetPreviousBlockColor()
     {
