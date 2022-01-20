@@ -13,7 +13,8 @@ public class UiManager : MonoBehaviour
     public TextMeshProUGUI turnCountText;
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-
+    public GameObject conditionEvent;
+    
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
     public static UiManager Instance => _uiManager;
@@ -61,6 +62,18 @@ public class UiManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
+    public void SeeCondition()
+    {
+        if (!conditionEvent.activeSelf)
+        {
+            conditionEvent.SetActive(true);
+        }
+        else
+        {
+            conditionEvent.SetActive(false);
+        }
+           
+    }
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
