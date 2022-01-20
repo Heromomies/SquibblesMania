@@ -4,8 +4,9 @@ using UnityEngine;
 using Wizama.Hardware.Antenna;  
 public class NFCManager : MonoBehaviour
 {
+	public NFC_DEVICE_ID[] nfc;
 	void Start()  {  
-		NFCController.StartPolling( NFC_DEVICE_ID.ANTENNA_1, NFC_DEVICE_ID.ANTENNA_8, NFC_DEVICE_ID.ANTENNA_14, NFC_DEVICE_ID.ANTENNA_21);
+		NFCController.StartPolling(nfc);
 	}   
     
 	void OnDisable()  {  
