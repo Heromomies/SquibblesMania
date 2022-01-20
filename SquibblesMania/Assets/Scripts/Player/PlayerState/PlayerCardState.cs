@@ -15,7 +15,7 @@ public class PlayerCardState : PlayerBaseState
 			player.stunCount--;
 			PlayerIsStun(player);
 		}
-		player.playerActionPoint = Random.Range(5, 6);
+		player.playerActionPoint = Random.Range(1, 6);
 		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
 		player.isPlayerInActionCardState = true;
 		UiManager.Instance.buttonNextTurn.SetActive(false);
