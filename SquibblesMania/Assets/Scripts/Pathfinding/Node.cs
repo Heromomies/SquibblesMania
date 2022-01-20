@@ -10,6 +10,16 @@ public class Node : MonoBehaviour
     public Transform previousBlock;
     public bool isActive;
 
+    public enum ColorBloc
+    {
+        Red = 0,
+        Yellow = 1,
+        Blue = 2,
+        Green = 3
+    }
+
+    public ColorBloc colorBloc;
+    
     public List<GamePath> possiblePath;
 
     [HideInInspector] public GroupBlockDetection groupBlockParent;

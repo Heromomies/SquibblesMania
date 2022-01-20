@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     }
 
     public TextMeshProUGUI playerPlaying;
+    
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     public List<GameObject> allBlocks;
