@@ -110,12 +110,6 @@ public class PlayerActionPointCardState : PlayerBaseState
             ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint,
                 playerStateManager);
         }
-
-        if (GameManager.Instance.isPathRefresh)
-        {
-            GameManager.Instance.isPathRefresh = false;
-        }
-        
     }
 
     #endregion
@@ -142,8 +136,9 @@ public class PlayerActionPointCardState : PlayerBaseState
             //Foreach possible path in our currentCheckedBlock
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
-                
+               
                 Vector3 pathParentPos = path.nextPath.transform.parent.position;
+                
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
                 if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
                     path.nextPath.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
@@ -163,6 +158,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
+            GameManager.Instance.isPathRefresh = false;
             ColorPossiblePaths(player.nextBlockPath, Color.grey);
             EnterState(player);
         }
@@ -202,8 +198,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
+            Vector3 pathParentPos = path.nextPath.transform.parent.position;
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive)
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
             {
                 nextBlocks.Add(path.nextPath);
 
@@ -238,9 +235,11 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach possible path in our currentBlock
         foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
         {
+            
+            Vector3 pathParentPos = path.nextPath.transform.parent.position;
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
             if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                currentBlock.GetComponent<Node>().isActive)
+                currentBlock.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
@@ -269,13 +268,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
 
-
+       
         //While the player selected block is != to the block wich player supposed to be 
         while (block != player.currentBlockPlayerOn)
         {
             //We add this block to our list final pathfinding
             player.finalPathFinding.Add(block);
-
+            
             //If in our selected block, the precedent block is not nul then the block become the past block
             if (block.GetComponent<Node>().previousBlock != null)
             {

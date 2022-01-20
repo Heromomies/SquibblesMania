@@ -49,7 +49,7 @@ public class MovementBlockManager : MonoBehaviour
 
         TouchManager.Instance.blockParent.DOMove(
             new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
-            0.25f);
+            0.2f);
         yield return new WaitForSeconds(0.3f);
 
         //We want to substract action point from the current player if he move up/down the block
@@ -65,12 +65,12 @@ public class MovementBlockManager : MonoBehaviour
             {
                 Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
                 playerOnGroupBlock.DOMove(
-                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), 0.25f);
+                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), 0.2f);
             }
-
             yield return new WaitForSeconds(0.3f);
         }
 
+        
 
         ResetPreviewPlatform();
         isMovingBlock = false;
@@ -107,7 +107,7 @@ public class MovementBlockManager : MonoBehaviour
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
         TouchManager.Instance.blockParent.DOMove(
             new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
-            0.25f);
+            0.2f);
         yield return new WaitForSeconds(0.3f);
 
         GameManager.Instance.currentPlayerTurn.playerActionPoint--;
@@ -124,13 +124,12 @@ public class MovementBlockManager : MonoBehaviour
             {
                 Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
                 playerOnGroupBlock.DOMove(
-                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), 0.25f);
+                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), 0.2f);
             }
-
             yield return new WaitForSeconds(0.3f);
         }
 
-
+        
         ResetPreviewPlatform();
 
         isMovingBlock = false;
