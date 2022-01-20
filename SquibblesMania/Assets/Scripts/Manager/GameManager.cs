@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         players[0].playerTeam = Player.PlayerTeam.TeamOne;
         players[1].playerTeam = Player.PlayerTeam.TeamTwo;
         players[2].playerTeam = Player.PlayerTeam.TeamOne;
-        players[3].playerTeam = Player.PlayerTeam.TeamOne;
+        players[3].playerTeam = Player.PlayerTeam.TeamTwo;
     }
 
     void StartGame()
