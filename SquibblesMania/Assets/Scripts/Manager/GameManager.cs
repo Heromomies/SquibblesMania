@@ -132,13 +132,13 @@ public class GameManager : MonoBehaviour
         
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
-           cameraScript.OrbitYMaxDegrees = actualCamPreset.rotateClamp;
-            cameraScript.OrbitXMaxDegrees = 180;
+           cameraScript.OrbitYMaxDegrees = 0;
+           cameraScript.OrbitXMaxDegrees = 0;
         }
         else
         {
-            cameraScript.OrbitXMaxDegrees = actualCamPreset.rotateClamp;
-            cameraScript.OrbitYMaxDegrees = 180;
+            cameraScript.OrbitXMaxDegrees = 0;
+            cameraScript.OrbitYMaxDegrees = 0;
         }
 
         _count++;
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-        //CamConfig(_count);
+        CamConfig(_count);
     }
 
     public void ShowEndZone()
