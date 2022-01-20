@@ -88,6 +88,8 @@ public class EventManager : MonoBehaviour
 
 	public void AddPointForWalkOnCase(int i)
 	{
+		_condition.conditions[1].numberOfSteps -= i;
+		textToReleaseEvent[1].text = _condition.conditions[1].conditionToRelease + _condition.conditions[1].numberOfSteps;
 	}
 
 	public void AddPointForMovingCase(int i) // Decrease point when moving case
@@ -137,6 +139,13 @@ public class EventManager : MonoBehaviour
 
 	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
 	{
+		if (_condition.conditions[1].numberOfSteps <= 0)
+		{
+			textToReleaseEvent[1].color = Color.green;
+			textToReleaseEvent[1].text = "Le nombre de cases déplacées a été atteint";
+			canvasButton.SetActive(true);
+			_numberEvent = 1;
+		}
 	}
 
 	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
