@@ -160,7 +160,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             GameManager.Instance.isPathRefresh = false;
             ColorPossiblePaths(player.nextBlockPath, Color.grey);
-            EnterState(player);
+            PreviewPath(GameManager.Instance.currentPlayerTurn.playerActionPoint, player);
         }
     }
 
