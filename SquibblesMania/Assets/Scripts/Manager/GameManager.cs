@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
         public Vector3 camRot;
         public float rotateClamp;
         public GameObject uiGameObject;
+        public GameObject panelButtonEvent;
         public GameObject buttonNextTurn;
         public TextMeshProUGUI actionPointText;
     }

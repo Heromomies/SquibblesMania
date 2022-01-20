@@ -17,7 +17,7 @@ public class EventManager : MonoBehaviour
 	public List<GameObject> listZoneSouthWest;
 	public List<GameObject> listZoneSouthEst;
 
-	[Space] [Header("CANVAS")] public GameObject canvasButton;
+	[Space] [Header("CANVAS")]
 	public List<TextMeshProUGUI> textToReleaseEvent;
 
 	[Space] [Header("YETI EVENT")] public List<Transform> yetiSpawn;
@@ -131,7 +131,7 @@ public class EventManager : MonoBehaviour
 
 			_turnNumber = GameManager.Instance.turnCount;
 
-			canvasButton.SetActive(true);
+			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
 			_numberEvent = 0;
 			_eventOne = true;
 		}
@@ -143,7 +143,7 @@ public class EventManager : MonoBehaviour
 		{
 			textToReleaseEvent[1].color = Color.green;
 			textToReleaseEvent[1].text = "Le nombre de cases déplacées a été atteint";
-			canvasButton.SetActive(true);
+			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
 			_numberEvent = 1;
 		}
 	}
@@ -154,7 +154,7 @@ public class EventManager : MonoBehaviour
 		{
 			textToReleaseEvent[2].color = Color.green;
 			textToReleaseEvent[2].text = "Le nombre de cases déplacées a été atteint";
-			canvasButton.SetActive(true);
+			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
 			_numberEvent = 2;
 		}
 	}
@@ -187,7 +187,7 @@ public class EventManager : MonoBehaviour
 	void LaunchEvent(int numberEvent)
 	{
 		events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
-		canvasButton.SetActive(false);
+		GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(false);
 		_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
 	}
 
