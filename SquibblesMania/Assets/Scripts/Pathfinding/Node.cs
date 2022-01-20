@@ -15,7 +15,15 @@ public class Node : MonoBehaviour
     [HideInInspector] public GroupBlockDetection groupBlockParent;
 
     private float radius = 1f;
+    public enum ColorBloc
+    {
+        Red = 0,
+        Yellow = 1,
+        Blue = 2,
+        Green = 3
+    }
 
+    public ColorBloc colorBloc;
     // Start is called before the first frame update
     void Awake()
     {
