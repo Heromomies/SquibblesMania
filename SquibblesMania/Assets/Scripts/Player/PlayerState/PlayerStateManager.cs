@@ -83,7 +83,6 @@ public class PlayerStateManager : Player
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
-                //Debug.Log(hit.collider.gameObject.GetComponent<Node>().colorBloc);
             }
         }
         else
