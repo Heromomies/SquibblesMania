@@ -90,9 +90,14 @@ public class GameManager : MonoBehaviour
         }
 
         players[0].playerTeam = Player.PlayerTeam.TeamOne;
+        players[0].gameObject.GetComponent<Renderer>().material.color = Color.red;
         players[1].playerTeam = Player.PlayerTeam.TeamTwo;
+        players[1].gameObject.GetComponent<Renderer>().material.color = Color.blue;
         players[2].playerTeam = Player.PlayerTeam.TeamOne;
+        players[2].gameObject.GetComponent<Renderer>().material.color = Color.red;
         players[3].playerTeam = Player.PlayerTeam.TeamTwo;
+        players[3].gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        
     }
 
     void StartGame()
