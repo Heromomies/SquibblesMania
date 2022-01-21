@@ -33,8 +33,7 @@ public class MovementBlockManager : MonoBehaviour
         {
             EventManager.Instance.AddPointForMovingCase(1);
         }
-
-        TouchManager.Instance.blockParent = TouchManager.Instance.Hit.collider.gameObject.transform.parent;
+        
 
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
 
@@ -94,8 +93,7 @@ public class MovementBlockManager : MonoBehaviour
         {
             EventManager.Instance.AddPointForMovingCase(1);
         }
-
-        TouchManager.Instance.blockParent = TouchManager.Instance.Hit.collider.gameObject.transform.parent;
+        
 
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
         if (TouchManager.Instance.blockParent.position.y <= 0)

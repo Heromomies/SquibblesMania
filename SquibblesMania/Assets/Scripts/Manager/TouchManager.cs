@@ -145,7 +145,8 @@ public class TouchManager : MonoBehaviour
                 MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(false);
                 //Take the block group parent from hit block gameobject
                 GroupBlockDetection blockGroupParent = Hit.transform.parent.GetComponent<GroupBlockDetection>();
-
+                
+                
                 //Take the current player position
                 Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
                 //Take the current block group selected position
@@ -156,6 +157,7 @@ public class TouchManager : MonoBehaviour
                 buttonGoToTheBlock.interactable = true;
 
                 blockCurrentlySelected = Hit.transform.gameObject;
+                blockParent = Hit.collider.gameObject.transform.parent;
                 //If the current block group if below or above the player pos
                 if (blockGroupParentPos.y + 1 > currentPlayerPos.y || blockGroupParentPos.y + 1 < currentPlayerPos.y)
                 {
