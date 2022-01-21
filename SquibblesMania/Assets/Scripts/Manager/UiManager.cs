@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UiManager : MonoBehaviour
 {
@@ -62,6 +63,18 @@ public class UiManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
+    public void Restart(string sceneName)
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        
+    }
+
+    public void MenuStart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
     public void SeeCondition()
     {
         if (!conditionEvent.activeSelf)
