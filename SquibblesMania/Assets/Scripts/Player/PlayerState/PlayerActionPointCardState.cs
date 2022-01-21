@@ -55,7 +55,11 @@ public class PlayerActionPointCardState : PlayerBaseState
             }
         }
 
-
+        if (actionPoint > indexBlockNearby)
+        {
+            ColorPossiblePaths(finalPreviewPath, Color.white);
+        }
+        
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
 
@@ -68,8 +72,14 @@ public class PlayerActionPointCardState : PlayerBaseState
         playerStateManager.nextBlockPath = finalPreviewPath;
 
         indexBlockNearby++;
-
-
+     
+        //If our current block is == to the player selected block then out of the loop
+        if (indexBlockNearby == actionPoint)
+        {
+            ColorPossiblePaths(finalPreviewPath, Color.white);
+            return;
+        }
+ 
         //The blocks we want to check
         List<Transform> currentCheckedBlocks = new List<Transform>();
 
@@ -88,13 +98,8 @@ public class PlayerActionPointCardState : PlayerBaseState
             currentCheckedBlocks.Add(nextBlocksPath[0]);
             nextBlocksPath.Remove(currentCheckedBlocks[0]);
         }
-
-        //If our current block is == to the player selected block then out of the loop
-        if (indexBlockNearby == actionPoint)
-        {
-            ColorPossiblePaths(finalPreviewPath, Color.white);
-            return;
-        }
+        
+      
 
         CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
@@ -103,7 +108,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             //We add in our list of path who are already visited, our currently checked blocks
             previousBlocksPath.Add(currentCheckedBlocks[i]);
         }
-
+       
         //If in our list, he stay a element, we restart the void
         if (nextBlocksPath.Any())
         {
