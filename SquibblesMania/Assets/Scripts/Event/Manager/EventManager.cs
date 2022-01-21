@@ -127,7 +127,7 @@ public class EventManager : MonoBehaviour
 		if (_condition.conditions[0].numberOfSteps <= 0)
 		{
 			textToReleaseEvent[0].color = Color.green;
-			textToReleaseEvent[0].text = "Le nombre de case a été atteint";
+			textToReleaseEvent[0].text = "Condition triggered";
 
 			_turnNumber = GameManager.Instance.turnCount;
 
@@ -142,7 +142,7 @@ public class EventManager : MonoBehaviour
 		if (_condition.conditions[1].numberOfSteps <= 0)
 		{
 			textToReleaseEvent[1].color = Color.green;
-			textToReleaseEvent[1].text = "Le nombre de cases déplacées a été atteint";
+			textToReleaseEvent[1].text = "Condition triggered";
 			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
 			_numberEvent = 1;
 		}
@@ -153,7 +153,7 @@ public class EventManager : MonoBehaviour
 		if (_condition.conditions[2].numberOfSteps <= 0)
 		{
 			textToReleaseEvent[2].color = Color.green;
-			textToReleaseEvent[2].text = "Le nombre de cases déplacées a été atteint";
+			textToReleaseEvent[2].text = "Condition triggered";
 			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
 			_numberEvent = 2;
 		}
@@ -193,6 +193,6 @@ public class EventManager : MonoBehaviour
 
 	public void OnApplicationQuit()
 	{
-		_condition.conditions[0].numberOfSteps = Random.Range(5, 10);
+		_condition.conditions[0].numberOfSteps = Random.Range(15, 20);
 	}
 }
