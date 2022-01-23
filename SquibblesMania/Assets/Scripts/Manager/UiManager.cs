@@ -37,7 +37,6 @@ public class UiManager : MonoBehaviour
     {
         
         GameManager.Instance.currentPlayerTurn.currentTouchBlock = TouchManager.Instance.Hit.transform;
-
         GameManager.Instance.currentPlayerTurn.StartPathFinding();
         TouchManager.Instance.uiInteractionParentObject.SetActive(false);
     }

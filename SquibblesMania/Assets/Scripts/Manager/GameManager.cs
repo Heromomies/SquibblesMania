@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
+    private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
 
     private void Awake()
@@ -160,17 +161,19 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-       // CamConfig(_count);
+        CamConfig(_count);
     }
 
     public void ShowEndZone()
     {
-        if (isConditionVictory)
+        if (isConditionVictory && !_isEndZoneShowed)
         {
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
             GameObject endZone = Instantiate(conditionVictory.endZone,
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
+            isConditionVictory = false;
+            _isEndZoneShowed = true;
         }
     }
 

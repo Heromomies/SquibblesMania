@@ -23,13 +23,14 @@ public class PlayerStateManager : Player
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-
+    
     private void Start()
     {
         DetectBlockBelowPlayer();
         //Assign the player to a list for know on what block group is currently on
         GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
+      
     }
 
 
@@ -55,8 +56,6 @@ public class PlayerStateManager : Player
         //If the current state of the player is when he use his action point
         if (CurrentState == PlayerActionPointCardState)
         {
-            finalPathFinding.Clear();
-
             PlayerActionPointCardState.FindPath(this);
         }
     }

@@ -53,30 +53,26 @@ public class EndZoneManager : MonoBehaviour
                 if (playerStateManager.playerTeam == Player.PlayerTeam.TeamOne)
                 {
                     playerCountTeamOne++;
+                    if (playerCountTeamOne >= 2)
+                    {
+                        Inventory inventoryTeamOne = TeamInventoryManager.Instance.inventory[0];
+                        if (inventoryTeamOne.isAllObjetAcquired)
+                        {
+                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
+                        }
+                    }
                 }
                 else if (playerStateManager.playerTeam == Player.PlayerTeam.TeamTwo)
                 {
                     playerCountTeamTwo++;
-                }
-            }
 
-            if (playerCountTeamOne >= 2)
-            {
-                foreach (Inventory playerInventory in TeamInventoryManager.Instance.inventory)
-                {
-                    if (playerInventory.inventoryTeam == Player.PlayerTeam.TeamOne)
+                    if (playerCountTeamTwo >= 2)
                     {
-                        GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
-                    }
-                }
-            }
-            else if (playerCountTeamTwo >= 2)
-            {
-                foreach (Inventory playerInventory in TeamInventoryManager.Instance.inventory)
-                {
-                    if (playerInventory.inventoryTeam == Player.PlayerTeam.TeamTwo)
-                    {
-                        GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
+                        Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
+                        if (inventoryTeamTwo.isAllObjetAcquired)
+                        {
+                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
+                        }
                     }
                 }
             }

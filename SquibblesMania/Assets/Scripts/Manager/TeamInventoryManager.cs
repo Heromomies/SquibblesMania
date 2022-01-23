@@ -20,6 +20,7 @@ public class TeamInventoryManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
     }
 
     public void AddResourcesToInventory(Ressources resources, Player.PlayerTeam playerTeam)
@@ -75,6 +76,7 @@ public class TeamInventoryManager : MonoBehaviour
             }
         }
 
+        inventory.isAllObjetAcquired = true;
         return true;
     }
 }
@@ -84,7 +86,7 @@ public class Inventory
 {
     public Player.PlayerTeam inventoryTeam;
     public List<Objet> items = new List<Objet>();
-
+    public bool isAllObjetAcquired;
     [Serializable]
     public class Objet
     {
