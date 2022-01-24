@@ -6,6 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class Ressources : Item
 {
+    public GameObject particleSystemPrefab;
+    
     [Serializable]
     public enum Types
     {
@@ -35,6 +37,8 @@ public class Ressources : Item
         {
             PlayerStateManager player = other.gameObject.GetComponent<PlayerStateManager>();
             TeamInventoryManager.Instance.AddResourcesToInventory(this, player.playerTeam);
+            GameObject particle = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
+            Destroy(particle, 2f);
         }
     }
 }
