@@ -14,7 +14,7 @@ public class UiManager : MonoBehaviour
     public TextMeshProUGUI turnCountText;
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-    public GameObject conditionEvent;
+    public GameObject conditionEvent, conditionInventory;
     
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
@@ -79,10 +79,12 @@ public class UiManager : MonoBehaviour
         if (!conditionEvent.activeSelf)
         {
             conditionEvent.SetActive(true);
+            conditionInventory.SetActive(true);
         }
         else
         {
             conditionEvent.SetActive(false);
+            conditionInventory.SetActive(false);
         }
            
     }
