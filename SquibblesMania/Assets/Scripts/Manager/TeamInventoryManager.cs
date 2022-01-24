@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TeamInventoryManager : MonoBehaviour
@@ -20,7 +21,6 @@ public class TeamInventoryManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void AddResourcesToInventory(Ressources resources, Player.PlayerTeam playerTeam)
@@ -33,6 +33,7 @@ public class TeamInventoryManager : MonoBehaviour
                 {
                     case Ressources.Types.Wood:
                         playerTeamInventory.items[0].isTeamHasObjet = true;
+                        playerTeamInventory.items[0].objetTextUi.color = Color.green;
                         if (CheckForVictoryConditions(playerTeamInventory))
                         {
                             GameManager.Instance.isConditionVictory = true;
@@ -43,6 +44,7 @@ public class TeamInventoryManager : MonoBehaviour
                     case Ressources.Types.Rock:
 
                         playerTeamInventory.items[1].isTeamHasObjet = true;
+                        playerTeamInventory.items[1].objetTextUi.color = Color.green;
                         if (CheckForVictoryConditions(playerTeamInventory))
                         {
                             GameManager.Instance.isConditionVictory = true;
@@ -53,6 +55,7 @@ public class TeamInventoryManager : MonoBehaviour
                     case Ressources.Types.Rope:
 
                         playerTeamInventory.items[2].isTeamHasObjet = true;
+                        playerTeamInventory.items[2].objetTextUi.color = Color.green;
                         if (CheckForVictoryConditions(playerTeamInventory))
                         {
                             GameManager.Instance.isConditionVictory = true;
@@ -87,12 +90,12 @@ public class Inventory
     public Player.PlayerTeam inventoryTeam;
     public List<Objet> items = new List<Objet>();
     public bool isAllObjetAcquired;
+
     [Serializable]
     public class Objet
     {
         public string objetName;
         public bool isTeamHasObjet;
+        public TextMeshProUGUI objetTextUi;
     }
-
-  
 }
