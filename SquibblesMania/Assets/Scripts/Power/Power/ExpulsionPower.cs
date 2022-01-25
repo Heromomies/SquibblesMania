@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ExpulsionPower : MonoBehaviour, IManagePower
 {
+    public void ShowEvent()
+    {
+        
+    }
+
     public void LaunchPower()
     {
         switch (PowerManager.Instance.raycastPos)

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwapPower : MonoBehaviour
+public class SwapPower : MonoBehaviour, IManagePower
 {
 	public int range;
 	private GameObject _playerToSwap;
@@ -19,11 +19,10 @@ public class SwapPower : MonoBehaviour
 		
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			Collide();
+			LaunchPower();
 		}
 	}
-
-	public void Collide()
+	public void LaunchPower()
 	{
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, range, layer);
 		foreach (var hitCollider in hitColliders)
@@ -33,17 +32,18 @@ public class SwapPower : MonoBehaviour
 		
 		_pos = hitColliders[0].transform.position;
 		SwapPosition(hitColliders[0].transform, hitColliders[1].transform);
-
 	}
+	
 	void SwapPosition(Transform playerOne, Transform playerTwo)
 	{
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
 	}
 
-	private void OnDrawGizmos()
+	public void ShowEvent()
 	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, range);
+		
 	}
+
+	
 }
