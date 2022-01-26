@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3226517119791555223}
   - component: {fileID: 3226517119791555226}
   - component: {fileID: 3226517119791555217}
+  - component: {fileID: 8398261687759252214}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -86,7 +87,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28dc0e77eac45a34b845e50615bf9bb7, type: 3}
   m_Name: 
@@ -173,6 +174,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
+--- !u!114 &8398261687759252214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226517119791555227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2010c74954f17124eb05b041c7f579f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  uiButtonCams:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  buttonTopViewMode: {fileID: 0}
+  buttonBaseViewMode: {fileID: 0}
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0
