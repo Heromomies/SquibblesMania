@@ -77,6 +77,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
-		gameObject.SetActive(false);
+		PowerManager.Instance.DeactivatePower(0);
 	}
 }

@@ -46,7 +46,7 @@ public class PowerManager : MonoBehaviour
 		{
 			if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
 			{
-				Debug.Log("i'm actually touching" + hit.collider.name);
+				//Debug.Log("i'm actually touching" + hit.collider.name);
 				
 				buttonOne.interactable = true;
 				buttonTwo.interactable = true;
@@ -68,6 +68,22 @@ public class PowerManager : MonoBehaviour
 				break;
 		}
 	}
+
+	public void DeactivatePower(int powerNumberCoroutine)
+	{
+		switch (powerNumberCoroutine)
+		{
+			case 0 : powers[0].SetActive(false);
+				break;
+			case 1 : powers[1].SetActive(false);
+				break;
+			case 2 : powers[2].SetActive(false);
+				break;
+			case 3 : powers[3].SetActive(false);
+				break;
+		}
+	}
+	
 	public void ButtonClicked()
 	{
 		buttonOne.interactable = false;
