@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IManagePower
 {
-	public void ShowEvent();
+	public void ShowPower();
 	public void LaunchPower();
 }

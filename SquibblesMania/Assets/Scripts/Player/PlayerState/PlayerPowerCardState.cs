@@ -9,7 +9,6 @@ public class PlayerPowerCardState : PlayerBaseState
     //The state when player use his card power
     public override void EnterState(PlayerStateManager player)
     {
-        PowerManager.Instance.RaycastEvent();
         ExitState(player);
     }
 

@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < allBlocks.Count; i++)
         {
-            int randomLocation = Random.Range(0, 2);
+            int randomLocation = Random.Range(0, 1);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
                 allBlocks[i].transform.position.z);
         }
@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
         players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
+        PowerManager.Instance.PlayerChangeTurn();
         //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
@@ -161,7 +162,8 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-        CamConfig(_count);
+       // CamConfig(_count);
+        PowerManager.Instance.PlayerChangeTurn();
     }
 
     public void ShowEndZone()
