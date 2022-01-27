@@ -189,6 +189,9 @@ namespace DigitalRubyShared
 
         private void OnEnable()
         {
+            bool isCamButtonActivated = gameObject.GetComponent<CameraManager>().enabled;
+
+
             // create a scale gesture to zoom orbiter in and out
             ScaleGesture = new ScaleGestureRecognizer { ZoomSpeed = ZoomSpeed };
             ScaleGesture.StateUpdated += ScaleGesture_Updated;
@@ -210,7 +213,7 @@ namespace DigitalRubyShared
                 PanGesture.PlatformSpecificView = OrbitTarget.gameObject;
             }
 
-            if (LookAtTarget)
+            if (LookAtTarget && isCamButtonActivated)
             {
                 // point oribiter at target
                 Orbiter.transform.LookAt(OrbitTarget.transform);

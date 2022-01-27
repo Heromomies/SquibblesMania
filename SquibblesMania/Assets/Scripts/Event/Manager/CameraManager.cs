@@ -14,13 +14,13 @@ public class CameraManager : MonoBehaviour
     private static CameraManager _cameraManager;
 
     public static CameraManager Instance => _cameraManager;
-    [Header("UI CAM BUTTONS")]
 
-    [SerializeField] private GameObject[] uiButtonCams;
+    [Header("UI CAM BUTTONS")] [SerializeField]
+    private GameObject[] uiButtonCams;
 
 
-    [SerializeField] public GameObject buttonTopViewMode, buttonBaseViewMode;
-    
+    [SerializeField] private GameObject[] buttonViewMode;
+
     private void OnEnable()
     {
         foreach (GameObject uiButton in uiButtonCams)
@@ -47,33 +47,49 @@ public class CameraManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _cam = Camera.main.transform;   
-        buttonBaseViewMode.SetActive(false);
+        _cam = Camera.main.transform;
+        buttonViewMode[0].SetActive(false);
+        buttonViewMode[2].SetActive(false);
     }
 
 
     public void TopViewMode()
     {
-        buttonBaseViewMode.SetActive(true);
-        buttonTopViewMode.SetActive(false);
+        int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
+        if (presetNumber == 1 || presetNumber == 2)
+        {
+            buttonViewMode[0].SetActive(true);
+            buttonViewMode[1].SetActive(false);
+        }
+        else if (presetNumber == 3 || presetNumber == 4)
+        {
+            buttonViewMode[2].SetActive(true);
+            buttonViewMode[3].SetActive(false);
+        }
+
         _cam.RotateAround(target.transform.position, _cam.right, 45f);
     }
 
     public void BaseViewMode()
     {
-        buttonBaseViewMode.SetActive(false);
-        buttonTopViewMode.SetActive(true);
+        int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
+        if (presetNumber == 1 || presetNumber == 2)
+        {
+            buttonViewMode[0].SetActive(false);
+            buttonViewMode[1].SetActive(true);
+        }
+        else if (presetNumber == 3 || presetNumber == 4)
+        {
+            buttonViewMode[2].SetActive(false);
+            buttonViewMode[3].SetActive(true);
+        }
+
         _cam.RotateAround(target.transform.position, _cam.right, -45f);
     }
 
-    public void RotateCameraRight()
-    {
-        _cam.RotateAround(target.transform.position, Vector3.up, 90f);
-    }
 
-
-    public void RotateCameraLeft()
+    public void RotateCamera(float angle)
     {
-        _cam.RotateAround(target.transform.position, Vector3.up, -90f);
+        _cam.RotateAround(target.transform.position, Vector3.up, angle);
     }
 }
