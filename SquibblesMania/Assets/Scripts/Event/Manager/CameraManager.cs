@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour
     private static CameraManager _cameraManager;
 
     public static CameraManager Instance => _cameraManager;
+    [Header("UI CAM BUTTONS")]
 
     [SerializeField] private GameObject[] uiButtonCams;
 

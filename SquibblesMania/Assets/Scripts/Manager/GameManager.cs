@@ -133,9 +133,11 @@ public class GameManager : MonoBehaviour
         cameraTransform.rotation = target;
         actualCamPreset = camPreSets[countTurn];
         
+        //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.uiGameObject.SetActive(true);
         TouchManager.Instance.AddFingerScriptPassTroughObject();
+       
         
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
@@ -161,7 +163,11 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-      //  CamConfig(_count);
+        CamConfig(_count);
+        if (CameraManager.Instance.enabled)
+        {
+            UiManager.Instance.PlayerChangeCamButton();
+        }
     }
 
     public void ShowEndZone()
