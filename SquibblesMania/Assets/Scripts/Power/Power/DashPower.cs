@@ -38,36 +38,33 @@ public class DashPower : MonoBehaviour, IManagePower
 							break;
 					}
 
-					RaycastHit hitPlayerTouched;
-					if (Physics.Raycast(hit.transform.position, _vectorRaycast[numberDirectionVector], out hitPlayerTouched, distanceBetweenTwoPlayers))
+					if (Physics.Raycast(hit.transform.position, _vectorRaycast[numberDirectionVector], out var hitPlayerTouched, distanceBetweenTwoPlayers))
 					{
 						var distanceBetweenBlockAndPlayerTouched = Vector3.Distance(hit.transform.position,
 							hitPlayerTouched.transform.position);
 						
 						var distanceBetweenTwoPlayersWhenABlockIsBehind = Vector3.Distance(position, hit.collider.transform.position);
-						//Debug.Log(distanceBetweenTwoPlayersWhenABlockIsBehind);
+						distanceBetweenTwoPlayersWhenABlockIsBehind = (int) distanceBetweenTwoPlayersWhenABlockIsBehind;
+						
+						
 						switch (distanceBetweenTwoPlayersWhenABlockIsBehind)
 						{
 							case 1:
-								Debug.Log("I do nothing i swear");
 								break;
 							case 2:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									position + _vectorRaycast[numberDirectionVector] * 
 									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
-								Debug.Log((distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 1));
 								break;
 							case 3:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									position + _vectorRaycast[numberDirectionVector] * 
-									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 3), 0.05f);
+									(distanceBetweenTwoPlayers -1), 0.05f);
 								break;
 						}
 
 						hit.collider.transform.DOMove(hit.collider.transform.position
 						                              + _vectorRaycast[numberDirectionVector] * (distanceBetweenBlockAndPlayerTouched - 1), 1f);
-
-						
 					}
 					else
 					{
