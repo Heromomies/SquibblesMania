@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class GrabPower : MonoBehaviour, IManagePower
@@ -7,7 +8,7 @@ public class GrabPower : MonoBehaviour, IManagePower
 	public int grabRange;
 
 
-	public List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
 	void Start()
 	{
@@ -28,8 +29,8 @@ public class GrabPower : MonoBehaviour, IManagePower
 			}
 			else if (hit.collider.gameObject.layer == 6)
 			{
-				GameManager.Instance.currentPlayerTurn.transform.position += _vectorRaycast[numberDirectionVector];
-				hit.collider.transform.position -= _vectorRaycast[numberDirectionVector];
+				GameManager.Instance.currentPlayerTurn.transform.DOMove(GameManager.Instance.currentPlayerTurn.transform.position + _vectorRaycast[numberDirectionVector], 1f);
+				hit.collider.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector], 1f);
 			}
 		}
 	}
