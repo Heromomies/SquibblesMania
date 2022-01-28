@@ -9848,8 +9848,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 887761963}
-        m_TargetAssemblyTypeName: GrabPower, Assembly-CSharp
+      - m_Target: {fileID: 1466380976}
+        m_TargetAssemblyTypeName: DashPower, Assembly-CSharp
         m_MethodName: ButtonClickedGrab
         m_Mode: 3
         m_Arguments:
@@ -10150,50 +10150,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883822033}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &887761961
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 887761962}
-  - component: {fileID: 887761963}
-  m_Layer: 0
-  m_Name: Grab Power
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &887761962
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 887761961}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &887761963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 887761961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5d89484a63352468ff83d7774fa20d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabRange: 3
 --- !u!114 &899762771 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 899762771, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
@@ -16814,6 +16770,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431875321}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1466380974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1466380975}
+  - component: {fileID: 1466380976}
+  m_Layer: 0
+  m_Name: Dash Power
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1466380975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466380974}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466380976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466380974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b13040a39b89da40a102e3c5bcbf953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashRange: 3
 --- !u!1 &1471639978
 GameObject:
   m_ObjectHideFlags: 0
@@ -17839,7 +17839,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: South
+  m_text: Down
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -18426,8 +18426,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 887761963}
-        m_TargetAssemblyTypeName: GrabPower, Assembly-CSharp
+      - m_Target: {fileID: 1466380976}
+        m_TargetAssemblyTypeName: DashPower, Assembly-CSharp
         m_MethodName: ButtonClickedGrab
         m_Mode: 3
         m_Arguments:
@@ -21332,7 +21332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: North
+  m_text: Up
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -22913,7 +22913,7 @@ GameObject:
   - component: {fileID: 2038742480}
   - component: {fileID: 2038742479}
   m_Layer: 0
-  m_Name: Button_South
+  m_Name: Button_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22983,8 +22983,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 887761963}
-        m_TargetAssemblyTypeName: GrabPower, Assembly-CSharp
+      - m_Target: {fileID: 1466380976}
+        m_TargetAssemblyTypeName: DashPower, Assembly-CSharp
         m_MethodName: ButtonClickedGrab
         m_Mode: 3
         m_Arguments:
@@ -23579,7 +23579,7 @@ GameObject:
   - component: {fileID: 2098599287}
   - component: {fileID: 2098599286}
   m_Layer: 0
-  m_Name: Button_North
+  m_Name: Button_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23649,8 +23649,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 887761963}
-        m_TargetAssemblyTypeName: GrabPower, Assembly-CSharp
+      - m_Target: {fileID: 1466380976}
+        m_TargetAssemblyTypeName: DashPower, Assembly-CSharp
         m_MethodName: ButtonClickedGrab
         m_Mode: 3
         m_Arguments:
@@ -24567,19 +24567,19 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 1013475130}
+      objectReference: {fileID: 361145808}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
-      objectReference: {fileID: 77383967}
+      objectReference: {fileID: 1013475130}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[2]
       value: 
-      objectReference: {fileID: 1189066011}
+      objectReference: {fileID: 1255682340}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[3]
       value: 
-      objectReference: {fileID: 101177145}
+      objectReference: {fileID: 77278396}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: camPreSets.Array.data[0].uiGameObject
       value: 
@@ -25196,6 +25196,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &5365709615927438413
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5365709616806789220, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_Name
+      value: Grab Power
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789220, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365709616806789223, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 70202b49bf465ce499a842c7317e2e4f, type: 3}
 --- !u!1001 &8600928336756649096
 PrefabInstance:
   m_ObjectHideFlags: 0

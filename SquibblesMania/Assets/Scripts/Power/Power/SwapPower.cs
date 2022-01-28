@@ -26,10 +26,10 @@ public class SwapPower : MonoBehaviour, IManagePower
 		_playerOne = hitColliders[0];
 		_playerTwo = hitColliders[1];
 
-		foreach (var col in hitColliders)
+		/*foreach (var col in hitColliders)
 		{
 			col.gameObject.GetComponent<Renderer>().material.color = Color.cyan;
-		}
+		}*/
 		
 		switch (hitColliders.Length)
 		{
