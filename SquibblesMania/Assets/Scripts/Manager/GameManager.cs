@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager currentPlayerTurn;
     public bool isPathRefresh;
     public int turnCount;
-    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraScript;
+    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
 
     public CamPreSets actualCamPreset;
 
@@ -53,9 +53,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _gameManager = this;
-        if (cameraScript != null)
+        if (cameraTouchScript != null)
         {
-            cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
+            cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
     }
 
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
         }
         TouchManager.Instance.RemoveFingerScriptPassThroughObject();
         
-        Transform cameraTransform = cameraScript.transform;
+        Transform cameraTransform = cameraTouchScript.transform;
 
         cameraTransform.position = camPreSets[countTurn].camPos;
 
@@ -141,13 +141,13 @@ public class GameManager : MonoBehaviour
         
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
-           cameraScript.OrbitYMaxDegrees = 0;
-           cameraScript.OrbitXMaxDegrees = 0;
+           cameraTouchScript.OrbitYMaxDegrees = 0;
+           cameraTouchScript.OrbitXMaxDegrees = 0;
         }
         else
         {
-            cameraScript.OrbitXMaxDegrees = 0;
-            cameraScript.OrbitYMaxDegrees = 0;
+            cameraTouchScript.OrbitXMaxDegrees = 0;
+            cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
         _count++;
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
         CamConfig(_count);
-        if (CameraManager.Instance.enabled)
+        if (CameraButtonManager.Instance.enabled)
         {
             UiManager.Instance.PlayerChangeCamButton();
         }

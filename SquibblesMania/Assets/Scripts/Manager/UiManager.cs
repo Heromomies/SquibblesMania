@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
@@ -110,15 +111,30 @@ public class UiManager : MonoBehaviour
         winText.text = $"{playerTeam} WIN";
     }
 
+    void SmoothResetCamPosAndRot()
+    {
+        GameObject cam = Camera.main.gameObject;
+        Vector3 targetPos = GameManager.Instance.actualCamPreset.camPos;
+        Quaternion targetRot = Quaternion.Euler(GameManager.Instance.actualCamPreset.camRot);
+        
+        cam.transform.DOMove(targetPos, 0.3f);
+        cam.transform.DORotateQuaternion(targetRot, 0.3f);
+
+    }
+
     public void ButtonChangeCamMoveUi()
     {
-        FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
+        FingersPanOrbitComponentScript cameraTouchMovement =
+            Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
 
-        if (!CameraManager.Instance.enabled)
+
+        if (!CameraButtonManager.Instance.enabled)
         {
-            CameraManager.Instance.enabled = true;
+            CameraButtonManager.Instance.enabled = true;
             cameraTouchMovement.enabled = false;
-            
+
+            CameraButtonManager.Instance.ResetBaseViewButton();
+            SmoothResetCamPosAndRot();
             int presetCamNum = GameManager.Instance.actualCamPreset.presetNumber;
 
             if (presetCamNum == 1 || presetCamNum == 2)
@@ -134,8 +150,9 @@ public class UiManager : MonoBehaviour
         }
         else
         {
-            CameraManager.Instance.enabled = false;
+            CameraButtonManager.Instance.enabled = false;
             cameraTouchMovement.enabled = true;
+            SmoothResetCamPosAndRot();
         }
     }
 

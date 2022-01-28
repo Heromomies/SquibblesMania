@@ -5,15 +5,15 @@ using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CameraManager : MonoBehaviour
+public class CameraButtonManager : MonoBehaviour
 {
     private Transform _cam;
     [SerializeField] private Transform target;
 
 
-    private static CameraManager _cameraManager;
+    private static CameraButtonManager _cameraManager;
 
-    public static CameraManager Instance => _cameraManager;
+    public static CameraButtonManager Instance => _cameraManager;
 
     [Header("UI CAM BUTTONS")] [SerializeField]
     private GameObject[] uiButtonCams;
@@ -48,10 +48,14 @@ public class CameraManager : MonoBehaviour
     void Start()
     {
         _cam = Camera.main.transform;
+        ResetBaseViewButton();
+    }
+
+    public void ResetBaseViewButton()
+    {
         buttonViewMode[0].SetActive(false);
         buttonViewMode[2].SetActive(false);
     }
-
 
     public void TopViewMode()
     {
@@ -60,14 +64,16 @@ public class CameraManager : MonoBehaviour
         {
             buttonViewMode[0].SetActive(true);
             buttonViewMode[1].SetActive(false);
+            _cam.RotateAround(target.transform.position, _cam.right, 45f);
         }
         else if (presetNumber == 3 || presetNumber == 4)
         {
             buttonViewMode[2].SetActive(true);
             buttonViewMode[3].SetActive(false);
+            _cam.RotateAround(target.transform.position, _cam.right, -45f);
         }
 
-        _cam.RotateAround(target.transform.position, _cam.right, 45f);
+        
     }
 
     public void BaseViewMode()
@@ -77,14 +83,16 @@ public class CameraManager : MonoBehaviour
         {
             buttonViewMode[0].SetActive(false);
             buttonViewMode[1].SetActive(true);
+            _cam.RotateAround(target.transform.position, _cam.right, -45f);
         }
         else if (presetNumber == 3 || presetNumber == 4)
         {
             buttonViewMode[2].SetActive(false);
             buttonViewMode[3].SetActive(true);
+            _cam.RotateAround(target.transform.position, _cam.right, 45f);
         }
 
-        _cam.RotateAround(target.transform.position, _cam.right, -45f);
+        
     }
 
 

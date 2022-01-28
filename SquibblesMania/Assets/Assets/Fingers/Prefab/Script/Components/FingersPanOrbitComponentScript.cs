@@ -189,7 +189,7 @@ namespace DigitalRubyShared
 
         private void OnEnable()
         {
-            bool isCamButtonActivated = gameObject.GetComponent<CameraManager>().enabled;
+            bool isCamButtonActivated = gameObject.GetComponent<CameraButtonManager>().enabled;
 
 
             // create a scale gesture to zoom orbiter in and out
