@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
@@ -29,15 +30,52 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					switch (distanceBetweenTwoPlayers)
 					{
-						case 1: distanceBetweenTwoPlayers = 3;
+						case 1:
+							distanceBetweenTwoPlayers = 3;
 							break;
-						case 3: distanceBetweenTwoPlayers = 1;
+						case 3:
+							distanceBetweenTwoPlayers = 1;
 							break;
 					}
-					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
-					hit.collider.transform.DOMove(hit.collider.transform.position
-					                              + _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, 1f);
+
+					RaycastHit hitPlayerTouched;
+					if (Physics.Raycast(hit.transform.position, _vectorRaycast[numberDirectionVector], out hitPlayerTouched, distanceBetweenTwoPlayers))
+					{
+						var distanceBetweenBlockAndPlayerTouched = Vector3.Distance(hit.transform.position,
+							hitPlayerTouched.transform.position);
+						
+						var distanceBetweenTwoPlayersWhenABlockIsBehind = Vector3.Distance(position, hit.collider.transform.position);
+						//Debug.Log(distanceBetweenTwoPlayersWhenABlockIsBehind);
+						switch (distanceBetweenTwoPlayersWhenABlockIsBehind)
+						{
+							case 1:
+								Debug.Log("I do nothing i swear");
+								break;
+							case 2:
+								GameManager.Instance.currentPlayerTurn.transform.DOMove(
+									position + _vectorRaycast[numberDirectionVector] * 
+									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
+								Debug.Log((distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 1));
+								break;
+							case 3:
+								GameManager.Instance.currentPlayerTurn.transform.DOMove(
+									position + _vectorRaycast[numberDirectionVector] * 
+									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 3), 0.05f);
+								break;
+						}
+
+						hit.collider.transform.DOMove(hit.collider.transform.position
+						                              + _vectorRaycast[numberDirectionVector] * (distanceBetweenBlockAndPlayerTouched - 1), 1f);
+
+						
+					}
+					else
+					{
+						GameManager.Instance.currentPlayerTurn.transform.DOMove(
+							position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
+						hit.collider.transform.DOMove(hit.collider.transform.position
+						                              + _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, 1f);
+					}
 				}
 			}
 		}

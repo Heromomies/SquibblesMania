@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     {
         //Choose Randomly a player to start
        
-        int numberPlayerToStart = Random.Range(0, players.Count);
+        int numberPlayerToStart = 0;
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
      
