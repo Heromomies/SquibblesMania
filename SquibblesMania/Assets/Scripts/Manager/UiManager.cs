@@ -64,6 +64,8 @@ public class UiManager : MonoBehaviour
 
     public void ButtonNextTurn()
     {
+        NFCManager.Instance.numberOfTheCard = 0;
+        NFCManager.Instance.cardDetected = false;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 

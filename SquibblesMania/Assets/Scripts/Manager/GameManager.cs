@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
      
-        players[numberPlayerToStart].StartState();
+        //players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
         PowerManager.Instance.PlayerChangeTurn();

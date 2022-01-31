@@ -15,12 +15,19 @@ public class PlayerCardState : PlayerBaseState
 			player.stunCount--;
 			PlayerIsStun(player);
 		}
-		player.playerActionPoint = Random.Range(1, 6);
-		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
-		player.isPlayerInActionCardState = true;
-		UiManager.Instance.buttonNextTurn.SetActive(false);
-		player.SwitchState(player.PlayerActionPointCardState);
-	
+
+		if (NFCManager.Instance.numberOfTheCard != 0)
+		{
+			player.playerActionPoint = NFCManager.Instance.numberOfTheCard;
+			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
+			player.isPlayerInActionCardState = true;
+			UiManager.Instance.buttonNextTurn.SetActive(false);
+			player.SwitchState(player.PlayerActionPointCardState);
+		}
+		else
+		{
+			Debug.Log("My action point are equivalent to 0");
+		}
 	}
 
 	void PlayerIsStun(PlayerStateManager player)
