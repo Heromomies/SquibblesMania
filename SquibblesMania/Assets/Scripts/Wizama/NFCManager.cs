@@ -1,29 +1,42 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine; 
 using Wizama.Hardware.Antenna;  
 public class NFCManager : MonoBehaviour
 {
+	public enum Color
+	{
+		Red = 0,
+		Blue = 1, 
+		Yellow = 2, 
+		Green = 3
+	}
+	
+	public NFC_DEVICE_ID[] nfc;
+	public char[] charCards;
 	void Start()  {  
-		NFCController.StartPolling( NFC_DEVICE_ID.ANTENNA_1, NFC_DEVICE_ID.ANTENNA_8, NFC_DEVICE_ID.ANTENNA_14, NFC_DEVICE_ID.ANTENNA_21);
+		NFCController.StartPolling(nfc);
 	}   
     
 	void OnDisable()  {  
 		NFCController.StopPolling();  
 	}   
-    
-	void FixedUpdate()
+	
+	void Update()
 	{
-		List<NFCTag> antenna1Tags = NFCController.GetTags(NFC_DEVICE_ID.ANTENNA_1);
-		foreach (NFCTag tag in antenna1Tags)  
-			Debug.Log(tag.Data + " placed on antenna 1");
-        
-		List<NFCTag>[] allAntennaTags = NFCController.GetTags(); 
-		int count = 0;  
-		foreach (List<NFCTag> Tags in allAntennaTags)  
-			count += Tags.Count;   
-            
-		//one.text = "There is " + count + " tags detected in total";  
-		Debug.Log("There is " + count + " tags detected in total");
+		List<NFCTag> antenna = NFCController.GetTags(nfc);
+		foreach (NFCTag tag in antenna)
+		{
+			//Debug.Log("the tag data is " + tag.Data);
+			charCards = tag.Data.ToCharArray();
+			if (charCards[1].Equals('B'))
+			{
+				Debug.Log("The color card is blue");
+			}
+		}
+		
+		
+		
 	} 
 }
