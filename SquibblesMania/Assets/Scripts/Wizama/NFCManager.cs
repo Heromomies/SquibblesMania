@@ -1,20 +1,30 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine; 
+using UnityEngine;
+using UnityEngine.UI;
 using Wizama.Hardware.Antenna;  
 public class NFCManager : MonoBehaviour
 {
-	public enum Color
-	{
-		Red = 0,
-		Blue = 1, 
-		Yellow = 2, 
-		Green = 3
-	}
-	
 	public NFC_DEVICE_ID[] nfc;
-	public char[] charCards;
+	public char[] _charCards;
+	public int numberOfTheCard;
+	[HideInInspector] public int colorInt;
+	
+	#region Singleton
+
+	private static NFCManager nfcManager;
+
+	public static NFCManager Instance => nfcManager;
+	// Start is called before the first frame update
+
+	private void Awake()
+	{
+		nfcManager = this;
+	}
+
+	#endregion
+	
 	void Start()  {  
 		NFCController.StartPolling(nfc);
 	}   
@@ -29,14 +39,36 @@ public class NFCManager : MonoBehaviour
 		foreach (NFCTag tag in antenna)
 		{
 			//Debug.Log("the tag data is " + tag.Data);
-			charCards = tag.Data.ToCharArray();
-			if (charCards[1].Equals('B'))
-			{
-				Debug.Log("The color card is blue");
-			}
+			_charCards = tag.Data.ToCharArray();
+			
+			DetectedCard(_charCards[0] - '0', _charCards[1]);
 		}
+	}
+
+	public void DetectedCard(int valueCard, char colorCard)
+	{
+		numberOfTheCard = valueCard;
 		
+		Debug.Log(numberOfTheCard);
 		
-		
-	} 
+		switch (colorCard)
+		{
+			case 'B' :
+				colorInt = 0;
+				Debug.Log("Blue + " + valueCard);
+				break;
+			case 'R' :
+				colorInt = 1;
+				Debug.Log("Red");
+				break;
+			case 'G' :
+				colorInt = 2;
+				Debug.Log("Green");
+				break;
+			case 'Y' :
+				colorInt = 3;
+				Debug.Log("Yellow");
+				break;
+		}
+	}
 }
