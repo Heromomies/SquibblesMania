@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager currentPlayerTurn;
     public bool isPathRefresh;
     public int turnCount;
-    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraScript;
+    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
 
     public CamPreSets actualCamPreset;
 
@@ -53,9 +53,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _gameManager = this;
-        if (cameraScript != null)
+        if (cameraTouchScript != null)
         {
-            cameraScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
+            cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
     }
 
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         }
         TouchManager.Instance.RemoveFingerScriptPassThroughObject();
         
-        Transform cameraTransform = cameraScript.transform;
+        Transform cameraTransform = cameraTouchScript.transform;
 
         cameraTransform.position = camPreSets[countTurn].camPos;
 
@@ -134,19 +134,21 @@ public class GameManager : MonoBehaviour
         cameraTransform.rotation = target;
         actualCamPreset = camPreSets[countTurn];
         
+        //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.uiGameObject.SetActive(true);
         TouchManager.Instance.AddFingerScriptPassTroughObject();
+       
         
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
-           cameraScript.OrbitYMaxDegrees = 0;
-           cameraScript.OrbitXMaxDegrees = 0;
+           cameraTouchScript.OrbitYMaxDegrees = 0;
+           cameraTouchScript.OrbitXMaxDegrees = 0;
         }
         else
         {
-            cameraScript.OrbitXMaxDegrees = 0;
-            cameraScript.OrbitYMaxDegrees = 0;
+            cameraTouchScript.OrbitXMaxDegrees = 0;
+            cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
         _count++;
@@ -164,6 +166,11 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[playerNumberTurn];
        // CamConfig(_count);
         PowerManager.Instance.PlayerChangeTurn();
+        CamConfig(_count);
+        if (CameraButtonManager.Instance.enabled)
+        {
+            UiManager.Instance.PlayerChangeCamButton();
+        }
     }
 
     public void ShowEndZone()
@@ -171,8 +178,7 @@ public class GameManager : MonoBehaviour
         if (isConditionVictory && !_isEndZoneShowed)
         {
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
-            GameObject endZone = Instantiate(conditionVictory.endZone,
-                conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
+            GameObject endZone = Instantiate(conditionVictory.endZone, conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
             isConditionVictory = false;
             _isEndZoneShowed = true;

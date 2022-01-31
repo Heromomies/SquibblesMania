@@ -189,6 +189,9 @@ namespace DigitalRubyShared
 
         private void OnEnable()
         {
+            bool isCamButtonActivated = gameObject.GetComponent<CameraButtonManager>().enabled;
+
+
             // create a scale gesture to zoom orbiter in and out
             ScaleGesture = new ScaleGestureRecognizer { ZoomSpeed = ZoomSpeed };
             ScaleGesture.StateUpdated += ScaleGesture_Updated;
@@ -210,7 +213,7 @@ namespace DigitalRubyShared
                 PanGesture.PlatformSpecificView = OrbitTarget.gameObject;
             }
 
-            if (LookAtTarget)
+            if (LookAtTarget && isCamButtonActivated)
             {
                 // point oribiter at target
                 Orbiter.transform.LookAt(OrbitTarget.transform);
@@ -251,7 +254,7 @@ namespace DigitalRubyShared
 
             Vector3 startPos = Orbiter.transform.position;
             UpdateOrbit(panVelocity.x, panVelocity.y);
-            UpdateZoom();
+            // UpdateZoom();
             ClampDistance(startPos);
             panVelocity *= OrbitInertia;
             zoomSpeed *= OrbitInertia;
@@ -399,24 +402,18 @@ namespace DigitalRubyShared
                     }
 
                     xDegrees += addAngle;
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
+
+                    if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
+                        GameManager.Instance.actualCamPreset.presetNumber == 3)
                     {
-                        case 1:
-                            axisX = Orbiter.transform.right;
-                            break;
-                        case 2:
-                            axisX = -Vector3.up;
-                         
-                            break;
-                        case 3:
-                            axisX = Vector3.up;
-                           
-                            break;
-                        case 4:
-                            axisX = -Orbiter.transform.right;
-                          
-                            break;
+                        axisX = Orbiter.transform.right;
                     }
+                    else if (GameManager.Instance.actualCamPreset.presetNumber == 2 ||
+                             GameManager.Instance.actualCamPreset.presetNumber == 4)
+                    {
+                        axisX = -Orbiter.transform.right;
+                    }
+
 
                     Orbiter.RotateAround(OrbitTarget.transform.position, axisX, addAngle);
                 }
@@ -448,22 +445,17 @@ namespace DigitalRubyShared
 
                     yDegrees += addAngle;
 
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
+                    if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
+                        GameManager.Instance.actualCamPreset.presetNumber == 3)
                     {
-                        case 1:
-                            axisY = Vector3.up;
-                            break;
-                        case 2:
-                            axisY = Orbiter.transform.up;
-                            break;
-                        case 3:
-
-                            axisY = Orbiter.transform.up;
-                            break;
-                        case 4:
-                            axisY = -Vector3.up;
-                            break;
+                        axisY = Vector3.up;
                     }
+                    else if (GameManager.Instance.actualCamPreset.presetNumber == 2 ||
+                             GameManager.Instance.actualCamPreset.presetNumber == 4)
+                    {
+                        axisY = -Vector3.up;
+                    }
+
 
                     Orbiter.RotateAround(OrbitTarget.transform.position, axisY, addAngle);
                 }
