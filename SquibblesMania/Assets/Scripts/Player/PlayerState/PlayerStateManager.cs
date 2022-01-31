@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
+using Random = UnityEngine.Random;
 
 public class PlayerStateManager : Player
 {
@@ -86,17 +85,15 @@ public class PlayerStateManager : Player
         }
         else
         {
-            // StartCoroutine(WaitUntilRespawn());
+             StartCoroutine(WaitUntilRespawn());
         }
     }
 
     IEnumerator WaitUntilRespawn()
     {
         yield return new WaitForSeconds(1f);
-        Vector3 p = GameManager.Instance.playersSpawnPoints[playerNumber].position;
-        transform.position = new Vector3(p.x, p.y + 1, p.z);
-        GameObject a = Instantiate(particle, transform.position, Quaternion.identity);
-        Destroy(a, 1f);
+        Transform blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+       // var chose =Random.Range((0,blockPlayerOn.GetComponentInParent<Transform>().GetComponentsInChildren<Transform>().Length));
     }
 
     public void StunPlayer(PlayerStateManager player, int stunTurnCount)

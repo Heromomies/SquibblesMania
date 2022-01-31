@@ -23,6 +23,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public void ShowPower()
 	{
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, range, layer);
+		
 		_playerOne = hitColliders[0];
 		_playerTwo = hitColliders[1];
 
