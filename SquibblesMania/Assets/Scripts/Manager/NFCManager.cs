@@ -113,7 +113,7 @@ public class NFCManager : MonoBehaviour
 			case 'B' : colorInt = 0;
 				break;
 			case 'R' : colorInt = 1;
-				PowerManager.Instance.ActivateDeactivatePower(true);
+				PowerManager.Instance.ActivateDeactivatePower(colorInt,true);
 				break;
 			case 'G' : colorInt = 2;
 				break;

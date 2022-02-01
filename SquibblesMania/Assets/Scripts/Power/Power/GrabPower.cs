@@ -12,9 +12,9 @@ public class GrabPower : MonoBehaviour, IManagePower
 
 	void Start()
 	{
-		for (int i = 0; i < buttons.Count; i++)
+		foreach (var t in buttons)
 		{
-			buttons[i].SetActive(true);
+			t.SetActive(true);
 		}
 	}
 
@@ -28,12 +28,27 @@ public class GrabPower : MonoBehaviour, IManagePower
 		{
 			if (hit.collider.gameObject.layer == 3)
 			{
-				GameManager.Instance.currentPlayerTurn.transform.position = hit.collider.transform.position - _vectorRaycast[numberDirectionVector];
+				GameManager.Instance.currentPlayerTurn.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector], 1f);
 			}
 			else if (hit.collider.gameObject.layer == 6)
 			{
-				GameManager.Instance.currentPlayerTurn.transform.DOMove(GameManager.Instance.currentPlayerTurn.transform.position + _vectorRaycast[numberDirectionVector], 1f);
-				hit.collider.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector], 1f);
+				var distanceBetweenTwoPlayers = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hit.transform.position);
+				distanceBetweenTwoPlayers += 0.1f;
+				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers;
+
+				switch (distanceBetweenTwoPlayers)
+				{
+					case 1 : Debug.Log("Only one bloc separate us");
+						break;
+					case 2 : hit.collider.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector], 1f);;
+						break;
+					case 3 : GameManager.Instance.currentPlayerTurn.transform.DOMove(GameManager.Instance.currentPlayerTurn.transform.position + _vectorRaycast[numberDirectionVector], 1f);
+						hit.collider.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector], 1f);;
+						break;
+					case 4 :GameManager.Instance.currentPlayerTurn.transform.DOMove(GameManager.Instance.currentPlayerTurn.transform.position + _vectorRaycast[numberDirectionVector], 1f);
+						hit.collider.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector] * 2, 1f);;
+						break;
+				}
 			}
 		}
 	}

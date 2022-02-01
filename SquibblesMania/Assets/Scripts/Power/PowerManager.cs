@@ -22,9 +22,9 @@ public class PowerManager : MonoBehaviour
 
 	#endregion
 	
-	public void ActivateDeactivatePower(bool activePower)
+	public void ActivateDeactivatePower(int powerIndex, bool activePower)
 	{
-		switch (NFCManager.Instance.colorInt)
+		switch (powerIndex)
 		{
 			case 0 : powers[0].SetActive(activePower);
 				break;

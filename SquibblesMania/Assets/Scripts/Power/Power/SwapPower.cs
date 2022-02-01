@@ -59,7 +59,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 				//ray shooting out of the camera from where the mouse is
 				var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-				if (Physics.Raycast(ray, out var hit, layer))
+				if (Physics.Raycast(ray, out var hit, range, layer))
 				{
 					//print out the name if the raycast hits something
 					_playerTwo = hit.collider;
@@ -80,6 +80,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
-		PowerManager.Instance.ActivateDeactivatePower(false);
+		PowerManager.Instance.ActivateDeactivatePower(1,false);
 	}
 }
