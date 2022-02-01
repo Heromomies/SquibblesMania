@@ -7,17 +7,25 @@ using Wizama.Hardware.Light;
 
 public class NFCManager : MonoBehaviour
 {
+	#region ANTENNA SETTINGS
 	[Header("ANTENNA SETTINGS")]
 	public NFC_DEVICE_ID[] antennaPlayerOne; [Space]
 	public NFC_DEVICE_ID[] antennaPlayerTwo; [Space]
 	public NFC_DEVICE_ID[] antennaPlayerThree; [Space]
-	public NFC_DEVICE_ID[] antennaPlayerFour; 
+	public NFC_DEVICE_ID[] antennaPlayerFour;
+	#endregion
+
+	#region UI SETTINGS
 
 	[Space]
-	[Header("UI")]
+	[Header("UI SETTINGS")]
 	public Button chosePower;
 	public Button choseToMove;
 	public TextMeshProUGUI textTakeOffCard;
+
+	#endregion
+
+	#region LIGHT SETTINGS
 
 	[Space]
 	[Header("LIGHT SETTINGS")]
@@ -26,10 +34,16 @@ public class NFCManager : MonoBehaviour
 	public LIGHT_INDEX[] lightIndexesPlayerThree;
 	public LIGHT_INDEX[] lightIndexesPlayerFour;
 	public List<LIGHT_COLOR> lightColor;
-	
+
+	#endregion
+
+	#region PRIVATE VAR
+
 	[HideInInspector] public int colorInt;
 	[HideInInspector] public int numberOfTheCard;
 	private char[] _charCards;
+
+	#endregion
 
 	#region Singleton
 
