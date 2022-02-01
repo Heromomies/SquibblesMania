@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class EditorMapWindow : EditorWindow
 {
-    private static GameObject lastObjectCreated, currentObjectSelected;
+    private static GameObject lastObjectCreated;
     private static bool onMapEditor;
     private static bool isCreating;
+
+    private static List<GameObject> currentObjectsCreated = new List<GameObject>();
 
     [MenuItem("Window/Editor Map/Custom Map Editor")]
     // Start is called before the first frame update
@@ -21,38 +23,55 @@ public class EditorMapWindow : EditorWindow
         SceneView.duringSceneGui += UpdateSceneView;
     }
 
-    private static void UpdateSceneView(SceneView sceneView)
+
+    private static Vector3 SnapOffset(Vector3 vector3, Vector3 offset, float gridSize = 1.0f)
     {
-        if (isCreating)
+        Vector3 snapped = vector3 + offset;
+        snapped = new Vector3(
+            Mathf.Round(snapped.x / gridSize) * gridSize,
+            Mathf.Round(snapped.y / gridSize + 1f) * gridSize,
+            Mathf.Round(snapped.z / gridSize) * gridSize);
+        return snapped - offset;
+    }
+
+    static void SpawnObjectOnPlane(UnityEngine.Event e)
+    {
+        // Shoot a ray from the mouse position into the world
+        Ray worldRay = HandleUtility.GUIPointToWorldRay(e.mousePosition);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(worldRay, out hitInfo, Mathf.Infinity))
         {
-            if (UnityEngine.Event.current.type == EventType.MouseDown && UnityEngine.Event.current.button == 0)
+            if (hitInfo.collider.GetComponent<MeshCollider>())
             {
-                Vector3 pointsPos =
-                    HandleUtility.GUIPointToWorldRay(UnityEngine.Event.current.mousePosition).direction * 1;
-
-                //Todo create object here at pointsPos
-                Instantiate(lastObjectCreated, pointsPos, Quaternion.identity);
-
-                // Avoid the current event being propagated
-                // I'm not sure which of both works better here
-                UnityEngine.Event.current = null;
-
-
-                // exit creation mode
-                isCreating = false;
+                GameObject spawnObj = Instantiate(lastObjectCreated);
+                currentObjectsCreated.Add(spawnObj);
+                Vector3 targetPos = SnapOffset(hitInfo.point,
+                    new Vector3(spawnObj.transform.position.x + 0.5f, spawnObj.transform.position.y,
+                        spawnObj.transform.position.z + 0.5f));
+                spawnObj.transform.position = targetPos;
             }
         }
-        else
+    }
+
+
+    private static void UpdateSceneView(SceneView sceneView)
+    {
+        UnityEngine.Event e = UnityEngine.Event.current;
+
+
+        if (e.type == EventType.MouseDown && e.button == 0 && onMapEditor)
         {
-            UnityEngine.Event.current = null;
+            SpawnObjectOnPlane(e);
         }
+
+        UnityEngine.Event.current = null;
     }
 
     private void OnInspectorUpdate()
     {
         if (onMapEditor && lastObjectCreated)
         {
-            isCreating = true;
         }
     }
 
@@ -63,6 +82,15 @@ public class EditorMapWindow : EditorWindow
         lastObjectCreated =
             EditorGUILayout.ObjectField("Select the object to create", lastObjectCreated, typeof(GameObject), true) as
                 GameObject;
+
+        if (GUILayout.Button("Remove last object created"))
+        {
+            if (currentObjectsCreated.Count > 0)
+            {
+                DestroyImmediate(currentObjectsCreated[currentObjectsCreated.Count - 1]);
+                currentObjectsCreated.Remove(currentObjectsCreated[currentObjectsCreated.Count - 1]);
+            }
+        }
     }
 
 
