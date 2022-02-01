@@ -358,15 +358,14 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (EndZoneManager.Instance != null)
             EndZoneManager.Instance.CheckPlayersTeam();
 
-        if (player.playerActionPoint > 0)
+        if (player.playerActionPoint > 0 )
         {
             EnterState(player);
-            // UiManager.Instance.buttonNextTurn.SetActive(false);
         }
         else
         {
-            NFCManager.Instance.textTakeOffCard.text = "Remove the card from the tablet";
-           // UiManager.Instance.buttonNextTurn.SetActive(true);
+            NFCManager.Instance.textTakeOffCard.text = NFCManager.Instance.hasRemovedCard ? "" : "Remove the card from the tablet";
+            UiManager.Instance.buttonNextTurn.SetActive(true);
         }
 
         

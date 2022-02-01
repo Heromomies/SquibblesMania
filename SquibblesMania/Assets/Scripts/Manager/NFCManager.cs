@@ -42,7 +42,9 @@ public class NFCManager : MonoBehaviour
 	[HideInInspector] public int colorInt;
 	[HideInInspector] public int numberOfTheCard;
 	private char[] _charCards;
-
+	[HideInInspector] public bool hasRemovedCard;
+	private bool _yep;
+	
 	#endregion
 
 	#region Singleton
@@ -68,6 +70,7 @@ public class NFCManager : MonoBehaviour
 
 	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
 	{
+		_yep = true;
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0 : NFCController.StartPollingAsync(antennaPlayerOne);
@@ -92,6 +95,7 @@ public class NFCManager : MonoBehaviour
     
 	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
 	{
+		Debug.Log(device + "" + nfcTag);
 		SetActiveButton(true);
 		
 		_charCards = nfcTag.Data.ToCharArray();
@@ -100,10 +104,13 @@ public class NFCManager : MonoBehaviour
 	
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
-		UiManager.Instance.buttonNextTurn.SetActive(true);
-		textTakeOffCard.text = "";
-		
-		NFCController.StopPolling();
+		hasRemovedCard = true;
+		SetActiveButton(false);
+		if (_yep)
+		{
+			_yep = false;
+			NFCController.StopPolling();
+		} 
 	}
 	
 	public void ChoseToLaunchPower() // If the player chose to launch a power 
