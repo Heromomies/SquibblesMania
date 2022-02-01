@@ -361,11 +361,12 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (player.playerActionPoint > 0)
         {
             EnterState(player);
-            UiManager.Instance.buttonNextTurn.SetActive(false);
+            // UiManager.Instance.buttonNextTurn.SetActive(false);
         }
         else
         {
-            UiManager.Instance.buttonNextTurn.SetActive(true);
+            NFCManager.Instance.textTakeOffCard.text = "Remove the card from the tablet";
+           // UiManager.Instance.buttonNextTurn.SetActive(true);
         }
 
         

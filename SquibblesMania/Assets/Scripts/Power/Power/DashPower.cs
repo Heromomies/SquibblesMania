@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -7,7 +8,17 @@ using UnityEngine.UI;
 public class DashPower : MonoBehaviour, IManagePower
 {
 	public int dashRange;
+
+	public List<GameObject> buttons;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+
+	private void Start()
+	{
+		for (int i = 0; i < buttons.Count; i++)
+		{
+			buttons[i].SetActive(true);
+		}
+	}
 
 	public void ButtonClickedGrab(int numberDirectionVector)
 	{

@@ -7,12 +7,15 @@ public class GrabPower : MonoBehaviour, IManagePower
 {
 	public int grabRange;
 
-
+	public List<GameObject> buttons;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
 	void Start()
 	{
-		//transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+		for (int i = 0; i < buttons.Count; i++)
+		{
+			buttons[i].SetActive(true);
+		}
 	}
 
 	public void ButtonClickedGrab(int numberDirectionVector)

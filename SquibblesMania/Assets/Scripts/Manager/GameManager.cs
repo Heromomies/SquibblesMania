@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
         //players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
-        PowerManager.Instance.PlayerChangeTurn();
+        NFCManager.Instance.PlayerChangeTurn();
         //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
        // CamConfig(_count);
-        PowerManager.Instance.PlayerChangeTurn();
+        NFCManager.Instance.PlayerChangeTurn();
         CamConfig(_count);
         if (CameraButtonManager.Instance.enabled)
         {
