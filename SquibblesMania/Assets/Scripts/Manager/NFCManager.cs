@@ -43,7 +43,7 @@ public class NFCManager : MonoBehaviour
 	[HideInInspector] public int numberOfTheCard;
 	private char[] _charCards;
 	[HideInInspector] public bool hasRemovedCard;
-	private bool _yep;
+	private bool _cliked;
 	
 	#endregion
 
@@ -70,7 +70,6 @@ public class NFCManager : MonoBehaviour
 
 	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
 	{
-		_yep = true;
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0 : NFCController.StartPollingAsync(antennaPlayerOne);
@@ -95,26 +94,43 @@ public class NFCManager : MonoBehaviour
     
 	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
 	{
-		Debug.Log(device + "" + nfcTag);
-		SetActiveButton(true);
+		if (!GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+		{
+			SetActiveButton(true);
 		
-		_charCards = nfcTag.Data.ToCharArray();
-		UiManager.Instance.buttonNextTurn.SetActive(false);
+			_charCards = nfcTag.Data.ToCharArray();
+			UiManager.Instance.buttonNextTurn.SetActive(false);
+		}
+		else
+		{
+			Debug.Log("Don't detect another card");
+		}
 	}
 	
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
-		hasRemovedCard = true;
-		SetActiveButton(false);
-		if (_yep)
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && _cliked)
 		{
-			_yep = false;
+			_cliked = false;
+		}
+		
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_cliked)
+		{
+			SetActiveButton(false);
+		}
+		else
+		{
+			hasRemovedCard = true;
+			SetActiveButton(false);
+			textTakeOffCard.text = "";
+			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCController.StopPolling();
-		} 
+		}
 	}
 	
 	public void ChoseToLaunchPower() // If the player chose to launch a power 
 	{
+		_cliked = true;
 		switch (_charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 		{
 			case 'B' : colorInt = 0;
@@ -132,6 +148,7 @@ public class NFCManager : MonoBehaviour
 
 	public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
 	{
+		_cliked = true;
 		numberOfTheCard = _charCards[0] - '0';
 		GameManager.Instance.currentPlayerTurn.StartState();
 		SetActiveButton(false);
