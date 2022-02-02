@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -111,19 +112,14 @@ public class NFCManager : MonoBehaviour
 	
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && _cliked)
-		{
-			_cliked = false;
-		}
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_cliked)
 		{
 			SetActiveButton(false);
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 		}
-		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint != 0 && _cliked)
+		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && _cliked)
 		{
 			Debug.Log("I'm in");
-			hasRemovedCard = true;
 			SetActiveButton(false);
 			textTakeOffCard.text = "";
 			UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -133,8 +129,21 @@ public class NFCManager : MonoBehaviour
 		{
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 		}
+		hasRemovedCard = true;
 	}
-	
+
+	private void Update()
+	{
+		if (hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && _cliked)
+		{
+			Debug.Log("I'm in the update");
+			UiManager.Instance.buttonNextTurn.SetActive(true);
+			textTakeOffCard.text = "";
+			_cliked = false;
+			hasRemovedCard = false;
+		} 
+	}
+
 	public void ChoseToLaunchPower() // If the player chose to launch a power 
 	{
 		_cliked = true;
