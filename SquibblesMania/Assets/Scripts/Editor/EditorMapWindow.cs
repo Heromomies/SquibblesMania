@@ -4,14 +4,25 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+public enum Colors
+{
+    Red,
+    Blue,
+    Yellow,
+    Green
+};
+
 public class EditorMapWindow : EditorWindow
 {
-    private static GameObject lastObjectCreated;
+    private static GameObject lastObjectCreated, currentObjectSelected;
     private static bool onMapEditor;
     private static bool isCreating;
-
+    private static bool isBlockSelected;
     private static List<GameObject> currentObjectsCreated = new List<GameObject>();
     private static Vector2 planeMapSize;
+
+    private static Colors colors;
+    private static Node currentBlockNode;
 
     [MenuItem("Window/Editor Map/Custom Map Editor")]
     // Start is called before the first frame update
@@ -43,7 +54,7 @@ public class EditorMapWindow : EditorWindow
 
         if (Physics.Raycast(worldRay, out hitInfo, Mathf.Infinity))
         {
-            if (hitInfo.collider.GetComponent<MeshCollider>())
+            if (hitInfo.collider.GetComponent<MeshCollider>() && lastObjectCreated != null)
             {
                 GameObject spawnObj = Instantiate(lastObjectCreated);
                 currentObjectsCreated.Add(spawnObj);
@@ -66,7 +77,25 @@ public class EditorMapWindow : EditorWindow
             SpawnObjectOnPlane(e);
         }
 
+        if (Selection.activeGameObject && isCreating && !isBlockSelected)
+        {
+            if (Selection.activeGameObject.GetComponent<BoxCollider>())
+            {
+                currentObjectSelected = Selection.activeGameObject;
+                currentBlockNode = Selection.activeGameObject.GetComponent<Node>();
+                isBlockSelected = true;
+            }
+
+            Selection.selectionChanged -= SelectionChanged;
+            Selection.selectionChanged += SelectionChanged;
+        }
+
         UnityEngine.Event.current = null;
+    }
+
+    private static void SelectionChanged()
+    {
+        isBlockSelected = false;
     }
 
     private void OnInspectorUpdate()
@@ -83,7 +112,7 @@ public class EditorMapWindow : EditorWindow
             planeMapSize = EditorGUILayout.Vector2Field("Size map (Y axis correspond at Z axis)", planeMapSize);
 
 
-            if (GUILayout.Button("Create plane"))
+            if (GUILayout.Button("Create plane") && planeMapSize.x >= 1 && planeMapSize.y >= 1)
             {
                 GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 plane.transform.position = Vector3.zero;
@@ -107,14 +136,64 @@ public class EditorMapWindow : EditorWindow
                 }
             }
         }
+
+        if (isBlockSelected)
+        {
+            GUILayout.Label("Choose a color for the block bellow");
+            colors = (Colors)EditorGUILayout.EnumPopup("Choose a color", colors);
+            if (GUILayout.Button("Colorize"))
+            {
+                ChangeBlockColor();
+            }
+        }
     }
 
+    private void ChangeBlockColor()
+    {
+        int lastMatNumber = currentObjectSelected.GetComponent<Renderer>().sharedMaterials.Length - 2;
+        Material[] tempSharedMat = currentObjectSelected.GetComponent<Renderer>().sharedMaterials;
+      
+        switch (colors)
+        {
+            case Colors.Blue:
+                Material blueMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_PiqueCube.mat", typeof(Material)) as Material;
+                tempSharedMat[lastMatNumber] = blueMat;
+                currentObjectSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+                currentBlockNode.colorBloc = Node.ColorBloc.Blue;
+                break;
+            case Colors.Green:
+                Material greenMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_TrefleCube.mat", typeof(Material)) as Material;
+                tempSharedMat[lastMatNumber] = greenMat;
+                currentObjectSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+                currentBlockNode.colorBloc = Node.ColorBloc.Green;
+                break;
+            case Colors.Red:
+                Material redMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CoeurCube.mat", typeof(Material)) as Material;
+                tempSharedMat[lastMatNumber] = redMat;
+                currentObjectSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+                currentBlockNode.colorBloc = Node.ColorBloc.Red;
+                break;
+            case Colors.Yellow:
+                Material yellowMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CarreauCube.mat", typeof(Material)) as Material;
+                tempSharedMat[lastMatNumber] = yellowMat;
+                currentObjectSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+                currentBlockNode.colorBloc = Node.ColorBloc.Yellow;
+                break;
+        }
+    }
 
     private void OnDestroy()
     {
         //Call when close the window
+        ResetVars();
+    }
+
+    void ResetVars()
+    {
         isCreating = false;
+        isBlockSelected = false;
         onMapEditor = false;
         lastObjectCreated = null;
+        currentObjectSelected = null;
     }
 }
