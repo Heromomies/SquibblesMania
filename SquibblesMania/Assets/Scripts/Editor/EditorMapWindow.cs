@@ -11,6 +11,7 @@ public class EditorMapWindow : EditorWindow
     private static bool isCreating;
 
     private static List<GameObject> currentObjectsCreated = new List<GameObject>();
+    private static Vector2 planeMapSize;
 
     [MenuItem("Window/Editor Map/Custom Map Editor")]
     // Start is called before the first frame update
@@ -70,25 +71,40 @@ public class EditorMapWindow : EditorWindow
 
     private void OnInspectorUpdate()
     {
-        if (onMapEditor && lastObjectCreated)
-        {
-        }
+        Repaint();
     }
 
     private void OnGUI()
     {
-        GUILayout.Label("MAP EDITOR TOOL", EditorStyles.boldLabel);
-        GUILayout.Label("Left click on the scene to create a object", EditorStyles.largeLabel);
-        lastObjectCreated =
-            EditorGUILayout.ObjectField("Select the object to create", lastObjectCreated, typeof(GameObject), true) as
-                GameObject;
-
-        if (GUILayout.Button("Remove last object created"))
+        if (!isCreating)
         {
-            if (currentObjectsCreated.Count > 0)
+            GUILayout.Label("MAP EDITOR TOOL", EditorStyles.boldLabel);
+            GUILayout.Label("Create a plane on the scene to place objects, you can choose it's size");
+            planeMapSize = EditorGUILayout.Vector2Field("Size map (Y axis correspond at Z axis)", planeMapSize);
+
+
+            if (GUILayout.Button("Create plane"))
             {
-                DestroyImmediate(currentObjectsCreated[currentObjectsCreated.Count - 1]);
-                currentObjectsCreated.Remove(currentObjectsCreated[currentObjectsCreated.Count - 1]);
+                GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                plane.transform.position = Vector3.zero;
+                plane.transform.localScale = new Vector3(planeMapSize.x, 1, planeMapSize.y);
+                isCreating = true;
+            }
+        }
+
+
+        if (isCreating)
+        {
+            GUILayout.Label("Left click on the scene to create a object", EditorStyles.largeLabel);
+            lastObjectCreated =
+                EditorGUILayout.ObjectField("Block", lastObjectCreated, typeof(GameObject), true) as GameObject;
+            if (GUILayout.Button("Remove last object created"))
+            {
+                if (currentObjectsCreated.Count > 0)
+                {
+                    DestroyImmediate(currentObjectsCreated[currentObjectsCreated.Count - 1]);
+                    currentObjectsCreated.Remove(currentObjectsCreated[currentObjectsCreated.Count - 1]);
+                }
             }
         }
     }
