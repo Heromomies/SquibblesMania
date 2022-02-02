@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -36,6 +37,8 @@ public class NFCManager : MonoBehaviour
 	public LIGHT_INDEX[] lightIndexesPlayerFour;
 	public List<LIGHT_COLOR> lightColor;
 
+	public List<LIGHT_INDEX> fullIndex;
+	
 	#endregion
 
 	#region PRIVATE VAR
@@ -45,7 +48,7 @@ public class NFCManager : MonoBehaviour
 	private char[] _charCards;
 	[HideInInspector] public bool hasRemovedCard;
 	private bool _cliked;
-	
+	private int _changeColor;
 	#endregion
 
 	#region Singleton
@@ -71,20 +74,56 @@ public class NFCManager : MonoBehaviour
 
 	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
 	{
+		StopAllCoroutines();
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0 : NFCController.StartPollingAsync(antennaPlayerOne);
-				LightController.Colorize(lightIndexesPlayerOne, lightColor[0],false);
+				//StartCoroutine(ColorRGB(lightIndexesPlayerOne,0.5f));
+				StartCoroutine(ColorOneByOne());
 				break;
 			case 1 : NFCController.StartPollingAsync(antennaPlayerTwo);
-				LightController.Colorize(lightIndexesPlayerTwo, lightColor[1],false);
+				//StartCoroutine(ColorRGB(lightIndexesPlayerTwo,0.5f));
+				StartCoroutine(ColorOneByOne());
 				break;
 			case 2 : NFCController.StartPollingAsync(antennaPlayerThree);
-				LightController.Colorize(lightIndexesPlayerThree, lightColor[2],false);
+				StartCoroutine(ColorRGB(lightIndexesPlayerThree,0.5f));
 				break;
 			case 3 : NFCController.StartPollingAsync(antennaPlayerFour);
-				LightController.Colorize(lightIndexesPlayerFour, lightColor[3],false);
+				StartCoroutine(ColorRGB(lightIndexesPlayerFour,0.5f));
 				break;
+		}
+	}
+
+	private IEnumerator ColorRGB(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight)
+	{
+		for (int i = 0; i < lightColor.Capacity; i++)
+		{
+			if (i == lightColor.Capacity-1)
+			{
+				i = 0;
+			}
+			LightController.Colorize(lightIndex, lightColor[i],false);
+			yield return new WaitForSeconds(timeBetweenTwoLight);
+		}
+	}
+
+	private IEnumerator ColorOneByOne()
+	{
+		for (int i = 0; i < fullIndex.Count; i++)
+		{
+			_changeColor++;
+			if (i == fullIndex.Count-1)
+			{
+				i = 0;
+			}
+			
+			if (_changeColor == lightColor.Count)
+			{
+				_changeColor = 0;
+			}
+
+			LightController.ColorizeOne(fullIndex[i], lightColor[_changeColor], false);
+			yield return new WaitForSeconds(0.2f);
 		}
 	}
 	
