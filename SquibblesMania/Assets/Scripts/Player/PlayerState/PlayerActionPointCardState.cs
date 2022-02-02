@@ -364,7 +364,14 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
         else
         {
-            NFCManager.Instance.textTakeOffCard.text = NFCManager.Instance.hasRemovedCard ? "" : "Remove the card from the tablet";
+            if (NFCManager.Instance.hasRemovedCard)
+            {
+                NFCManager.Instance.textTakeOffCard.text = "";
+            }
+            else
+            {
+                NFCManager.Instance.textTakeOffCard.text = "Remove the card from the tablet";
+            }
         }
     }
 }

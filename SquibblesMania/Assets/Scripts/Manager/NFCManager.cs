@@ -100,10 +100,12 @@ public class NFCManager : MonoBehaviour
 		
 			_charCards = nfcTag.Data.ToCharArray();
 			UiManager.Instance.buttonNextTurn.SetActive(false);
+			hasRemovedCard = false;
 		}
 		else
 		{
 			Debug.Log("Don't detect another card");
+			UiManager.Instance.buttonNextTurn.SetActive(false);
 		}
 	}
 	
@@ -113,18 +115,23 @@ public class NFCManager : MonoBehaviour
 		{
 			_cliked = false;
 		}
-		
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_cliked)
 		{
 			SetActiveButton(false);
+			UiManager.Instance.buttonNextTurn.SetActive(false);
 		}
-		else
+		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint != 0 && _cliked)
 		{
+			Debug.Log("I'm in");
 			hasRemovedCard = true;
 			SetActiveButton(false);
 			textTakeOffCard.text = "";
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCController.StopPolling();
+		}
+		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && !_cliked)
+		{
+			UiManager.Instance.buttonNextTurn.SetActive(false);
 		}
 	}
 	
@@ -151,6 +158,7 @@ public class NFCManager : MonoBehaviour
 		_cliked = true;
 		numberOfTheCard = _charCards[0] - '0';
 		GameManager.Instance.currentPlayerTurn.StartState();
+		
 		SetActiveButton(false);
 	}
 

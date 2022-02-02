@@ -24,10 +24,6 @@ public class PlayerCardState : PlayerBaseState
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 			player.SwitchState(player.PlayerActionPointCardState);
 		}
-		else
-		{
-			Debug.Log("My action point are equivalent to 0");
-		}
 	}
 
 	void PlayerIsStun(PlayerStateManager player)
