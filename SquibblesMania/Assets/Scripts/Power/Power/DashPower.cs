@@ -18,14 +18,14 @@ public class DashPower : MonoBehaviour, IManagePower
 		}
 	}
 
-	public void ButtonClickedGrab(int numberDirectionVector)
+	public void ButtonClickedGrab(int numberDirectionVector) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
 
 		RaycastHit hit;
 
-		if (Physics.Raycast(transform.position, _vectorRaycast[numberDirectionVector], out hit, dashRange))
+		if (Physics.Raycast(transform.position, _vectorRaycast[numberDirectionVector], out hit, dashRange)) // launch the raycast
 		{
 			if (hit.collider.gameObject.layer == 3)
 			{

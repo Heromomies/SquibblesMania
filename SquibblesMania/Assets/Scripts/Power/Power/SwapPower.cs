@@ -20,20 +20,13 @@ public class SwapPower : MonoBehaviour, IManagePower
 		ShowPower();
 	}
 	
-	public void ShowPower()
+	public void ShowPower() // Show the sphere and admit the player to chose the other player to swap
 	{
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, range, layer);
-		
-		Debug.Log(layer);
 		
 		_playerOne = hitColliders[0];
 		_playerTwo = hitColliders[1];
 
-		/*foreach (var col in hitColliders)
-		{
-			col.gameObject.GetComponent<Renderer>().material.color = Color.cyan;
-		}*/
-		
 		switch (hitColliders.Length)
 		{
 			case 1:
@@ -54,7 +47,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		if (_canChoseThePlayer)
 		{
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonDown(0)) // Touch and swap position
 			{
 				//ray shooting out of the camera from where the mouse is
 				var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -76,7 +69,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		SwapPosition(_playerOne.transform, _playerTwo.transform);
 	}
 
-	void SwapPosition(Transform playerOne, Transform playerTwo)
+	void SwapPosition(Transform playerOne, Transform playerTwo) // Swap the position between the two players
 	{
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;

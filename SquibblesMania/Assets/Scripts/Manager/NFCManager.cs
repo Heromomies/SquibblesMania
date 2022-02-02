@@ -79,22 +79,22 @@ public class NFCManager : MonoBehaviour
 		{
 			case 0 : NFCController.StartPollingAsync(antennaPlayerOne);
 				//StartCoroutine(ColorRGB(lightIndexesPlayerOne,0.5f));
-				StartCoroutine(ColorOneByOne());
+				StartCoroutine(ColorOneByOneAllTheAntennas());
 				break;
 			case 1 : NFCController.StartPollingAsync(antennaPlayerTwo);
 				//StartCoroutine(ColorRGB(lightIndexesPlayerTwo,0.5f));
-				StartCoroutine(ColorOneByOne());
+				StartCoroutine(ColorOneByOneAllTheAntennas());
 				break;
 			case 2 : NFCController.StartPollingAsync(antennaPlayerThree);
-				StartCoroutine(ColorRGB(lightIndexesPlayerThree,0.5f));
+				StartCoroutine(ColorOneRange(lightIndexesPlayerThree,0.5f));
 				break;
 			case 3 : NFCController.StartPollingAsync(antennaPlayerFour);
-				StartCoroutine(ColorRGB(lightIndexesPlayerFour,0.5f));
+				StartCoroutine(ColorOneRange(lightIndexesPlayerFour,0.5f));
 				break;
 		}
 	}
 
-	private IEnumerator ColorRGB(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight)
+	private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight)
 	{
 		for (int i = 0; i < lightColor.Capacity; i++)
 		{
@@ -107,7 +107,7 @@ public class NFCManager : MonoBehaviour
 		}
 	}
 
-	private IEnumerator ColorOneByOne()
+	private IEnumerator ColorOneByOneAllTheAntennas()
 	{
 		for (int i = 0; i < fullIndex.Count; i++)
 		{

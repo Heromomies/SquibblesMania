@@ -18,25 +18,25 @@ public class GrabPower : MonoBehaviour, IManagePower
 		}
 	}
 
-	public void ButtonClickedGrab(int numberDirectionVector)
+	public void ButtonClickedGrab(int numberDirectionVector) // When we clicked on the button
 	{
 		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 		
 		RaycastHit hit;
 		
-		if (Physics.Raycast( transform.position, _vectorRaycast[numberDirectionVector], out hit, grabRange))
+		if (Physics.Raycast( transform.position, _vectorRaycast[numberDirectionVector], out hit, grabRange)) // Launch a raycast
 		{
-			if (hit.collider.gameObject.layer == 3)
+			if (hit.collider.gameObject.layer == 3) // if the raycast touch a bloc
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(hit.collider.transform.position - _vectorRaycast[numberDirectionVector], 1f);
 			}
-			else if (hit.collider.gameObject.layer == 6)
+			else if (hit.collider.gameObject.layer == 6) // if the raycast touch a player
 			{
 				var distanceBetweenTwoPlayers = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hit.transform.position);
 				distanceBetweenTwoPlayers += 0.1f;
 				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers;
 
-				switch (distanceBetweenTwoPlayers)
+				switch (distanceBetweenTwoPlayers) // In function to the distance move to certain distance
 				{
 					case 1 : Debug.Log("Only one bloc separate us");
 						break;

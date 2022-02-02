@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class ShieldPower : MonoBehaviour, IManagePower
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    private PlayerStateManager _player;
     // Update is called once per frame
     void Update()
     {
@@ -18,11 +13,13 @@ public class ShieldPower : MonoBehaviour, IManagePower
 
     public void ShowPower()
     {
-        throw new System.NotImplementedException();
+        //TODO instantiate VFX
     }
 
     public void LaunchPower()
     {
-        throw new System.NotImplementedException();
+        _player = GameManager.Instance.currentPlayerTurn;	
+        
+        
     }
 }
