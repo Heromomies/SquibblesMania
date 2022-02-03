@@ -108,6 +108,12 @@ public class DashPower : MonoBehaviour, IManagePower
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
+		PowerManager.Instance.ActivateDeactivatePower(2, false);
+		PowerManager.Instance.ChangeTurnPlayer();
+		foreach (var button in buttons)
+		{
+			button.SetActive(false);
+		}
 	}
 
 	public void ShowPower()

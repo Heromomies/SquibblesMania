@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class SwapPower : MonoBehaviour, IManagePower
 {
@@ -74,5 +75,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
 		PowerManager.Instance.ActivateDeactivatePower(1,false);
+		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

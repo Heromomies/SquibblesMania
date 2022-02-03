@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnablePowerToTest : MonoBehaviour
 {
     public List<GameObject> powers;
-
+    private bool _activeShield;
     public void LaunchPower(int p)
     {
 	    switch (p)
@@ -16,8 +16,16 @@ public class EnablePowerToTest : MonoBehaviour
 			    break;
 		    case 2 : powers[2].SetActive(true);
 			    break;
-		    case 3 : powers[3].SetActive(true);
+		    case 3 : _activeShield = true;
 			    break;
+	    }
+	    if (_activeShield)
+	    {
+		    ShieldPower shield = Instantiate(powers[3].GetComponent<ShieldPower>(), transform.position, Quaternion.identity);
+		    if (shield.activated)
+		    {
+			    shield.ChangeTurn();
+		    }
 	    }
     }
 }

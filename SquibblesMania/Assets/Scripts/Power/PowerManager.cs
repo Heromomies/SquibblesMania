@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PowerManager : MonoBehaviour
 {
 	public List<GameObject> powers;
-	
+	private bool _activeShield;
 	#region Singleton
 
 	private static PowerManager powerManager;
@@ -32,8 +32,22 @@ public class PowerManager : MonoBehaviour
 				break;
 			case 2 : powers[2].SetActive(activePower);
 				break;
-			case 3 : powers[3].SetActive(activePower);
+			case 3 : _activeShield = true;
 				break;
 		}
+
+		if (_activeShield)
+		{
+			ShieldPower shield = Instantiate(powers[3].GetComponent<ShieldPower>(), transform.position, Quaternion.identity);
+			if (shield.activated)
+			{
+				shield.ChangeTurn();
+			}
+		}
+	}
+
+	public void ChangeTurnPlayer()
+	{
+		UiManager.Instance.buttonNextTurn.SetActive(true);
 	}
 }

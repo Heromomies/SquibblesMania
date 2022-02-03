@@ -78,12 +78,10 @@ public class NFCManager : MonoBehaviour
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0 : NFCController.StartPollingAsync(antennaPlayerOne);
-				//StartCoroutine(ColorRGB(lightIndexesPlayerOne,0.5f));
-				StartCoroutine(ColorOneByOneAllTheAntennas());
+				StartCoroutine(ColorOneRange(lightIndexesPlayerOne,0.5f));
 				break;
 			case 1 : NFCController.StartPollingAsync(antennaPlayerTwo);
-				//StartCoroutine(ColorRGB(lightIndexesPlayerTwo,0.5f));
-				StartCoroutine(ColorOneByOneAllTheAntennas());
+				StartCoroutine(ColorOneRange(lightIndexesPlayerTwo,0.5f));
 				break;
 			case 2 : NFCController.StartPollingAsync(antennaPlayerThree);
 				StartCoroutine(ColorOneRange(lightIndexesPlayerThree,0.5f));
@@ -189,13 +187,16 @@ public class NFCManager : MonoBehaviour
 		switch (_charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 		{
 			case 'B' : colorInt = 0;
+				PowerManager.Instance.ActivateDeactivatePower(colorInt,true);
 				break;
 			case 'R' : colorInt = 1;
 				PowerManager.Instance.ActivateDeactivatePower(colorInt,true);
 				break;
 			case 'G' : colorInt = 2;
+				PowerManager.Instance.ActivateDeactivatePower(colorInt,true);
 				break;
 			case 'Y' : colorInt = 3;
+				PowerManager.Instance.ActivateDeactivatePower(colorInt,true);
 				break;
 		}
 		SetActiveButton(false);

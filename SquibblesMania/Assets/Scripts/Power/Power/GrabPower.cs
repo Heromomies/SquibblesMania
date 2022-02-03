@@ -51,6 +51,13 @@ public class GrabPower : MonoBehaviour, IManagePower
 				}
 			}
 		}
+		
+		PowerManager.Instance.ActivateDeactivatePower(0, false);
+		PowerManager.Instance.ChangeTurnPlayer();
+		foreach (var t in buttons)
+		{
+			t.SetActive(false);
+		}
 	}
 	public void ShowPower()
 	{
