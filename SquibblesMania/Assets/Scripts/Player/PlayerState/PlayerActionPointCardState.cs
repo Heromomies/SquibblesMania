@@ -17,7 +17,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         player.nextBlockPath.Clear();
         previewPath.Clear();
-        
         PreviewPath(player.playerActionPoint, player);
     }
 
