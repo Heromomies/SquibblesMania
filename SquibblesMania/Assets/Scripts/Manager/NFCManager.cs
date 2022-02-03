@@ -156,7 +156,6 @@ public class NFCManager : MonoBehaviour
 		}
 		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && _cliked)
 		{
-			Debug.Log("I'm in");
 			SetActiveButton(false);
 			textTakeOffCard.text = "";
 			UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -173,7 +172,6 @@ public class NFCManager : MonoBehaviour
 	{
 		if (hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && _cliked)
 		{
-			Debug.Log("I'm in the update");
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			textTakeOffCard.text = "";
 			_cliked = false;

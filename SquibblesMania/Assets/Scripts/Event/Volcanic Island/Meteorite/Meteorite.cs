@@ -9,8 +9,6 @@ public class Meteorite : MonoBehaviour
 	private Rigidbody _rb;
 	private int _turn;
 	public GameObject particleSystem;
-	public Material m;
-	public List<Transform> t = new List<Transform>();
 
 	private void Start()
 	{
