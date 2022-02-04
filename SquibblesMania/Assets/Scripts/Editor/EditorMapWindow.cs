@@ -19,7 +19,7 @@ public class EditorMapWindow : EditorWindow
     private static bool onMapEditor;
     private static bool isCreating;
     private static bool isBlockSelected;
-    private static List<GameObject> currentObjectsCreated = new List<GameObject>();
+    private static List<GameObject> currentBlockObjectsCreated = new List<GameObject>();
     private static List<GameObject> allObjectsCreatedOnScene = new List<GameObject>();
     private static Vector2 planeMapSize;
 
@@ -60,7 +60,7 @@ public class EditorMapWindow : EditorWindow
             if (hitInfo.collider.GetComponent<MeshCollider>() && lastObjectCreated != null)
             {
                 GameObject spawnObj = Instantiate(lastObjectCreated);
-                currentObjectsCreated.Add(spawnObj);
+                currentBlockObjectsCreated.Add(spawnObj);
                 allObjectsCreatedOnScene.Add(spawnObj);
                 Vector3 targetPos = SnapOffset(hitInfo.point,
                     new Vector3(spawnObj.transform.position.x + 0.5f, spawnObj.transform.position.y,
@@ -74,7 +74,7 @@ public class EditorMapWindow : EditorWindow
     private static void UpdateSceneView(SceneView sceneView)
     {
         UnityEngine.Event e = UnityEngine.Event.current;
-        
+
         if (e.type == EventType.MouseDown && e.button == 0 && onMapEditor)
         {
             SpawnObjectOnPlane(e);
@@ -130,16 +130,16 @@ public class EditorMapWindow : EditorWindow
     private void CreateObject()
     {
         EditorGUILayout.Space(20);
-        GUILayout.Label("Left click on the scene to create a object", EditorStyles.largeLabel);
+        GUILayout.Label("Left click on the scene to create an object", EditorStyles.largeLabel);
         lastObjectCreated =
             EditorGUILayout.ObjectField("Block", lastObjectCreated, typeof(GameObject), true) as GameObject;
         EditorGUILayout.Space(20);
-        if (currentObjectsCreated.Count > 0)
+        if (currentBlockObjectsCreated.Count > 0)
         {
             if (GUILayout.Button("Remove last object created"))
             {
-                DestroyImmediate(currentObjectsCreated[currentObjectsCreated.Count - 1]);
-                currentObjectsCreated.Remove(currentObjectsCreated[currentObjectsCreated.Count - 1]);
+                DestroyImmediate(currentBlockObjectsCreated[currentBlockObjectsCreated.Count - 1]);
+                currentBlockObjectsCreated.Remove(currentBlockObjectsCreated[currentBlockObjectsCreated.Count - 1]);
             }
         }
     }
@@ -158,7 +158,6 @@ public class EditorMapWindow : EditorWindow
 
     #endregion
 
-   
 
     private void OnGUI()
     {
@@ -177,7 +176,7 @@ public class EditorMapWindow : EditorWindow
             ColorizeObject();
         }
 
-        if (isCreating && currentObjectsCreated.Count >= 1)
+        if (isCreating && currentBlockObjectsCreated.Count >= 1)
         {
             EditorGUILayout.Space(20);
             if (GUILayout.Button("Create map"))
@@ -202,34 +201,15 @@ public class EditorMapWindow : EditorWindow
 
     private void CreateMap()
     {
-        var parents = new List<GameObject>();
-
-        foreach (var currentObj in currentObjectsCreated.ToList())
+        foreach (var currentBlock in currentBlockObjectsCreated.ToList())
         {
-            var rays = new Ray[4];
-            var raycastHits = new RaycastHit[4];
-            var vectorRaycast = new List<Vector3> { Vector3.back, Vector3.forward, Vector3.right, Vector3.left };
-            var listGoForParent = new List<GameObject>();
-
-            for (int i = 0; i < rays.Length; i++)
-            {
-                rays[i] = InitializeRay(rays[i], currentObj.transform.position, vectorRaycast[i]);
-
-                if (Physics.Raycast(rays[i], out raycastHits[i], 1.2f))
-                {
-                    HitReturn(raycastHits[i], currentObj, listGoForParent);
-                }
-            }
-
-            if (!listGoForParent.Contains(currentObj))
-            {
-                listGoForParent.Add(currentObj);
-            }
-
-            currentObjectsCreated.Remove(currentObj);
-
-            parents.Add(ParentingNeighboorObjects(listGoForParent));
+            var neighborsBlocks = new List<GameObject>();
+            DetectBlocks(currentBlock, neighborsBlocks);
+            ParentingNeighboorObjects(neighborsBlocks); 
         }
+        
+        //Destroys remaining block parent with no childs
+        GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
 
         foreach (var parent in parents)
         {
@@ -238,29 +218,51 @@ public class EditorMapWindow : EditorWindow
                 DestroyImmediate(parent);
             }
         }
+        
+        DestroyImmediate(planeGo);
+        OnDestroy();
+    }
 
-
-        if (currentObjectsCreated.Any())
+    void DetectBlocks(GameObject currentBlock, List<GameObject> neighborsBlocks)
+    {
+        //Shoot 4 raycast int 4 different direction
+        var rays = new Ray[4];
+        var raycastHits = new RaycastHit[4];
+        var vectorRaycast = new List<Vector3> { Vector3.back, Vector3.forward, Vector3.right, Vector3.left };
+       
+        
+        //If the list for parenting the objects doesn't contains our currentObj we add him in the list and remove from the principal list
+        if (!neighborsBlocks.Contains(currentBlock))
         {
-            CreateMap();
+            neighborsBlocks.Add(currentBlock);
+            currentBlockObjectsCreated.Remove(currentBlock);
         }
-        else
+        
+        //For each rays if we hit 
+        for (int i = 0; i < rays.Length; i++)
         {
-            DestroyImmediate(planeGo);
-            OnDestroy();
+            rays[i] = InitializeRay(rays[i], currentBlock.transform.position, vectorRaycast[i]);
+
+            if (Physics.Raycast(rays[i], out raycastHits[i], 1.2f))
+            {
+                //Check what our currentObj hit 
+                HitReturn(raycastHits[i], currentBlock, neighborsBlocks);
+            }
         }
     }
 
-    private GameObject ParentingNeighboorObjects(List<GameObject> listForParenting)
+    private void ParentingNeighboorObjects(List<GameObject> neighborsBlocks)
     {
-        GameObject blockParent = new GameObject("Block_Parent");
-        
-        foreach (var block in listForParenting)
+        //Create a parent and for each gameobject of neighbors list change there parent to the create one
+        var blockParent = new GameObject("Block parent");
+        foreach (var block in neighborsBlocks)
         {
             block.transform.parent = blockParent.transform;
         }
+
+        blockParent.tag = "BlockParent";
+
         allObjectsCreatedOnScene.Add(blockParent);
-        return blockParent;
     }
 
     private Ray InitializeRay(Ray ray, Vector3 origin, Vector3 direction)
@@ -271,14 +273,18 @@ public class EditorMapWindow : EditorWindow
         return ray;
     }
 
-    private void HitReturn(RaycastHit hit, GameObject currentObject, List<GameObject> listGoParent)
+    private void HitReturn(RaycastHit hit, GameObject currentBlock, List<GameObject> neighborsBlocks)
     {
+        //Check the colorbloc value of hit gameobject and currentObject 
         Node hitNode = hit.collider.gameObject.GetComponent<Node>();
-        Node currentObjNode = currentObject.GetComponent<Node>();
-
-        if (hitNode.colorBloc == currentObjNode.colorBloc)
+        Node currentObjNode = currentBlock.GetComponent<Node>();
+        
+        //Add hit go in the list and Reload the function with the hit go  
+        if (hitNode.colorBloc == currentObjNode.colorBloc && !neighborsBlocks.Contains(hit.collider.gameObject))
         {
-            listGoParent.Add(hit.collider.gameObject);
+            neighborsBlocks.Add(hit.collider.gameObject);
+            currentBlockObjectsCreated.Remove(hit.collider.gameObject);
+            DetectBlocks(hit.collider.gameObject, neighborsBlocks);
         }
     }
 
@@ -339,6 +345,6 @@ public class EditorMapWindow : EditorWindow
         lastObjectCreated = null;
         currentObjectSelected = null;
         planeGo = null;
-        currentObjectsCreated.Clear();
+        currentBlockObjectsCreated.Clear();
     }
 }
