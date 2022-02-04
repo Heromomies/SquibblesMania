@@ -95,11 +95,20 @@ public class PlayerStateManager : Player
         }
     }
 
-    IEnumerator WaitUntilRespawn()
+    private IEnumerator WaitUntilRespawn()
     {
         yield return new WaitForSeconds(1f);
-        Transform blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-       // var chose =Random.Range((0,blockPlayerOn.GetComponentInParent<Transform>().GetComponentsInChildren<Transform>().Length));
+        
+        var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
+        var obj =  blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
+        var children = obj.GetComponentsInChildren<Node>();
+
+        var randomNumber =Random.Range(0,children.Length);
+
+        Debug.Log(children.Length);
+        
+        GameManager.Instance.currentPlayerTurn.transform.position = children[randomNumber].transform.position + new Vector3(0,1,0);
+        StopAllCoroutines();
     }
 
     public void StunPlayer(PlayerStateManager player, int stunTurnCount)
