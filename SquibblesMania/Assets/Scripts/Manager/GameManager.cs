@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
      
-        //players[numberPlayerToStart].StartState();
+        players[numberPlayerToStart].StartState();
         currentPlayerTurn = players[numberPlayerToStart];
         CamConfig(_count);
         NFCManager.Instance.PlayerChangeTurn();
@@ -164,7 +164,6 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         players[playerNumberTurn].StartState();
         currentPlayerTurn = players[playerNumberTurn];
-       // CamConfig(_count);
         NFCManager.Instance.PlayerChangeTurn();
         CamConfig(_count);
         if (CameraButtonManager.Instance.enabled)

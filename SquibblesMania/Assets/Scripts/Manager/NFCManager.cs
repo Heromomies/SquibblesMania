@@ -45,10 +45,10 @@ public class NFCManager : MonoBehaviour
 
 	[HideInInspector] public int colorInt;
 	[HideInInspector] public int numberOfTheCard;
-	private char[] _charCards;
+	[HideInInspector] public char[] charCards;
 	[HideInInspector] public bool hasRemovedCard;
-	private bool _cliked;
-	private int _changeColor;
+	[HideInInspector] public bool clicked;
+	[HideInInspector] public int changeColor;
 	#endregion
 
 	#region Singleton
@@ -65,16 +65,11 @@ public class NFCManager : MonoBehaviour
 
 	#endregion
 	
-	void Start() // Launch the polling function to detect card
-	{  
-		NFCController.OnNewTag = OnNewTagDetected;
-		NFCController.OnTagRemoved = OnTagRemoveDetected;
-		NFCController.StartPollingAsync(antennaPlayerOne);
-	}
-
 	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
 	{
 		StopAllCoroutines();
+		NFCController.StopPolling(); 
+		clicked = false;
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0 : NFCController.StartPollingAsync(antennaPlayerOne);
@@ -109,18 +104,18 @@ public class NFCManager : MonoBehaviour
 	{
 		for (int i = 0; i < fullIndex.Count; i++)
 		{
-			_changeColor++;
+			changeColor++;
 			if (i == fullIndex.Count-1)
 			{
 				i = 0;
 			}
 			
-			if (_changeColor == lightColor.Count)
+			if (changeColor == lightColor.Count)
 			{
-				_changeColor = 0;
+				changeColor = 0;
 			}
 
-			LightController.ColorizeOne(fullIndex[i], lightColor[_changeColor], false);
+			LightController.ColorizeOne(fullIndex[i], lightColor[changeColor], false);
 			yield return new WaitForSeconds(0.2f);
 		}
 	}
@@ -128,61 +123,12 @@ public class NFCManager : MonoBehaviour
 	private void OnDisable()  // Stop polling on disable, can't detect card
 	{  
 		NFCController.StopPolling();  
-	}    
-    
-	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
-	{
-		if (!GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
-		{
-			SetActiveButton(true);
-		
-			_charCards = nfcTag.Data.ToCharArray();
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-			hasRemovedCard = false;
-		}
-		else
-		{
-			Debug.Log("Don't detect another card");
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-		}
-	}
-	
-	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
-	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_cliked)
-		{
-			SetActiveButton(false);
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-		}
-		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && _cliked)
-		{
-			SetActiveButton(false);
-			textTakeOffCard.text = "";
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-			NFCController.StopPolling();
-		}
-		else if(GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && !_cliked)
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-		}
-		hasRemovedCard = true;
-	}
-
-	private void Update()
-	{
-		if (hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && _cliked)
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-			textTakeOffCard.text = "";
-			_cliked = false;
-			hasRemovedCard = false;
-		} 
 	}
 
 	public void ChoseToLaunchPower() // If the player chose to launch a power 
 	{
-		_cliked = true;
-		switch (_charCards[1]) // Check the letter of the card for the color and launch the appropriate power
+		clicked = true;
+		switch (charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 		{
 			case 'B' : colorInt = 0;
 				PowerManager.Instance.ActivateDeactivatePower(colorInt,true);
@@ -202,14 +148,14 @@ public class NFCManager : MonoBehaviour
 
 	public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
 	{
-		_cliked = true;
-		numberOfTheCard = _charCards[0] - '0';
+		clicked = true;
+		numberOfTheCard = charCards[0] - '0';
 		GameManager.Instance.currentPlayerTurn.StartState();
 		
 		SetActiveButton(false);
 	}
-
-	private void SetActiveButton(bool setActive) // Can activate / deactivate button from everywhere in the script
+	
+	public void SetActiveButton(bool setActive) // Can activate / deactivate button from everywhere in the script
 	{
 		choseToMove.gameObject.SetActive(setActive);
 		chosePower.gameObject.SetActive(setActive);

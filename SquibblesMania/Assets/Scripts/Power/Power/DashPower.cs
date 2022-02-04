@@ -28,9 +28,9 @@ public class DashPower : MonoBehaviour, IManagePower
 			if (hit.collider.gameObject.layer == 3)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
-				
-					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					position + _vectorRaycast[numberDirectionVector] * (distance-1), 0.05f);
+
+				GameManager.Instance.currentPlayerTurn.transform.DOMove(
+					position + _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
 			{
@@ -106,6 +106,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
+
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		foreach (var button in buttons)
