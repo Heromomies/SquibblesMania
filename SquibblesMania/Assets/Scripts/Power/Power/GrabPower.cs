@@ -10,7 +10,7 @@ public class GrabPower : MonoBehaviour, IManagePower
 	public List<GameObject> buttons;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
-	void Start()
+	void OnEnable()
 	{
 		foreach (var t in buttons)
 		{

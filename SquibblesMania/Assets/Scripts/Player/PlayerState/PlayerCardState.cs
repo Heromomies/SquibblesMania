@@ -16,15 +16,8 @@ public class PlayerCardState : PlayerBaseState
 			player.stunCount--;
 			PlayerIsStun(player);
 		}
-
-		if (NFCManager.Instance.numberOfTheCard != 0)
-		{
-			player.playerActionPoint = NFCManager.Instance.numberOfTheCard;
-			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(player.playerActionPoint);
-			player.isPlayerInActionCardState = true;
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-			player.SwitchState(player.PlayerActionPointCardState);
-		}
+		
+		
 		
 		NFCController.OnNewTag = OnNewTagDetected;
 		NFCController.OnTagRemoved = OnTagRemoveDetected;
@@ -104,14 +97,9 @@ public class PlayerCardState : PlayerBaseState
 		{
 			player.SwitchState(player.PlayerPowerCardState);
 		}
-
-		if (Input.GetKeyDown(KeyCode.E))
-		{
 		
-		}
 		if (NFCManager.Instance.hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
-			Debug.Log("I'm in the update");
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCManager.Instance.textTakeOffCard.text = "";
 			NFCManager.Instance.clicked = false;
@@ -123,5 +111,6 @@ public class PlayerCardState : PlayerBaseState
 
 	public override void ExitState(PlayerStateManager player)
 	{
+	
 	}
 }

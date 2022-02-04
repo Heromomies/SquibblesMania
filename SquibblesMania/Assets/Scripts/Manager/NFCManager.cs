@@ -128,6 +128,7 @@ public class NFCManager : MonoBehaviour
 	public void ChoseToLaunchPower() // If the player chose to launch a power 
 	{
 		clicked = true;
+		GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
 		switch (charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 		{
 			case 'B' : colorInt = 0;
@@ -150,7 +151,11 @@ public class NFCManager : MonoBehaviour
 	{
 		clicked = true;
 		numberOfTheCard = charCards[0] - '0';
-		GameManager.Instance.currentPlayerTurn.StartState();
+		GameManager.Instance.currentPlayerTurn.playerActionPoint = numberOfTheCard;
+			
+		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+		GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState = true;
+		GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
 		
 		SetActiveButton(false);
 	}

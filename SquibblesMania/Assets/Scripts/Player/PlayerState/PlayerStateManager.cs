@@ -50,6 +50,8 @@ public class PlayerStateManager : Player
         CurrentState.EnterState(this);
     }
 
+    
+    
     public void StartPathFinding()
     {
         //If the current state of the player is when he use his action point
@@ -62,11 +64,15 @@ public class PlayerStateManager : Player
 
     public void SwitchState(PlayerBaseState state)
     {
-        CurrentState.ExitState(this);
-        //Switch current state to the new "state"
-        CurrentState = state;
+        if (CurrentState != null)
+        {
+            CurrentState.ExitState(this);
+            //Switch current state to the new "state"
+            CurrentState = state;
 
-        state.EnterState(this);
+            state.EnterState(this);
+        }
+        
     }
 
     private void DetectBlockBelowPlayer()
