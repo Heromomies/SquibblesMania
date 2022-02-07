@@ -30,7 +30,7 @@ public class EditorMapWindow : EditorWindow
     private static Material material;
 
     [MenuItem("Window/Editor Map/Custom Map Editor")]
-    // Start is called before the first frame update
+   
     public static void ShowWindow()
     {
         GetWindow<EditorMapWindow>("Map Editor");
@@ -51,7 +51,7 @@ public class EditorMapWindow : EditorWindow
         return snapped - offset;
     }
 
-    static void SpawnObjectOnPlane(UnityEngine.Event e)
+   private static void SpawnObjectOnPlane(UnityEngine.Event e)
     {
         // Shoot a ray from the mouse position into the world
         Ray worldRay = HandleUtility.GUIPointToWorldRay(e.mousePosition);
@@ -73,12 +73,14 @@ public class EditorMapWindow : EditorWindow
     }
 
 
+    //Calling multiple time when scene window in focused
     private static void UpdateSceneView(SceneView sceneView)
     {
         UnityEngine.Event e = UnityEngine.Event.current;
 
         if (e.type == EventType.MouseDown && e.button == 0 && onMapEditor)
         {
+            //Spawn bloc on plane
             SpawnObjectOnPlane(e);
         }
 
@@ -105,6 +107,7 @@ public class EditorMapWindow : EditorWindow
 
     private void OnInspectorUpdate()
     {
+        //Update the window
         Repaint();
     }
 
@@ -112,6 +115,7 @@ public class EditorMapWindow : EditorWindow
 
     private void CreatePlane()
     {
+        //Editor window for creating base plane for placing object
         GUILayout.Label("MAP EDITOR TOOL", EditorStyles.boldLabel);
         EditorGUILayout.Space(20);
         GUILayout.Label("Create a plane on the scene to place blocs, you can choose it's size");
@@ -131,10 +135,10 @@ public class EditorMapWindow : EditorWindow
 
     private void CreateObject()
     {
+        //Editor Window for creating object
         EditorGUILayout.Space(20);
         GUILayout.Label("Left click on the scene to create a bloc", EditorStyles.largeLabel);
-        lastBlocCreated =
-            EditorGUILayout.ObjectField("Bloc", lastBlocCreated, typeof(GameObject), true) as GameObject;
+        lastBlocCreated = EditorGUILayout.ObjectField("Bloc", lastBlocCreated, typeof(GameObject), true) as GameObject;
         EditorGUILayout.Space(20);
         if (currentBlocObjectsCreated.Count > 0)
         {
@@ -148,6 +152,7 @@ public class EditorMapWindow : EditorWindow
 
     private void ChangeMatObject()
     {
+        //Editor window for changing mat of object
         EditorGUILayout.Space(20);
         GUILayout.Label("Choose a new material for the bloc (leave it blank if you keep his base mat)");
         GUILayout.BeginHorizontal();
@@ -166,6 +171,7 @@ public class EditorMapWindow : EditorWindow
 
     private void ColorizeObject()
     {
+        //Editor window for changing colorBloc of bloc
         EditorGUILayout.Space(20);
         GUILayout.Label("Choose a color for the bloc bellow");
         colors = (Colors)EditorGUILayout.EnumPopup("Choose a color", colors);
@@ -207,6 +213,7 @@ public class EditorMapWindow : EditorWindow
         }
 
         EditorGUILayout.Space(20);
+        //Reset the window
         if (GUILayout.Button("Reset"))
         {
             foreach (var obj in allObjectsCreatedOnScene)
@@ -226,7 +233,7 @@ public class EditorMapWindow : EditorWindow
         {
             var neighborsBlocks = new List<GameObject>();
             DetectBlocs(currentBloc, neighborsBlocks);
-            ParentingNeighboorObjects(neighborsBlocks);
+            ParentingNeighboorBlocs(neighborsBlocks);
         }
 
         //Destroys remaining block parent with no childs
@@ -272,7 +279,7 @@ public class EditorMapWindow : EditorWindow
         }
     }
 
-    private void ParentingNeighboorObjects(List<GameObject> neighborsBlocs)
+    private void ParentingNeighboorBlocs(List<GameObject> neighborsBlocs)
     {
         //Create a parent and for each gameobject of neighbors list change there parent to the create one
         var blockParent = new GameObject("Block parent");
@@ -311,6 +318,7 @@ public class EditorMapWindow : EditorWindow
 
     private void ChangeBlocColor()
     {
+        //Change bloc color base on the window enum selected
         int lastMatNumber = currentBlocSelected.GetComponent<Renderer>().sharedMaterials.Length - 2;
         Material[] tempSharedMat = currentBlocSelected.GetComponent<Renderer>().sharedMaterials;
 
@@ -323,6 +331,7 @@ public class EditorMapWindow : EditorWindow
                 tempSharedMat[lastMatNumber] = blueMat;
                 currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
                 currentBlocNode.colorBloc = Node.ColorBloc.Blue;
+                ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Blue);
                 break;
             case Colors.Green:
                 Material greenMat =
@@ -331,6 +340,7 @@ public class EditorMapWindow : EditorWindow
                 tempSharedMat[lastMatNumber] = greenMat;
                 currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
                 currentBlocNode.colorBloc = Node.ColorBloc.Green;
+                ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Green);
                 break;
             case Colors.Red:
                 Material redMat =
@@ -339,6 +349,7 @@ public class EditorMapWindow : EditorWindow
                 tempSharedMat[lastMatNumber] = redMat;
                 currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
                 currentBlocNode.colorBloc = Node.ColorBloc.Red;
+                ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Red);
                 break;
             case Colors.Yellow:
                 Material yellowMat =
@@ -347,6 +358,7 @@ public class EditorMapWindow : EditorWindow
                 tempSharedMat[lastMatNumber] = yellowMat;
                 currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
                 currentBlocNode.colorBloc = Node.ColorBloc.Yellow;
+                ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Yellow);
                 break;
         }
     }
@@ -357,8 +369,15 @@ public class EditorMapWindow : EditorWindow
         tempSharedMat[0] = material;
         tempSharedMat[tempSharedMat.Length - 1] = material;
         currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+        lastBlocCreated.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
     }
 
+    private void ChangePrefabBaseBloc(GameObject prefab, Material[] sharedMat, Node.ColorBloc colorBloc)
+    {
+        //Update the prefab bloc
+        prefab.GetComponent<Renderer>().sharedMaterials = sharedMat;
+        prefab.GetComponent<Node>().colorBloc = colorBloc;
+    }
     private void OnDestroy()
     {
         //Call when close the window
@@ -366,7 +385,7 @@ public class EditorMapWindow : EditorWindow
     }
 
 
-    void ResetVars()
+   private void ResetVars()
     {
         isCreating = false;
         isBlocSelected = false;
