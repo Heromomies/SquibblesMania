@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using ICSharpCode.NRefactory.Ast;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public enum Colors
 {
@@ -13,6 +16,15 @@ public enum Colors
     Yellow,
     Green
 };
+
+public enum Theme
+{
+    Volcano,
+    Mountain,
+    Submarine,
+    Temple
+};
+
 
 public class EditorMapWindow : EditorWindow
 {
@@ -27,10 +39,14 @@ public class EditorMapWindow : EditorWindow
     private static Colors colors;
     private static Node currentBlocNode;
     private static GameObject planeGo;
-    private static Material material;
+
+    private static Theme theme;
+
+    public static Material[] materials = new Material[5];
+    // private static Material material
+
 
     [MenuItem("Window/Editor Map/Custom Map Editor")]
-   
     public static void ShowWindow()
     {
         GetWindow<EditorMapWindow>("Map Editor");
@@ -51,7 +67,7 @@ public class EditorMapWindow : EditorWindow
         return snapped - offset;
     }
 
-   private static void SpawnObjectOnPlane(UnityEngine.Event e)
+    private static void SpawnObjectOnPlane(UnityEngine.Event e)
     {
         // Shoot a ray from the mouse position into the world
         Ray worldRay = HandleUtility.GUIPointToWorldRay(e.mousePosition);
@@ -81,6 +97,7 @@ public class EditorMapWindow : EditorWindow
         if (e.type == EventType.MouseDown && e.button == 0 && onMapEditor)
         {
             //Spawn bloc on plane
+
             SpawnObjectOnPlane(e);
         }
 
@@ -138,7 +155,9 @@ public class EditorMapWindow : EditorWindow
         //Editor Window for creating object
         EditorGUILayout.Space(20);
         GUILayout.Label("Left click on the scene to create a bloc", EditorStyles.largeLabel);
-        lastBlocCreated = EditorGUILayout.ObjectField("Bloc", lastBlocCreated, typeof(GameObject), true) as GameObject;
+        lastBlocCreated = EditorGUILayout.ObjectField("Bloc",
+            AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Bloc_prefab/Bloc_prefab.prefab", typeof(GameObject)),
+            typeof(GameObject), true) as GameObject;
         EditorGUILayout.Space(20);
         if (currentBlocObjectsCreated.Count > 0)
         {
@@ -150,21 +169,44 @@ public class EditorMapWindow : EditorWindow
         }
     }
 
+    private void ChooseMapTheme()
+    {
+        EditorGUILayout.Space(20);
+        GUILayout.Label("Choose a theme to show the materials corresponding to the theme");
+        theme = (Theme)EditorGUILayout.EnumPopup("Theme", theme);
+        EditorGUILayout.Space(20);
+    }
+
     private void ChangeMatObject()
     {
         //Editor window for changing mat of object
         EditorGUILayout.Space(20);
-        GUILayout.Label("Choose a new material for the bloc (leave it blank if you keep his base mat)");
-        GUILayout.BeginHorizontal();
-        material = (Material)EditorGUILayout.ObjectField("Material", material, typeof(Material));
-        GUILayout.EndHorizontal();
+        GUILayout.Label("Choose a material for the bloc and press the button to apply the material");
+        ShowingMaterials(theme);
+        //material = EditorGUILayout.ObjectField("Material", material, typeof(Material)) as Material;
         EditorGUILayout.Space(20);
-        if (material != null)
+    }
+
+    private void ShowingMaterials(Theme mapTheme)
+    {
+        switch (mapTheme)
         {
-            if (GUILayout.Button("Change bloc material"))
-            {
-                ChangeBlocMaterial();
-            }
+            case Theme.Volcano:
+                PickUpMaterialFromAsset(materials[0],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_grass.mat", typeof(Material)), typeof(Material)));
+                PickUpMaterialFromAsset(materials[1],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_rock.mat", typeof(Material)), typeof(Material)));
+                PickUpMaterialFromAsset(materials[2],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_sand.mat", typeof(Material)), typeof(Material)));
+                PickUpMaterialFromAsset(materials[3],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_volcanic_rock.mat", typeof(Material)), typeof(Material)));
+                PickUpMaterialFromAsset(materials[4],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_unmovable_volcanic.mat", typeof(Material)), typeof(Material)));
+                break;
+        }
+    }
+
+    private void PickUpMaterialFromAsset(Material mat, Object objectField)
+    {
+        mat = objectField as Material;
+        if (GUILayout.Button("Select material"))
+        {
+            ChangeBlocMaterial(mat);
         }
     }
 
@@ -173,13 +215,14 @@ public class EditorMapWindow : EditorWindow
     {
         //Editor window for changing colorBloc of bloc
         EditorGUILayout.Space(20);
-        GUILayout.Label("Choose a color for the bloc bellow");
+        GUILayout.Label("Choose a color for the selected bloc");
         colors = (Colors)EditorGUILayout.EnumPopup("Choose a color", colors);
         EditorGUILayout.Space(20);
-        if (GUILayout.Button("Colorize"))
+        if (currentBlocSelected.GetComponent<Node>())
         {
             ChangeBlocColor();
         }
+        
     }
 
     #endregion
@@ -199,6 +242,7 @@ public class EditorMapWindow : EditorWindow
 
         if (isBlocSelected)
         {
+            ChooseMapTheme();
             ChangeMatObject();
             ColorizeObject();
         }
@@ -208,24 +252,33 @@ public class EditorMapWindow : EditorWindow
             EditorGUILayout.Space(20);
             if (GUILayout.Button("Create map"))
             {
+                foreach (var block in currentBlocObjectsCreated)
+                {
+                    block.GetComponent<Node>().SetUpPossiblePath();
+                }
+
                 CreateMap();
             }
         }
 
         EditorGUILayout.Space(20);
-        //Reset the window
-        if (GUILayout.Button("Reset"))
+        if (currentBlocObjectsCreated.Count >= 1 && isCreating)
         {
-            foreach (var obj in allObjectsCreatedOnScene)
+            //Reset the window 
+            if (GUILayout.Button("Reset"))
             {
-                DestroyImmediate(obj);
-            }
+                foreach (var obj in allObjectsCreatedOnScene)
+                {
+                    DestroyImmediate(obj);
+                }
 
-            allObjectsCreatedOnScene.Clear();
-            OnDestroy();
-            ShowWindow();
+                allObjectsCreatedOnScene.Clear();
+                OnDestroy();
+                ShowWindow();
+            }
         }
     }
+
 
     private void CreateMap()
     {
@@ -233,7 +286,7 @@ public class EditorMapWindow : EditorWindow
         {
             var neighborsBlocks = new List<GameObject>();
             DetectBlocs(currentBloc, neighborsBlocks);
-            ParentingNeighboorBlocs(neighborsBlocks);
+            ParentingNeighborBlocs(neighborsBlocks);
         }
 
         //Destroys remaining block parent with no childs
@@ -248,7 +301,9 @@ public class EditorMapWindow : EditorWindow
         }
 
         DestroyImmediate(planeGo);
-        OnDestroy();
+        ResetVars();
+        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        EditorUtility.SetDirty(this);
     }
 
     void DetectBlocs(GameObject currentBloc, List<GameObject> neighborsBlocs)
@@ -279,7 +334,7 @@ public class EditorMapWindow : EditorWindow
         }
     }
 
-    private void ParentingNeighboorBlocs(List<GameObject> neighborsBlocs)
+    private void ParentingNeighborBlocs(List<GameObject> neighborsBlocs)
     {
         //Create a parent and for each gameobject of neighbors list change there parent to the create one
         var blockParent = new GameObject("Block parent");
@@ -363,11 +418,10 @@ public class EditorMapWindow : EditorWindow
         }
     }
 
-    private void ChangeBlocMaterial()
+    private void ChangeBlocMaterial(Material material)
     {
         Material[] tempSharedMat = currentBlocSelected.GetComponent<Renderer>().sharedMaterials;
         tempSharedMat[0] = material;
-        tempSharedMat[tempSharedMat.Length - 1] = material;
         currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
         lastBlocCreated.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
     }
@@ -378,21 +432,24 @@ public class EditorMapWindow : EditorWindow
         prefab.GetComponent<Renderer>().sharedMaterials = sharedMat;
         prefab.GetComponent<Node>().colorBloc = colorBloc;
     }
+
     private void OnDestroy()
     {
         //Call when close the window
         ResetVars();
+        onMapEditor = false;
+        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        EditorUtility.SetDirty(this);
     }
 
 
-   private void ResetVars()
+    private void ResetVars()
     {
         isCreating = false;
         isBlocSelected = false;
-        onMapEditor = false;
-        lastBlocCreated = null;
         currentBlocSelected = null;
         planeGo = null;
         currentBlocObjectsCreated.Clear();
+        allObjectsCreatedOnScene.Clear();
     }
 }
