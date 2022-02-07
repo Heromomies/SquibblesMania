@@ -10,7 +10,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	public LayerMask layerMask;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
-	private void Start()
+	private void OnEnable()
 	{
 		for (int i = 0; i < buttons.Count; i++)
 		{
@@ -107,7 +107,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
 
-		PowerManager.Instance.ActivateDeactivatePower(2, false);
+		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		foreach (var button in buttons)
 		{

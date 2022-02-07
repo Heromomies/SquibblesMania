@@ -104,8 +104,6 @@ public class PlayerStateManager : Player
         var children = obj.GetComponentsInChildren<Node>();
 
         var randomNumber =Random.Range(0,children.Length);
-
-        Debug.Log(children.Length);
         
         GameManager.Instance.currentPlayerTurn.transform.position = children[randomNumber].transform.position + new Vector3(0,1,0);
         StopAllCoroutines();

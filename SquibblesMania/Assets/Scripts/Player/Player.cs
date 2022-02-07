@@ -11,8 +11,12 @@ public class Player : MonoBehaviour
     public bool isUsingCardPower;
     public GameObject playerPref;
     public PlayerTeam playerTeam;
+   
     public int stunCount;
     public bool isPlayerStun;
+    
+    public bool isPlayerShielded;
+    public int shieldCount;
     public enum PlayerTeam
     {
         TeamOne,

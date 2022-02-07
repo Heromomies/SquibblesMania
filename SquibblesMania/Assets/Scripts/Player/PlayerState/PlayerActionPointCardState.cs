@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
-    public List<Transform> previewPath = new List<Transform>();
-    [HideInInspector] public int actionPointText;
-    [HideInInspector] public int actionPoint;
-
+    public List<Transform> previewPath = new List<Transform>(); 
+    private int _actionPointText;
+    
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -307,7 +305,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         int movementPlayer = 0;
 
-        actionPointText = player.playerActionPoint;
+        _actionPointText = player.playerActionPoint;
 
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
@@ -321,15 +319,15 @@ public class PlayerActionPointCardState : PlayerBaseState
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
-                actionPointText--;
-                UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(actionPointText);
+                _actionPointText--;
+                UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(_actionPointText);
                 
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
             }
         }
 
-        player.playerActionPoint = actionPointText;
+        player.playerActionPoint = _actionPointText;
         Clear(player);
     }
 

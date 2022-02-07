@@ -87,7 +87,7 @@ public class NFCManager : MonoBehaviour
 		}
 	}
 
-	private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight)
+	private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight) // Color One range with different colors
 	{
 		for (int i = 0; i < lightColor.Capacity; i++)
 		{
@@ -100,7 +100,7 @@ public class NFCManager : MonoBehaviour
 		}
 	}
 
-	private IEnumerator ColorOneByOneAllTheAntennas()
+	public IEnumerator ColorOneByOneAllTheAntennas() // Color One by One all the antennas 
 	{
 		for (int i = 0; i < fullIndex.Count; i++)
 		{
@@ -154,6 +154,11 @@ public class NFCManager : MonoBehaviour
 		GameManager.Instance.currentPlayerTurn.playerActionPoint = numberOfTheCard;
 			
 		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded)
+		{
+			GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
+			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+		}
 		GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState = true;
 		GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
 		

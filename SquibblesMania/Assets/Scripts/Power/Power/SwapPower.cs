@@ -14,7 +14,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private bool _canChoseThePlayer;
-	public void Start()
+	public void OnEnable()
 	{
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
@@ -74,7 +74,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
-		PowerManager.Instance.ActivateDeactivatePower(1,false);
+		PowerManager.Instance.ActivateDeactivatePower(2,false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

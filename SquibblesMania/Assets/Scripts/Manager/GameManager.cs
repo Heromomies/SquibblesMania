@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < allBlocks.Count; i++)
         {
-            int randomLocation = Random.Range(0, 1);
+            int randomLocation = Random.Range(0, 2);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
                 allBlocks[i].transform.position.z);
         }
@@ -189,6 +189,8 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
+
+       StartCoroutine( NFCManager.Instance.ColorOneByOneAllTheAntennas());
         //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);

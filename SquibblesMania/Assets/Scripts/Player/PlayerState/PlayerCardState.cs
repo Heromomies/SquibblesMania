@@ -16,9 +16,12 @@ public class PlayerCardState : PlayerBaseState
 			player.stunCount--;
 			PlayerIsStun(player);
 		}
-		
-		
-		
+
+		if (player.isPlayerShielded)
+		{
+			player.shieldCount--;
+		}
+
 		NFCController.OnNewTag = OnNewTagDetected;
 		NFCController.OnTagRemoved = OnTagRemoveDetected;
 		NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
@@ -57,6 +60,12 @@ public class PlayerCardState : PlayerBaseState
 		{
 			NFCManager.Instance.SetActiveButton(false);
 			UiManager.Instance.buttonNextTurn.SetActive(false);
+		}
+
+		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded && GameManager.Instance.currentPlayerTurn.shieldCount == 0)
+		{
+			GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
+			GameManager.Instance.currentPlayerTurn.isPlayerShielded = false;
 		}
 		
 		NFCManager.Instance.hasRemovedCard = true;

@@ -5,26 +5,26 @@ using UnityEngine;
 
 public class ShieldPower : MonoBehaviour, IManagePower
 {
-    private int _savePlayerTurn;
-    private int _actualTurn;
-    
-    private PlayerStateManager _player;
-    [HideInInspector] public bool activated;
-
-    public void Start()
+	public int durationShield;
+	
+    public void OnEnable()
     {
-	    activated = true;
-	    _player = GameManager.Instance.currentPlayerTurn;
-	    _savePlayerTurn = GameManager.Instance.turnCount;
-	    _player.gameObject.layer = 0;
-	    //GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
-	    
-	    PowerManager.Instance.ChangeTurnPlayer();
-	    
-	    Debug.Log(_player.name);
-	    Debug.Log(_savePlayerTurn);
+	    GameManager.Instance.currentPlayerTurn.isPlayerShielded = true;
+	    GameManager.Instance.currentPlayerTurn.shieldCount = durationShield;
+	    GameManager.Instance.currentPlayerTurn.gameObject.layer = 3;
+	    transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+
+	    StartCoroutine(CoroutineShield());
     }
 
+	IEnumerator CoroutineShield()
+	{
+		yield return new WaitForSeconds(5f);
+		
+	    PowerManager.Instance.ActivateDeactivatePower(3, false);
+	    PowerManager.Instance.ChangeTurnPlayer();
+    }
+    
     public void ShowPower()
     {
 	   
@@ -32,21 +32,5 @@ public class ShieldPower : MonoBehaviour, IManagePower
 
     public void LaunchPower()
     {
-	    
-	    
-    }
-
-    public void ChangeTurn()
-    {
-	    if (GameManager.Instance.turnCount == _savePlayerTurn + 2)
-	    {
-		    Debug.Log("Player regain his layer");
-		    _player.gameObject.layer = 6;
-	    }
-	    if (GameManager.Instance.turnCount == _savePlayerTurn + 4)
-	    {
-		    Debug.Log("Player gain two action point");
-		    _player.PlayerActionPointCardState.actionPoint += 2;
-	    }
     }
 }
