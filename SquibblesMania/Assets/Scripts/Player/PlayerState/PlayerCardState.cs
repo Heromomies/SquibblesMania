@@ -38,7 +38,6 @@ public class PlayerCardState : PlayerBaseState
 		}
 		else
 		{
-			Debug.Log("Don't detect another card");
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 		}
 	}
@@ -48,7 +47,7 @@ public class PlayerCardState : PlayerBaseState
 		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
 			NFCManager.Instance.SetActiveButton(false);
-			NFCManager.Instance.textTakeOffCard.text = "";
+			NFCManager.Instance.textTakeOffCard.gameObject.SetActive(false);
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCController.StopPolling();
 		} 
@@ -110,7 +109,7 @@ public class PlayerCardState : PlayerBaseState
 		if (NFCManager.Instance.hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
 			UiManager.Instance.buttonNextTurn.SetActive(true);
-			NFCManager.Instance.textTakeOffCard.text = "";
+			NFCManager.Instance.textTakeOffCard.gameObject.SetActive(false);
 			NFCManager.Instance.clicked = false;
 			NFCManager.Instance.hasRemovedCard = false;
 		} 

@@ -365,11 +365,11 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             if (NFCManager.Instance.hasRemovedCard)
             {
-                NFCManager.Instance.textTakeOffCard.text = "";
+                NFCManager.Instance.textTakeOffCard.gameObject.SetActive(false);
             }
             else
             {
-                NFCManager.Instance.textTakeOffCard.text = "Remove the card from the tablet";
+                NFCManager.Instance.textTakeOffCard.gameObject.SetActive(true);
             }
         }
     }
