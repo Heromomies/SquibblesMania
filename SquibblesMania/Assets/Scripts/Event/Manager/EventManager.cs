@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Event;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
