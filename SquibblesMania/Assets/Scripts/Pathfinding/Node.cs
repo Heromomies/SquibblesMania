@@ -51,9 +51,9 @@ public class Node : MonoBehaviour
         int count = 0;
         foreach (var collider in colliders)
         {
-            Node colorColliderBlock = collider.gameObject.GetComponent<Node>();
+            
             if (Vector3.Distance(collider.transform.position, transform.position) <= (radius + 0.1f) &&
-                collider.transform != transform && colorColliderBlock.colorBloc == colorBloc)
+                collider.transform != transform)
             {
                 //Create a new element and set possiblePath value
                 possiblePath.Add(new GamePath());

@@ -14,7 +14,8 @@ public enum Colors
     Red,
     Blue,
     Yellow,
-    Green
+    Green,
+    None
 };
 
 public enum Theme
@@ -42,7 +43,7 @@ public class EditorMapWindow : EditorWindow
 
     private static Theme theme;
 
-    public static Material[] materials = new Material[5];
+    private static Material[] materials = new Material[5];
     // private static Material material
 
 
@@ -183,7 +184,6 @@ public class EditorMapWindow : EditorWindow
         EditorGUILayout.Space(20);
         GUILayout.Label("Choose a material for the bloc and press the button to apply the material");
         ShowingMaterials(theme);
-        //material = EditorGUILayout.ObjectField("Material", material, typeof(Material)) as Material;
         EditorGUILayout.Space(20);
     }
 
@@ -192,11 +192,24 @@ public class EditorMapWindow : EditorWindow
         switch (mapTheme)
         {
             case Theme.Volcano:
-                PickUpMaterialFromAsset(materials[0],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_grass.mat", typeof(Material)), typeof(Material)));
-                PickUpMaterialFromAsset(materials[1],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_rock.mat", typeof(Material)), typeof(Material)));
-                PickUpMaterialFromAsset(materials[2],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_sand.mat", typeof(Material)), typeof(Material)));
-                PickUpMaterialFromAsset(materials[3],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_volcanic_rock.mat", typeof(Material)), typeof(Material)));
-                PickUpMaterialFromAsset(materials[4],EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_unmovable_volcanic.mat", typeof(Material)), typeof(Material)));
+                if (colors != Colors.None)
+                {
+                    PickUpMaterialFromAsset(materials[0], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_grass.mat", typeof(Material)), typeof(Material)));
+                    PickUpMaterialFromAsset(materials[1], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_rock.mat", typeof(Material)), typeof(Material)));
+                    PickUpMaterialFromAsset(materials[2], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_sand.mat", typeof(Material)), typeof(Material)));
+                    PickUpMaterialFromAsset(materials[3], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_volcanic_rock.mat", typeof(Material)), typeof(Material)));
+                }
+
+                break;
+
+            case Theme.Mountain:
+                if (colors != Colors.None)
+                {
+                    PickUpMaterialFromAsset(materials[0], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_ice.mat", typeof(Material)), typeof(Material)));
+                    PickUpMaterialFromAsset(materials[1], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_snow.mat", typeof(Material)), typeof(Material)));
+                    PickUpMaterialFromAsset(materials[2], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_mountain_stone.mat", typeof(Material)), typeof(Material)));
+                }
+                
                 break;
         }
     }
@@ -218,11 +231,11 @@ public class EditorMapWindow : EditorWindow
         GUILayout.Label("Choose a color for the selected bloc");
         colors = (Colors)EditorGUILayout.EnumPopup("Choose a color", colors);
         EditorGUILayout.Space(20);
-        if (currentBlocSelected.GetComponent<Node>())
+        if (currentBlocSelected != null)
         {
             ChangeBlocColor();
         }
-        
+     
     }
 
     #endregion
@@ -279,6 +292,7 @@ public class EditorMapWindow : EditorWindow
         }
     }
 
+    #region MapCreation
 
     private void CreateMap()
     {
@@ -371,67 +385,131 @@ public class EditorMapWindow : EditorWindow
         }
     }
 
-    private void ChangeBlocColor()
+    #endregion
+
+    #region BlocModifiers
+    
+ private void ChangeBlocColor()
     {
         //Change bloc color base on the window enum selected
-        int lastMatNumber = currentBlocSelected.GetComponent<Renderer>().sharedMaterials.Length - 2;
+        int middleMatNumber = currentBlocSelected.GetComponent<Renderer>().sharedMaterials.Length - 2;
+        int lastMatNumber = currentBlocSelected.GetComponent<Renderer>().sharedMaterials.Length - 1;
         Material[] tempSharedMat = currentBlocSelected.GetComponent<Renderer>().sharedMaterials;
-
+        Material boxMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_box.mat", typeof(Material)) as Material;
         switch (colors)
         {
             case Colors.Blue:
-                Material blueMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_PiqueCube.mat", typeof(Material)) as
-                        Material;
-                tempSharedMat[lastMatNumber] = blueMat;
-                currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
-                currentBlocNode.colorBloc = Node.ColorBloc.Blue;
+                if (!currentBlocSelected.GetComponent<Node>()) currentBlocSelected.AddComponent<Node>();
+                Material blueMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_PiqueCube.mat", typeof(Material)) as Material;
+                InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, blueMat, lastMatNumber, boxMat);
+                ColorBloc(tempSharedMat, Node.ColorBloc.Blue);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Blue);
                 break;
             case Colors.Green:
-                Material greenMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_TrefleCube.mat", typeof(Material)) as
-                        Material;
-                tempSharedMat[lastMatNumber] = greenMat;
-                currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
-                currentBlocNode.colorBloc = Node.ColorBloc.Green;
+                if (!currentBlocSelected.GetComponent<Node>()) currentBlocSelected.AddComponent<Node>();
+                Material greenMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_TrefleCube.mat", typeof(Material)) as Material;
+                InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, greenMat, lastMatNumber, boxMat);
+                ColorBloc(tempSharedMat, Node.ColorBloc.Green);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Green);
                 break;
             case Colors.Red:
-                Material redMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CoeurCube.mat", typeof(Material)) as
-                        Material;
-                tempSharedMat[lastMatNumber] = redMat;
-                currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
-                currentBlocNode.colorBloc = Node.ColorBloc.Red;
+                if (!currentBlocSelected.GetComponent<Node>()) currentBlocSelected.AddComponent<Node>();
+                Material redMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CoeurCube.mat", typeof(Material)) as Material;
+                InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, redMat, lastMatNumber, boxMat);
+                ColorBloc(tempSharedMat, Node.ColorBloc.Red);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Red);
                 break;
             case Colors.Yellow:
-                Material yellowMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CarreauCube.mat", typeof(Material)) as
-                        Material;
-                tempSharedMat[lastMatNumber] = yellowMat;
-                currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
-                currentBlocNode.colorBloc = Node.ColorBloc.Yellow;
+                if (!currentBlocSelected.GetComponent<Node>()) currentBlocSelected.AddComponent<Node>();
+                Material yellowMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CarreauCube.mat", typeof(Material)) as Material;
+                InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, yellowMat, lastMatNumber, boxMat);
+                ColorBloc(tempSharedMat, Node.ColorBloc.Yellow);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Yellow);
+                break;
+            case Colors.None:
+                UnmovableBlocSetUp(tempSharedMat);
                 break;
         }
     }
 
-    private void ChangeBlocMaterial(Material material)
+ private void InitializeTemporarySharedMat(Material[] sharedMaterials, int indexMiddleMatNumber, Material colorMaterial, int indexLastMatNumber, Material blocMaterial)
+ {
+     //Initialize value for sharedMaterials
+     sharedMaterials[indexMiddleMatNumber] = colorMaterial;
+     sharedMaterials[indexLastMatNumber] = blocMaterial;
+     sharedMaterials[0] = lastBlocCreated.GetComponent<Renderer>().sharedMaterial;
+ }
+ private void UnmovableBlocSetUp(Material[] materialBloc)
     {
-        Material[] tempSharedMat = currentBlocSelected.GetComponent<Renderer>().sharedMaterials;
-        tempSharedMat[0] = material;
-        currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
-        lastBlocCreated.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+        //Set up the block for unMovable mat
+        Material baseMat = null;
+        switch (theme)
+        {
+            case Theme.Volcano: 
+                baseMat =  AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_unmovable_volcanic.mat", typeof(Material)) as Material;
+                break;
+            case Theme.Mountain:
+                baseMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_unmovable_mountain.mat", typeof(Material)) as Material;
+                break;
+        }
+        
+        for (int i = 0; i < materialBloc.Length; i++)
+        {
+            materialBloc[i] = baseMat;
+        }
+        
+        currentBlocSelected.GetComponent<Renderer>().sharedMaterials = materialBloc;
+        Node node = currentBlocSelected.GetComponent<Node>();
+        DestroyImmediate(node);
     }
 
-    private void ChangePrefabBaseBloc(GameObject prefab, Material[] sharedMat, Node.ColorBloc colorBloc)
+ private void ColorBloc(Material[] tempSharedMaterial, Node.ColorBloc colorBloc)
+    {
+        //Change the shared bloc mats
+        if (!currentBlocSelected.GetComponent<Node>())
+        {
+            currentBlocNode =  currentBlocSelected.AddComponent<Node>();
+        }
+        currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMaterial;
+        if (currentBlocNode != null)
+        {
+            currentBlocNode.colorBloc = colorBloc;
+        }
+        
+    }
+
+ private void ChangeBlocMaterial(Material material)
+    {
+        //Change the base material of the currentBlocSelected
+        bool isBlocMovable = currentBlocSelected.GetComponent<Node>();
+        Material[] tempSharedMat = currentBlocSelected.GetComponent<Renderer>().sharedMaterials;
+        if (isBlocMovable)
+        {
+            tempSharedMat[0] = material;
+            currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+            lastBlocCreated.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+        }
+        else
+        {
+            for (int i = 0; i < tempSharedMat.Length; i++)
+            {
+                tempSharedMat[i] = material;
+            }
+            currentBlocSelected.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+            lastBlocCreated.GetComponent<Renderer>().sharedMaterials = tempSharedMat;
+        }
+       
+     
+    }
+
+ private void ChangePrefabBaseBloc(GameObject prefab, Material[] sharedMat, Node.ColorBloc colorBloc)
     {
         //Update the prefab bloc
         prefab.GetComponent<Renderer>().sharedMaterials = sharedMat;
         prefab.GetComponent<Node>().colorBloc = colorBloc;
-    }
+     }
+    #endregion
+   
 
     private void OnDestroy()
     {
