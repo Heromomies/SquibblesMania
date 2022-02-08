@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace I2.Loc
@@ -9,7 +10,7 @@ namespace I2.Loc
         #if UNITY_5_2 || UNITY_5_3 || UNITY_5_4_OR_NEWER
         void OnEnable()
 		{
-			var dropdown = GetComponent<Dropdown>();
+			var dropdown = GetComponent<TMP_Dropdown>();
 			if (dropdown==null)
 				return;
 
@@ -29,7 +30,7 @@ namespace I2.Loc
 		
 		void OnValueChanged( int index )
 		{
-			var dropdown = GetComponent<Dropdown>();
+			var dropdown = GetComponent<TMP_Dropdown>();
 			if (index<0)
 			{
 				index = 0;
