@@ -23,9 +23,9 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		// Create a new Sequence.
 		Sequence s = DOTween.Sequence();
 		// Change the scale of the object to make it smaller
-		s.Append(foldoutValues.volcanoTransform.DOScaleY(-1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
-		s.Insert(0, foldoutValues.volcanoTransform.DOScaleZ(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
-		s.Insert(0, foldoutValues.volcanoTransform.DOScaleX(-0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Append(foldoutValues.volcanoTransform.DOScaleY(0.3f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Insert(0, foldoutValues.volcanoTransform.DOScaleZ(0.1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
+		s.Insert(0, foldoutValues.volcanoTransform.DOScaleX(0.1f, foldoutValuesEvent.durationOfScale).SetRelative().SetEase(Ease.Linear));
 
 		// Add shake to the object
 		s.Insert(foldoutValuesEvent.durationOfScale,
@@ -34,11 +34,11 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 		// Change the scale of the object to make it bigger
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValues.volcanoTransform.DOScaleY(2f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleY(-0.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValues.volcanoTransform.DOScaleZ(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleZ(-0.1f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 		s.Insert(foldoutValuesEvent.durationOfScale * 3.5f,
-			foldoutValues.volcanoTransform.DOScaleX(1.3f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
+			foldoutValues.volcanoTransform.DOScaleX(-0.1f, foldoutValuesEvent.durationOfScale / 2).SetRelative().SetEase(Ease.Linear));
 
 		yield return new WaitForSeconds(foldoutValuesEvent.durationOfScale * 3.5f);
 		Instantiate(foldoutValuesEvent.particleSystem, new Vector3(foldoutValuesEvent.transformToSpawnParticles.position.x,

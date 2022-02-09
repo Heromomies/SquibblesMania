@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
+using I2.Loc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,7 +55,8 @@ public class UiManager : MonoBehaviour
 
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
-        currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {actionPointText}";
+        var localManager = currentActionPointsOfCurrentPlayerTurn.GetComponent<LocalizationParamsManager>();
+        localManager.SetParameterValue("ACTIONPOINT", actionPointText.ToString());
     }
 
     public void UpdateCurrentTurnCount(int turnCount)
@@ -64,6 +66,7 @@ public class UiManager : MonoBehaviour
 
     public void ButtonNextTurn()
     {
+        NFCManager.Instance.numberOfTheCard = 0;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 

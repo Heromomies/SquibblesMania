@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Meteorite : MonoBehaviour
@@ -9,9 +5,9 @@ public class Meteorite : MonoBehaviour
 	private Rigidbody _rb;
 	private int _turn;
 	public GameObject particleSystem;
-	public Material m;
-	public List<Transform> t = new List<Transform>();
-
+	public float speedTurnAround;
+	private bool _stopRotating;
+	
 	private void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
@@ -26,6 +22,12 @@ public class Meteorite : MonoBehaviour
 			_turn = GameManager.Instance.turnCount;
 			Destroy(gameObject);
 		}
+
+		if (!_stopRotating)
+		{
+			var rotate = Random.Range(0.5f, 3f);
+			transform.Rotate(new Vector3(rotate,rotate,rotate) * speedTurnAround * Time.deltaTime, Space.World);
+		}
 	}
 
 	private void OnCollisionEnter(Collision other)
@@ -35,7 +37,9 @@ public class Meteorite : MonoBehaviour
 			other.gameObject.GetComponent<Node>().isActive = false;
 			transform.parent = other.transform;
 			_turn = GameManager.Instance.turnCount;
-			
+
+			transform.rotation = new Quaternion(0,0,0,0);
+			_stopRotating = true;
 			Instantiate(particleSystem, transform.position, Quaternion.identity);
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);

@@ -105,13 +105,15 @@ public class GameManager : MonoBehaviour
     {
         //Choose Randomly a player to start
        
-        int numberPlayerToStart = Random.Range(0, players.Count);
+        int numberPlayerToStart = 0;
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
-     
-        players[numberPlayerToStart].StartState();
+        
         currentPlayerTurn = players[numberPlayerToStart];
+        currentPlayerTurn.StartState();
+        
         CamConfig(_count);
+        NFCManager.Instance.PlayerChangeTurn();
         //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
@@ -161,8 +163,11 @@ public class GameManager : MonoBehaviour
     {
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
-        players[playerNumberTurn].StartState();
+        
         currentPlayerTurn = players[playerNumberTurn];
+        currentPlayerTurn.StartState();
+       
+        NFCManager.Instance.PlayerChangeTurn();
         CamConfig(_count);
         if (CameraButtonManager.Instance.enabled)
         {
@@ -184,6 +189,8 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
+
+       StartCoroutine( NFCManager.Instance.ColorOneByOneAllTheAntennas());
         //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);

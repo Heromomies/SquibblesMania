@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Event;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -159,7 +158,7 @@ public class EventManager : MonoBehaviour
 		}
 	}
 
-	public void ClickButton(int numberButton)
+	public void ClickButton(int numberButton) // Chose the zone where the event will appear 
 	{
 		switch (numberButton)
 		{
@@ -184,7 +183,7 @@ public class EventManager : MonoBehaviour
 		LaunchEvent(_numberEvent);
 	}
 
-	void LaunchEvent(int numberEvent)
+	void LaunchEvent(int numberEvent) // Launch the event
 	{
 		events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
 		GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(false);
