@@ -53,11 +53,12 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 			_placeOfCube.Add(placeOfCube); 
 			RandomEvent(placeOfCube);
 		}
+
+		LaunchEvent();
 	}
 
 	public void LaunchEvent()
 	{
-		
 		Instantiate(particleSystemExplosion, new Vector3(transformToSpawnParticles.position.x,
 			transformToSpawnParticles.position.y + 1, transformToSpawnParticles.position.z), Quaternion.identity);
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, repeatRate);
