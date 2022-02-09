@@ -8,9 +8,9 @@ public class Node : MonoBehaviour
 {
     public float blockSizeOffset = 0.5f;
     public Transform previousBlock;
-    public bool isActive;
+    public bool isActive = true;
 
-    public List<GamePath> possiblePath;
+    public List<GamePath> possiblePath = new List<GamePath>();
 
     [HideInInspector] public GroupBlockDetection groupBlockParent;
 
