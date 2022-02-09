@@ -58,7 +58,7 @@ public class PlayerCardState : PlayerBaseState
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !NFCManager.Instance.clicked)
 		{
 			NFCManager.Instance.SetActiveButton(false);
-			UiManager.Instance.buttonNextTurn.SetActive(false);
+			UiManager.Instance.buttonNextTurn.SetActive(true);
 		}
 
 		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded && GameManager.Instance.currentPlayerTurn.shieldCount == 0)

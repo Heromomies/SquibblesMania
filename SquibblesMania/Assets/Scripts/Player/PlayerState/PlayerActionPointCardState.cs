@@ -365,6 +365,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             if (NFCManager.Instance.hasRemovedCard)
             {
                 NFCManager.Instance.textTakeOffCard.gameObject.SetActive(false);
+                UiManager.Instance.buttonNextTurn.SetActive(true);
             }
             else
             {
