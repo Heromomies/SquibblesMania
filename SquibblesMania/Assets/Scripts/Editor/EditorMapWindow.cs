@@ -267,7 +267,12 @@ public class EditorMapWindow : EditorWindow
             {
                 foreach (var block in currentBlocObjectsCreated)
                 {
-                    block.GetComponent<Node>().SetUpPossiblePath();
+                    if (block.GetComponent<Node>() != null)
+                    {
+                        block.GetComponent<Node>().SetUpPossiblePath();
+                    }
+                    
+                    
                 }
 
                 CreateMap();
@@ -373,16 +378,29 @@ public class EditorMapWindow : EditorWindow
     private void HitReturn(RaycastHit hit, GameObject currentBloc, List<GameObject> neighborsBlocs)
     {
         //Check the colorbloc value of hit gameobject and currentObject 
-        Node hitNode = hit.collider.gameObject.GetComponent<Node>();
-        Node currentObjNode = currentBloc.GetComponent<Node>();
-
-        //Add hit go in the list and Reload the function with the hit go  
-        if (hitNode.colorBloc == currentObjNode.colorBloc && !neighborsBlocs.Contains(hit.collider.gameObject))
+        if (currentBloc.GetComponent<Node>() && hit.collider.gameObject.GetComponent<Node>())
         {
-            neighborsBlocs.Add(hit.collider.gameObject);
-            currentBlocObjectsCreated.Remove(hit.collider.gameObject);
-            DetectBlocs(hit.collider.gameObject, neighborsBlocs);
+            Node hitNode = hit.collider.gameObject.GetComponent<Node>();
+            Node currentObjNode = currentBloc.GetComponent<Node>();
+            
+        //Add hit go in the list and Reload the function with the hit go  
+            if (hitNode.colorBloc == currentObjNode.colorBloc && !neighborsBlocs.Contains(hit.collider.gameObject))
+            {
+                neighborsBlocs.Add(hit.collider.gameObject);
+                currentBlocObjectsCreated.Remove(hit.collider.gameObject);
+                DetectBlocs(hit.collider.gameObject, neighborsBlocs);
+            }
         }
+        else
+        {
+            if (!neighborsBlocs.Contains(hit.collider.gameObject) && !hit.collider.gameObject.GetComponent<Node>())
+            {
+                neighborsBlocs.Add(hit.collider.gameObject);
+                currentBlocObjectsCreated.Remove(hit.collider.gameObject);
+                DetectBlocs(hit.collider.gameObject, neighborsBlocs);
+            }
+        }
+      
     }
 
     #endregion
