@@ -29,12 +29,7 @@ public class MovementBlockManager : MonoBehaviour
 
     IEnumerator PlatformUp()
     {
-        if (EventManager.Instance != null)
-        {
-            EventManager.Instance.AddPointForMovingCase(1);
-        }
         
-
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
 
 
@@ -89,12 +84,6 @@ public class MovementBlockManager : MonoBehaviour
 
     IEnumerator PlatformDown()
     {
-        if (EventManager.Instance != null)
-        {
-            EventManager.Instance.AddPointForMovingCase(1);
-        }
-        
-
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
         if (TouchManager.Instance.blockParent.position.y <= 0)
         {

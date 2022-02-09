@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     public ConditionVictory conditionVictory;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
-
+    [HideInInspector] public int cycleCount;
     private void Awake()
     {
         _gameManager = this;
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
         NFCManager.Instance.PlayerChangeTurn();
         //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
-
+    
     void CamConfig(int countTurn)
     {
         if (actualCamPreset.presetNumber > 0)
@@ -159,8 +159,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void IncreaseCycle()
+    {
+        EventManager.Instance.CyclePassed();
+    }
     public void ChangePlayerTurn(int playerNumberTurn)
     {
+        if (playerNumberTurn == players[0].playerNumber)
+        {
+            IncreaseCycle();
+            cycleCount++;
+        }
+        
         turnCount++;
         UiManager.Instance.UpdateCurrentTurnCount(turnCount);
         
