@@ -310,10 +310,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             if (movementPlayer < player.playerActionPoint)
             {
-                if (EventManager.Instance != null)
-                    EventManager.Instance.AddPointForNumberOfSteps(1);
-
-
                 Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
                                   new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);

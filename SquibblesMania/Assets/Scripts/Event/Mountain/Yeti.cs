@@ -12,7 +12,7 @@ public class Yeti : MonoBehaviour, IManageEvent
     public void ShowEvent()
     {
         textPrevention.text ="The yeti is going to shoot the nearest player !";
-        transform.position = EventManager.Instance.yetiFinalSpawn.position;
+       // transform.position = EventManager.Instance.yetiFinalSpawn.position;
     }
 
     public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player
