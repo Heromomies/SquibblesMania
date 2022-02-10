@@ -7,6 +7,14 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
    public GameObject eventToTest;
    public void OnClick()
    {
-      eventToTest.SetActive(true);
+      if (!eventToTest.activeSelf)
+      {
+         eventToTest.SetActive(true);
+      }
+      else
+      {
+         eventToTest.SetActive(false);
+      }
+     
    }
 }

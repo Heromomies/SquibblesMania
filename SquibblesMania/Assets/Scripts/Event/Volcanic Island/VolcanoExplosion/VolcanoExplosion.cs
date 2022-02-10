@@ -5,7 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Random = UnityEngine.Random;
 
-public class MeteoriteExplosion : MonoBehaviour, IManageEvent
+public class VolcanoExplosion : MonoBehaviour, IManageEvent
 {
 	public Color colorOne, colorTwo;
 	
@@ -14,9 +14,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 
 	[HideInInspector] public List<GameObject> cubeOnMap;
 	[HideInInspector] public List<GameObject> cubeTouched;
-
 	
-
 	public Rigidbody bulletPrefab;
 	public Transform volcanoTransform;
 
@@ -24,8 +22,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 	[Range(0.0f, 1.0f)] public float repeatRate;
 
 	private int _turn;
-	public List<int> _placeOfCube= new List<int>();
-	
+
 	public Conditions[] conditionsDangerousness;
 
 	[Serializable]
@@ -43,17 +40,14 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 	{
 		cubeOnMap = EventManager.Instance.cleanList;
 
-		while (conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite > 0)
+		for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
-			conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite--;
-
-			int placeOfCube = Random.Range(0, EventManager.Instance.cleanList.Count-1);
+			int placeOfCube =1;
 			EventManager.Instance.cleanList.Remove(EventManager.Instance.cleanList[placeOfCube]);
 			
-			_placeOfCube.Add(placeOfCube); 
 			RandomEvent(placeOfCube);
 		}
-
+		
 		LaunchEvent();
 	}
 
@@ -101,7 +95,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		{
 			_turn = GameManager.Instance.turnCount;
 			
-			for (int i = 0; i < _placeOfCube.Count; i++)
+			for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
 			{
 				cubeTouched[i].GetComponent<Renderer>().material.color = Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
 			}
@@ -110,6 +104,7 @@ public class MeteoriteExplosion : MonoBehaviour, IManageEvent
 		if (cubeTouched.Count <= 0)
 		{
 			CancelInvoke();
+			gameObject.SetActive(false);
 		}
 	}
 

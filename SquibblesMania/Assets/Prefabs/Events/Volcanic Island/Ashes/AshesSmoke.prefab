@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 5419626292892989450}
   - component: {fileID: 5419626292892989449}
   m_Layer: 0
-  m_Name: SmokeEvent
+  m_Name: AshesSmoke
   m_TagString: Black Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5419626292892989450
 Transform:
   m_ObjectHideFlags: 0
@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5419626292892989451}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 12.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -43,7 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4797540a57d2d84093b6274c94e2707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cubeTouched: []
-  eventParticle: {fileID: 2378000658934859931, guid: 5a2032561193e5543928344c98aad8b9, type: 3}
-  numberOfSmoke: 3
+  cubeTouched: []
+  parentBlocs: []
+  ashes: {fileID: 1111483769708069568, guid: c43ee3db75d8fba418a4537b2d5b164b, type: 3}
   heightSpawnParticle: 0.3
+  childrenBlocs: []
+  conditionsDangerousnessAshesSmoke:
+  - numberOfBlocsCovered: 8
+  - numberOfBlocsCovered: 16
+  - numberOfBlocsCovered: 24
+  - numberOfBlocsCovered: 32
