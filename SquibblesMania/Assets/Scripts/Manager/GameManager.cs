@@ -143,11 +143,11 @@ public class GameManager : MonoBehaviour
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
            cameraTouchScript.OrbitYMaxDegrees = 0;
-           cameraTouchScript.OrbitXMaxDegrees = 0;
+           cameraTouchScript.OrbitXMaxDegrees = 30;
         }
         else
         {
-            cameraTouchScript.OrbitXMaxDegrees = 0;
+            cameraTouchScript.OrbitXMaxDegrees = 30;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
