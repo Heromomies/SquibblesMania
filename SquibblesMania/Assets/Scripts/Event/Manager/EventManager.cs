@@ -86,16 +86,16 @@ public class EventManager : MonoBehaviour
 		switch (levelOfDanger)
 		{
 			case LevelOfDanger.LevelOne : Debug.Log("Level One");
-				dangerousness = 1;
+				dangerousness = 0;
 				break;
 			case LevelOfDanger.LevelTwo : Debug.Log("Level Two");
-				dangerousness = 2;
+				dangerousness = 1;
 				break;
 			case LevelOfDanger.LevelThree : Debug.Log("Level Three");
-				dangerousness = 3;
+				dangerousness = 2;
 				break;
 			case LevelOfDanger.LevelFour : Debug.Log("Level Four");
-				dangerousness = 4;
+				dangerousness = 3;
 				break;
 		}
 	}

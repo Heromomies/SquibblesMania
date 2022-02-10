@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeEvent : MonoBehaviour, IManageEvent
+public class AshesSmoke : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT")] private List<GameObject> _cubeOnMap;
 	[HideInInspector] public List<GameObject> cubeTouched;

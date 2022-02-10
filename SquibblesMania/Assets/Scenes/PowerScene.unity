@@ -349,6 +349,7 @@ Transform:
   - {fileID: 1263104352}
   - {fileID: 1198056435}
   - {fileID: 170818306}
+  - {fileID: 852783569}
   m_Father: {fileID: 1251349576}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11487,6 +11488,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 850537256}
   m_CullTransparentMesh: 1
+--- !u!1 &852783568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 852783569}
+  - component: {fileID: 852783570}
+  m_Layer: 0
+  m_Name: EarthQuake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &852783569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852783568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.5, y: 0, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 12304897}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &852783570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852783568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96fde585af2fe14191560ef219d52ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 4
+  layer:
+    serializedVersion: 2
+    m_Bits: 8
+  colliders: []
+  conditionsDangerousnessEarthQuake:
+  - numberOfBlocsTouched: 4
+  - numberOfBlocsTouched: 8
+  - numberOfBlocsTouched: 12
+  - numberOfBlocsTouched: 16
 --- !u!1 &860494491
 GameObject:
   m_ObjectHideFlags: 0
@@ -25977,7 +26031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b315f9fef97500c4e8702d743e10514b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventToTest: {fileID: 1198056434}
+  eventToTest: {fileID: 852783568}
 --- !u!4 &2032625288
 Transform:
   m_ObjectHideFlags: 0
