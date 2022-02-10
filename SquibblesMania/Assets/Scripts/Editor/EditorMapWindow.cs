@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Linq;
-using ICSharpCode.NRefactory.Ast;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -197,20 +195,20 @@ public class EditorMapWindow : EditorWindow
                     PickUpMaterialFromAsset(materials[0],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_grass.mat",
-                                typeof(Material)), typeof(Material)));
+                                typeof(Material)), typeof(Material), true));
                     PickUpMaterialFromAsset(materials[1],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_rock.mat",
-                                typeof(Material)), typeof(Material)));
+                                typeof(Material)), typeof(Material), true));
                     PickUpMaterialFromAsset(materials[2],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_sand.mat",
-                                typeof(Material)), typeof(Material)));
+                                typeof(Material)), typeof(Material), true));
                     PickUpMaterialFromAsset(materials[3],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath(
                                 "Assets/Materials/CubeMat/Volcano/Iteration1/M_volcanic_rock.mat", typeof(Material)),
-                            typeof(Material)));
+                            typeof(Material), true));
                 }
 
                 break;
@@ -221,16 +219,16 @@ public class EditorMapWindow : EditorWindow
                     PickUpMaterialFromAsset(materials[0],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_ice.mat",
-                                typeof(Material)), typeof(Material)));
+                                typeof(Material)), typeof(Material), true));
                     PickUpMaterialFromAsset(materials[1],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_snow.mat",
-                                typeof(Material)), typeof(Material)));
+                                typeof(Material)), typeof(Material), true));
                     PickUpMaterialFromAsset(materials[2],
                         EditorGUILayout.ObjectField("Material",
                             AssetDatabase.LoadAssetAtPath(
                                 "Assets/Materials/CubeMat/Mountain/Iteration1/M_mountain_stone.mat", typeof(Material)),
-                            typeof(Material)));
+                            typeof(Material), true));
                 }
 
                 break;

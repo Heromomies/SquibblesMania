@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using DigitalRubyShared;
 using TMPro;
-using Unity.Mathematics;
+
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
