@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8885060723732602601}
   - component: {fileID: 8885060723732602606}
   m_Layer: 0
-  m_Name: Meteorite Explosion
+  m_Name: Volcano Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,22 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dbafc86a164d346805d66ddeff8a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foldoutValues:
-    cubeOnMap: []
-    cubeTouched: []
-    numberOfMeteorite: 3
-    bulletPrefab: {fileID: -2439834658567328607, guid: d7dff3febd5faa441b054ed7d2add88e, type: 3}
-    volcanoTransform: {fileID: 0}
-    speed: 1.75
-    repeatRate: 0.5
-  foldoutValuesEvent:
-    durationOfScale: 0.5
-    durationShake: 0.3
-    strength: {x: 0.1, y: 0.1, z: 0.1}
-    vibrato: 100
-    randomness: 90
-    particleSystem: {fileID: 5123500826265043806, guid: 7d34824224cc8ad499617e003f22e2e9, type: 3}
-    transformToSpawnParticles: {fileID: 0}
   colorOne: {r: 1, g: 0.51320755, b: 0.51320755, a: 0}
   colorTwo: {r: 0.5188679, g: 0, b: 0, a: 0}
-  _placeOfCube: 
+  particleSystemExplosion: {fileID: 0}
+  transformToSpawnParticles: {fileID: 0}
+  cubeOnMap: []
+  cubeTouched: []
+  bulletPrefab: {fileID: 0}
+  volcanoTransform: {fileID: 0}
+  speed: 0
+  repeatRate: 0
+  conditionsDangerousness: []
