@@ -91,7 +91,7 @@ public class PlayerStateManager : Player
         }
         else
         {
-             StartCoroutine(WaitUntilRespawn());
+           //  StartCoroutine(WaitUntilRespawn());
         }
     }
 
