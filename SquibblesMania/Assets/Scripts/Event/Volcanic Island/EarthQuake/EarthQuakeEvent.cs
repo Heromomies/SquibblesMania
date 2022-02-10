@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -10,7 +8,6 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	public int radius;
 	public LayerMask layer;
 	public Collider[] colliders;
-	
 	
 	public Conditions[] conditionsDangerousnessEarthQuake;
 
@@ -45,6 +42,8 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			col = new Vector3(col.x, 0, col.z);
 			colliders[randomNumber].transform.position = col;
 		}
+		
+		gameObject.SetActive(false);
 	}
 
 	private void OnDrawGizmos()

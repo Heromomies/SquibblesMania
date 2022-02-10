@@ -104,6 +104,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		if (cubeTouched.Count <= 0)
 		{
 			CancelInvoke();
+			gameObject.SetActive(false);
 		}
 	}
 

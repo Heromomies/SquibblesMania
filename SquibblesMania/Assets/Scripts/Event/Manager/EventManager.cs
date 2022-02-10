@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class EventManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class EventManager : MonoBehaviour
 	public List<GameObject> listZoneSouthEst;
 
 	public int dangerousness;
+	
+	public Slider sliderDangerousness;
 	
 	public LevelOfDanger levelOfDanger;
 	
@@ -45,6 +48,7 @@ public class EventManager : MonoBehaviour
 	void Start()
 	{
 		cleanList = listZoneNorthWest;
+		sliderDangerousness.value = dangerousness;
 		DefineCondition();
 	}
 
@@ -56,6 +60,8 @@ public class EventManager : MonoBehaviour
 			LaunchEvent();
 			levelOfDanger = LevelOfDanger.LevelOne;
 			dangerousness = 0;
+			sliderDangerousness.value = dangerousness;
+			GameManager.Instance.cycleCount = 0;
 		}
 		else
 		{
@@ -71,7 +77,7 @@ public class EventManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-			
+			sliderDangerousness.value = dangerousness;
 		}
 	}
 	private void Update()
@@ -122,8 +128,9 @@ public class EventManager : MonoBehaviour
 
 	void LaunchEvent() // Launch the event
 	{
-		//events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
-		//GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(false);
-		//_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
+		foreach (var eventsGo in events)
+		{
+			eventsGo.SetActive(true);
+		}
 	}
 }

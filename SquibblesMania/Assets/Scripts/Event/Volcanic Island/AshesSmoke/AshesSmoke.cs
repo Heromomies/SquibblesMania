@@ -60,6 +60,8 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 			var c = childrenBlocs[i + rand].transform.position;
 			Instantiate(ashes, new Vector3(c.x, c.y + 0.55f, c.z), Quaternion.identity);
 		}
+		
+		gameObject.SetActive(false);
 	}
 
 	public void LaunchEvent() // Launch the event
