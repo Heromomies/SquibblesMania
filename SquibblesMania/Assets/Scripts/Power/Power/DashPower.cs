@@ -27,6 +27,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		{
 			if (hit.collider.gameObject.layer == 3)
 			{
+				Debug.Log("There is a bloc in front of me");
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
@@ -34,6 +35,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
 			{
+				Debug.Log("There is a player in front of me");
 				var distanceBetweenTwoPlayers = Vector3.Distance(position, hit.collider.transform.position);
 				distanceBetweenTwoPlayers += 0.1f;
 				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers; // check distance between two players
@@ -99,6 +101,12 @@ public class DashPower : MonoBehaviour, IManagePower
 					hit.collider.transform.DOMove(hit.collider.transform.position
 					                              + _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, 1f);
 				}
+			}
+			else if (hit.collider.gameObject.layer == 0)
+			{
+				Debug.Log("I'm dashing a lot my bro");
+				GameManager.Instance.currentPlayerTurn.transform.DOMove(
+					position + _vectorRaycast[numberDirectionVector] * dashRange, 0.1f);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
