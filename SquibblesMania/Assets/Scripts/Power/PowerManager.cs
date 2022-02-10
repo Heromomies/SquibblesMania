@@ -39,6 +39,7 @@ public class PowerManager : MonoBehaviour
 
 	public void ChangeTurnPlayer()
 	{
+		
 		UiManager.Instance.buttonNextTurn.SetActive(true);
 	}
 }

@@ -8,9 +8,9 @@ public class Node : MonoBehaviour
 {
     public float blockSizeOffset = 0.5f;
     public Transform previousBlock;
-    public bool isActive;
+    public bool isActive = true;
 
-    public List<GamePath> possiblePath;
+    public List<GamePath> possiblePath = new List<GamePath>();
 
     [HideInInspector] public GroupBlockDetection groupBlockParent;
 
@@ -51,8 +51,9 @@ public class Node : MonoBehaviour
         int count = 0;
         foreach (var collider in colliders)
         {
+            
             if (Vector3.Distance(collider.transform.position, transform.position) <= (radius + 0.1f) &&
-                collider.transform != transform)
+                collider.transform != transform && collider.gameObject.GetComponent<Node>())
             {
                 //Create a new element and set possiblePath value
                 possiblePath.Add(new GamePath());
