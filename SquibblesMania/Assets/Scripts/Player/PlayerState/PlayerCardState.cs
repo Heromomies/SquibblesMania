@@ -30,7 +30,7 @@ public class PlayerCardState : PlayerBaseState
 	{
 		if (!GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
 		{
-			NFCManager.Instance.SetActiveButton(true);
+			NFCManager.Instance.SetActivePlayerActionButton(true);
 		
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 			UiManager.Instance.buttonNextTurn.SetActive(false);
@@ -46,8 +46,14 @@ public class PlayerCardState : PlayerBaseState
 	{
 		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
-			NFCManager.Instance.SetActiveButton(false);
-			NFCManager.Instance.textTakeOffCard.gameObject.SetActive(false);
+			NFCManager.Instance.SetActivePlayerActionButton(false);
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
+				case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
+				case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
+				case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
+			}
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCController.StopPolling();
 		} 
@@ -57,8 +63,7 @@ public class PlayerCardState : PlayerBaseState
 		}
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !NFCManager.Instance.clicked)
 		{
-			NFCManager.Instance.SetActiveButton(false);
-			UiManager.Instance.buttonNextTurn.SetActive(true);
+			NFCManager.Instance.SetActivePlayerActionButton(false);
 		}
 
 		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded && GameManager.Instance.currentPlayerTurn.shieldCount == 0)
@@ -109,7 +114,13 @@ public class PlayerCardState : PlayerBaseState
 		if (NFCManager.Instance.hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
 			UiManager.Instance.buttonNextTurn.SetActive(true);
-			NFCManager.Instance.textTakeOffCard.gameObject.SetActive(false);
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
+				case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
+				case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
+				case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
+			}
 			NFCManager.Instance.clicked = false;
 			NFCManager.Instance.hasRemovedCard = false;
 		} 
