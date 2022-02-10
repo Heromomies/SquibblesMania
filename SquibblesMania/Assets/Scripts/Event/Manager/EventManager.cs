@@ -45,7 +45,6 @@ public class EventManager : MonoBehaviour
 	void Start()
 	{
 		cleanList = listZoneNorthWest;
-		dangerousness = 3;
 		DefineCondition();
 	}
 
@@ -87,12 +86,16 @@ public class EventManager : MonoBehaviour
 		switch (levelOfDanger)
 		{
 			case LevelOfDanger.LevelOne : Debug.Log("Level One");
+				dangerousness = 1;
 				break;
 			case LevelOfDanger.LevelTwo : Debug.Log("Level Two");
+				dangerousness = 2;
 				break;
 			case LevelOfDanger.LevelThree : Debug.Log("Level Three");
+				dangerousness = 3;
 				break;
 			case LevelOfDanger.LevelFour : Debug.Log("Level Four");
+				dangerousness = 4;
 				break;
 		}
 	}
