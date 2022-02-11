@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,6 +9,11 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	public int radius;
 	public LayerMask layer;
 	public Collider[] colliders;
+
+	public Transform mapParent;
+	public GameObject blocParent;
+
+	private Camera _cam;
 	
 	public Conditions[] conditionsDangerousnessEarthQuake;
 
@@ -19,37 +25,35 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
+		_cam = Camera.main;
 		ShowEvent();
 	}
 
 	public void ShowEvent()
 	{
-		colliders = Physics.OverlapSphere(gameObject.transform.position, radius, layer);
-
-		for (int i = 0; i < colliders.Length; i++)
+		colliders = Physics.OverlapSphere(gameObject.transform.position, radius, layer); // Detect bloc around the object
+		
+		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
 		{
-			if (colliders[i].transform.position.y == 0)
-			{
-				colliders.ToList().Remove(colliders[i]);
-			}
-		}
-		for (int j = 0; j < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; j++)
-		{
-			Debug.Log(colliders.Length);
 			int randomNumber = Random.Range(0, colliders.Length);
-			var col = colliders[randomNumber].transform.position;
-					
-			col = new Vector3(col.x, 0, col.z);
-			colliders[randomNumber].transform.position = col;
+			if (colliders[randomNumber].transform.position.y == 0) // If the Y position is equal to 0, add one bloc to touch
+			{
+				i--;
+			}
+			else // When a bloc can be moved 
+			{
+				var col = colliders[randomNumber].transform.position;
+				
+				GameObject parent = Instantiate(blocParent, mapParent);
+				colliders[randomNumber].transform.parent = parent.transform;
+			
+				col = new Vector3(col.x, 0, col.z);
+				colliders[randomNumber].transform.DOMove(col, 5f);
+				_cam.DOShakePosition(5f, 0.1f, 100, 90f);
+			}
 		}
 		
 		gameObject.SetActive(false);
-	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.DrawWireSphere(transform.position, radius);
-		Gizmos.color = Color.magenta;
 	}
 
 	public void LaunchEvent()
