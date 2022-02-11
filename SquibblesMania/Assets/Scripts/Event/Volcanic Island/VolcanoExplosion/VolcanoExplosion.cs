@@ -7,17 +7,21 @@ using Random = UnityEngine.Random;
 
 public class VolcanoExplosion : MonoBehaviour, IManageEvent
 {
+	[Header("COLOR")]
 	public Color colorOne, colorTwo;
-	
+	[Space]
+	[Header("PARTICLE SYSTEM")]
 	public GameObject particleSystemExplosion;
-	public Transform transformToSpawnParticles;
-
-	[HideInInspector] public List<GameObject> cubeOnMap;
+	[Space]
+	 public List<GameObject> cubeOnMap;
 	[HideInInspector] public List<GameObject> cubeTouched;
 	
+	[Header("BULLET AND SPAWN")]
 	public Rigidbody bulletPrefab;
 	public Transform volcanoTransform;
 
+	[Space]
+	[Header("BULLET SETTINGS")]
 	[Range(0.0f, 3.0f)] public float speed;
 	[Range(0.0f, 1.0f)] public float repeatRate;
 
@@ -39,10 +43,10 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	public void ShowEvent()
 	{
 		cubeOnMap = EventManager.Instance.cleanList;
-
+		
 		for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
-			int placeOfCube =1;
+			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite);
 			EventManager.Instance.cleanList.Remove(EventManager.Instance.cleanList[placeOfCube]);
 			
 			RandomEvent(placeOfCube);
@@ -53,8 +57,11 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	public void LaunchEvent()
 	{
-		Instantiate(particleSystemExplosion, new Vector3(transformToSpawnParticles.position.x,
-			transformToSpawnParticles.position.y + 1, transformToSpawnParticles.position.z), Quaternion.identity);
+		GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
+			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);
+		
+		Destroy(ps, 5f);
+		
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, repeatRate);
 	}
 

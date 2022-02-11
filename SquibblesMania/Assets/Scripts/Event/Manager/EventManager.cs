@@ -47,14 +47,29 @@ public class EventManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		cleanList = listZoneNorthWest;
+		foreach (var l in listZoneNorthWest)
+		{
+			cleanList.Add(l);
+		}
+		foreach (var l in listZoneNorthEst)
+		{
+			cleanList.Add(l);
+		}
+		foreach (var l in listZoneSouthEst)
+		{
+			cleanList.Add(l);
+		}
+		foreach (var l in listZoneSouthWest)
+		{
+			cleanList.Add(l);
+		}
 		sliderDangerousness.value = dangerousness;
-		DefineCondition();
+		//DefineCondition();
 	}
 
 	public void CyclePassed() // When a cycle is make, random Number to know if the manager can launch the event
 	{
-		int randomNumber = Random.Range(0, 101);
+		var randomNumber = Random.Range(0, 101);
 		if (randomNumber < 34 * GameManager.Instance.cycleCount)
 		{
 			LaunchEvent();

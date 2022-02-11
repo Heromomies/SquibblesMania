@@ -1,19 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class AshesSmoke : MonoBehaviour, IManageEvent
 {
-	[Header("EVENT")] private List<GameObject> _cubeOnMap;
-	[HideInInspector] public List<GameObject> cubeTouched;
-	public List<GameObject> parentBlocs;
+	[Header("EVENT SETTINGS")] 
+	public List<GameObject> parentBlocs; [Space]
+	public GameObject ashes;[Space]
+	public float heightSpawnParticle;[Space]
 
-	public GameObject ashes;
-	public float heightSpawnParticle;
-	private int _cubeToChange;
-	public List<GameObject> childrenBlocs;
+	[HideInInspector] public List<GameObject> childrenBlocs;
+	
+	[Header("CONDITIONS DANGEROUSNESS")]
 	public Conditions[] conditionsDangerousnessAshesSmoke;
 
 	[Serializable]
@@ -21,16 +22,17 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 	{
 		public int numberOfBlocsCovered;
 	}
-	
+
 	private void OnEnable()
 	{
+		Shuffle(parentBlocs);
 		ShowEvent();
 	}
 
 	/// <summary>
 	/// To random a list easily
 	/// </summary>
-	/*void Shuffle<T>(List<T> inputList)
+	void Shuffle<T>(List<T> inputList)
 	{
 		for (int i = 0; i < inputList.Count; i++)
 		{
@@ -39,33 +41,40 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 			inputList[i] = inputList[random];
 			inputList[random] = temp;
 		}
-	}*/
-	
+	}
 	public void ShowEvent() // Show the event
 	{
-		foreach (var t in parentBlocs)
+		foreach (var parentB in parentBlocs)
 		{
-			foreach (var child in t.GetComponentsInChildren<Node>())
+			foreach (var child in parentB.GetComponentsInChildren<Node>())
 			{
 				childrenBlocs.Add(child.gameObject);
 			}
 		}
 
-		int rand = Random.Range(0, childrenBlocs.Count 
+		var rand = Random.Range(0, childrenBlocs.Count
 		                           - conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered);
 
-		
 		for (int i = 0; i < conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered; i++)
 		{
-			var c = childrenBlocs[i + rand].transform.position;
-			Instantiate(ashes, new Vector3(c.x, c.y + 0.55f, c.z), Quaternion.identity);
+			if (childrenBlocs[i + rand].CompareTag("Black Block"))
+			{
+				i--;
+			}
+			else
+			{
+				var childPos = childrenBlocs[i + rand].transform.position;
+				GameObject ashe =Instantiate(ashes, new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity);
+				ashe.transform.localScale = new Vector3(0, 0, 0);
+
+				ashe.transform.DOScale(new Vector3(1, 0.1f, 1), 0.5f);
+			}
 		}
-		
+
 		gameObject.SetActive(false);
 	}
 
 	public void LaunchEvent() // Launch the event
 	{
-		
 	}
 }
