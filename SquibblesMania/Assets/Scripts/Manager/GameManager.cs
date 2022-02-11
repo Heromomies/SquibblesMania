@@ -78,10 +78,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
-            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
-                               new Vector3(0, playerPref.transform.localScale.y / 2f, 0);
+            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint();
 
-            PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+                               PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
@@ -90,13 +89,13 @@ public class GameManager : MonoBehaviour
         }
 
         players[0].playerTeam = Player.PlayerTeam.TeamOne;
-        players[0].gameObject.GetComponent<Renderer>().material.color = Color.red;
+        players[0].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
         players[1].playerTeam = Player.PlayerTeam.TeamTwo;
-        players[1].gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        players[1].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
         players[2].playerTeam = Player.PlayerTeam.TeamOne;
-        players[2].gameObject.GetComponent<Renderer>().material.color = Color.red;
+        players[2].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
         players[3].playerTeam = Player.PlayerTeam.TeamTwo;
-        players[3].gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        players[3].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
         
     }
 
@@ -143,11 +142,11 @@ public class GameManager : MonoBehaviour
         if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
         {
            cameraTouchScript.OrbitYMaxDegrees = 0;
-           cameraTouchScript.OrbitXMaxDegrees = 0;
+           cameraTouchScript.OrbitXMaxDegrees = 30;
         }
         else
         {
-            cameraTouchScript.OrbitXMaxDegrees = 0;
+            cameraTouchScript.OrbitXMaxDegrees = 30;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
