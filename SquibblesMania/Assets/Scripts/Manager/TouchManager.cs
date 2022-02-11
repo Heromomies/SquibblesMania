@@ -163,7 +163,8 @@ public class TouchManager : MonoBehaviour
                 blockCurrentlySelected = Hit.transform.gameObject;
                 blockParent = Hit.collider.gameObject.transform.parent;
                 //If the current block group if below or above the player pos
-                if (blockGroupParentPos.y > currentPlayerPos.y)
+                if (Math.Abs(blockGroupParentPos.y + 1f - currentPlayerPos.y) > 0.1f ||
+                    GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
                 {
                     buttonGoToTheBlock.interactable = false;
                 }

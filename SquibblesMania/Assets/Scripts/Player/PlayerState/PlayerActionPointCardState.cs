@@ -36,27 +36,24 @@ public class PlayerActionPointCardState : PlayerBaseState
             player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().material.color = blockBaseColor;
             TouchManager.Instance.blockCurrentlySelectedColor = blockBaseColor;
         }
-
-
+       
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
             Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
-            Vector3 pathParentPos = path.nextPath.transform.parent.position;
+            //Vector3 pathParentPos = path.nextPath.transform.parent.position;
           
             
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && actualNode.isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && actualNode.isActive)
             {
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
             }
+           
         }
-
-        if (actionPoint > indexBlockNearby)
-        {
-            ColorPossiblePaths(finalPreviewPath, Color.white);
-        }
+        finalPreviewPath.Add(player.currentBlockPlayerOn);
+        
         
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
