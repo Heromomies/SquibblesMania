@@ -6,14 +6,21 @@ using Random = UnityEngine.Random;
 
 public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 {
+	[Header("EVENT SETTINGS")]
 	public int radius;
+	[Space]
 	public LayerMask layer;
-	public Collider[] colliders;
+	
+	[HideInInspector]public Collider[] colliders;
 
+	[Header("PARENT")]
+	[Space]
 	public Transform mapParent;
 	public GameObject blocParent;
 
 	private Camera _cam;
+	[Space]
+	[Header("CONDITIONS DANGEROUSNESS")]
 	
 	public Conditions[] conditionsDangerousnessEarthQuake;
 
@@ -36,7 +43,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
 		{
 			int randomNumber = Random.Range(0, colliders.Length);
-			if (colliders[randomNumber].transform.position.y == 0) // If the Y position is equal to 0, add one bloc to touch
+			if (colliders[randomNumber].transform.position.y == 0 || colliders[randomNumber].CompareTag("Black Block")) // If the Y position is equal to 0, add one bloc to touch
 			{
 				i--;
 			}
@@ -49,7 +56,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			
 				col = new Vector3(col.x, 0, col.z);
 				colliders[randomNumber].transform.DOMove(col, 5f);
-				_cam.DOShakePosition(5f, 0.1f, 100, 90f);
+				_cam.DOShakePosition(5f, 0.1f, 100);
 			}
 		}
 		

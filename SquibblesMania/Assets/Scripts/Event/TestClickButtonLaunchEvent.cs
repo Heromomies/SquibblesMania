@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class TestClickButtonLaunchEvent : MonoBehaviour
 {
-   public GameObject eventToTest;
+   public List<GameObject> eventToTest;
    public void OnClick()
    {
-      if (!eventToTest.activeSelf)
+      foreach (var eventTested in eventToTest)
       {
-         eventToTest.SetActive(true);
+         if (!eventTested.activeSelf)
+         {
+            eventTested.SetActive(true);
+         }
+         else
+         {
+            eventTested.SetActive(false);
+         }
       }
-      else
-      {
-         eventToTest.SetActive(false);
-      }
-     
    }
 }
