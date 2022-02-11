@@ -47,7 +47,7 @@ public class Meteorite : MonoBehaviour
 			_stopRotating = true;
 			GameObject explosionPS = Instantiate(particleSystemExplosion, transform.position, Quaternion.identity);
 			Destroy(explosionPS, 2f);
-			GameObject firePS = Instantiate(particleSystemFire, transform.position, Quaternion.identity);
+			GameObject firePS = Instantiate(particleSystemFire, transform.position, particleSystemFire.transform.rotation);
 			_particleFireToDelete = firePS;
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
