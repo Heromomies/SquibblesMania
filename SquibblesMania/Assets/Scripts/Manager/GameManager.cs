@@ -78,10 +78,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
-            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
-                               new Vector3(0, playerPref.transform.localScale.y / 2f, 0);
+            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint();
 
-            PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+                               PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
             player.gameObject.name = "Player " + (i + 1);
             player.playerNumber = i;
