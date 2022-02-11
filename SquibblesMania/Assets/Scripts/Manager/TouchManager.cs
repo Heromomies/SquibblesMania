@@ -14,7 +14,10 @@ public class TouchManager : MonoBehaviour
 
 
     public PanGestureRecognizer PlayerTouchGesture { get; private set; }
-    [Header("TOUCH MANAGER")] public Transform blockParent;
+
+    [Header("TOUCH MANAGER")] [HideInInspector]
+    public Transform blockParent;
+
     [SerializeField] private RectTransform canvasTransform;
     [SerializeField] private Vector3 offsetPos;
     public GameObject uiInteractionParentObject;
@@ -23,7 +26,7 @@ public class TouchManager : MonoBehaviour
     public LayerMask touchLayersMask;
     private Camera _cam;
     public RaycastHit Hit;
-    public GameObject blockCurrentlySelected;
+    [HideInInspector] public GameObject blockCurrentlySelected;
     public Color blockCurrentlySelectedColor;
     public GameObject seeConditionsEvent;
     private static TouchManager _touchManager;
@@ -61,6 +64,7 @@ public class TouchManager : MonoBehaviour
         {
             FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
         }
+
         FingersScript.Instance.PassThroughObjects.Add(seeConditionsEvent);
     }
 
@@ -145,8 +149,8 @@ public class TouchManager : MonoBehaviour
                 MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(false);
                 //Take the block group parent from hit block gameobject
                 GroupBlockDetection blockGroupParent = Hit.transform.parent.GetComponent<GroupBlockDetection>();
-                
-                
+
+
                 //Take the current player position
                 Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
                 //Take the current block group selected position
