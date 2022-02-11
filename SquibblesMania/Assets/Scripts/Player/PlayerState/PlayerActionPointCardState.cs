@@ -44,8 +44,8 @@ public class PlayerActionPointCardState : PlayerBaseState
             Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
           
-
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && actualNode.isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
+            
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && actualNode.isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
             {
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
@@ -144,7 +144,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
                 if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                    path.nextPath.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
+                    path.nextPath.GetComponent<Node>().isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -203,7 +203,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
             {
                 nextBlocks.Add(path.nextPath);
 
@@ -242,7 +242,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
             if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                currentBlock.GetComponent<Node>().isActive && Math.Abs(pathParentPos.y + 1 - player.transform.position.y) < 0.1f)
+                currentBlock.GetComponent<Node>().isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
@@ -310,8 +310,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             if (movementPlayer < player.playerActionPoint)
             {
-                Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
-                                  new Vector3(0, player.gameObject.transform.localScale.y / 2f, 0);
+                Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() + new Vector3(0,0.5f,0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 _actionPointText--;
