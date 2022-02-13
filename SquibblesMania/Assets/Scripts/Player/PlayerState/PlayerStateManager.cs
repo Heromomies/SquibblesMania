@@ -17,7 +17,7 @@ public class PlayerStateManager : Player
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
-    public GameObject particle;
+  
 
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
@@ -26,10 +26,12 @@ public class PlayerStateManager : Player
     private void Start()
     {
         DetectBlockBelowPlayer();
+        Node currentNodePlayerOn = currentBlockPlayerOn.GetComponent<Node>();
         //Assign the player to a list for know on what block group is currently on
-        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
-      
+        currentNodePlayerOn.isActive = false;
+
     }
 
 
@@ -87,6 +89,7 @@ public class PlayerStateManager : Player
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
+                
             }
         }
         else
