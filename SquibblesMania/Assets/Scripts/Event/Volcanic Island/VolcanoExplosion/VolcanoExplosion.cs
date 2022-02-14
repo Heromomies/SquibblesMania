@@ -40,7 +40,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		ShowEvent();
 	}
 
-	public void ShowEvent()
+	public void ShowEvent() // Chose the bloc 
 	{
 		cubeOnMap = EventManager.Instance.cleanList;
 		
@@ -55,7 +55,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		LaunchEvent();
 	}
 
-	public void LaunchEvent()
+	public void LaunchEvent() // Launch the bullet's function
 	{
 		GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
 			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);

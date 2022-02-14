@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class GrabPower : MonoBehaviour, IManagePower
+public class GrabPower : MonoBehaviour
 {
 	public int grabRange;
 
@@ -58,13 +58,5 @@ public class GrabPower : MonoBehaviour, IManagePower
 		{
 			t.SetActive(false);
 		}
-	}
-	public void ShowPower()
-	{
-		
-	}
-
-	public void LaunchPower()
-	{
 	}
 }

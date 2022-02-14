@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldPower : MonoBehaviour, IManagePower
+public class ShieldPower : MonoBehaviour
 {
 	public int durationShield;
 	
@@ -23,14 +23,5 @@ public class ShieldPower : MonoBehaviour, IManagePower
 		
 	    PowerManager.Instance.ActivateDeactivatePower(3, false);
 	    PowerManager.Instance.ChangeTurnPlayer();
-    }
-    
-    public void ShowPower()
-    {
-	   
-    }
-
-    public void LaunchPower()
-    {
     }
 }

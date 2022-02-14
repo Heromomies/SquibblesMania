@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-public class SwapPower : MonoBehaviour, IManagePower
+public class SwapPower : MonoBehaviour
 {
 	public int range;
 	public LayerMask layer;
