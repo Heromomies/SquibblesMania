@@ -34,7 +34,8 @@ public class SwapPower : MonoBehaviour
 		switch (hitColliders.Length)
 		{
 			case 1:
-				Debug.Log("I'm null and i can't do anything");
+				PowerManager.Instance.ActivateDeactivatePower(2,false);
+				PowerManager.Instance.ChangeTurnPlayer();
 				break;
 			case 2:
 				LaunchPower();
