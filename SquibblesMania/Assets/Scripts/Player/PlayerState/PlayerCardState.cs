@@ -21,7 +21,9 @@ public class PlayerCardState : PlayerBaseState
 		{
 			player.shieldCount--;
 		}
-
+		
+		player.indicatorPlayer.SetActive(true);
+		
 		NFCController.OnNewTag = OnNewTagDetected;
 		NFCController.OnTagRemoved = OnTagRemoveDetected;
 		NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);

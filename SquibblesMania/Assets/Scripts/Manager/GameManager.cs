@@ -86,15 +86,24 @@ public class GameManager : MonoBehaviour
 
             players.Add(player);
         }
+        SetUpPlayers();
+      
+    }
 
+    void SetUpPlayers()
+    {
         players[0].playerTeam = Player.PlayerTeam.TeamOne;
         players[0].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
+        players[0].indicatorPlayer.SetActive(false);
         players[1].playerTeam = Player.PlayerTeam.TeamTwo;
         players[1].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
+        players[1].indicatorPlayer.SetActive(false);
         players[2].playerTeam = Player.PlayerTeam.TeamOne;
         players[2].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
+        players[2].indicatorPlayer.SetActive(false);
         players[3].playerTeam = Player.PlayerTeam.TeamTwo;
         players[3].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
+        players[3].indicatorPlayer.SetActive(false);
     }
 
     void StartGame()

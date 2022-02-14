@@ -34,7 +34,7 @@ public class TeamInventoryManager : MonoBehaviour
                     case Ressources.Types.Wood:
                         playerTeamInventory.items[0].isTeamHasObjet = true;
                         playerTeamInventory.items[0].objetTextUi.color = Color.green;
-                        if (CheckForVictoryConditions(playerTeamInventory))
+                        if (CheckForVictoryConditions(playerTeamInventory) && !playerTeamInventory.isAllObjetAcquired)
                         {
                             GameManager.Instance.isConditionVictory = true;
                             GameManager.Instance.ShowEndZone();
@@ -45,7 +45,7 @@ public class TeamInventoryManager : MonoBehaviour
 
                         playerTeamInventory.items[1].isTeamHasObjet = true;
                         playerTeamInventory.items[1].objetTextUi.color = Color.green;
-                        if (CheckForVictoryConditions(playerTeamInventory))
+                        if (CheckForVictoryConditions(playerTeamInventory) && !playerTeamInventory.isAllObjetAcquired)
                         {
                             GameManager.Instance.isConditionVictory = true;
                             GameManager.Instance.ShowEndZone();
@@ -56,12 +56,11 @@ public class TeamInventoryManager : MonoBehaviour
 
                         playerTeamInventory.items[2].isTeamHasObjet = true;
                         playerTeamInventory.items[2].objetTextUi.color = Color.green;
-                        if (CheckForVictoryConditions(playerTeamInventory))
+                        if (CheckForVictoryConditions(playerTeamInventory) && !playerTeamInventory.isAllObjetAcquired)
                         {
                             GameManager.Instance.isConditionVictory = true;
                             GameManager.Instance.ShowEndZone();
                         }
-
 
                         break;
                 }
@@ -69,17 +68,17 @@ public class TeamInventoryManager : MonoBehaviour
         }
     }
 
-    bool CheckForVictoryConditions(Inventory inventory)
+    bool CheckForVictoryConditions(Inventory playerInventory)
     {
-        for (int i = 0; i < inventory.items.Count; i++)
+        for (int i = 0; i < playerInventory.items.Count; i++)
         {
-            if (inventory.items[i].isTeamHasObjet == false)
+            if (playerInventory.items[i].isTeamHasObjet == false)
             {
                 return false;
             }
         }
 
-        inventory.isAllObjetAcquired = true;
+        playerInventory.isAllObjetAcquired = true;
         return true;
     }
 }

@@ -16,6 +16,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.nextBlockPath.Clear();
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         previewPath.Clear();
+        player.indicatorPlayer.SetActive(false);
         PreviewPath(player.playerActionPoint, player);
     }
 
@@ -131,7 +132,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
         {
-            Debug.Log(checkedBlock);
+       
             //Foreach possible path in our currentCheckedBlock
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
