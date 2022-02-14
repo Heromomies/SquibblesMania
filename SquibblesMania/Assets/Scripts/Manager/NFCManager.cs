@@ -195,6 +195,5 @@ public class NFCManager : MonoBehaviour
             case 3: actionPlayerPreset[1].SetActive(setActive); break;
             case 4: actionPlayerPreset[1].SetActive(setActive); break;
         }
-        
     }
 }

@@ -112,7 +112,7 @@ public class DashPower : MonoBehaviour
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
 
-		PowerManager.Instance.ActivateDeactivatePower(0, false);
+		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		foreach (var button in buttons)
 		{
