@@ -131,15 +131,16 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
         {
+            Debug.Log(checkedBlock);
             //Foreach possible path in our currentCheckedBlock
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
                 Vector3 pathParentPos = path.nextPath.transform.parent.position;
-
+                Vector3 checkedBlockPos = checkedBlock.transform.position;
+                
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                    path.nextPath.GetComponent<Node>().isActive &&
-                    Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && path.nextPath.GetComponent<Node>().isActive && 
+                    Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f && Math.Abs(checkedBlockPos.y - path.nextPath.transform.position.y) < 0.1f)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
