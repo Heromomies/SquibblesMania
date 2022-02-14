@@ -54,13 +54,13 @@ MonoBehaviour:
   currentPlayerTurn: {fileID: 0}
   isPathRefresh: 0
   turnCount: 0
-  cameraScript: {fileID: 0}
+  cameraTouchScript: {fileID: 0}
   actualCamPreset:
     presetNumber: 0
     camPos: {x: 0, y: 0, z: 0}
     camRot: {x: 0, y: 0, z: 0}
     rotateClamp: 0
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
@@ -69,23 +69,23 @@ MonoBehaviour:
     camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 30, y: 45, z: 0}
     rotateClamp: 30
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
+    panelButtonEvent: {fileID: 0}
+    buttonNextTurn: {fileID: 0}
+    actionPointText: {fileID: 0}
+  - presetNumber: 3
+    camPos: {x: -2, y: 6, z: -10}
+    camRot: {x: 150, y: 225, z: 0}
+    rotateClamp: 30
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
   - presetNumber: 2
     camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 150, y: 225, z: 0}
-    rotateClamp: 30
-    uiGameObject: {fileID: 0}
-    panelButtonEvent: {fileID: 0}
-    buttonNextTurn: {fileID: 0}
-    actionPointText: {fileID: 0}
-  - presetNumber: 1
-    camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 30, y: 45, z: 0}
     rotateClamp: 30
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
@@ -93,7 +93,7 @@ MonoBehaviour:
     camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 150, y: 225, z: 0}
     rotateClamp: 30
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
@@ -148,3 +148,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  cycleCount: 0

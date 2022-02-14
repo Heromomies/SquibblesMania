@@ -7,14 +7,14 @@ using UnityEngine;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
-    public List<Transform> previewPath = new List<Transform>(); 
+    public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
-    
+
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-      
         player.nextBlockPath.Clear();
+        player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
     }
@@ -36,25 +36,25 @@ public class PlayerActionPointCardState : PlayerBaseState
             player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().material.color = blockBaseColor;
             TouchManager.Instance.blockCurrentlySelectedColor = blockBaseColor;
         }
-       
+
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
         {
             Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
             //Vector3 pathParentPos = path.nextPath.transform.parent.position;
-          
-            
+
+
             if (path.isActive && path.nextPath.GetComponent<Node>().isActive && actualNode.isActive)
             {
                 possiblePath.Add(path.nextPath);
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
             }
-           
         }
+
         finalPreviewPath.Add(player.currentBlockPlayerOn);
-        
-        
+
+
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
 
@@ -67,14 +67,14 @@ public class PlayerActionPointCardState : PlayerBaseState
         playerStateManager.nextBlockPath = finalPreviewPath;
 
         indexBlockNearby++;
-     
+
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
             ColorPossiblePaths(finalPreviewPath, Color.white);
             return;
         }
- 
+
         //The blocks we want to check
         List<Transform> currentCheckedBlocks = new List<Transform>();
 
@@ -93,17 +93,17 @@ public class PlayerActionPointCardState : PlayerBaseState
             currentCheckedBlocks.Add(nextBlocksPath[0]);
             nextBlocksPath.Remove(currentCheckedBlocks[0]);
         }
-        
-      
 
-        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
+
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath,
+            playerStateManager);
 
         for (int i = 0; i < currentCheckedBlocks.Count; i++)
         {
             //We add in our list of path who are already visited, our currently checked blocks
             previousBlocksPath.Add(currentCheckedBlocks[i]);
         }
-       
+
         //If in our list, he stay a element, we restart the void
         if (nextBlocksPath.Any())
         {
@@ -119,12 +119,10 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Player have a preview of his possible movement
         foreach (var block in finalPreviewPath)
         {
-            
             block.gameObject.GetComponent<Renderer>().material.color = color;
         }
 
         previewPath = finalPreviewPath;
-        
     }
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
@@ -136,12 +134,12 @@ public class PlayerActionPointCardState : PlayerBaseState
             //Foreach possible path in our currentCheckedBlock
             foreach (GamePath path in checkedBlock.GetComponent<Node>().possiblePath)
             {
-               
                 Vector3 pathParentPos = path.nextPath.transform.parent.position;
-                
+
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
                 if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                    path.nextPath.GetComponent<Node>().isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
+                    path.nextPath.GetComponent<Node>().isActive &&
+                    Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -200,7 +198,8 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && path.nextPath.GetComponent<Node>().isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
+            if (path.isActive && path.nextPath.GetComponent<Node>().isActive &&
+                Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
             {
                 nextBlocks.Add(path.nextPath);
 
@@ -235,11 +234,11 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Foreach possible path in our currentBlock
         foreach (GamePath path in currentBlock.GetComponent<Node>().possiblePath)
         {
-            
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
             if (!previousBlocksPath.Contains(path.nextPath) && path.isActive &&
-                currentBlock.GetComponent<Node>().isActive &&  Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
+                currentBlock.GetComponent<Node>().isActive &&
+                Math.Abs(pathParentPos.y + 1f - player.transform.position.y) < 0.1f)
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
@@ -268,13 +267,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
 
-       
+
         //While the player selected block is != to the block wich player supposed to be 
         while (block != player.currentBlockPlayerOn)
         {
             //We add this block to our list final pathfinding
             player.finalPathFinding.Add(block);
-            
+
             //If in our selected block, the precedent block is not nul then the block become the past block
             if (block.GetComponent<Node>().previousBlock != null)
             {
@@ -307,12 +306,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             if (movementPlayer < player.playerActionPoint)
             {
-                Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() + new Vector3(0,0.5f,0);
+                Vector3 movePos = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint() +
+                                  new Vector3(0, 0.5f, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 _actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(_actionPointText);
-                
+
                 movementPlayer++;
                 yield return new WaitForSeconds(0.4f);
             }
@@ -324,8 +324,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     private void Clear(PlayerStateManager player)
     {
+        Node currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
         //We add the player to the list of block group which the player is currently on 
-        GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        GroupBlockDetection groupBlockDetection =  currentNodePlayerOn.groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
 
         //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
@@ -341,14 +342,15 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-        
+        currentNodePlayerOn.isActive = false;
+
         if (EndZoneManager.Instance != null && GameManager.Instance.isConditionVictory)
             EndZoneManager.Instance.PlayersIsOnEndZone();
-        
+
         if (EndZoneManager.Instance != null)
             EndZoneManager.Instance.CheckPlayersTeam();
 
-        if (player.playerActionPoint > 0 )
+        if (player.playerActionPoint > 0)
         {
             EnterState(player);
         }
@@ -358,22 +360,38 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 switch (GameManager.Instance.actualCamPreset.presetNumber)
                 {
-                    case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-                    case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-                    case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
-                    case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
+                    case 1:
+                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
+                        break;
+                    case 2:
+                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
+                        break;
+                    case 3:
+                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
+                        break;
+                    case 4:
+                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
+                        break;
                 }
-                
+
                 UiManager.Instance.buttonNextTurn.SetActive(true);
             }
             else
             {
                 switch (GameManager.Instance.actualCamPreset.presetNumber)
                 {
-                    case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
-                    case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
-                    case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
-                    case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
+                    case 1:
+                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
+                        break;
+                    case 2:
+                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
+                        break;
+                    case 3:
+                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
+                        break;
+                    case 4:
+                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
+                        break;
                 }
             }
         }

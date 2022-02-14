@@ -12,8 +12,7 @@ public class UiManager : MonoBehaviour
 {
     //Manager for simple button Ui
     [Header("MANAGER UI")] public TextMeshProUGUI currentActionPointsOfCurrentPlayerTurn;
-
-    public TextMeshProUGUI turnCountText;
+    
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
     public GameObject conditionEvent, conditionInventory;
@@ -60,10 +59,7 @@ public class UiManager : MonoBehaviour
     }
 
 
-    public void UpdateCurrentTurnCount(int turnCount)
-    {
-        turnCountText.text = $"Round number : {turnCount}";
-    }
+    
 
     public void ButtonNextTurn()
     {
