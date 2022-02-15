@@ -192,23 +192,10 @@ public class EditorMapWindow : EditorWindow
             case Theme.Volcano:
                 if (colors != Colors.None)
                 {
-                    PickUpMaterialFromAsset(materials[0],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_grass.mat",
-                                typeof(Material)), typeof(Material), true));
-                    PickUpMaterialFromAsset(materials[1],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_rock.mat",
-                                typeof(Material)), typeof(Material), true));
-                    PickUpMaterialFromAsset(materials[2],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_sand.mat",
-                                typeof(Material)), typeof(Material), true));
-                    PickUpMaterialFromAsset(materials[3],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath(
-                                "Assets/Materials/CubeMat/Volcano/Iteration1/M_volcanic_rock.mat", typeof(Material)),
-                            typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[0], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_grass.mat", typeof(Material)), typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[1], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_rock.mat", typeof(Material)), typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[2], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_sand.mat", typeof(Material)), typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[3], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Volcano/Iteration1/M_volcanic_rock.mat", typeof(Material)), typeof(Material), true));
                 }
 
                 break;
@@ -216,19 +203,9 @@ public class EditorMapWindow : EditorWindow
             case Theme.Mountain:
                 if (colors != Colors.None)
                 {
-                    PickUpMaterialFromAsset(materials[0],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_ice.mat",
-                                typeof(Material)), typeof(Material), true));
-                    PickUpMaterialFromAsset(materials[1],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_snow.mat",
-                                typeof(Material)), typeof(Material), true));
-                    PickUpMaterialFromAsset(materials[2],
-                        EditorGUILayout.ObjectField("Material",
-                            AssetDatabase.LoadAssetAtPath(
-                                "Assets/Materials/CubeMat/Mountain/Iteration1/M_mountain_stone.mat", typeof(Material)),
-                            typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[0], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_ice.mat", typeof(Material)), typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[1], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_snow.mat", typeof(Material)), typeof(Material), true));
+                    PickUpMaterialFromAsset(materials[2], EditorGUILayout.ObjectField("Material", AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/Mountain/Iteration1/M_mountain_stone.mat", typeof(Material)), typeof(Material), true));
                 }
 
                 break;
@@ -381,7 +358,7 @@ public class EditorMapWindow : EditorWindow
         }
 
         blockParent.tag = "BlockParent";
-
+        blockParent.layer = 3;
         allObjectsCreatedOnScene.Add(blockParent);
     }
 
@@ -436,40 +413,32 @@ public class EditorMapWindow : EditorWindow
         switch (colors)
         {
             case Colors.Blue:
-                Material blueMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_PiqueCube.mat", typeof(Material)) as
-                        Material;
+                Material blueMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_PiqueCube.mat", typeof(Material)) as Material;
                 InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, blueMat, lastMatNumber, boxMat);
                 ColorBloc(tempSharedMat, Node.ColorBloc.Blue);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Blue);
                 break;
             case Colors.Green:
-                Material greenMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_TrefleCube.mat", typeof(Material)) as
-                        Material;
+                Material greenMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_TrefleCube.mat", typeof(Material)) as Material;
                 InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, greenMat, lastMatNumber, boxMat);
                 ColorBloc(tempSharedMat, Node.ColorBloc.Green);
-
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Green);
                 break;
             case Colors.Red:
-                Material redMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CoeurCube.mat", typeof(Material)) as
-                        Material;
+                Material redMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CoeurCube.mat", typeof(Material)) as Material;
                 InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, redMat, lastMatNumber, boxMat);
                 ColorBloc(tempSharedMat, Node.ColorBloc.Red);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Red);
                 break;
             case Colors.Yellow:
-                Material yellowMat =
-                    AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CarreauCube.mat", typeof(Material)) as
-                        Material;
+                Material yellowMat = AssetDatabase.LoadAssetAtPath("Assets/Materials/CubeMat/M_CarreauCube.mat", typeof(Material)) as Material;
                 InitializeTemporarySharedMat(tempSharedMat, middleMatNumber, yellowMat, lastMatNumber, boxMat);
                 ColorBloc(tempSharedMat, Node.ColorBloc.Yellow);
                 ChangePrefabBaseBloc(lastBlocCreated, tempSharedMat, Node.ColorBloc.Yellow);
                 break;
             case Colors.None:
                 UnmovableBlocSetUp(tempSharedMat);
+               
                 break;
         }
     }
@@ -505,7 +474,8 @@ public class EditorMapWindow : EditorWindow
         {
             materialBloc[i] = baseMat;
         }
-
+        currentBlocSelected.layer = 0;
+        currentBlocSelected.tag = "Untagged";
         currentBlocSelected.gameObject.name = "Bloc_prefab_" + Colors.None;
         currentBlocSelected.GetComponent<Renderer>().sharedMaterials = materialBloc;
         Node node = currentBlocSelected.GetComponent<Node>();
@@ -557,6 +527,8 @@ public class EditorMapWindow : EditorWindow
         //Update the prefab bloc
         prefab.GetComponent<Renderer>().sharedMaterials = sharedMat;
         prefab.GetComponent<Node>().colorBloc = colorBloc;
+        if (currentBlocSelected.layer != 3) currentBlocSelected.layer = 3;
+
     }
 
     #endregion
