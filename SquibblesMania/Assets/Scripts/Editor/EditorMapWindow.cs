@@ -34,13 +34,13 @@ public class EditorMapWindow : EditorWindow
     private static List<GameObject> currentBlocObjectsCreated = new List<GameObject>();
     private static List<GameObject> allObjectsCreatedOnScene = new List<GameObject>();
     private static Vector2 planeMapSize;
-
+    
     private static Colors colors;
     private static Node currentBlocNode;
     private static GameObject planeGo;
 
     private static Theme theme;
-
+    private static GameObject mapParent;
     private static Material[] materials = new Material[5];
     // private static Material material
 
@@ -305,7 +305,24 @@ public class EditorMapWindow : EditorWindow
 
         //Destroys remaining block parent with no childs
         GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
+        
+        if (!mapParent)
+        {
+            mapParent = new GameObject("MapParent")
+            {
+                transform =
+                {
+                    position = Vector3.zero
+                }
+            };
+        }
 
+        for (int i = 0; i < parents.Length; i++)
+        {
+            parents[i].transform.parent = mapParent.transform;
+        }
+
+        
         foreach (var parent in parents)
         {
             if (parent.transform.childCount <= 0)
@@ -313,7 +330,9 @@ public class EditorMapWindow : EditorWindow
                 DestroyImmediate(parent);
             }
         }
-
+        
+     
+        
         DestroyImmediate(planeGo);
         ResetVars();
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
