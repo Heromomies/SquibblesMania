@@ -64,6 +64,7 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 			else
 			{
 				var childPos = childrenBlocs[i + rand].transform.position;
+
 				GameObject ashe =Instantiate(ashes, new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity);
 				ashe.transform.localScale = new Vector3(0, 0, 0);
 

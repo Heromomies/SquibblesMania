@@ -56,20 +56,16 @@ public class Meteorite : MonoBehaviour
 
 			StartCoroutine(SetActiveFalseBullet());
 		}
+		else if (other.gameObject.CompareTag("Player"))
+		{
+			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
+			Destroy(gameObject);
+		}
 	}
 
 	IEnumerator SetActiveFalseBullet()
 	{
 		yield return new WaitForSeconds(2f);
 		transform.position = new Vector3(100, 100, 100);
-	}
-	
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.gameObject.CompareTag("Player"))
-		{
-			other.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
-			Destroy(gameObject);
-		}
 	}
 }
