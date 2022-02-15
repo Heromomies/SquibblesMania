@@ -26,7 +26,7 @@ public class ShieldPower : MonoBehaviour
 
 	IEnumerator CoroutineShield()
 	{
-		yield return new WaitForSeconds(5f);
+		yield return new WaitForSeconds(2f);
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 	    PowerManager.Instance.ChangeTurnPlayer();

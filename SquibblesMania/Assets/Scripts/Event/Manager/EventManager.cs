@@ -69,7 +69,7 @@ public class EventManager : MonoBehaviour
 
 	public void CyclePassed() // When a cycle is make, random Number to know if the manager can launch the event
 	{
-		var randomNumber = Random.Range(0, 101);
+		var randomNumber = Random.Range(0, 100);
 		if (randomNumber < 25 * GameManager.Instance.cycleCount)
 		{
 			LaunchEvent();
