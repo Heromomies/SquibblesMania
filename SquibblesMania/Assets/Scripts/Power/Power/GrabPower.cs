@@ -12,9 +12,20 @@ public class GrabPower : MonoBehaviour
 
 	void OnEnable()
 	{
-		foreach (var t in buttons)
+		switch (GameManager.Instance.actualCamPreset.presetNumber)
 		{
-			t.SetActive(true);
+			case 1:
+				buttons[0].SetActive(true);
+				break;
+			case 2 :
+				buttons[0].SetActive(true);
+				break;
+			case 3:
+				buttons[1].SetActive(true);
+				break;
+			case 4 :
+				buttons[1].SetActive(true);
+				break;
 		}
 	}
 
@@ -54,9 +65,12 @@ public class GrabPower : MonoBehaviour
 		
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
-		foreach (var t in buttons)
+		foreach (var button in buttons)
 		{
-			t.SetActive(false);
+			if (button.activeSelf)
+			{
+				button.SetActive(false);
+			}
 		}
 	}
 }
