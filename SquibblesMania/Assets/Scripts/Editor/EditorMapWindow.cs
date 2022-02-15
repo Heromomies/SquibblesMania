@@ -298,7 +298,7 @@ public class EditorMapWindow : EditorWindow
         }
 
         EditorGUILayout.Space(20);
-        if (currentBlocObjectsCreated.Count >= 1 && isCreating)
+        if (allObjectsCreatedOnScene.Count >= 1 && isCreating)
         {
             //Reset the window 
             if (GUILayout.Button("Reset"))
@@ -579,6 +579,5 @@ public class EditorMapWindow : EditorWindow
         currentBlocSelected = null;
         planeGo = null;
         currentBlocObjectsCreated.Clear();
-        allObjectsCreatedOnScene.Clear();
     }
 }
