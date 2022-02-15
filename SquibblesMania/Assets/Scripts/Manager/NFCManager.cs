@@ -47,8 +47,7 @@ public class NFCManager : MonoBehaviour
     #endregion
 
     #region PRIVATE VAR
-
-    [HideInInspector] public int colorInt;
+    
     [HideInInspector] public int numberOfTheCard;
     [HideInInspector] public char[] charCards;
     [HideInInspector] public bool hasRemovedCard;
@@ -143,22 +142,10 @@ public class NFCManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
         switch (charCards[1]) // Check the letter of the card for the color and launch the appropriate power
         {
-            case 'B':
-                colorInt = 0;
-                PowerManager.Instance.ActivateDeactivatePower(colorInt, true);
-                break;
-            case 'R':
-                colorInt = 1;
-                PowerManager.Instance.ActivateDeactivatePower(colorInt, true);
-                break;
-            case 'G':
-                colorInt = 2;
-                PowerManager.Instance.ActivateDeactivatePower(colorInt, true);
-                break;
-            case 'Y':
-                colorInt = 3;
-                PowerManager.Instance.ActivateDeactivatePower(colorInt, true);
-                break;
+            case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
+            case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
+            case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
+            case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
         }
 
         SetActivePlayerActionButton(false);
