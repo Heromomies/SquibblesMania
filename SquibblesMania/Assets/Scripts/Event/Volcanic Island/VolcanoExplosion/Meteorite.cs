@@ -45,11 +45,14 @@ public class Meteorite : MonoBehaviour
 
 			transform.rotation = new Quaternion(0,0,0,0);
 			_stopRotating = true;
-			GameObject explosionPS = Instantiate(particleSystemExplosion, transform.position, Quaternion.identity);
+			
+			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transform.position, Quaternion.identity);
 			Destroy(explosionPS, 2f);
-			GameObject firePS = Instantiate(particleSystemFire, transform.position, particleSystemFire.transform.rotation);
+			
+			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite", transform.position, Quaternion.identity);
 			_particleFireToDelete = firePS;
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
+			
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
 
 			transform.rotation = other.transform.rotation;
@@ -66,6 +69,6 @@ public class Meteorite : MonoBehaviour
 	IEnumerator SetActiveFalseBullet()
 	{
 		yield return new WaitForSeconds(2f);
-		transform.position = new Vector3(100, 100, 100);
+		gameObject.SetActive(false);
 	}
 }
