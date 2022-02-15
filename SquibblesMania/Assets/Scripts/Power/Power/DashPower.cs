@@ -12,9 +12,20 @@ public class DashPower : MonoBehaviour
 
 	private void OnEnable()
 	{
-		for (int i = 0; i < buttons.Count; i++)
+		switch (GameManager.Instance.actualCamPreset.presetNumber)
 		{
-			buttons[i].SetActive(true);
+			case 1:
+				buttons[0].SetActive(true);
+				break;
+			case 2 :
+				buttons[0].SetActive(true);
+				break;
+			case 3:
+				buttons[1].SetActive(true);
+				break;
+			case 4 :
+				buttons[1].SetActive(true);
+				break;
 		}
 	}
 
@@ -116,7 +127,10 @@ public class DashPower : MonoBehaviour
 		PowerManager.Instance.ChangeTurnPlayer();
 		foreach (var button in buttons)
 		{
-			button.SetActive(false);
+			if (button.activeSelf)
+			{
+				button.SetActive(false);
+			}
 		}
 	}
 }

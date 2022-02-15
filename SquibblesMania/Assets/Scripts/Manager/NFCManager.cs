@@ -71,8 +71,7 @@ public class NFCManager : MonoBehaviour
 
     #endregion
 
-    public void
-        PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
+    public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
     {
         StopAllCoroutines();
         NFCController.StopPolling();
