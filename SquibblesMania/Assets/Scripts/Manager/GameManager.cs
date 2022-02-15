@@ -167,6 +167,7 @@ public class GameManager : MonoBehaviour
     private void IncreaseCycle()
     {
         EventManager.Instance.CyclePassed();
+        PowerManager.Instance.CyclePassed();
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)

@@ -170,15 +170,15 @@ public class NFCManager : MonoBehaviour
         clicked = true;
         numberOfTheCard = charCards[0] - '0';
         GameManager.Instance.currentPlayerTurn.playerActionPoint = numberOfTheCard;
-
-        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+        
         if (GameManager.Instance.currentPlayerTurn.isPlayerShielded)
         {
             GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
-                .playerActionPoint);
         }
 
+        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
+            .playerActionPoint);
+        
         GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState = true;
         GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
             .PlayerActionPointCardState);
@@ -195,6 +195,5 @@ public class NFCManager : MonoBehaviour
             case 3: actionPlayerPreset[1].SetActive(setActive); break;
             case 4: actionPlayerPreset[1].SetActive(setActive); break;
         }
-        
     }
 }

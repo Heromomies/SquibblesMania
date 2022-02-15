@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class GrabPower : MonoBehaviour, IManagePower
+public class GrabPower : MonoBehaviour
 {
 	public int grabRange;
 
@@ -52,19 +52,11 @@ public class GrabPower : MonoBehaviour, IManagePower
 			}
 		}
 		
-		PowerManager.Instance.ActivateDeactivatePower(1, false);
+		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		foreach (var t in buttons)
 		{
 			t.SetActive(false);
 		}
-	}
-	public void ShowPower()
-	{
-		
-	}
-
-	public void LaunchPower()
-	{
 	}
 }

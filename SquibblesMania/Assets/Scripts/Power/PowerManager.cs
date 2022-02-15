@@ -6,8 +6,11 @@ using UnityEngine.UI;
 
 public class PowerManager : MonoBehaviour
 {
-	public List<GameObject> powers;
-	
+	public DashPower dash;
+	public GrabPower grab;
+	public SwapPower swap;
+	public ShieldPower shield;
+
 	#region Singleton
 
 	private static PowerManager powerManager;
@@ -21,25 +24,32 @@ public class PowerManager : MonoBehaviour
 	}
 
 	#endregion
-	
+
 	public void ActivateDeactivatePower(int powerIndex, bool activePower)
 	{
 		switch (powerIndex)
 		{
-			case 0 : powers[0].SetActive(activePower);
-				break;
-			case 1 : powers[1].SetActive(activePower);
-				break;
-			case 2 : powers[2].SetActive(activePower);
-				break;
-			case 3 : powers[3].SetActive(activePower);
-				break;
+			case 0: dash.gameObject.SetActive(activePower); break;
+			case 1: grab.gameObject.SetActive(activePower); break;
+			case 2: swap.gameObject.SetActive(activePower); break;
+			case 3: shield.gameObject.SetActive(activePower); break;
+		}
+	}
+
+	public void CyclePassed()
+	{
+		if (shield.numberOfCycleBeforeDeactivateShield < 1)
+		{
+			shield.numberOfCycleBeforeDeactivateShield++;
+		}
+		else
+		{
+			Destroy(shield.shield);
 		}
 	}
 
 	public void ChangeTurnPlayer()
 	{
-		
 		UiManager.Instance.buttonNextTurn.SetActive(true);
 	}
 }

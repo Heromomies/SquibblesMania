@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class DashPower : MonoBehaviour, IManagePower
+public class DashPower : MonoBehaviour
 {
 	public int dashRange;
 
@@ -27,7 +27,6 @@ public class DashPower : MonoBehaviour, IManagePower
 		{
 			if (hit.collider.gameObject.layer == 3)
 			{
-				Debug.Log("There is a bloc in front of me");
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
@@ -35,7 +34,6 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
 			{
-				Debug.Log("There is a player in front of me");
 				var distanceBetweenTwoPlayers = Vector3.Distance(position, hit.collider.transform.position);
 				distanceBetweenTwoPlayers += 0.1f;
 				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers; // check distance between two players
@@ -104,7 +102,6 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 			else if (hit.collider.gameObject.layer == 0)
 			{
-				Debug.Log("I'm dashing a lot my bro");
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
 					position + _vectorRaycast[numberDirectionVector] * dashRange, 0.1f);
 			}
@@ -115,19 +112,11 @@ public class DashPower : MonoBehaviour, IManagePower
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
 
-		PowerManager.Instance.ActivateDeactivatePower(0, false);
+		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		foreach (var button in buttons)
 		{
 			button.SetActive(false);
 		}
-	}
-
-	public void ShowPower()
-	{
-	}
-
-	public void LaunchPower()
-	{
 	}
 }

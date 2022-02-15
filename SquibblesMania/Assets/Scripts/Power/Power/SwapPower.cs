@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-public class SwapPower : MonoBehaviour, IManagePower
+public class SwapPower : MonoBehaviour
 {
 	public int range;
 	public LayerMask layer;
@@ -14,8 +14,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private bool _canChoseThePlayer;
+	private Camera _cam;
+	
 	public void OnEnable()
 	{
+		_cam = Camera.main;
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
 		ShowPower();
@@ -31,7 +34,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 		switch (hitColliders.Length)
 		{
 			case 1:
-				Debug.Log("I'm null and i can't do anything");
+				PowerManager.Instance.ActivateDeactivatePower(2,false);
+				PowerManager.Instance.ChangeTurnPlayer();
 				break;
 			case 2:
 				LaunchPower();
@@ -48,16 +52,15 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		if (_canChoseThePlayer)
 		{
-			if (Input.GetMouseButtonDown(0)) // Touch and swap position
+			if (Input.touchCount > 0)
 			{
-				//ray shooting out of the camera from where the mouse is
-				var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-				if (Physics.Raycast(ray, out var hit, range, layer))
+				if (Input.GetTouch(0).phase == TouchPhase.Began)
 				{
-					//print out the name if the raycast hits something
-					_playerTwo = hit.collider;
-					
+					Touch touch = Input.GetTouch(0);
+					//ray shooting out of the camera from where the touch is
+
+					_playerTwo.transform.position = _cam.ScreenToWorldPoint(touch.position);
+
 					LaunchPower();
 				}
 			}

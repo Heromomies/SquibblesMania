@@ -26,7 +26,8 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	[Range(0.0f, 1.0f)] public float repeatRate;
 
 	private int _turn;
-
+	
+	[Header("CONDITIONS DANGEROUSNESS")]
 	public Conditions[] conditionsDangerousness;
 
 	[Serializable]
@@ -40,7 +41,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		ShowEvent();
 	}
 
-	public void ShowEvent()
+	public void ShowEvent() // Chose the bloc 
 	{
 		cubeOnMap = EventManager.Instance.cleanList;
 		
@@ -55,7 +56,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		LaunchEvent();
 	}
 
-	public void LaunchEvent()
+	public void LaunchEvent() // Launch the bullet's function
 	{
 		GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
 			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);
@@ -84,7 +85,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		cubeTouched[0].tag = "Black Block";
 
 		var positionVol = volcanoTransform.position;
-		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position, positionVol,
+		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
 			speed); // Add the velocity to make an effect of parabola for the bullets
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
 

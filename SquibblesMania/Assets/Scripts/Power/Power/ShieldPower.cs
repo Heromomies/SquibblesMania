@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldPower : MonoBehaviour, IManagePower
+public class ShieldPower : MonoBehaviour
 {
 	public int durationShield;
+	public GameObject vfxShield;
+
+	public int numberOfCycleBeforeDeactivateShield;
+	[HideInInspector] public GameObject shield;
 	
     public void OnEnable()
     {
@@ -14,23 +18,17 @@ public class ShieldPower : MonoBehaviour, IManagePower
 	    GameManager.Instance.currentPlayerTurn.gameObject.layer = 3;
 	    transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 
+		GameObject s = Instantiate(vfxShield, GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity);
+
+		shield = s;
 	    StartCoroutine(CoroutineShield());
     }
 
 	IEnumerator CoroutineShield()
 	{
-		yield return new WaitForSeconds(5f);
-		
-	    PowerManager.Instance.ActivateDeactivatePower(3, false);
-	    PowerManager.Instance.ChangeTurnPlayer();
-    }
-    
-    public void ShowPower()
-    {
-	   
-    }
+		yield return new WaitForSeconds(2f);
 
-    public void LaunchPower()
-    {
+		PowerManager.Instance.ActivateDeactivatePower(3, false);
+	    PowerManager.Instance.ChangeTurnPlayer();
     }
 }
