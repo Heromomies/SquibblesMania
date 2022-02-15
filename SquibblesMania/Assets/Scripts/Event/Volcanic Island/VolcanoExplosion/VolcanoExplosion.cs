@@ -14,7 +14,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	public GameObject particleSystemExplosion;
 	[Space]
 	 public List<GameObject> cubeOnMap;
-	[HideInInspector] public List<GameObject> cubeTouched;
+	 public List<GameObject> cubeTouched;
 	
 	[Header("BULLET AND SPAWN")]
 	public Rigidbody bulletPrefab;
@@ -88,11 +88,11 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
 			speed); // Add the velocity to make an effect of parabola for the bullets
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
-
+		
 		cubeTouched.Remove(cubeTouched[0]);
 
-		Rigidbody obj = Instantiate(bulletPrefab, positionVol, Quaternion.identity);
-		obj.velocity = vo;
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity);
+		obj.GetComponent<Rigidbody>().velocity = vo;
 	}
 
 	#endregion
