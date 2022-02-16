@@ -116,11 +116,5 @@ public class PlayerStateManager : Player
     {
         player.isPlayerStun = true;
         player.stunCount = stunTurnCount;
-
-        if (GameManager.Instance.currentPlayerTurn == player)
-        {
-            //Exit current state of current player
-            player.CurrentState.ExitState(player);
-        }
     }
 }

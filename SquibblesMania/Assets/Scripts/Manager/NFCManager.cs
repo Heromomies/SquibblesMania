@@ -162,8 +162,7 @@ public class NFCManager : MonoBehaviour
             GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
         }
 
-        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
-            .playerActionPoint);
+        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
         
         GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState = true;
         GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
