@@ -27,9 +27,6 @@ public class SwapPower : MonoBehaviour
 	public void ShowPower() // Show the sphere and admit the player to chose the other player to swap
 	{
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, range, layer);
-		
-		_playerOne = hitColliders[0];
-		_playerTwo = hitColliders[1];
 
 		switch (hitColliders.Length)
 		{
@@ -38,6 +35,8 @@ public class SwapPower : MonoBehaviour
 				PowerManager.Instance.ChangeTurnPlayer();
 				break;
 			case 2:
+				_playerOne = hitColliders[0];
+				_playerTwo = hitColliders[1];
 				LaunchPower();
 				break;
 		}

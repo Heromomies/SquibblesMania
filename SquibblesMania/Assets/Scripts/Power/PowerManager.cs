@@ -44,7 +44,7 @@ public class PowerManager : MonoBehaviour
         }
         else
         {
-            Destroy(shield.shield);
+            Destroy(shield.shieldGameObject);
         }
     }
 
