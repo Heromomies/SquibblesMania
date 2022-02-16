@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
 
     public void ChangePlayerTurn(int playerNumberTurn)
     {
-        if (playerNumberTurn == players[0].playerNumber)
+        if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
         {
             IncreaseCycle();
             cycleCount++;
