@@ -9,18 +9,19 @@ public class ShieldPower : MonoBehaviour
 	public GameObject vfxShield;
 
 	public int numberOfCycleBeforeDeactivateShield;
-	[HideInInspector] public GameObject shield;
+	[HideInInspector] public GameObject shieldGameObject;
 	
     public void OnEnable()
     {
-	    GameManager.Instance.currentPlayerTurn.isPlayerShielded = true;
-	    GameManager.Instance.currentPlayerTurn.shieldCount = durationShield;
-	    GameManager.Instance.currentPlayerTurn.gameObject.layer = 3;
-	    transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+	    var cPlayerTurn = GameManager.Instance.currentPlayerTurn;
+	    
+	    cPlayerTurn.isPlayerShielded = true;
+	    cPlayerTurn.shieldCount = durationShield;
+	    cPlayerTurn.gameObject.layer = 3;
 
-		GameObject s = Instantiate(vfxShield, GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity);
+	    GameObject s = Instantiate(vfxShield, cPlayerTurn.transform.position, Quaternion.identity);
 
-		shield = s;
+		shieldGameObject = s;
 	    StartCoroutine(CoroutineShield());
     }
 
