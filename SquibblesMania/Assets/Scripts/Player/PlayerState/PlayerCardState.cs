@@ -46,6 +46,7 @@ public class PlayerCardState : PlayerBaseState
 	
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
+		
 		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
 			NFCManager.Instance.SetActivePlayerActionButton(false);
@@ -59,10 +60,7 @@ public class PlayerCardState : PlayerBaseState
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCController.StopPolling();
 		} 
-		if(GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && !NFCManager.Instance.clicked)
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-		}
+		
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !NFCManager.Instance.clicked)
 		{
 			NFCManager.Instance.SetActivePlayerActionButton(false);
@@ -107,15 +105,10 @@ public class PlayerCardState : PlayerBaseState
 
 	public override void UpdateState(PlayerStateManager player)
 	{
-		// if player touch the power button
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			player.SwitchState(player.PlayerPowerCardState);
-		}
 		
 		if (NFCManager.Instance.hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
-			UiManager.Instance.buttonNextTurn.SetActive(true);
+			
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
