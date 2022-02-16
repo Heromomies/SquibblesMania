@@ -19,6 +19,7 @@ public class PlayerPowerCardState : PlayerBaseState
 
     public override void ExitState(PlayerStateManager player)
     {
+       
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {

@@ -30,10 +30,10 @@ public class PlayerCardState : PlayerBaseState
 	}
 	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
 	{
-		if (!GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+		
+		if (GameManager.Instance.currentPlayerTurn.CurrentState == GameManager.Instance.currentPlayerTurn.PlayerCardState && !NFCManager.Instance.clicked)
 		{
 			NFCManager.Instance.SetActivePlayerActionButton(true);
-		
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 			NFCManager.Instance.hasRemovedCard = false;
