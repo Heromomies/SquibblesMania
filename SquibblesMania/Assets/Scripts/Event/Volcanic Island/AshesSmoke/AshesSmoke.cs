@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -43,12 +44,9 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 	}
 	public void ShowEvent() // Show the event
 	{
-		foreach (var parentB in parentBlocs)
+		foreach (var child in parentBlocs.SelectMany(parentB => parentB.GetComponentsInChildren<Node>()))
 		{
-			foreach (var child in parentB.GetComponentsInChildren<Node>())
-			{
-				childrenBlocs.Add(child.gameObject);
-			}
+			childrenBlocs.Add(child.gameObject);
 		}
 
 		var rand = Random.Range(0, childrenBlocs.Count

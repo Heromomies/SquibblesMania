@@ -90,7 +90,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
 		
 		cubeTouched.Remove(cubeTouched[0]);
-
+		
 		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity);
 		obj.GetComponent<Rigidbody>().velocity = vo;
 	}

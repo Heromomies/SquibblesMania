@@ -31,7 +31,7 @@ public class Meteorite : MonoBehaviour
 		if (!_stopRotating)
 		{
 			var rotate = Random.Range(0.5f, 3f);
-			transform.Rotate(new Vector3(rotate,rotate,rotate) * speedTurnAround * Time.deltaTime, Space.World);
+			transform.Rotate(new Vector3(rotate,rotate,rotate) * (speedTurnAround * Time.deltaTime), Space.World);
 		}
 	}
 
@@ -39,6 +39,8 @@ public class Meteorite : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("Black Block"))
 		{
+			StartCoroutine(SetActiveFalseBullet());
+			
 			other.gameObject.GetComponent<Node>().isActive = false;
 			transform.parent = other.transform;
 			_turn = GameManager.Instance.turnCount;
@@ -56,13 +58,11 @@ public class Meteorite : MonoBehaviour
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
 
 			transform.rotation = other.transform.rotation;
-
-			StartCoroutine(SetActiveFalseBullet());
 		}
 		else if (other.gameObject.CompareTag("Player"))
 		{
-			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
-			Destroy(gameObject);
+			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
+			StartCoroutine(SetActiveFalseBullet());
 		}
 	}
 
