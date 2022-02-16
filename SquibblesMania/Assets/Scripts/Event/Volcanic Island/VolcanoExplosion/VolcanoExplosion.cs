@@ -38,6 +38,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
+		Debug.Log("Show Event");
 		ShowEvent();
 	}
 
@@ -101,6 +102,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	{
 		if (_turn < GameManager.Instance.turnCount)
 		{
+			Debug.Log("Update");
 			_turn = GameManager.Instance.turnCount;
 			
 			for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
@@ -112,6 +114,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		if (cubeTouched.Count <= 0)
 		{
 			CancelInvoke();
+			_turn = 0;
 			gameObject.SetActive(false);
 		}
 	}

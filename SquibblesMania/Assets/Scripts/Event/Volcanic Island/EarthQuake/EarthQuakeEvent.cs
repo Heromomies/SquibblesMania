@@ -32,12 +32,14 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
+		Debug.Log("Show Event");
 		_cam = Camera.main;
 		ShowEvent();
 	}
 
 	public void ShowEvent()
 	{
+		
 		colliders = Physics.OverlapSphere(gameObject.transform.position, radius, layer); // Detect bloc around the object
 		
 		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0

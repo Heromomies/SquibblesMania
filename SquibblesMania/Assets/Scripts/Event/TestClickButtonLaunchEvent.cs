@@ -11,6 +11,7 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
       {
          if (!eventTested.activeSelf)
          {
+            Debug.Log("Je passe par la aussi ");
             eventTested.SetActive(true);
          }
          else
