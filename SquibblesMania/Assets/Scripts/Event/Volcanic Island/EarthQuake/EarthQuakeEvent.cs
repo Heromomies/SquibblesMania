@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	[Space]
 	public LayerMask layer;
 	
-	[HideInInspector]public Collider[] colliders;
+	public Collider[] colliders;
 
 	[Header("PARENT")]
 	[Space]
@@ -32,6 +33,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
+		Debug.Log("earthquake");
 		_cam = Camera.main;
 		ShowEvent();
 	}
@@ -43,7 +45,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
 		{
 			int randomNumber = Random.Range(0, colliders.Length);
-			if (colliders[randomNumber].transform.position.y == 0 || colliders[randomNumber].CompareTag("Black Block")) // If the Y position is equal to 0, add one bloc to touch
+			if (colliders[randomNumber].transform.position.y == 0 || colliders[randomNumber].CompareTag("BlackBlock")) // If the Y position is equal to 0, add one bloc to touch
 			{
 				i--;
 			}
@@ -60,9 +62,13 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			}
 		}
 		
+		StartCoroutine(SetActiveFalseBullet());
+	}
+	IEnumerator SetActiveFalseBullet()
+	{
+		yield return new WaitForSeconds(1f);
 		gameObject.SetActive(false);
 	}
-
 	public void LaunchEvent()
 	{
 	}

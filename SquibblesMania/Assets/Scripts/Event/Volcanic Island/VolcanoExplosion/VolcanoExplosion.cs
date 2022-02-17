@@ -17,9 +17,9 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	 public List<GameObject> cubeTouched;
 	
 	[Header("BULLET AND SPAWN")]
-	public Rigidbody bulletPrefab;
 	public Transform volcanoTransform;
-
+	public Transform bulletParent;
+	
 	[Space]
 	[Header("BULLET SETTINGS")]
 	[Range(0.0f, 3.0f)] public float speed;
@@ -38,6 +38,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
+		Debug.Log(("volcano"));
 		ShowEvent();
 	}
 
@@ -48,12 +49,13 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
 			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite);
-			EventManager.Instance.cleanList.Remove(EventManager.Instance.cleanList[placeOfCube]);
+			EventManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
 			
 			RandomEvent(placeOfCube);
 		}
 		
 		LaunchEvent();
+		
 	}
 
 	public void LaunchEvent() // Launch the bullet's function
@@ -82,36 +84,27 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	void LaunchBullet() // Launch the bullets 
 	{
-		cubeTouched[0].tag = "Black Block";
+		cubeTouched[0].tag = "BlackBlock";
 
 		var positionVol = volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
 			speed); // Add the velocity to make an effect of parabola for the bullets
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
 		
-		cubeTouched.Remove(cubeTouched[0]);
-		
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity);
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
 		obj.GetComponent<Rigidbody>().velocity = vo;
+		
+		cubeTouched.Remove(cubeTouched[0]);
 	}
 
 	#endregion
 
 	void Update()
 	{
-		if (_turn < GameManager.Instance.turnCount)
-		{
-			_turn = GameManager.Instance.turnCount;
-			
-			for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
-			{
-				cubeTouched[i].GetComponent<Renderer>().material.color = Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
-			}
-		}
-
 		if (cubeTouched.Count <= 0)
 		{
 			CancelInvoke();
+			_turn = 0;
 			gameObject.SetActive(false);
 		}
 	}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,12 @@ using UnityEngine;
 public class TestClickButtonLaunchEvent : MonoBehaviour
 {
    public List<GameObject> eventToTest;
-   public void OnClick()
+
+   public void OnClicked()
    {
       foreach (var eventTested in eventToTest)
       {
-         if (!eventTested.activeSelf)
+         if (!eventTested.activeInHierarchy)
          {
             eventTested.SetActive(true);
          }

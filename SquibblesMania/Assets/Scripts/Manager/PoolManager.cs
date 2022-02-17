@@ -50,7 +50,7 @@ public class PoolManager : MonoBehaviour
         }
     }
 
-    public GameObject SpawnObjectFromPool(string tag, Vector3 position, Quaternion rotation)
+    public GameObject SpawnObjectFromPool(string tag, Vector3 position, Quaternion rotation, Transform parent)
     {
         //If we dont have a pool with tag we return 
         if (!poolDictionnary.ContainsKey(tag))
@@ -60,12 +60,16 @@ public class PoolManager : MonoBehaviour
         }
         //Spawn object from pool using our dictionnary
         GameObject objectToSpawn =  poolDictionnary[tag].Dequeue();
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-        
-        //Add back to the queue so we can use the object later
-        poolDictionnary[tag].Enqueue(objectToSpawn);
+        if (objectToSpawn != null)
+        {
+            objectToSpawn.SetActive(true);
+            objectToSpawn.transform.position = position;
+            objectToSpawn.transform.rotation = rotation;
+            objectToSpawn.transform.parent = parent;
+            
+            //Add back to the queue so we can use the object later
+            poolDictionnary[tag].Enqueue(objectToSpawn);
+        }
 
         return objectToSpawn;
     }
