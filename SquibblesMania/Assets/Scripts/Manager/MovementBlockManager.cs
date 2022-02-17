@@ -10,7 +10,7 @@ public class MovementBlockManager : MonoBehaviour
     private static MovementBlockManager _movementBlockManager;
 
     public static MovementBlockManager Instance => _movementBlockManager;
-
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -77,7 +77,7 @@ public class MovementBlockManager : MonoBehaviour
 
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().material.color = Color.gray;
+                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
             }
         }
     }
@@ -128,17 +128,17 @@ public class MovementBlockManager : MonoBehaviour
             UiManager.Instance.buttonNextTurn.SetActive(true);
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().material.color = Color.gray;
+                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
             }
         }
     }
 
 
-    public void ResetPreviousBlockColor()
+    public Color ResetPreviousBlockColor()
     {
-        Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().material;
-
+        Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().materials[2];
         blockCurrentlySelectedMat.color = TouchManager.Instance.blockCurrentlySelectedColor;
+        return blockCurrentlySelectedMat.color;
     }
 
     private void ResetPreviewPlatform()
