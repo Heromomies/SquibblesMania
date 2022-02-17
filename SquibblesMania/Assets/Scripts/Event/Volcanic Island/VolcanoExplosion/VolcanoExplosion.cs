@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class VolcanoExplosion : MonoBehaviour, IManageEvent
 {
 	[Header("COLOR")]
-	public Color colorOne, colorTwo;
+	public Material materialOne;
 	[Space]
 	[Header("PARTICLE SYSTEM")]
 	public GameObject particleSystemExplosion;
@@ -72,8 +72,8 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
-		cubeOnMap[placeOfCube].GetComponent<Renderer>().material.color = colorOne;
-
+		cubeOnMap[placeOfCube].GetComponent<Renderer>().material.CopyPropertiesFromMaterial(materialOne);
+		
 		cubeTouched.Add(cubeOnMap[placeOfCube]);
 		_turn = GameManager.Instance.turnCount;
 	}
