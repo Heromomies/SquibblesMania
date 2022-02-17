@@ -17,12 +17,12 @@ public class PlayerStateManager : Player
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
-  
+
 
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-    
+
     private void Start()
     {
         DetectBlockBelowPlayer();
@@ -31,7 +31,6 @@ public class PlayerStateManager : Player
         GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
         currentNodePlayerOn.isActive = false;
-
     }
 
 
@@ -52,8 +51,7 @@ public class PlayerStateManager : Player
         CurrentState.EnterState(this);
     }
 
-    
-    
+
     public void StartPathFinding()
     {
         //If the current state of the player is when he use his action point
@@ -74,7 +72,6 @@ public class PlayerStateManager : Player
 
             state.EnterState(this);
         }
-        
     }
 
     private void DetectBlockBelowPlayer()
@@ -89,26 +86,23 @@ public class PlayerStateManager : Player
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
-                
             }
         }
-        else
-        {
-           //  StartCoroutine(WaitUntilRespawn());
-        }
+        
     }
 
     private IEnumerator WaitUntilRespawn()
     {
         yield return new WaitForSeconds(1f);
-        
+
         var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
-        var obj =  blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
+        var obj = blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
         var children = obj.GetComponentsInChildren<Node>();
 
-        var randomNumber =Random.Range(0,children.Length);
-        
-        GameManager.Instance.currentPlayerTurn.transform.position = children[randomNumber].transform.position + new Vector3(0,1,0);
+        var randomNumber = Random.Range(0, children.Length);
+
+        GameManager.Instance.currentPlayerTurn.transform.position =
+            children[randomNumber].transform.position + new Vector3(0, 1, 0);
         StopAllCoroutines();
     }
 
@@ -117,4 +111,6 @@ public class PlayerStateManager : Player
         player.isPlayerStun = true;
         player.stunCount = stunTurnCount;
     }
+
+ 
 }
