@@ -171,14 +171,14 @@ public class TouchManager : MonoBehaviour
 
 				if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f && blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
 				{
-					Debug.Log("Floor : "+(blockGroupParentPos.y + 2.5f - currentPlayerPos.y));
 					buttonGoToTheBlock.interactable = true;
 				}
-
-				else if (Mathf.Ceil(blockGroupParentPos.y + 2.5f - currentPlayerPos.y) != 0
-				    || GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
+				else
 				{
-					Debug.Log("Ceil : "+Mathf.Ceil(blockGroupParentPos.y + 2.5f - currentPlayerPos.y));
+					buttonGoToTheBlock.interactable = false;
+				}
+				if (GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
+				{
 					buttonGoToTheBlock.interactable = false;
 				}
 
