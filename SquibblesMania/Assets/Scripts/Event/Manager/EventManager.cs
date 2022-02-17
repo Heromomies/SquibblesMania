@@ -7,14 +7,10 @@ using Random = UnityEngine.Random;
 public class EventManager : MonoBehaviour
 {
 	[Space] [Header("EVENTS")] public List<GameObject> events;
-
-	 public List<GameObject> cleanList;
-
-	[Space] [Header("MAP ZONE")] public List<GameObject> listZoneNorthWest;
-	public List<GameObject> listZoneNorthEst;
-	public List<GameObject> listZoneSouthWest;
-	public List<GameObject> listZoneSouthEst;
-
+	
+	[Space] [Header("MAP ZONE")] 
+	public List<GameObject> cleanList;
+	
 	public int dangerousness;
 	
 	public Slider sliderDangerousness;
@@ -47,22 +43,6 @@ public class EventManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		foreach (var l in listZoneNorthWest)
-		{
-			cleanList.Add(l);
-		}
-		foreach (var l in listZoneNorthEst)
-		{
-			cleanList.Add(l);
-		}
-		foreach (var l in listZoneSouthEst)
-		{
-			cleanList.Add(l);
-		}
-		foreach (var l in listZoneSouthWest)
-		{
-			cleanList.Add(l);
-		}
 		sliderDangerousness.value = dangerousness;
 		//DefineCondition();
 	}
@@ -119,26 +99,6 @@ public class EventManager : MonoBehaviour
 				dangerousness = 3;
 				break;
 		}
-	}
-	public void ClickButton(int numberButton) // Chose the zone where the event will appear 
-	{
-		switch (numberButton)
-		{
-			case 0:
-				cleanList = listZoneNorthWest;
-				break;
-			case 1:
-				cleanList = listZoneNorthEst;
-				break;
-			case 2:
-				cleanList = listZoneSouthWest;
-				break;
-			case 3:
-				cleanList = listZoneSouthEst;
-				break;
-		}
-
-		//
 	}
 
 	void LaunchEvent() // Launch the event

@@ -11,7 +11,7 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 	public List<GameObject> parentBlocs; [Space]
 	public float heightSpawnParticle;[Space]
 
-	[HideInInspector] public List<GameObject> childrenBlocs;
+	public List<GameObject> childrenBlocs;
 	
 	[Header("CONDITIONS DANGEROUSNESS")]
 	public Conditions[] conditionsDangerousnessAshesSmoke;
@@ -24,7 +24,7 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
-		Debug.Log("Show Event");
+		Debug.Log(("ashes"));
 		Shuffle(parentBlocs);
 		ShowEvent();
 	}
@@ -44,37 +44,40 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 	}
 	public void ShowEvent() // Show the event
 	{
-		foreach (var parentB in parentBlocs)
-		{
-			foreach (var child in parentB.GetComponentsInChildren<Node>())
-			{
-				childrenBlocs.Add(child.gameObject);
-			}
-		}
+		childrenBlocs = EventManager.Instance.cleanList;
 
 		var rand = Random.Range(0, childrenBlocs.Count
 		                           - conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered);
 
 		for (int i = 0; i < conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered; i++)
 		{
-			if (childrenBlocs[i + rand].CompareTag("Black Block"))
+			//var childPos = childrenBlocs[i + rand].transform.position;
+				
+			//GameObject ashe = PoolManager.Instance.SpawnObjectFromPool("Ashe", new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity, childrenBlocs[i + rand].transform);
+			
+			if (childrenBlocs[i + rand].CompareTag("BlackBlock"))
 			{
-				i--;
+				i++;
 			}
 			else
 			{
 				var childPos = childrenBlocs[i + rand].transform.position;
 				
-				GameObject ashe = PoolManager.Instance.SpawnObjectFromPool("Ashe", new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity);
-				ashe.transform.localScale = new Vector3(0, 0, 0);
+				GameObject ashe = PoolManager.Instance.SpawnObjectFromPool("Ashe", new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity, childrenBlocs[i + rand].transform);
+				//ashe.transform.localScale = new Vector3(0, 0, 0);
 
-				ashe.transform.DOScale(new Vector3(1, 0.1f, 1), 0.5f);
+				//ashe.transform.DOScale(new Vector3(1, 0.1f, 1), 0.5f);
 			}
 		}
 
+		StartCoroutine(SetActiveFalseBullet());
+	}
+	
+	IEnumerator SetActiveFalseBullet()
+	{
+		yield return new WaitForSeconds(1f);
 		gameObject.SetActive(false);
 	}
-
 	public void LaunchEvent() // Launch the event
 	{
 	}

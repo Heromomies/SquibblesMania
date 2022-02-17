@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,19 @@ using UnityEngine;
 public class TestClickButtonLaunchEvent : MonoBehaviour
 {
    public List<GameObject> eventToTest;
-   public void OnClick()
+
+   private void Start()
    {
+      InvokeRepeating("OnClicked", 0, 1.1f);
+   }
+
+   public void OnClicked()
+   {
+      Debug.Log("Je passe par là");
       foreach (var eventTested in eventToTest)
       {
-         if (!eventTested.activeSelf)
+         if (!eventTested.activeInHierarchy)
          {
-            Debug.Log("Je passe par la aussi ");
             eventTested.SetActive(true);
          }
          else

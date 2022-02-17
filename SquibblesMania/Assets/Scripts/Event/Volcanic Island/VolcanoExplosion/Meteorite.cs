@@ -37,7 +37,7 @@ public class Meteorite : MonoBehaviour
 
 	private void OnCollisionEnter(Collision other)
 	{
-		if (other.gameObject.CompareTag("Black Block"))
+		if (other.gameObject.CompareTag("BlackBlock"))
 		{
 			StartCoroutine(SetActiveFalseBullet());
 			
@@ -48,11 +48,11 @@ public class Meteorite : MonoBehaviour
 			transform.rotation = new Quaternion(0,0,0,0);
 			_stopRotating = true;
 			
-			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transform.position, Quaternion.identity);
+			/*GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transform.position, Quaternion.identity, null);
 			Destroy(explosionPS, 2f);
 			
-			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite", transform.position, Quaternion.identity);
-			_particleFireToDelete = firePS;
+			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite", transform.position, Quaternion.identity, null);
+			_particleFireToDelete = firePS;*/
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
