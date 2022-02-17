@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -45,7 +46,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
 		{
 			int randomNumber = Random.Range(0, colliders.Length);
-			if (colliders[randomNumber].transform.position.y == 0 || colliders[randomNumber].CompareTag("BlackBlock")) // If the Y position is equal to 0, add one bloc to touch
+			if (Math.Abs(colliders[randomNumber].transform.position.y - 1) < 0.1f || colliders[randomNumber].CompareTag("BlackBlock")) // If the Y position is equal to 0, add one bloc to touch
 			{
 				i--;
 			}
@@ -56,7 +57,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 				GameObject parent = Instantiate(blocParent, mapParent);
 				colliders[randomNumber].transform.parent = parent.transform;
 			
-				col = new Vector3(col.x, 0, col.z);
+				col = new Vector3(col.x, 1, col.z);
 				colliders[randomNumber].transform.DOMove(col, 5f);
 				_cam.DOShakePosition(5f, 0.1f, 100);
 			}
