@@ -8,7 +8,7 @@ public class MovementBlockManager : MonoBehaviour
     public GameObject buttonMoveBlockParentObject;
     public bool isMovingBlock;
     private static MovementBlockManager _movementBlockManager;
-
+   
     public static MovementBlockManager Instance => _movementBlockManager;
     
     // Start is called before the first frame update
@@ -35,7 +35,7 @@ public class MovementBlockManager : MonoBehaviour
 
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
 
-        if (TouchManager.Instance.blockParent.position.y >= 4)
+        if (TouchManager.Instance.blockParent.position.y >= GameManager.Instance.maxHeightBlocMovement)
         {
             yield break;
         }
@@ -85,7 +85,7 @@ public class MovementBlockManager : MonoBehaviour
     IEnumerator PlatformDown()
     {
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
-        if (TouchManager.Instance.blockParent.position.y <= 0)
+        if (TouchManager.Instance.blockParent.position.y <= GameManager.Instance.minHeightBlocMovement)
         {
             yield break;
         }
