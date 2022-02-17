@@ -58,7 +58,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			
 				col = new Vector3(col.x, 0, col.z);
 				colliders[randomNumber].transform.DOMove(col, 5f);
-				//_cam.DOShakePosition(5f, 0.1f, 100);
+				_cam.DOShakePosition(5f, 0.1f, 100);
 			}
 		}
 		

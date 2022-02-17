@@ -60,10 +60,10 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	public void LaunchEvent() // Launch the bullet's function
 	{
-		/*GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
+		GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
 			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);
 		
-		Destroy(ps, 5f);*/
+		Destroy(ps, 5f);
 		
 		InvokeRepeating(nameof(LaunchBullet), 0.2f, repeatRate);
 	}
@@ -84,10 +84,6 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	void LaunchBullet() // Launch the bullets 
 	{
-		/*cubeTouched.Remove(cubeTouched[0]);
-		return;*/
-
-		//Debug.Log($"{cubeTouched[0].name} / {cubeTouched[0].tag}");
 		cubeTouched[0].tag = "BlackBlock";
 
 		var positionVol = volcanoTransform.position;
@@ -105,16 +101,6 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	void Update()
 	{
-		/*if (_turn < GameManager.Instance.turnCount)
-		{
-			_turn = GameManager.Instance.turnCount;
-			
-			for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
-			{
-				cubeTouched[i].GetComponent<Renderer>().material.color = Color.Lerp(colorOne, colorTwo, Mathf.PingPong(Time.time, 1));
-			}
-		}*/
-
 		if (cubeTouched.Count <= 0)
 		{
 			CancelInvoke();

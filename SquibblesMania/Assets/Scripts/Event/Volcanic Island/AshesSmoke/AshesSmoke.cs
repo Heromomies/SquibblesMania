@@ -64,9 +64,9 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 				var childPos = childrenBlocs[i + rand].transform.position;
 				
 				GameObject ashe = PoolManager.Instance.SpawnObjectFromPool("Ashe", new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity, childrenBlocs[i + rand].transform);
-				//ashe.transform.localScale = new Vector3(0, 0, 0);
+				ashe.transform.localScale = new Vector3(0, 0, 0);
 
-				//ashe.transform.DOScale(new Vector3(1, 0.1f, 1), 0.5f);
+				ashe.transform.DOScale(new Vector3(1, 0.1f, 1), 0.5f);
 			}
 		}
 

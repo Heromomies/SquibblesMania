@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Meteorite : MonoBehaviour
 {
+	public float speedTurnAround;
+	
 	private Rigidbody _rb;
 	private int _turn;
-	public GameObject particleSystemExplosion;
-	public GameObject particleSystemFire;
-	public float speedTurnAround;
+	
 	private bool _stopRotating;
 	private GameObject _particleFireToDelete;
 	private void Start()
@@ -48,11 +48,12 @@ public class Meteorite : MonoBehaviour
 			transform.rotation = new Quaternion(0,0,0,0);
 			_stopRotating = true;
 			
-			/*GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transform.position, Quaternion.identity, null);
+			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transform.position, Quaternion.identity, null);
 			Destroy(explosionPS, 2f);
 			
 			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite", transform.position, Quaternion.identity, null);
-			_particleFireToDelete = firePS;*/
+			_particleFireToDelete = firePS;
+			
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			
 			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
