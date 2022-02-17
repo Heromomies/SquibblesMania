@@ -315,6 +315,7 @@ public class EditorMapWindow : EditorWindow
                     position = Vector3.zero
                 }
             };
+            mapParent.tag = "Map";
         }
 
         for (int i = 0; i < parents.Length; i++)

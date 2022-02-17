@@ -15,6 +15,7 @@ public class PlayerCardState : PlayerBaseState
 		{
 			player.stunCount--;
 			PlayerIsStun(player);
+			
 		}
 
 		if (player.isPlayerShielded)
@@ -22,11 +23,15 @@ public class PlayerCardState : PlayerBaseState
 			player.shieldCount--;
 		}
 		
-		player.indicatorPlayer.SetActive(true);
-		
-		NFCController.OnNewTag = OnNewTagDetected;
-		NFCController.OnTagRemoved = OnTagRemoveDetected;
-		NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
+		//If the current player is this player
+		if (GameManager.Instance.currentPlayerTurn == player)
+		{
+			player.indicatorPlayer.SetActive(true);
+			NFCController.OnNewTag = OnNewTagDetected;
+			NFCController.OnTagRemoved = OnTagRemoveDetected;
+			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
+		}
+
 	}
 	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
 	{
@@ -77,6 +82,7 @@ public class PlayerCardState : PlayerBaseState
 	
 	void PlayerIsStun(PlayerStateManager player)
 	{
+		player.indicatorPlayer.SetActive(false);
 		//If the stunCount is less than zero player is now not stun
 		if (player.stunCount <= 0)
 		{
