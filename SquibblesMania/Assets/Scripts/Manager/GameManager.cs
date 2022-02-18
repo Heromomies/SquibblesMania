@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _gameManager;
 
     public static GameManager Instance => _gameManager;
-
+    public int maxHeightBlocMovement, minHeightBlocMovement;
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
     public Transform[] playersSpawnPoints;
@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
 
     public CamPreSets actualCamPreset;
-
+   
     public List<CamPreSets> camPreSets;
     public float camRotateClamp = 30f;
     private int _count;
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < allBlocks.Count; i++)
         {
-            int randomLocation = Random.Range(0, 2);
+            int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
                 allBlocks[i].transform.position.z);
         }
