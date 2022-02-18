@@ -38,7 +38,6 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
-		Debug.Log(("volcano"));
 		ShowEvent();
 	}
 

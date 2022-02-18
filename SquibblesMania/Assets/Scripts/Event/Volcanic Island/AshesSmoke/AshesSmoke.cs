@@ -24,7 +24,6 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
-		Debug.Log(("ashes"));
 		Shuffle(parentBlocs);
 		ShowEvent();
 	}

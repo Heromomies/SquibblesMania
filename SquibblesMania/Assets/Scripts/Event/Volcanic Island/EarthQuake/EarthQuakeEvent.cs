@@ -34,7 +34,6 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
-		Debug.Log("earthquake");
 		_cam = Camera.main;
 		ShowEvent();
 	}
