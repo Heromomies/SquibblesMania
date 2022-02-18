@@ -9,12 +9,9 @@ public class SwapPower : MonoBehaviour
 	public int range;
 	public LayerMask layer;
 
-	public Collider[] players;
-	
 	private GameObject _playerToSwap;
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
-	private bool _canChoseThePlayer;
 	private Camera _cam;
 
 	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
@@ -42,7 +39,7 @@ public class SwapPower : MonoBehaviour
 
 	private void ShowPower() // Show the sphere and admit the player to chose the other player to swap
 	{
-		players = Physics.OverlapSphere(transform.position, range, layer);
+		Collider[] players = Physics.OverlapSphere(transform.position, range, layer);
 
 		_playerOne = GameManager.Instance.currentPlayerTurn.gameObject.GetComponent<Collider>();
 		
