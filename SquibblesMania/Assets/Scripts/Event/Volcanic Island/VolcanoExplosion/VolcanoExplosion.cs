@@ -7,9 +7,6 @@ using Random = UnityEngine.Random;
 
 public class VolcanoExplosion : MonoBehaviour, IManageEvent
 {
-	[Header("COLOR")]
-	public Material materialOne;
-	[Space]
 	[Header("PARTICLE SYSTEM")]
 	public GameObject particleSystemExplosion;
 	[Space]
