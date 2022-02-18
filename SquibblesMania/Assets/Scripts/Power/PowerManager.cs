@@ -6,61 +6,63 @@ using UnityEngine.UI;
 
 public class PowerManager : MonoBehaviour
 {
-	public int maxDistance;
-	[Space] [Header("UI")] public Button buttonOne;
-	public Button buttonTwo;
+    public GrabPower grab;
+    public DashPower dash;
+    public SwapPower swap;
+    public ShieldPower shield;
 
-	[Space] [Header("VECTORS")] public List<Vector3> vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+    #region Singleton
 
-	[HideInInspector] public int raycastPos;
-	[HideInInspector] public RaycastHit hitRaycast;
-	private RaycastHit _hitRaycasta;
+    private static PowerManager powerManager;
 
-	#region Singleton
+    public static PowerManager Instance => powerManager;
+    // Start is called before the first frame update
 
-	private static PowerManager powerManager;
+    private void Awake()
+    {
+        powerManager = this;
+    }
 
-	public static PowerManager Instance => powerManager;
-	// Start is called before the first frame update
+    #endregion
 
-	private void Awake()
-	{
-		powerManager = this;
-	}
+    public void ActivateDeactivatePower(int powerIndex, bool activePower)
+    {
+        switch (powerIndex)
+        {
+            case 0: grab.gameObject.SetActive(activePower); break;
+            case 1: dash.gameObject.SetActive(activePower); break;
+            case 2: swap.gameObject.SetActive(activePower); break;
+            case 3: shield.gameObject.SetActive(activePower); break;
+        }
+    }
 
-	#endregion
+    public void CyclePassed()
+    {
+        if (shield.numberOfCycleBeforeDeactivateShield < 1)
+        {
+            shield.numberOfCycleBeforeDeactivateShield++;
+        }
+        else
+        {
+            Destroy(shield.shieldGameObject);
+        }
+    }
 
-	public void Update()
-	{
-//		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
-		Debug.DrawRay(transform.position, Vector3.back * maxDistance, Color.yellow);
-		Debug.DrawRay(transform.position, Vector3.forward * maxDistance, Color.yellow);
-		Debug.DrawRay(transform.position, Vector3.right * maxDistance, Color.yellow);
-		Debug.DrawRay(transform.position, Vector3.left * maxDistance, Color.yellow);
-	}
-
-	public void RaycastEvent()
-	{
-		RaycastHit hit;
-		
-
-		for (int i = 0; i < vectorRaycast.Count; i++)
-		{
-			if (Physics.Raycast(transform.position, vectorRaycast[i], out hit, maxDistance))
-			{
-				raycastPos = i;
-				hitRaycast = hit;
-				buttonOne.interactable = true;
-				buttonTwo.interactable = true;
-			}
-		}
-	}
-
-	public void ButtonClicked()
-	{
-		hitRaycast = new RaycastHit();
-		
-		buttonOne.interactable = false;
-		buttonTwo.interactable = false;
-	}
+    public void ChangeTurnPlayer()
+    {
+        if (NFCManager.Instance.hasRemovedCard)
+        {
+            UiManager.Instance.buttonNextTurn.SetActive(true);
+        }
+        else
+        {
+            switch (GameManager.Instance.actualCamPreset.presetNumber)
+            {
+                case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
+                case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
+                case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
+                case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
+            }
+        }
+    }
 }

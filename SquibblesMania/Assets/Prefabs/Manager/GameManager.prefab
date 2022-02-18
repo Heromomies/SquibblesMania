@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7fa4c8d885c784aa6b34f925c827c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHeightBlocMovement: 2
+  minHeightBlocMovement: -1
   players: []
   playersSpawnPoints:
   - {fileID: 0}
@@ -54,13 +56,12 @@ MonoBehaviour:
   currentPlayerTurn: {fileID: 0}
   isPathRefresh: 0
   turnCount: 0
-  cameraScript: {fileID: 0}
+  cameraTouchScript: {fileID: 0}
   actualCamPreset:
     presetNumber: 0
     camPos: {x: 0, y: 0, z: 0}
     camRot: {x: 0, y: 0, z: 0}
-    rotateClamp: 0
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
@@ -68,35 +69,32 @@ MonoBehaviour:
   - presetNumber: 1
     camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 30, y: 45, z: 0}
-    rotateClamp: 30
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
+    panelButtonEvent: {fileID: 0}
+    buttonNextTurn: {fileID: 0}
+    actionPointText: {fileID: 0}
+  - presetNumber: 3
+    camPos: {x: -2, y: 6, z: -10}
+    camRot: {x: 150, y: 225, z: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
   - presetNumber: 2
     camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 150, y: 225, z: 0}
-    rotateClamp: 30
-    uiGameObject: {fileID: 0}
-    panelButtonEvent: {fileID: 0}
-    buttonNextTurn: {fileID: 0}
-    actionPointText: {fileID: 0}
-  - presetNumber: 1
-    camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 30, y: 45, z: 0}
-    rotateClamp: 30
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
   - presetNumber: 4
     camPos: {x: -2, y: 6, z: -10}
     camRot: {x: 150, y: 225, z: 0}
-    rotateClamp: 30
-    uiGameObject: {fileID: 0}
+    playerUiButtons: {fileID: 0}
     panelButtonEvent: {fileID: 0}
     buttonNextTurn: {fileID: 0}
     actionPointText: {fileID: 0}
+  camRotateClamp: 30
   isConditionVictory: 0
   conditionVictory:
     mapTheme: 0
@@ -148,3 +146,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  cycleCount: 0

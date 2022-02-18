@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
+using I2.Loc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,8 +12,7 @@ public class UiManager : MonoBehaviour
 {
     //Manager for simple button Ui
     [Header("MANAGER UI")] public TextMeshProUGUI currentActionPointsOfCurrentPlayerTurn;
-
-    public TextMeshProUGUI turnCountText;
+    
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
     public GameObject conditionEvent, conditionInventory;
@@ -54,16 +54,16 @@ public class UiManager : MonoBehaviour
 
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
-        currentActionPointsOfCurrentPlayerTurn.text = $"Action point : {actionPointText}";
+        var localManager = currentActionPointsOfCurrentPlayerTurn.GetComponent<LocalizationParamsManager>();
+        localManager.SetParameterValue("ACTIONPOINT", actionPointText.ToString());
     }
 
-    public void UpdateCurrentTurnCount(int turnCount)
-    {
-        turnCountText.text = $"Round number : {turnCount}";
-    }
+
+    
 
     public void ButtonNextTurn()
     {
+        NFCManager.Instance.numberOfTheCard = 0;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
@@ -116,10 +116,9 @@ public class UiManager : MonoBehaviour
         GameObject cam = Camera.main.gameObject;
         Vector3 targetPos = GameManager.Instance.actualCamPreset.camPos;
         Quaternion targetRot = Quaternion.Euler(GameManager.Instance.actualCamPreset.camRot);
-        
+
         cam.transform.DOMove(targetPos, 0.3f);
         cam.transform.DORotateQuaternion(targetRot, 0.3f);
-
     }
 
     public void ButtonChangeCamMoveUi()

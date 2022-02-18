@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
+using Random = UnityEngine.Random;
 
 public class PlayerStateManager : Player
 {
@@ -18,19 +17,20 @@ public class PlayerStateManager : Player
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
-    public GameObject particle;
+
 
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-    
+
     private void Start()
     {
         DetectBlockBelowPlayer();
+        Node currentNodePlayerOn = currentBlockPlayerOn.GetComponent<Node>();
         //Assign the player to a list for know on what block group is currently on
-        GroupBlockDetection groupBlockDetection = currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
+        GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
-      
+        currentNodePlayerOn.isActive = false;
     }
 
 
@@ -51,6 +51,7 @@ public class PlayerStateManager : Player
         CurrentState.EnterState(this);
     }
 
+
     public void StartPathFinding()
     {
         //If the current state of the player is when he use his action point
@@ -63,11 +64,14 @@ public class PlayerStateManager : Player
 
     public void SwitchState(PlayerBaseState state)
     {
-        CurrentState.ExitState(this);
-        //Switch current state to the new "state"
-        CurrentState = state;
+        if (CurrentState != null)
+        {
+            CurrentState.ExitState(this);
+            //Switch current state to the new "state"
+            CurrentState = state;
 
-        state.EnterState(this);
+            state.EnterState(this);
+        }
     }
 
     private void DetectBlockBelowPlayer()
@@ -84,30 +88,29 @@ public class PlayerStateManager : Player
                 currentBlockPlayerOn = hit.transform;
             }
         }
-        else
-        {
-            // StartCoroutine(WaitUntilRespawn());
-        }
+        
     }
 
-    IEnumerator WaitUntilRespawn()
+    private IEnumerator WaitUntilRespawn()
     {
         yield return new WaitForSeconds(1f);
-        Vector3 p = GameManager.Instance.playersSpawnPoints[playerNumber].position;
-        transform.position = new Vector3(p.x, p.y + 1, p.z);
-        GameObject a = Instantiate(particle, transform.position, Quaternion.identity);
-        Destroy(a, 1f);
+
+        var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
+        var obj = blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
+        var children = obj.GetComponentsInChildren<Node>();
+
+        var randomNumber = Random.Range(0, children.Length);
+
+        GameManager.Instance.currentPlayerTurn.transform.position =
+            children[randomNumber].transform.position + new Vector3(0, 1, 0);
+        StopAllCoroutines();
     }
 
     public void StunPlayer(PlayerStateManager player, int stunTurnCount)
     {
         player.isPlayerStun = true;
         player.stunCount = stunTurnCount;
-
-        if (GameManager.Instance.currentPlayerTurn == player)
-        {
-            //Exit current state of current player
-            player.CurrentState.ExitState(player);
-        }
     }
+
+ 
 }

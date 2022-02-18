@@ -10,160 +10,180 @@ using UnityEngine.UI;
 
 public class TouchManager : MonoBehaviour
 {
-    private readonly List<RaycastResult> raycast = new List<RaycastResult>();
+	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
 
 
-    public PanGestureRecognizer PlayerTouchGesture { get; private set; }
-    [Header("TOUCH MANAGER")] public Transform blockParent;
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private Vector3 offsetPos;
-    public GameObject uiInteractionParentObject;
-    [SerializeField] private Button buttonGoToTheBlock;
+	public PanGestureRecognizer PlayerTouchGesture { get; private set; }
 
-    public LayerMask touchLayersMask;
-    private Camera _cam;
-    public RaycastHit Hit;
-    public GameObject blockCurrentlySelected;
-    public Color blockCurrentlySelectedColor;
-    public GameObject seeConditionsEvent;
-    private static TouchManager _touchManager;
+	[Header("TOUCH MANAGER")] [HideInInspector]
+	public Transform blockParent;
 
-    public static TouchManager Instance => _touchManager;
+	[SerializeField] private RectTransform canvasTransform;
+	[SerializeField] private Vector3 offsetPos;
+	public GameObject uiInteractionParentObject;
+	[SerializeField] private Button buttonGoToTheBlock;
 
-    private void Awake()
-    {
-        _touchManager = this;
-    }
+	public LayerMask touchLayersMask;
+	private Camera _cam;
+	public RaycastHit Hit;
+	public GameObject blockCurrentlySelected;
+	public Color blockCurrentlySelectedColor;
+	public GameObject seeConditionsEvent;
+	private static TouchManager _touchManager;
 
-    private void Start()
-    {
-        _cam = Camera.main;
-    }
+	public static TouchManager Instance => _touchManager;
 
-    private void OnEnable()
-    {
-        PlayerTouchGesture = new PanGestureRecognizer();
-        PlayerTouchGesture.ThresholdUnits = 0.0f; // start right away
-        //Add new gesture
-        PlayerTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
-        PlayerTouchGesture.AllowSimultaneousExecutionWithAllGestures();
+	private void Awake()
+	{
+		_touchManager = this;
+	}
 
-        FingersScript.Instance.AddGesture(PlayerTouchGesture);
+	private void Start()
+	{
+		_cam = Camera.main;
+	}
 
-        //Allow gesture to work through certain objects
-        if (MovementBlockManager.Instance != null)
-        {
-            FingersScript.Instance.PassThroughObjects.Add(MovementBlockManager.Instance.buttonMoveBlockParentObject);
-        }
+	private void OnEnable()
+	{
+		PlayerTouchGesture = new PanGestureRecognizer();
+		PlayerTouchGesture.ThresholdUnits = 0.0f; // start right away
+		//Add new gesture
+		PlayerTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
+		PlayerTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
-        FingersScript.Instance.PassThroughObjects.Add(uiInteractionParentObject);
-        if (UiManager.Instance != null)
-        {
-            FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
-        }
-        FingersScript.Instance.PassThroughObjects.Add(seeConditionsEvent);
-    }
+		FingersScript.Instance.AddGesture(PlayerTouchGesture);
 
-    private void OnDisable()
-    {
-        if (FingersScript.HasInstance)
-        {
-            FingersScript.Instance.RemoveGesture(PlayerTouchGesture);
-        }
+		//Allow gesture to work through certain objects
+		if (MovementBlockManager.Instance != null)
+		{
+			FingersScript.Instance.PassThroughObjects.Add(MovementBlockManager.Instance.buttonMoveBlockParentObject);
+		}
 
-        FingersScript.Instance.PassThroughObjects.Remove(seeConditionsEvent);
-        FingersScript.Instance.PassThroughObjects.Remove(MovementBlockManager.Instance.buttonMoveBlockParentObject);
-        FingersScript.Instance.PassThroughObjects.Remove(uiInteractionParentObject);
-        FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);
-        FingersScript.Instance.PassThroughObjects.Clear();
-    }
+		FingersScript.Instance.PassThroughObjects.Add(uiInteractionParentObject);
+		if (UiManager.Instance != null)
+		{
+			FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
+		}
 
-    public void RemoveFingerScriptPassThroughObject()
-    {
-        FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);
-        FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.currentActionPointsOfCurrentPlayerTurn
-            .gameObject);
-    }
+		FingersScript.Instance.PassThroughObjects.Add(seeConditionsEvent);
+	}
 
-    public void AddFingerScriptPassTroughObject()
-    {
-        FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
-        FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.currentActionPointsOfCurrentPlayerTurn
-            .gameObject);
-    }
+	private void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(PlayerTouchGesture);
+		}
 
-    private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
-    {
-        if (gesture.State == GestureRecognizerState.Began)
-        {
-            PointerEventData p = new PointerEventData(EventSystem.current);
-            p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+		FingersScript.Instance.PassThroughObjects.Remove(seeConditionsEvent);
+		FingersScript.Instance.PassThroughObjects.Remove(MovementBlockManager.Instance.buttonMoveBlockParentObject);
+		FingersScript.Instance.PassThroughObjects.Remove(uiInteractionParentObject);
+		FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);
+		FingersScript.Instance.PassThroughObjects.Clear();
+	}
 
-            raycast.Clear();
-            EventSystem.current.RaycastAll(p, raycast);
+	public void RemoveFingerScriptPassThroughObject()
+	{
+		FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);
+		FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.currentActionPointsOfCurrentPlayerTurn
+			.gameObject);
+	}
 
-            Ray ray = _cam.ScreenPointToRay(p.position);
+	public void AddFingerScriptPassTroughObject()
+	{
+		FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
+		FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.currentActionPointsOfCurrentPlayerTurn
+			.gameObject);
+	}
 
-            if (Physics.Raycast(ray, out Hit, Mathf.Infinity, touchLayersMask))
-            {
-                if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
-                {
-                    //Previous selected block get his base color back
+	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
+	{
+		if (gesture.State == GestureRecognizerState.Began)
+		{
+			PointerEventData p = new PointerEventData(EventSystem.current);
+			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
-                    MovementBlockManager.Instance.ResetPreviousBlockColor();
-                    GameManager.Instance.isPathRefresh = true;
-                }
+			raycast.Clear();
+			EventSystem.current.RaycastAll(p, raycast);
 
-                PlayerTurnActionStateSelectBlock();
-            }
+			Ray ray = _cam.ScreenPointToRay(p.position);
 
-            else
-            {
-                //If player OnSelect the block, the block get his color back
-                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState &&
-                    MovementBlockManager.Instance.isMovingBlock)
-                {
-                    MovementBlockManager.Instance.ResetPreviousBlockColor();
-                    GameManager.Instance.isPathRefresh = true;
-                    blockCurrentlySelected = null;
-                }
+			if (Physics.Raycast(ray, out Hit, Mathf.Infinity, touchLayersMask))
+			{
+				if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
+				{
+					//Previous selected block get his base color back
 
-                gesture.Reset();
-                uiInteractionParentObject.SetActive(false);
-            }
-        }
-    }
+					MovementBlockManager.Instance.ResetPreviousBlockColor();
+					GameManager.Instance.isPathRefresh = true;
+				}
 
-    void PlayerTurnActionStateSelectBlock()
-    {
-        if (Hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
-            GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
-        {
-            if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(Hit.transform) &&
-                GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
-            {
-                MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(false);
-                //Take the block group parent from hit block gameobject
-                GroupBlockDetection blockGroupParent = Hit.transform.parent.GetComponent<GroupBlockDetection>();
-                
-                
-                //Take the current player position
-                Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
-                //Take the current block group selected position
-                Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
-                //Change pos of canvas base on the current block selected
-                canvasTransform.position = Hit.transform.position + offsetPos;
-                uiInteractionParentObject.SetActive(true);
-                buttonGoToTheBlock.interactable = true;
+				PlayerTurnActionStateSelectBlock();
+			}
 
-                blockCurrentlySelected = Hit.transform.gameObject;
-                blockParent = Hit.collider.gameObject.transform.parent;
-                //If the current block group if below or above the player pos
-                if (blockGroupParentPos.y + 1 > currentPlayerPos.y || blockGroupParentPos.y + 1 < currentPlayerPos.y)
-                {
-                    buttonGoToTheBlock.interactable = false;
-                }
-            }
-        }
-    }
+			else
+			{
+				//If player OnSelect the block, the block get his color back
+				if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState &&
+				    MovementBlockManager.Instance.isMovingBlock)
+				{
+					MovementBlockManager.Instance.ResetPreviousBlockColor();
+					GameManager.Instance.isPathRefresh = true;
+					blockCurrentlySelected = null;
+				}
+
+				gesture.Reset();
+				uiInteractionParentObject.SetActive(false);
+			}
+		}
+	}
+
+	void PlayerTurnActionStateSelectBlock()
+	{
+		if (Hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
+		    GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+		{
+			if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(Hit.transform) &&
+			    GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+			{
+				MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(false);
+				//Take the block group parent from hit block gameobject
+				GroupBlockDetection blockGroupParent = Hit.transform.parent.GetComponent<GroupBlockDetection>();
+
+
+				//Take the current player position
+				Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
+				//Take the current block group selected position
+				Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
+				//Change pos of canvas base on the current block selected
+				canvasTransform.position = Hit.transform.position + offsetPos;
+				uiInteractionParentObject.SetActive(true);
+				buttonGoToTheBlock.interactable = true;
+
+				blockCurrentlySelected = Hit.transform.gameObject;
+				blockParent = Hit.collider.gameObject.transform.parent;
+				//If the current block group if below or above the player pos
+				/* if ((int) Math.Abs(blockGroupParentPos.y+currentPlayerPos.y - currentPlayerPos.y) < 0 ||
+				     GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
+				 {
+				     buttonGoToTheBlock.interactable = false;
+				 }*/
+
+				if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f && blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
+				{
+					buttonGoToTheBlock.interactable = true;
+				}
+				else
+				{
+					buttonGoToTheBlock.interactable = false;
+				}
+				if (GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
+				{
+					buttonGoToTheBlock.interactable = false;
+				}
+
+				
+			}
+		}
+	}
 }

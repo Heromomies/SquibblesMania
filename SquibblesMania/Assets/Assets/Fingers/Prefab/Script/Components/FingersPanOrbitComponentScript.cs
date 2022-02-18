@@ -404,11 +404,11 @@ namespace DigitalRubyShared
                     xDegrees += addAngle;
 
                     if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-                        GameManager.Instance.actualCamPreset.presetNumber == 3)
+                        GameManager.Instance.actualCamPreset.presetNumber == 2)
                     {
                         axisX = Orbiter.transform.right;
                     }
-                    else if (GameManager.Instance.actualCamPreset.presetNumber == 2 ||
+                    else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
                              GameManager.Instance.actualCamPreset.presetNumber == 4)
                     {
                         axisX = -Orbiter.transform.right;
@@ -446,11 +446,11 @@ namespace DigitalRubyShared
                     yDegrees += addAngle;
 
                     if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-                        GameManager.Instance.actualCamPreset.presetNumber == 3)
+                        GameManager.Instance.actualCamPreset.presetNumber == 2)
                     {
                         axisY = Vector3.up;
                     }
-                    else if (GameManager.Instance.actualCamPreset.presetNumber == 2 ||
+                    else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
                              GameManager.Instance.actualCamPreset.presetNumber == 4)
                     {
                         axisY = -Vector3.up;

@@ -1,37 +1,31 @@
 using System.Collections.Generic;
-using Event;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class EventManager : MonoBehaviour
 {
-	[Header("CONDITION RELEASE EVENT")] public List<ConditionReleaseEvent> conditionReleaseEvents;
-
 	[Space] [Header("EVENTS")] public List<GameObject> events;
-
-	 public List<GameObject> cleanList;
-
-	[Space] [Header("MAP ZONE")] public List<GameObject> listZoneNorthWest;
-	public List<GameObject> listZoneNorthEst;
-	public List<GameObject> listZoneSouthWest;
-	public List<GameObject> listZoneSouthEst;
-
-	[Space] [Header("CANVAS")]
-	public List<TextMeshProUGUI> textToReleaseEvent;
-
-	[Space] [Header("YETI EVENT")] public List<Transform> yetiSpawn;
-	[HideInInspector] public Transform yetiFinalSpawn;
+	
+	[Space] [Header("MAP ZONE")] 
+	public List<GameObject> cleanList;
+	
+	public int dangerousness;
+	
+	public Slider sliderDangerousness;
+	
+	public LevelOfDanger levelOfDanger;
+	
+	public enum LevelOfDanger
+	{
+		LevelOne = 0,
+		LevelTwo = 1,
+		LevelThree = 2,
+		LevelFour = 3
+	}
 	
 	
-	private ConditionReleaseEvent _condition;
-	private int _numberOfCondition;
-	private bool _eventOne;
-	private bool _b;
-	private int _numberEvent;
-	private int _turnNumber;
-	
-
 	#region Singleton
 
 	private static EventManager eventManager;
@@ -49,150 +43,69 @@ public class EventManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		DefineCondition();
+		sliderDangerousness.value = dangerousness;
+		//DefineCondition();
 	}
 
-	private void DefineCondition() // Define the condition to activate event
+	public void CyclePassed() // When a cycle is make, random Number to know if the manager can launch the event
 	{
-		_numberOfCondition = Random.Range(0, conditionReleaseEvents.Count);
-		_condition = conditionReleaseEvents[_numberOfCondition];
-
-		if (_condition.conditions[0].conditionType == Condition.ConditionType.NumberOfSteps)
+		var randomNumber = Random.Range(0, 100);
+		if (randomNumber < 25 * GameManager.Instance.cycleCount)
 		{
-			textToReleaseEvent[0].text = conditionReleaseEvents[_numberOfCondition].conditions[0].conditionToRelease +
-			                             conditionReleaseEvents[_numberOfCondition].conditions[0].numberOfSteps;
+			LaunchEvent();
+			levelOfDanger = LevelOfDanger.LevelOne;
+			dangerousness = 0;
+			sliderDangerousness.value = dangerousness;
+			GameManager.Instance.cycleCount = 0;
 		}
-
-		if (_condition.conditions[1].conditionType == Condition.ConditionType.WalkOnCase)
+		else
 		{
-			textToReleaseEvent[1].text = conditionReleaseEvents[_numberOfCondition].conditions[1].conditionToRelease +
-			                             conditionReleaseEvents[_numberOfCondition].conditions[1].numberOfSteps;
-		}
-
-		if (_condition.conditions[2].conditionType == Condition.ConditionType.MoveCase)
-		{
-			textToReleaseEvent[2].text = conditionReleaseEvents[_numberOfCondition].conditions[2].conditionToRelease +
-			                             conditionReleaseEvents[_numberOfCondition].conditions[2].numberOfSteps;
-		}
-		//conditionReleaseEvents.Remove(conditionReleaseEvents[_numberOfCondition]);
-	}
-
-	public void AddPointForNumberOfSteps(int i) // Decrease number of steps 
-	{
-		if (!_eventOne)
-		{
-			_condition.conditions[0].numberOfSteps -= i;
-			textToReleaseEvent[0].text = _condition.conditions[0].conditionToRelease + _condition.conditions[0].numberOfSteps;
+			switch (levelOfDanger)
+			{
+				case LevelOfDanger.LevelOne : levelOfDanger = LevelOfDanger.LevelTwo;
+					dangerousness = 1;
+					break;
+				case LevelOfDanger.LevelTwo :levelOfDanger = LevelOfDanger.LevelThree;
+					dangerousness = 2;
+					break;
+				case LevelOfDanger.LevelThree : levelOfDanger = LevelOfDanger.LevelFour;
+					dangerousness = 3;
+					break;
+			}
+			sliderDangerousness.value = dangerousness;
 		}
 	}
-
-	public void AddPointForWalkOnCase(int i)
-	{
-		_condition.conditions[1].numberOfSteps -= i;
-		textToReleaseEvent[1].text = _condition.conditions[1].conditionToRelease + _condition.conditions[1].numberOfSteps;
-	}
-
-	public void AddPointForMovingCase(int i) // Decrease point when moving case
-	{
-		_condition.conditions[2].numberOfSteps -= i;
-		textToReleaseEvent[2].text = _condition.conditions[2].conditionToRelease + _condition.conditions[2].numberOfSteps;
-	}
- 
-	
-	//TODO Remove the function on build
-	public void OnClick()
-	{
-		_condition.conditions[0].numberOfSteps--;
-		Debug.Log("Le nombre de pas restants à faire est : "+_condition.conditions[0].numberOfSteps);
-	}
-	
 	private void Update()
 	{
-		NumberOfSteps();
-		MoveCase();
-		//ColorToWalkOn();
+		
 		
 		// Launch The Event
-		if (_turnNumber != 0 && GameManager.Instance.turnCount >= _turnNumber + 4 && !_b)
-		{
-			_b = true;
-			events[_numberEvent].SetActive(true);
-			events[_numberEvent].GetComponent<IManageEvent>().LaunchEvent();
-		}
+		
 	}
-
-	// Update is called once per frame
-	private void NumberOfSteps() // Function to update conditions and launch the event when the number of steps is reached
+	private void DefineCondition() // Define the condition to activate event
 	{
-		if (_condition.conditions[0].numberOfSteps <= 0)
+		switch (levelOfDanger)
 		{
-			textToReleaseEvent[0].color = Color.green;
-			textToReleaseEvent[0].text = "Condition triggered";
-
-			_turnNumber = GameManager.Instance.turnCount;
-
-			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
-			_numberEvent = 0;
-			_eventOne = true;
-		}
-	}
-
-	void ColorToWalkOn() // Function to update conditions and launch the event when the number of case of a certain color is reached
-	{
-		if (_condition.conditions[1].numberOfSteps <= 0)
-		{
-			textToReleaseEvent[1].color = Color.green;
-			textToReleaseEvent[1].text = "Condition triggered";
-			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
-			_numberEvent = 1;
-		}
-	}
-
-	void MoveCase() // Function to update conditions and launch the event when the number of case moved on is reached
-	{
-		if (_condition.conditions[2].numberOfSteps <= 0)
-		{
-			textToReleaseEvent[2].color = Color.green;
-			textToReleaseEvent[2].text = "Condition triggered";
-			GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(true);
-			_numberEvent = 2;
-		}
-	}
-
-	public void ClickButton(int numberButton)
-	{
-		switch (numberButton)
-		{
-			case 0:
-				cleanList = listZoneNorthWest;
-				yetiFinalSpawn = yetiSpawn[0];
+			case LevelOfDanger.LevelOne : Debug.Log("Level One");
+				dangerousness = 0;
 				break;
-			case 1:
-				cleanList = listZoneNorthEst;
-				yetiFinalSpawn = yetiSpawn[1];
+			case LevelOfDanger.LevelTwo : Debug.Log("Level Two");
+				dangerousness = 1;
 				break;
-			case 2:
-				cleanList = listZoneSouthWest;
-				yetiFinalSpawn = yetiSpawn[2];
+			case LevelOfDanger.LevelThree : Debug.Log("Level Three");
+				dangerousness = 2;
 				break;
-			case 3:
-				cleanList = listZoneSouthEst;
-				yetiFinalSpawn = yetiSpawn[3];
+			case LevelOfDanger.LevelFour : Debug.Log("Level Four");
+				dangerousness = 3;
 				break;
 		}
-
-		LaunchEvent(_numberEvent);
 	}
 
-	void LaunchEvent(int numberEvent)
+	void LaunchEvent() // Launch the event
 	{
-		events[_numberEvent].GetComponent<IManageEvent>().ShowEvent();
-		GameManager.Instance.actualCamPreset.panelButtonEvent.SetActive(false);
-		_condition.conditions[numberEvent].numberOfSteps = Mathf.Infinity;
-	}
-
-	public void OnApplicationQuit()
-	{
-		_condition.conditions[0].numberOfSteps = Random.Range(15, 20);
+		foreach (var eventsGo in events)
+		{
+			eventsGo.SetActive(true);
+		}
 	}
 }

@@ -9,8 +9,7 @@ public class PlayerPowerCardState : PlayerBaseState
     //The state when player use his card power
     public override void EnterState(PlayerStateManager player)
     {
-        PowerManager.Instance.RaycastEvent();
-        ExitState(player);
+       
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -20,6 +19,7 @@ public class PlayerPowerCardState : PlayerBaseState
 
     public override void ExitState(PlayerStateManager player)
     {
+        player.indicatorPlayer.SetActive(false);
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {

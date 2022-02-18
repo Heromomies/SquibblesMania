@@ -8,9 +8,9 @@ public class MovementBlockManager : MonoBehaviour
     public GameObject buttonMoveBlockParentObject;
     public bool isMovingBlock;
     private static MovementBlockManager _movementBlockManager;
-
+   
     public static MovementBlockManager Instance => _movementBlockManager;
-
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,18 +29,13 @@ public class MovementBlockManager : MonoBehaviour
 
     IEnumerator PlatformUp()
     {
-        if (EventManager.Instance != null)
-        {
-            EventManager.Instance.AddPointForMovingCase(1);
-        }
         
-
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
 
 
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
 
-        if (TouchManager.Instance.blockParent.position.y >= 4)
+        if (TouchManager.Instance.blockParent.position.y >= GameManager.Instance.maxHeightBlocMovement)
         {
             yield break;
         }
@@ -82,21 +77,15 @@ public class MovementBlockManager : MonoBehaviour
 
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().material.color = Color.gray;
+                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
             }
         }
     }
 
     IEnumerator PlatformDown()
     {
-        if (EventManager.Instance != null)
-        {
-            EventManager.Instance.AddPointForMovingCase(1);
-        }
-        
-
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
-        if (TouchManager.Instance.blockParent.position.y <= 0)
+        if (TouchManager.Instance.blockParent.position.y <= GameManager.Instance.minHeightBlocMovement)
         {
             yield break;
         }
@@ -139,17 +128,17 @@ public class MovementBlockManager : MonoBehaviour
             UiManager.Instance.buttonNextTurn.SetActive(true);
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().material.color = Color.gray;
+                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
             }
         }
     }
 
 
-    public void ResetPreviousBlockColor()
+    public Color ResetPreviousBlockColor()
     {
-        Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().material;
-
+        Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().materials[2];
         blockCurrentlySelectedMat.color = TouchManager.Instance.blockCurrentlySelectedColor;
+        return blockCurrentlySelectedMat.color;
     }
 
     private void ResetPreviewPlatform()
