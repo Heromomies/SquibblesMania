@@ -15,7 +15,7 @@ public class UiManager : MonoBehaviour
     
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-    public GameObject conditionEvent, conditionInventory;
+    public GameObject conditionInventory;
 
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
@@ -75,32 +75,25 @@ public class UiManager : MonoBehaviour
 
     public void SeeCondition()
     {
-        Quaternion conditionEventRotZ = conditionEvent.transform.rotation;
         Quaternion conditionInventoryRotZ = conditionInventory.transform.rotation;
 
-        if (!conditionEvent.activeSelf)
+        if (!conditionInventory.activeSelf)
         {
-            conditionEventRotZ.z = 0f;
             conditionInventoryRotZ.z = 0f;
-
-            conditionEvent.SetActive(true);
+            
             conditionInventory.SetActive(true);
-
-            conditionEvent.transform.rotation = conditionEventRotZ;
+            
             conditionInventory.transform.rotation = conditionInventoryRotZ;
 
             if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
                 GameManager.Instance.actualCamPreset.presetNumber == 4)
             {
-                conditionEventRotZ.z = 180f;
                 conditionInventoryRotZ.z = 180f;
-                conditionEvent.transform.rotation = conditionEventRotZ;
                 conditionInventory.transform.rotation = conditionInventoryRotZ;
             }
         }
         else
         {
-            conditionEvent.SetActive(false);
             conditionInventory.SetActive(false);
         }
     }
