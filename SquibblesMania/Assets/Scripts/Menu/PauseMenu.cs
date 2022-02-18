@@ -9,14 +9,15 @@ public class PauseMenu : MonoBehaviour
     
     // Start is called before the first frame update
 	public void Pause()
-    {
-	    if (!panelPause.activeSelf)
-	    {
-		    panelPause.SetActive(true);
-	    }
-	    else
-	    {
-		    panelPause.SetActive(false);
-	    }
-    }
+	{
+		if (!panelPause.activeSelf)
+		{
+			panelPause.SetActive(true);
+		}
+		else 
+		{
+			panelPause.SetActive(false);
+		}
+		
+	}
 }
