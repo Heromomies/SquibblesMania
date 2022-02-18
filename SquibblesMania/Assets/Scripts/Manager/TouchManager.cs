@@ -28,7 +28,6 @@ public class TouchManager : MonoBehaviour
 	public RaycastHit Hit;
 	public GameObject blockCurrentlySelected;
 	public Color blockCurrentlySelectedColor;
-	public GameObject seeConditionsEvent;
 	private static TouchManager _touchManager;
 
 	public static TouchManager Instance => _touchManager;
@@ -64,8 +63,6 @@ public class TouchManager : MonoBehaviour
 		{
 			FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
 		}
-
-		FingersScript.Instance.PassThroughObjects.Add(seeConditionsEvent);
 	}
 
 	private void OnDisable()
@@ -74,8 +71,7 @@ public class TouchManager : MonoBehaviour
 		{
 			FingersScript.Instance.RemoveGesture(PlayerTouchGesture);
 		}
-
-		FingersScript.Instance.PassThroughObjects.Remove(seeConditionsEvent);
+		
 		FingersScript.Instance.PassThroughObjects.Remove(MovementBlockManager.Instance.buttonMoveBlockParentObject);
 		FingersScript.Instance.PassThroughObjects.Remove(uiInteractionParentObject);
 		FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);

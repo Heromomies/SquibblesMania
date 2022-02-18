@@ -391,7 +391,7 @@ namespace DigitalRubyShared
                     if (OrbitXMaxDegrees > 0.0f)
                     {
                         float newDegrees = xDegrees + addAngle;
-                        Debug.Log(newDegrees);
+                       
                         if (newDegrees > OrbitXMaxDegrees)
                         {
                             addAngle = OrbitXMaxDegrees - xDegrees;
