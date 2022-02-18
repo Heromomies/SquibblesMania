@@ -187,7 +187,7 @@ namespace DigitalRubyShared
         private float cameraSize;
         [SerializeField] private Camera camUI;
 
-        private void OnEnable()
+        public void OnEnable()
         {
             bool isCamButtonActivated = gameObject.GetComponent<CameraButtonManager>().enabled;
 
@@ -226,7 +226,7 @@ namespace DigitalRubyShared
             cameraSize = Camera.main.orthographicSize;
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             if (FingersScript.HasInstance)
             {
@@ -391,6 +391,7 @@ namespace DigitalRubyShared
                     if (OrbitXMaxDegrees > 0.0f)
                     {
                         float newDegrees = xDegrees + addAngle;
+                        
                         if (newDegrees > OrbitXMaxDegrees)
                         {
                             addAngle = OrbitXMaxDegrees - xDegrees;

@@ -145,14 +145,16 @@ public class GameManager : MonoBehaviour
         TouchManager.Instance.AddFingerScriptPassTroughObject();
 
 
-        if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
+        if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
         {
+           
             cameraTouchScript.OrbitYMaxDegrees = 0;
             cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
         }
         else
         {
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
+            
+            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp + 6f;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
