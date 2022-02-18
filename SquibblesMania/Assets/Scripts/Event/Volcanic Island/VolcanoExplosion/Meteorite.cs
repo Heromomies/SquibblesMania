@@ -56,7 +56,7 @@ public class Meteorite : MonoBehaviour
 			
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			
-			transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
+			transform.position = new Vector3(other.transform.position.x, transform.position.y -0.1f, other.transform.position.z);
 
 			transform.rotation = other.transform.rotation;
 		}
