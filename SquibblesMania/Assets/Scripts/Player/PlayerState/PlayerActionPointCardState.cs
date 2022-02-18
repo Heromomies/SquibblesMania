@@ -11,7 +11,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
     private Color _blocBaseColor;
-   
+
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -117,28 +117,26 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     void ColorPossiblePaths(List<Transform> finalPreviewPath, Color color)
     {
-        
         //Player have a preview of his possible movement
-        
+
         foreach (var bloc in finalPreviewPath)
         {
             bloc.gameObject.GetComponent<Renderer>().materials[2].color = color;
         }
-     
+
         previewPath = finalPreviewPath;
     }
 
-  
+
     private void PulsingColorMat(Color baseBlocColor, Color colorTo, List<Transform> blocList)
     {
-
         foreach (var bloc in blocList)
         {
             bloc.GetComponent<Renderer>().materials[2].color =
                 Color.Lerp(colorTo, baseBlocColor, Mathf.PingPong(Time.time, 0.3f));
         }
     }
-    
+
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
@@ -154,9 +152,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
                 
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isNextPathActive &&
-                    Math.Abs(pathParentPos.y + 1f - player.transform.position.y) > 0.1f &&
-                    Math.Abs(checkedBlockPos.y - path.nextPath.transform.position.y) < 0.1f)
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position) && CurrentCheckedBlocPosComparedToNextBlocPos(checkedBlockPos, path.nextPath.transform.position))
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -166,6 +162,15 @@ public class PlayerActionPointCardState : PlayerBaseState
                 }
             }
         }
+    }
+
+    bool CurrentCheckedBlocPosComparedToNextBlocPos(Vector3 checkedBlocPos, Vector3 nextBlocPoS)
+    {
+        return checkedBlocPos.y - nextBlocPoS.y < 0.1f && checkedBlocPos.y - nextBlocPoS.y > -0.1f;
+    }
+    bool PathParentPosComparedToPlayerPos(Vector3 pathParentPos, Vector3 playerPos)
+    {
+        return pathParentPos.y + 2.5f - playerPos.y > -0.1f && pathParentPos.y + 2.5f - playerPos.y < 0.1f;
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -222,7 +227,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && isNextPathActive && Math.Abs(pathParentPos.y + 1f - player.transform.position.y) > 0.1f)
+            if (path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
             {
                 nextBlocks.Add(path.nextPath);
 
@@ -235,7 +240,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
         //We explore our pathfinding
-        
+
         ExplorePath(nextBlocks, pastBlocks, player);
         BuildPath(player);
     }
@@ -261,7 +266,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             bool isCurrentBlockActive = currentBlock.GetComponent<Node>().isActive;
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isCurrentBlockActive && Math.Abs(pathParentPos.y + 1f - player.transform.position.y) > 0.1f)
+            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isCurrentBlockActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
@@ -330,7 +335,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
             if (movementPlayer < player.playerActionPoint)
             {
-                Vector3 movePos = walkPoint + new Vector3(0,1, 0);
+                Vector3 movePos = walkPoint + new Vector3(0, 1, 0);
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 _actionPointText--;
@@ -385,10 +390,18 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 switch (GameManager.Instance.actualCamPreset.presetNumber)
                 {
-                    case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
-                    case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
-                    case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
-                    case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
+                    case 1:
+                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
+                        break;
+                    case 2:
+                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
+                        break;
+                    case 3:
+                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
+                        break;
+                    case 4:
+                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
+                        break;
                 }
             }
         }
