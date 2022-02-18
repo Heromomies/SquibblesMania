@@ -143,18 +143,18 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
         TouchManager.Instance.AddFingerScriptPassTroughObject();
-
-
+            
+        
         if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
         {
-           
+            ResetCamVars();
             cameraTouchScript.OrbitYMaxDegrees = 0;
             cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
         }
         else
         {
-            
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp + 6f;
+            ResetCamVars();
+            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp + 5f;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
@@ -164,6 +164,12 @@ public class GameManager : MonoBehaviour
         {
             _count = 0;
         }
+    }
+
+    void ResetCamVars()
+    {
+        cameraTouchScript.panVelocity = Vector2.zero;
+        cameraTouchScript.xDegrees = 0f;
     }
 
     private void IncreaseCycle()

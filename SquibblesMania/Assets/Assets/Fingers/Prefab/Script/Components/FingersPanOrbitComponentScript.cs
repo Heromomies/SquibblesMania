@@ -29,7 +29,7 @@ namespace DigitalRubyShared
 
         /// <summary>Whether to look at the target automatically. Set to false if you are controlling this yourself.</summary>
         [Tooltip("Whether to look at the target automatically. Set to false if you are controlling this yourself.")]
-        public bool LookAtTarget = true;
+        public bool LookAtTarget = false;
 
         /// <summary>Clamp camera to specified world space bounds, null for no clamp</summary>
         [Tooltip("Clamp camera to specified world space bounds, null for no clamp")]
@@ -172,9 +172,9 @@ namespace DigitalRubyShared
         /// </summary>
         public TapGestureRecognizer TapGesture { get; private set; }
 
-        private float xDegrees;
+        public float xDegrees;
         private float yDegrees;
-        private Vector2 panVelocity;
+        public Vector2 panVelocity;
         private float zoomSpeed;
         private Vector3 axisX;
         private Vector3 axisY;
@@ -391,7 +391,7 @@ namespace DigitalRubyShared
                     if (OrbitXMaxDegrees > 0.0f)
                     {
                         float newDegrees = xDegrees + addAngle;
-                        
+                        Debug.Log(newDegrees);
                         if (newDegrees > OrbitXMaxDegrees)
                         {
                             addAngle = OrbitXMaxDegrees - xDegrees;
@@ -401,7 +401,7 @@ namespace DigitalRubyShared
                             addAngle = -OrbitXMaxDegrees - xDegrees;
                         }
                     }
-
+                    
                     xDegrees += addAngle;
 
                     if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
