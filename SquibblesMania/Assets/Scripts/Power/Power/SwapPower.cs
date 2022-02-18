@@ -46,7 +46,7 @@ public class SwapPower : MonoBehaviour
 		switch (players.Length)
 		{
 			case 1:
-				PowerManager.Instance.ActivateDeactivatePower(2, false);
+				PowerManager.Instance.ActivateDeactivatePower(0, false);
 				PowerManager.Instance.ChangeTurnPlayer();
 				break;
 		}
@@ -91,7 +91,7 @@ public class SwapPower : MonoBehaviour
 		
 		PlayerTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 		
-		PowerManager.Instance.ActivateDeactivatePower(2, false);
+		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

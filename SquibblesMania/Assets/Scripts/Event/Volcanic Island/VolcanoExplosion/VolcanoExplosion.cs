@@ -71,7 +71,6 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
-		cubeOnMap[placeOfCube].GetComponent<Renderer>().material.CopyPropertiesFromMaterial(materialOne);
 		
 		cubeTouched.Add(cubeOnMap[placeOfCube]);
 		_turn = GameManager.Instance.turnCount;
@@ -84,6 +83,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	void LaunchBullet() // Launch the bullets 
 	{
 		cubeTouched[0].tag = "BlackBlock";
+		cubeTouched[0].layer = 7;
 
 		var positionVol = volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
