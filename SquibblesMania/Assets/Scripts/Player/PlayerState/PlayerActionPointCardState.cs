@@ -133,7 +133,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         foreach (var bloc in blocList)
         {
             bloc.GetComponent<Renderer>().materials[2].color =
-                Color.Lerp(colorTo, baseBlocColor, Mathf.PingPong(Time.time, 0.3f));
+                Color.Lerp(colorTo, baseBlocColor, Mathf.PingPong(Time.time, 0.25f));
         }
     }
 
