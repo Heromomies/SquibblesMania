@@ -10,13 +10,13 @@ public class PlayerActionPointCardState : PlayerBaseState
 {
     public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
-    private Color _blocBaseColor;
+    private Color _blocBaseEmissiveColor;
 
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
         player.nextBlockPath.Clear();
-        _blocBaseColor = player.currentBlockPlayerOn.GetComponent<Renderer>().materials[2].color;
+        _blocBaseEmissiveColor = player.currentBlockPlayerOn.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
@@ -35,8 +35,8 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Take the base color of the block
         if (player.currentBlockPlayerOn != null)
         {
-            player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].color = _blocBaseColor;
-            TouchManager.Instance.blockCurrentlySelectedColor = _blocBaseColor;
+            player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].color = _blocBaseEmissiveColor;
+            TouchManager.Instance.blockCurrentlySelectedColor = _blocBaseEmissiveColor;
         }
 
         //Foreach possible path compared to the block wich player is currently on
@@ -72,7 +72,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
-            ColorPossiblePaths(finalPreviewPath, _blocBaseColor);
+            ResetColorPreviewPath(finalPreviewPath, _blocBaseEmissiveColor);
             return;
         }
 
@@ -115,13 +115,13 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     #endregion
 
-    void ColorPossiblePaths(List<Transform> finalPreviewPath, Color color)
+    void ResetColorPreviewPath(List<Transform> finalPreviewPath, Color color)
     {
-        //Player have a preview of his possible movement
-
+        
         foreach (var bloc in finalPreviewPath)
         {
-            bloc.gameObject.GetComponent<Renderer>().materials[2].color = color;
+            Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2];
+            blocSquareMat.SetColor("_EmissionColor", color);
         }
 
         previewPath = finalPreviewPath;
@@ -132,8 +132,8 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         foreach (var bloc in blocList)
         {
-            bloc.GetComponent<Renderer>().materials[2].color =
-                Color.Lerp(colorTo, baseBlocColor, Mathf.PingPong(Time.time, 0.25f));
+            Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2]; 
+            blocSquareMat.SetColor("_EmissionColor", Color.Lerp(colorTo, baseBlocColor, Mathf.PingPong(Time.time, 0.4f))); 
         }
     }
 
@@ -150,9 +150,11 @@ public class PlayerActionPointCardState : PlayerBaseState
                 Vector3 pathParentPos = path.nextPath.transform.parent.position;
                 Vector3 checkedBlockPos = checkedBlock.transform.position;
                 bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
-                
+
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position) && CurrentCheckedBlocPosComparedToNextBlocPos(checkedBlockPos, path.nextPath.transform.position))
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isNextPathActive &&
+                    PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position) &&
+                    CurrentCheckedBlocPosComparedToNextBlocPos(checkedBlockPos, path.nextPath.transform.position))
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -168,6 +170,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         return checkedBlocPos.y - nextBlocPoS.y < 0.1f && checkedBlocPos.y - nextBlocPoS.y > -0.1f;
     }
+
     bool PathParentPosComparedToPlayerPos(Vector3 pathParentPos, Vector3 playerPos)
     {
         return pathParentPos.y + 2.5f - playerPos.y > -0.1f && pathParentPos.y + 2.5f - playerPos.y < 0.1f;
@@ -179,20 +182,20 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
             GameManager.Instance.isPathRefresh = false;
-            ColorPossiblePaths(player.nextBlockPath, Color.white);
+            ResetColorPreviewPath(player.nextBlockPath, Color.white);
             PreviewPath(GameManager.Instance.currentPlayerTurn.playerActionPoint, player);
         }
 
         if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
         {
-            PulsingColorMat(_blocBaseColor, Color.magenta, previewPath);
+            PulsingColorMat(_blocBaseEmissiveColor, Color.black, previewPath);
         }
     }
 
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-        ColorPossiblePaths(player.finalPathFinding, _blocBaseColor);
+        ResetColorPreviewPath(player.finalPathFinding, _blocBaseEmissiveColor);
         player.indicatorPlayer.SetActive(false);
         //Switch to next player of another team to play
         switch (player.playerNumber)
@@ -227,7 +230,8 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
+            if (path.isActive && isNextPathActive &&
+                PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
             {
                 nextBlocks.Add(path.nextPath);
 
@@ -266,7 +270,8 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             bool isCurrentBlockActive = currentBlock.GetComponent<Node>().isActive;
             //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isCurrentBlockActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
+            if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isCurrentBlockActive &&
+                PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
             {
                 //We add in our list the next block
                 nextBlocksPath.Add(path.nextPath);
@@ -362,7 +367,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        ColorPossiblePaths(player.nextBlockPath, _blocBaseColor);
+        ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
 
         player.finalPathFinding.Clear();
         player.walking = false;
