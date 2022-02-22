@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     
     public bool isPlayerShielded;
     public int shieldCount;
+    
     public enum PlayerTeam
     {
         TeamOne,

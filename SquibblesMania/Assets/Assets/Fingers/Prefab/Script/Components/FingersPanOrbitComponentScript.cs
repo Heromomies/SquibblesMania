@@ -176,7 +176,6 @@ namespace DigitalRubyShared
         private float yDegrees;
         public Vector2 panVelocity;
         private float zoomSpeed;
-        private Vector3 axisX;
         private Vector3 axisY;
 
         /// <summary>
@@ -403,20 +402,7 @@ namespace DigitalRubyShared
                     }
                     
                     xDegrees += addAngle;
-
-                    if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-                        GameManager.Instance.actualCamPreset.presetNumber == 2)
-                    {
-                        axisX = Orbiter.transform.right;
-                    }
-                    else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
-                             GameManager.Instance.actualCamPreset.presetNumber == 4)
-                    {
-                        axisX = -Orbiter.transform.right;
-                    }
-
-
-                    Orbiter.RotateAround(OrbitTarget.transform.position, axisX, addAngle);
+                    Orbiter.RotateAround(OrbitTarget.transform.position, Orbiter.transform.right, addAngle);
                 }
             }
 
