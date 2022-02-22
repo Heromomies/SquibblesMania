@@ -96,8 +96,7 @@ public class NFCManager : MonoBehaviour
         }
     }
 
-    private IEnumerator
-        ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight) // Color One range with different colors
+    private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight) // Color One range with different colors
     {
         for (int i = 0; i < lightColor.Capacity; i++)
         {
