@@ -117,13 +117,11 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     void ResetColorPreviewPath(List<Transform> finalPreviewPath, Color color)
     {
-        
         foreach (var bloc in finalPreviewPath)
         {
             Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2];
             blocSquareMat.SetColor("_EmissionColor", color);
         }
-
         previewPath = finalPreviewPath;
     }
 
@@ -359,7 +357,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
+        ResetColorPreviewPath(previewPath, _blocBaseEmissiveColor);
 
         player.finalPathFinding.Clear();
         player.walking = false;
