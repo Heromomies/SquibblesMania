@@ -22,6 +22,6 @@ public class Player : MonoBehaviour
     public enum PlayerTeam
     {
         TeamOne,
-        TeamTwo,
+        TeamTwo
     }
 }

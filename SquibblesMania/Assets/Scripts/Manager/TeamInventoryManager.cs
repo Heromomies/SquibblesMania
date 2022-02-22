@@ -2,99 +2,62 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TeamInventoryManager : MonoBehaviour
 {
-    public Inventory[] inventory;
+	public Inventory[] inventory;
+	public List<GameObject> objectTransport;
+	public GameObject objectToSpawn;
 
+	private static TeamInventoryManager _teamInventoryManager;
 
-    private static TeamInventoryManager _teamInventoryManager;
+	public static TeamInventoryManager Instance => _teamInventoryManager;
 
-    public static TeamInventoryManager Instance => _teamInventoryManager;
+	// Start is called before the first frame update
+	void Awake()
+	{
+		_teamInventoryManager = this;
+	}
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-        _teamInventoryManager = this;
-    }
+	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam)
+	{
+		if (playerTeam == Player.PlayerTeam.TeamOne)
+		{
+			Instantiate(objectTransport[inventory[0].objectAcquired], transform.position, Quaternion.identity, inventory[0].spawnObject);
+			inventory[0].objectAcquired += indexObject;
+		}
+		else
+		{
+			Instantiate(objectTransport[inventory[1].objectAcquired], transform.position, Quaternion.identity, inventory[1].spawnObject);
+			inventory[1].objectAcquired += indexObject;
+		}
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
+		var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
+		var bloc = EventManager.Instance.cleanList[randomBloc].transform;
+		Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
+			Quaternion.identity, bloc);
+	}
 
-    public void AddResourcesToInventory(Ressources resources, Player.PlayerTeam playerTeam)
-    {
-        foreach (Inventory playerTeamInventory in inventory)
-        {
-            if (playerTeamInventory.inventoryTeam == playerTeam)
-            {
-                switch (resources.ressourcesTypes)
-                {
-                    case Ressources.Types.Wood:
-                        playerTeamInventory.items[0].isTeamHasObjet = true;
-                        playerTeamInventory.items[0].objetTextUi.color = Color.green;
-                        if (CheckForVictoryConditions(playerTeamInventory) && !playerTeamInventory.isAllObjetAcquired)
-                        {
-                            GameManager.Instance.isConditionVictory = true;
-                            GameManager.Instance.ShowEndZone();
-                        }
+	bool CheckForVictoryConditions(Inventory playerInventory)
+	{
+		/*for (int i = 0; i < playerInventory.objectAcquired.Count; i++)
+		{
+		    if (playerInventory.objectAcquired[i].isTeamHasObjet == false)
+		    {
+		        return false;
+		    }
+		}*/
 
-                        break;
-                    case Ressources.Types.Rock:
-
-                        playerTeamInventory.items[1].isTeamHasObjet = true;
-                        playerTeamInventory.items[1].objetTextUi.color = Color.green;
-                        if (CheckForVictoryConditions(playerTeamInventory) && !playerTeamInventory.isAllObjetAcquired)
-                        {
-                            GameManager.Instance.isConditionVictory = true;
-                            GameManager.Instance.ShowEndZone();
-                        }
-
-                        break;
-                    case Ressources.Types.Rope:
-
-                        playerTeamInventory.items[2].isTeamHasObjet = true;
-                        playerTeamInventory.items[2].objetTextUi.color = Color.green;
-                        if (CheckForVictoryConditions(playerTeamInventory) && !playerTeamInventory.isAllObjetAcquired)
-                        {
-                            GameManager.Instance.isConditionVictory = true;
-                            GameManager.Instance.ShowEndZone();
-                        }
-
-                        break;
-                }
-            }
-        }
-    }
-
-    bool CheckForVictoryConditions(Inventory playerInventory)
-    {
-        for (int i = 0; i < playerInventory.items.Count; i++)
-        {
-            if (playerInventory.items[i].isTeamHasObjet == false)
-            {
-                return false;
-            }
-        }
-
-        playerInventory.isAllObjetAcquired = true;
-        return true;
-    }
+		// playerInventory.isAllObjetAcquired = true;
+		return true;
+	}
 }
 
-[System.Serializable]
+[Serializable]
 public class Inventory
 {
-    public Player.PlayerTeam inventoryTeam;
-    public List<Objet> items = new List<Objet>();
-    public bool isAllObjetAcquired;
-
-    [Serializable]
-    public class Objet
-    {
-        public string objetName;
-        public bool isTeamHasObjet;
-        public TextMeshProUGUI objetTextUi;
-    }
+	// public bool isAllObjetAcquired;
+	public Transform spawnObject;
+	public int objectAcquired;
 }
