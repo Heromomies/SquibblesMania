@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour
         {
             cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
+
+        Application.targetFrameRate = 60;
     }
 
 
@@ -165,8 +167,7 @@ public class GameManager : MonoBehaviour
             _count = 0;
         }
     }
-
-    void ResetCamVars()
+    public void ResetCamVars()
     {
         cameraTouchScript.panVelocity = Vector2.zero;
         cameraTouchScript.xDegrees = 0f;

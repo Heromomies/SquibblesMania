@@ -112,6 +112,7 @@ public class UiManager : MonoBehaviour
 
         cam.transform.DOMove(targetPos, 0.3f);
         cam.transform.DORotateQuaternion(targetRot, 0.3f);
+        GameManager.Instance.ResetCamVars();
     }
 
     public void ButtonChangeCamMoveUi()
@@ -128,7 +129,7 @@ public class UiManager : MonoBehaviour
         {
             CameraButtonManager.Instance.enabled = false;
             cameraTouchMovement.enabled = true;
-            SmoothResetCamPosAndRot();
+            CameraButtonManager.Instance.BaseViewMode();
         }
     }
     
