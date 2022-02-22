@@ -142,7 +142,7 @@ public class EditorMapWindow : EditorWindow
         {
             GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
             plane.transform.position = Vector3.zero;
-            plane.transform.localScale = new Vector3(planeMapSize.x, 1, planeMapSize.y);
+            plane.transform.localScale = new Vector3(planeMapSize.x/10, 1, planeMapSize.y/10);
             planeGo = plane;
             allObjectsCreatedOnScene.Add(plane);
             isCreating = true;
