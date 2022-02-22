@@ -12,6 +12,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     private int _actionPointText;
     private Color _blocBaseEmissiveColor;
 
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.4f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -35,7 +36,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Take the base color of the block
         if (player.currentBlockPlayerOn != null)
         {
-            player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].color = _blocBaseEmissiveColor;
+            player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", _blocBaseEmissiveColor);
             TouchManager.Instance.blockCurrentlySelectedColor = _blocBaseEmissiveColor;
         }
 
@@ -336,7 +337,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 _actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(_actionPointText);
                 movementPlayer++;
-                yield return new WaitForSeconds(0.4f);
+                yield return _timeBetweenPlayerMovement;
             }
         }
 
@@ -357,7 +358,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        ResetColorPreviewPath(previewPath, _blocBaseEmissiveColor);
+        ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
 
         player.finalPathFinding.Clear();
         player.walking = false;
