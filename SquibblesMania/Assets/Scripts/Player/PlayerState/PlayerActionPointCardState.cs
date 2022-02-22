@@ -127,15 +127,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         previewPath = finalPreviewPath;
     }
 
-
-    private void PulsingColorMat(Color baseBlocColor, Color colorTo, List<Transform> blocList)
-    {
-        foreach (var bloc in blocList)
-        {
-            Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2]; 
-            blocSquareMat.SetColor("_EmissionColor", Color.Lerp(colorTo, baseBlocColor, Mathf.PingPong(Time.time, 0.4f))); 
-        }
-    }
+    
 
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
@@ -188,7 +180,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
         {
-            PulsingColorMat(_blocBaseEmissiveColor, Color.black, previewPath);
+            PulsingBloc.PulsingEmissiveColorSquareBlocList(_blocBaseEmissiveColor, Color.black, previewPath, 0.4f);
         }
     }
 

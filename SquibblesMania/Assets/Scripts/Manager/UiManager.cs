@@ -24,7 +24,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] [Header("CAM SWITCH PARAMETERS")]
     private bool isSwitchChanged;
 
-    public GameObject[] uiCamGameObject;
+   
 
     private void Awake()
     {
@@ -116,29 +116,13 @@ public class UiManager : MonoBehaviour
 
     public void ButtonChangeCamMoveUi()
     {
-        FingersPanOrbitComponentScript cameraTouchMovement =
-            Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
-
-
+        FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
+        
         if (!CameraButtonManager.Instance.enabled)
         {
             CameraButtonManager.Instance.enabled = true;
             cameraTouchMovement.enabled = false;
-
-            CameraButtonManager.Instance.ResetBaseViewButton();
-            SmoothResetCamPosAndRot();
-            int presetCamNum = GameManager.Instance.actualCamPreset.presetNumber;
-
-            if (presetCamNum == 1 || presetCamNum == 2)
-            {
-                uiCamGameObject[1].SetActive(false);
-                uiCamGameObject[0].SetActive(true);
-            }
-            else if (presetCamNum == 3 || presetCamNum == 4)
-            {
-                uiCamGameObject[0].SetActive(false);
-                uiCamGameObject[1].SetActive(true);
-            }
+            CameraButtonManager.Instance.TopViewMode();
         }
         else
         {
@@ -147,20 +131,5 @@ public class UiManager : MonoBehaviour
             SmoothResetCamPosAndRot();
         }
     }
-
-    public void PlayerChangeCamButton()
-    {
-        int presetCamNum = GameManager.Instance.actualCamPreset.presetNumber;
-
-        if (presetCamNum == 1 || presetCamNum == 2)
-        {
-            uiCamGameObject[1].SetActive(false);
-            uiCamGameObject[0].SetActive(true);
-        }
-        else if (presetCamNum == 3 || presetCamNum == 4)
-        {
-            uiCamGameObject[0].SetActive(false);
-            uiCamGameObject[1].SetActive(true);
-        }
-    }
+    
 }

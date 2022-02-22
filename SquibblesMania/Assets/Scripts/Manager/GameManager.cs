@@ -193,10 +193,7 @@ public class GameManager : MonoBehaviour
 
         NFCManager.Instance.PlayerChangeTurn();
         CamConfig(_count);
-        if (CameraButtonManager.Instance.enabled)
-        {
-            UiManager.Instance.PlayerChangeCamButton();
-        }
+      
     }
 
     public void ShowEndZone()
