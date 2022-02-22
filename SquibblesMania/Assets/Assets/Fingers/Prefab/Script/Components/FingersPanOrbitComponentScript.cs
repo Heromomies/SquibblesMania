@@ -253,7 +253,7 @@ namespace DigitalRubyShared
 
             Vector3 startPos = Orbiter.transform.position;
             UpdateOrbit(panVelocity.x, panVelocity.y);
-            // UpdateZoom();
+            UpdateZoom();
             ClampDistance(startPos);
             panVelocity *= OrbitInertia;
             zoomSpeed *= OrbitInertia;
