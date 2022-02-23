@@ -87,6 +87,7 @@ public class PlayerStateManager : Player
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
+                _timeLeft = 0.5f;
             }
         } 
         else
@@ -94,7 +95,8 @@ public class PlayerStateManager : Player
             _timeLeft -= Time.deltaTime;
             if ( _timeLeft < 0 )
             {
-               
+                StartCoroutine(WaitUntilRespawn());
+                _timeLeft = 0.5f;
             }
         }
         
