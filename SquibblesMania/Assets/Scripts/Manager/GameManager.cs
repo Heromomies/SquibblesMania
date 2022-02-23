@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     private int _count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
+
+    [SerializeField] private float cameraOrthoBaseSize = 11f;
     [Serializable]
     public struct CamPreSets
     {
@@ -173,6 +175,9 @@ public class GameManager : MonoBehaviour
     {
         cameraTouchScript.panVelocity = Vector2.zero;
         cameraTouchScript.xDegrees = 0f;
+        cameraTouchScript.cameraSize = cameraOrthoBaseSize;
+        Camera.main.orthographicSize = cameraOrthoBaseSize;
+        cameraTouchScript.camUI.orthographicSize = cameraOrthoBaseSize;
     }
 
     private void IncreaseCycle()

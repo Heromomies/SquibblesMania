@@ -183,8 +183,8 @@ namespace DigitalRubyShared
         /// </summary>
         public event System.Action OrbitTargetTapped;
 
-        private float cameraSize;
-        [SerializeField] private Camera camUI;
+        public float cameraSize;
+        public Camera camUI;
 
         public void OnEnable()
         {
