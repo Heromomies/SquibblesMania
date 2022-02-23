@@ -78,17 +78,6 @@ public class UiManager : MonoBehaviour
         winText.text = $"{playerTeam} WIN";
     }
 
-    void SmoothResetCamPosAndRot()
-    {
-        GameObject cam = Camera.main.gameObject;
-        Vector3 targetPos = GameManager.Instance.actualCamPreset.camPos;
-        Quaternion targetRot = Quaternion.Euler(GameManager.Instance.actualCamPreset.camRot);
-
-        cam.transform.DOMove(targetPos, 0.3f);
-        cam.transform.DORotateQuaternion(targetRot, 0.3f);
-        GameManager.Instance.ResetCamVars();
-    }
-
     public void ButtonChangeCamMoveUi()
     {
         FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
@@ -98,12 +87,14 @@ public class UiManager : MonoBehaviour
             CameraButtonManager.Instance.enabled = true;
             cameraTouchMovement.enabled = false;
             CameraButtonManager.Instance.TopViewMode();
+            GameManager.Instance.ResetCamVars();
         }
         else
         {
             CameraButtonManager.Instance.enabled = false;
             cameraTouchMovement.enabled = true;
             CameraButtonManager.Instance.BaseViewMode();
+            GameManager.Instance.ResetCamVars();
         }
     }
     

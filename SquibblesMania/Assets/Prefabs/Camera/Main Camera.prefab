@@ -94,10 +94,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OrbitTarget: {fileID: 0}
   Orbiter: {fileID: 3226517119791555220}
-  LookAtTarget: 1
+  LookAtTarget: 0
   ClampBounds: {fileID: 0}
-  MinimumDistance: 5
-  MaximumDistance: 20
+  MinimumDistance: 6
+  MaximumDistance: 15
   ZoomSpeed: 8
   ZoomLookAtSpeed: 1
   ZoomThresholdUnits: 0.15
@@ -118,6 +118,7 @@ MonoBehaviour:
   RequireOrbitGesturesToStartOnTarget: 0
   xDegrees: 0
   panVelocity: {x: 0, y: 0}
+  cameraSize: 0
   camUI: {fileID: 3226517120416600737}
 --- !u!114 &3226517119791555223
 MonoBehaviour:
@@ -189,14 +190,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  uiButtonCams:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  buttonViewMode: []
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0

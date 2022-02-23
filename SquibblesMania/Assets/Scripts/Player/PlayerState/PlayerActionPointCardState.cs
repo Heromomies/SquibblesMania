@@ -125,9 +125,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
         previewPath = finalPreviewPath;
     }
-
     
-
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
