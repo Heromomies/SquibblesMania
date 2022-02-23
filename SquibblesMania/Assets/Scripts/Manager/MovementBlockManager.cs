@@ -79,7 +79,7 @@ public class MovementBlockManager : MonoBehaviour
 
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
+                block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
             }
         }
     }
