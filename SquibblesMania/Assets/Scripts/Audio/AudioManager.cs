@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
         slider.onValueChanged.AddListener(HandleSliderValueChanged);
     }
 
-    public void HandleSliderValueChanged(float value)
+    public void HandleSliderValueChanged(float value) // When we change the value of the slider
     { 
         value  = slider.value;
         mixer.SetFloat(_volumeParameter, value);
@@ -63,7 +63,7 @@ public class AudioManager : MonoBehaviour
         }
     }
     
-    public void Play(string name)
+    public void Play(string name) // Play a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
         if (s != null)
@@ -77,7 +77,7 @@ public class AudioManager : MonoBehaviour
         //Debug.Log("play");
     }
 
-    public void Stop(string name)
+    public void Stop(string name) // Stop a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
         if (s != null)

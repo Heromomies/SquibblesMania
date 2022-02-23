@@ -9,9 +9,9 @@ public class Ressources : Item
     public GameObject particleSystemPrefab;
     private List<PlayerStateManager> _playersList = new List<PlayerStateManager>();
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) // When we collide with a player 
     {   //Check if current player doesnt already collid with the ressource
-        if (other.gameObject.GetComponent<PlayerStateManager>())
+        if (other.gameObject.CompareTag("Player"))
         {
             var player = other.gameObject.GetComponent<PlayerStateManager>();
             if (!_playersList.Contains(player))
