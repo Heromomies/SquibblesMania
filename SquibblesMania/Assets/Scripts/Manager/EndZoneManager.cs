@@ -6,6 +6,7 @@ using UnityEngine;
 public class EndZoneManager : MonoBehaviour
 {
     public List<Transform> playerInEndZone;
+    public Color baseColor, colorTo;
 
     public List<Transform> blocksChilds = new List<Transform>();
     private static EndZoneManager _endZoneManager;
@@ -28,10 +29,6 @@ public class EndZoneManager : MonoBehaviour
 
         //Remove this object from the list
         blocksChilds.RemoveAt(blocksChilds.Count - 1);
-        foreach (Transform block in blocksChilds)
-        {
-            block.GetComponent<Renderer>().material.color = Color.green;
-        }
     }
 
     public void PlayersIsOnEndZone()
@@ -44,6 +41,7 @@ public class EndZoneManager : MonoBehaviour
     {
         if (playerInEndZone.Count > 1)
         {
+            Debug.Log("L'école du cirque c'est à côté");
             int playerCountTeamOne = 0;
             int playerCountTeamTwo = 0;
 
@@ -56,10 +54,10 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamOne >= 2)
                     {
                         Inventory inventoryTeamOne = TeamInventoryManager.Instance.inventory[0];
-                        /*if (inventoryTeamOne.isAllObjetAcquired)
+                        if (inventoryTeamOne.boatObject.Count == 2)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
-                        }*/
+                        }
                     }
                 }
                 else if (playerStateManager.playerTeam == Player.PlayerTeam.TeamTwo)
@@ -69,10 +67,10 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamTwo >= 2)
                     {
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
-                       /* if (inventoryTeamTwo.isAllObjetAcquired)
+                        if (inventoryTeamTwo.boatObject.Count == 2)
                         {
-                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
-                        }*/
+                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
+                        }
                     }
                 }
             }
@@ -82,5 +80,6 @@ public class EndZoneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PulsingBloc.PulsingEmissiveColorSquareBlocList(baseColor, colorTo, blocksChilds, 0.4f);
     }
 }

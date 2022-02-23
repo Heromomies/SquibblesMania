@@ -27,33 +27,29 @@ public class TeamInventoryManager : MonoBehaviour
 			Instantiate(objectTransport[inventory[0].objectAcquired],inventory[0].spawnObject.position, 
 				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 			inventory[0].objectAcquired += indexObject;
+			
+			inventory[0].boatObject.Add(objectTransport[0]);
 		}
 		else
 		{
 			Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
 				inventory[0].spawnObject.rotation, inventory[1].spawnObject);
 			inventory[1].objectAcquired += indexObject;
+			inventory[1].boatObject.Add(objectTransport[0]);
 		}
 
 		var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
 		var bloc = EventManager.Instance.cleanList[randomBloc].transform;
 		Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
 			Quaternion.identity, bloc);
-	}
 
-	bool CheckForVictoryConditions(Inventory playerInventory)
-	{
-		/*for (int i = 0; i < playerInventory.objectAcquired.Count; i++)
+		if (inventory[0].boatObject.Count == 1 || inventory[0].boatObject.Count == 2)
 		{
-		    if (playerInventory.objectAcquired[i].isTeamHasObjet == false)
-		    {
-		        return false;
-		    }
-		}*/
-
-		// playerInventory.isAllObjetAcquired = true;
-		return true;
+			GameManager.Instance.isConditionVictory = true;
+			GameManager.Instance.ShowEndZone();
+		}
 	}
+	
 }
 
 [Serializable]
@@ -62,4 +58,5 @@ public class Inventory
 	// public bool isAllObjetAcquired;
 	public Transform spawnObject;
 	public int objectAcquired;
+	[HideInInspector] public List<GameObject> boatObject;
 }
