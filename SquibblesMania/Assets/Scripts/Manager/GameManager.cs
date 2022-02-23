@@ -208,6 +208,7 @@ public class GameManager : MonoBehaviour
     {
         if (isConditionVictory && !_isEndZoneShowed)
         {
+            Debug.Log("I'm showing the end zone");
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
             GameObject endZone = Instantiate(conditionVictory.endZone,
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
