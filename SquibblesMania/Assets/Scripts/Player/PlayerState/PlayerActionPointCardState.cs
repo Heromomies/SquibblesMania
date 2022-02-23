@@ -170,15 +170,15 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
-            Debug.Log(previewPath.Count);
+            
             GameManager.Instance.isPathRefresh = false;
             ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
-            PreviewPath(GameManager.Instance.currentPlayerTurn.playerActionPoint, player);
+            EnterState(player);
         }
 
         if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
         {
-            PulsingBloc.PulsingEmissiveColorSquareBlocList(_blocBaseEmissiveColor, Color.black, previewPath, 0.4f);
+            PulsingBloc.PulsingEmissiveColorSquareBlocList(_blocBaseEmissiveColor, Color.black, player.nextBlockPath, 0.4f);
         }
     }
 
