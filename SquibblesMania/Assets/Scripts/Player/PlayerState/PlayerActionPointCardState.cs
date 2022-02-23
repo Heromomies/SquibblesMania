@@ -73,7 +73,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
-            ResetColorPreviewPath(finalPreviewPath, _blocBaseEmissiveColor);
+            previewPath = finalPreviewPath;
             return;
         }
 
@@ -172,8 +172,9 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
+            Debug.Log(previewPath.Count);
             GameManager.Instance.isPathRefresh = false;
-            ResetColorPreviewPath(player.nextBlockPath, Color.white);
+            ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
             PreviewPath(GameManager.Instance.currentPlayerTurn.playerActionPoint, player);
         }
 

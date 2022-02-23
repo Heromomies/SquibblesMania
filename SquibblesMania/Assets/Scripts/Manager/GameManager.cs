@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
@@ -27,7 +28,8 @@ public class GameManager : MonoBehaviour
     public List<CamPreSets> camPreSets;
     public float camRotateClamp = 30f;
     private int _count;
-
+    [SerializeField] 
+    private float smoothTransitionTime = 0.3f;
     [Serializable]
     public struct CamPreSets
     {
@@ -133,12 +135,12 @@ public class GameManager : MonoBehaviour
         TouchManager.Instance.RemoveFingerScriptPassThroughObject();
 
         Transform cameraTransform = cameraTouchScript.transform;
-
-        cameraTransform.position = camPreSets[countTurn].camPos;
-
         Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-
-        cameraTransform.rotation = target;
+        
+        //Smooth Transition
+        cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
+        cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
+        
         actualCamPreset = camPreSets[countTurn];
         
         //UI SWITCH
