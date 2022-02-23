@@ -24,12 +24,14 @@ public class TeamInventoryManager : MonoBehaviour
 	{
 		if (playerTeam == Player.PlayerTeam.TeamOne)
 		{
-			Instantiate(objectTransport[inventory[0].objectAcquired], transform.position, Quaternion.identity, inventory[0].spawnObject);
+			Instantiate(objectTransport[inventory[0].objectAcquired],inventory[0].spawnObject.position, 
+				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 			inventory[0].objectAcquired += indexObject;
 		}
 		else
 		{
-			Instantiate(objectTransport[inventory[1].objectAcquired], transform.position, Quaternion.identity, inventory[1].spawnObject);
+			Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
+				inventory[0].spawnObject.rotation, inventory[1].spawnObject);
 			inventory[1].objectAcquired += indexObject;
 		}
 
