@@ -54,8 +54,9 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamOne >= 2)
                     {
                         Inventory inventoryTeamOne = TeamInventoryManager.Instance.inventory[0];
-                        if (inventoryTeamOne.boatObject.Count == 2)
+                        if (inventoryTeamOne.boatObject.Count == 3)
                         {
+                            Debug.Log("I'm here");
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
                         }
                     }
@@ -67,7 +68,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamTwo >= 2)
                     {
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
-                        if (inventoryTeamTwo.boatObject.Count == 2)
+                        if (inventoryTeamTwo.boatObject.Count == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
                         }

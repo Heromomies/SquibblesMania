@@ -66,10 +66,10 @@ public class UiManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
-    public void LoadScene(string sceneName)
+    public void LoadScene()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
     
     public void WinSetUp(Player.PlayerTeam playerTeam)

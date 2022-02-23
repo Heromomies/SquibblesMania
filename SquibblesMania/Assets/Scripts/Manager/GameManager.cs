@@ -225,9 +225,4 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 }

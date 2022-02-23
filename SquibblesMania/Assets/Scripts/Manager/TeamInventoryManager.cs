@@ -43,7 +43,7 @@ public class TeamInventoryManager : MonoBehaviour
 		Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
 			Quaternion.identity, bloc);
 
-		if (inventory[0].boatObject.Count == 1 || inventory[0].boatObject.Count == 2)
+		if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
 		{
 			GameManager.Instance.isConditionVictory = true;
 			GameManager.Instance.ShowEndZone();
