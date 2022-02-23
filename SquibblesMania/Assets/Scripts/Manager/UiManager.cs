@@ -15,7 +15,6 @@ public class UiManager : MonoBehaviour
     
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-    public GameObject conditionInventory;
 
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
@@ -72,32 +71,7 @@ public class UiManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
-
-    public void SeeCondition()
-    {
-        Quaternion conditionInventoryRotZ = conditionInventory.transform.rotation;
-
-        if (!conditionInventory.activeSelf)
-        {
-            conditionInventoryRotZ.z = 0f;
-            
-            conditionInventory.SetActive(true);
-            
-            conditionInventory.transform.rotation = conditionInventoryRotZ;
-
-            if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
-                GameManager.Instance.actualCamPreset.presetNumber == 4)
-            {
-                conditionInventoryRotZ.z = 180f;
-                conditionInventory.transform.rotation = conditionInventoryRotZ;
-            }
-        }
-        else
-        {
-            conditionInventory.SetActive(false);
-        }
-    }
-
+    
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
