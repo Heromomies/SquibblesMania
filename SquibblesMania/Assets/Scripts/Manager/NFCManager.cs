@@ -61,6 +61,10 @@ public class NFCManager : MonoBehaviour
     private static NFCManager nfcManager;
 
     public static NFCManager Instance => nfcManager;
+
+    private WaitForSeconds _timeBetweenTwoLight = new WaitForSeconds(0.5f);
+
+    private WaitForSeconds _timeAntennaOneByOne = new WaitForSeconds(0.2f);
     // Start is called before the first frame update
 
     private void Awake()
@@ -79,24 +83,24 @@ public class NFCManager : MonoBehaviour
         {
             case 0:
                 NFCController.StartPollingAsync(antennaPlayerOne);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerOne, 0.5f));
+                StartCoroutine(ColorOneRange(lightIndexesPlayerOne));
                 break;
             case 1:
                 NFCController.StartPollingAsync(antennaPlayerTwo);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerTwo, 0.5f));
+                StartCoroutine(ColorOneRange(lightIndexesPlayerTwo));
                 break;
             case 2:
                 NFCController.StartPollingAsync(antennaPlayerThree);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerThree, 0.5f));
+                StartCoroutine(ColorOneRange(lightIndexesPlayerThree));
                 break;
             case 3:
                 NFCController.StartPollingAsync(antennaPlayerFour);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerFour, 0.5f));
+                StartCoroutine(ColorOneRange(lightIndexesPlayerFour));
                 break;
         }
     }
 
-    private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight) // Color One range with different colors
+    private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex) // Color One range with different colors
     {
         for (int i = 0; i < lightColor.Capacity; i++)
         {
@@ -106,7 +110,7 @@ public class NFCManager : MonoBehaviour
             }
 
             LightController.Colorize(lightIndex, lightColor[i], false);
-            yield return new WaitForSeconds(timeBetweenTwoLight);
+            yield return _timeBetweenTwoLight;
         }
     }
 
@@ -126,7 +130,7 @@ public class NFCManager : MonoBehaviour
             }
 
             LightController.ColorizeOne(fullIndex[i], lightColor[changeColor], false);
-            yield return new WaitForSeconds(0.2f);
+            yield return _timeAntennaOneByOne;
         }
     }
 
