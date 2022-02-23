@@ -208,7 +208,6 @@ public class GameManager : MonoBehaviour
     {
         if (isConditionVictory && !_isEndZoneShowed)
         {
-            Debug.Log("I'm showing the end zone");
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
             GameObject endZone = Instantiate(conditionVictory.endZone,
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
@@ -220,6 +219,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
+        Debug.Log("Player Win");
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
         //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
         Time.timeScale = 0f;

@@ -41,6 +41,7 @@ public class EndZoneManager : MonoBehaviour
     {
         if (playerInEndZone.Count > 1)
         {
+            Debug.Log("L'école du cirque c'est à côté");
             int playerCountTeamOne = 0;
             int playerCountTeamTwo = 0;
 

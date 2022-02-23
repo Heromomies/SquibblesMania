@@ -362,13 +362,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.finalPathFinding.Clear();
         player.walking = false;
         currentNodePlayerOn.isActive = false;
-
-        if (EndZoneManager.Instance != null && GameManager.Instance.isConditionVictory)
-            EndZoneManager.Instance.PlayersIsOnEndZone();
-
+        
         if (EndZoneManager.Instance != null)
+        {
             EndZoneManager.Instance.CheckPlayersTeam();
-
+            EndZoneManager.Instance.PlayersIsOnEndZone();
+        }
+        
         if (player.playerActionPoint > 0)
         {
             EnterState(player);
