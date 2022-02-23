@@ -221,13 +221,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Player Win");
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-        //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }

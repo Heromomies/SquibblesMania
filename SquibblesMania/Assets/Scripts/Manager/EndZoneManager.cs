@@ -8,7 +8,7 @@ public class EndZoneManager : MonoBehaviour
     public List<Transform> playerInEndZone;
     public Color baseColor, colorTo;
 
-    public List<Transform> blocksChilds = new List<Transform>();
+    public List<Transform> blocksChild = new List<Transform>();
     private static EndZoneManager _endZoneManager;
 
     public static EndZoneManager Instance => _endZoneManager;
@@ -24,24 +24,23 @@ public class EndZoneManager : MonoBehaviour
     {
         foreach (Transform tr in transform.parent)
         {
-            blocksChilds.Add(tr);
+            blocksChild.Add(tr);
         }
 
         //Remove this object from the list
-        blocksChilds.RemoveAt(blocksChilds.Count - 1);
+        blocksChild.RemoveAt(blocksChild.Count - 1);
     }
 
     public void PlayersIsOnEndZone()
     {
-        GroupBlockDetection parent = blocksChilds[0].parent.GetComponent<GroupBlockDetection>();
+        GroupBlockDetection parent = blocksChild[0].parent.GetComponent<GroupBlockDetection>();
         playerInEndZone = parent.playersOnGroupBlock;
     }
 
-    public void CheckPlayersTeam()
+    public void CheckPlayersTeam() // Check the players team
     {
         if (playerInEndZone.Count > 1)
         {
-            Debug.Log("L'école du cirque c'est à côté");
             int playerCountTeamOne = 0;
             int playerCountTeamTwo = 0;
 
@@ -54,7 +53,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamOne >= 2)
                     {
                         Inventory inventoryTeamOne = TeamInventoryManager.Instance.inventory[0];
-                        if (inventoryTeamOne.boatObject.Count == 2)
+                        if (inventoryTeamOne.boatObject.Count == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
                         }
@@ -67,7 +66,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamTwo >= 2)
                     {
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
-                        if (inventoryTeamTwo.boatObject.Count == 2)
+                        if (inventoryTeamTwo.boatObject.Count == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
                         }
@@ -78,8 +77,8 @@ public class EndZoneManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update() // Pulsing bloc
     {
-        PulsingBloc.PulsingEmissiveColorSquareBlocList(baseColor, colorTo, blocksChilds, 0.4f);
+        PulsingBloc.PulsingEmissiveColorSquareBlocList(baseColor, colorTo, blocksChild, 0.4f);
     }
 }
