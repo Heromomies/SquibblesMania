@@ -23,7 +23,7 @@ public class PlayerStateManager : Player
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
 
-    private float _timeLeft = 0.5f;
+    private float _timeLeft = 1.5f;
     private void Start()
     {
         DetectBlockBelowPlayer();
@@ -87,7 +87,7 @@ public class PlayerStateManager : Player
             if (hit.collider.gameObject.GetComponent<Node>() != null)
             {
                 currentBlockPlayerOn = hit.transform;
-                _timeLeft = 0.5f;
+                _timeLeft = 1.5f;
             }
         } 
         else
