@@ -12,7 +12,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     private int _actionPointText;
     private Color _blocBaseEmissiveColor;
 
-    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.4f);
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.1f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
