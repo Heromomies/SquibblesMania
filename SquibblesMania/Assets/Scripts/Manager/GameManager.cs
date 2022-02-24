@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
-    public bool isPathRefresh;
+  
     public int turnCount;
     [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
 

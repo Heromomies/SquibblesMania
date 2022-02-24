@@ -72,7 +72,7 @@ public class MovementBlockManager : MonoBehaviour
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
 
-        GameManager.Instance.isPathRefresh = true;
+        
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -82,6 +82,11 @@ public class MovementBlockManager : MonoBehaviour
                 block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
             }
         }
+
+        yield return _timeBetweenBlocMovement;
+        var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
     IEnumerator PlatformDown()
@@ -120,7 +125,7 @@ public class MovementBlockManager : MonoBehaviour
 
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
-        GameManager.Instance.isPathRefresh = true;
+        
 
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
@@ -130,6 +135,11 @@ public class MovementBlockManager : MonoBehaviour
                 block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
             }
         }
+
+        yield return _timeBetweenBlocMovement;
+        var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
 
