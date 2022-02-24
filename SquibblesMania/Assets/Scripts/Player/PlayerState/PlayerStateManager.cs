@@ -17,7 +17,7 @@ public class PlayerStateManager : Player
     public List<Transform> finalPathFinding = new List<Transform>();
     public bool walking;
     public float timeMoveSpeed;
-
+    public float timeRotateSpeed;
 
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;

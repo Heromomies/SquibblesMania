@@ -109,7 +109,7 @@ public class TouchManager : MonoBehaviour
 				if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
 				{
 					//Previous selected block get his base color back
-
+					
 					MovementBlockManager.Instance.ResetPreviousBlockColor();
 					GameManager.Instance.isPathRefresh = true;
 				}

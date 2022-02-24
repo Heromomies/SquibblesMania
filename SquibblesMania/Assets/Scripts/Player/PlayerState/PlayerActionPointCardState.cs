@@ -11,8 +11,8 @@ public class PlayerActionPointCardState : PlayerBaseState
     public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
     private Color _blocBaseEmissiveColor;
-
-    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.1f);
+  
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
@@ -153,6 +153,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 }
             }
         }
+       
     }
 
     bool CurrentCheckedBlocPosComparedToNextBlocPos(Vector3 checkedBlocPos, Vector3 nextBlocPoS)
@@ -170,10 +171,9 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Update the preview Path of the player 
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
-            
-            GameManager.Instance.isPathRefresh = false;
             ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
             EnterState(player);
+            GameManager.Instance.isPathRefresh = false;
         }
 
         if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
@@ -331,7 +331,12 @@ public class PlayerActionPointCardState : PlayerBaseState
             if (movementPlayer < player.playerActionPoint)
             {
                 Vector3 movePos = walkPoint + new Vector3(0, 1, 0);
+                Vector3 direction = (movePos - player.transform.position).normalized;
+
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
+                player.transform.DORotateQuaternion(Quaternion.Euler(0,targetAngle,0), player.timeRotateSpeed);
                 player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 _actionPointText--;
                 UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(_actionPointText);
@@ -361,7 +366,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-        currentNodePlayerOn.isActive = false;
+      
         
         if (EndZoneManager.Instance != null)
         {
@@ -372,9 +377,11 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (player.playerActionPoint > 0)
         {
             EnterState(player);
+            currentNodePlayerOn.isActive = false;
         }
         else
         {
+            currentNodePlayerOn.isActive = false;
             if (NFCManager.Instance.hasRemovedCard)
             {
                 NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
