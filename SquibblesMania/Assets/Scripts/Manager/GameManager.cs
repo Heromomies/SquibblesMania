@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
 
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
+    public GameObject crown;
+    public float heightCrownSpawn;
     public ConditionVictory conditionVictory;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
@@ -212,6 +214,11 @@ public class GameManager : MonoBehaviour
             GameObject endZone = Instantiate(conditionVictory.endZone,
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
+
+            var t = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint];
+
+           // Instantiate(crown, new Vector3(t.position.x, t.position.y + heightCrownSpawn, t.position.z), Quaternion.identity, t);
+            
             isConditionVictory = false;
             _isEndZoneShowed = true;
         }
