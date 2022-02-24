@@ -40,8 +40,17 @@ public class TeamInventoryManager : MonoBehaviour
 
 		var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
 		var bloc = EventManager.Instance.cleanList[randomBloc].transform;
-		Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
-			Quaternion.identity, bloc);
+
+		if (bloc.GetComponent<Node>().isActive)
+		{
+			Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
+				Quaternion.identity, bloc);
+		}
+		else
+		{
+			AddResourcesToInventory(0, Player.PlayerTeam.None);
+		}
+		
 
 		if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
 		{
