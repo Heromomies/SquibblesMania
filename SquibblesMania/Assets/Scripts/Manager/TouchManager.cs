@@ -137,7 +137,7 @@ public class TouchManager : MonoBehaviour
 		if (Hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
 		    GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
 		{
-			if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(Hit.transform) &&
+			if (GameManager.Instance.currentPlayerTurn.nextBlockPath.Contains(Hit.transform) &&
 			    GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 			{
 				MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(false);
