@@ -46,12 +46,10 @@ public class PlayerCardState : PlayerBaseState
 
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
-				Debug.Log("Head");
 				NFCManager.Instance.SetActivePlayerActionButton(1,true);
 			}
 			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
-				Debug.Log("Movement");
 				NFCManager.Instance.SetActivePlayerActionButton(0,true);
 			}
 
