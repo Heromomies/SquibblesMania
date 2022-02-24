@@ -172,8 +172,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (GameManager.Instance.isPathRefresh && player.playerActionPoint > 0)
         {
             ResetColorPreviewPath(player.nextBlockPath, _blocBaseEmissiveColor);
-            EnterState(player);
-            GameManager.Instance.isPathRefresh = false;
+            PreviewPath(player.playerActionPoint, player);
         }
 
         if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
@@ -324,7 +323,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         int movementPlayer = 0;
 
         _actionPointText = player.playerActionPoint;
-
+        GameManager.Instance.isPathRefresh = false;
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
             Vector3 walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
@@ -366,7 +365,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-      
+        
         
         if (EndZoneManager.Instance != null)
         {
