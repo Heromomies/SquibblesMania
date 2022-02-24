@@ -96,7 +96,7 @@ public class PlayerStateManager : Player
             if ( _timeLeft < 0 )
             {
                 StartCoroutine(WaitUntilRespawn());
-                _timeLeft = 0.5f;
+                _timeLeft = 1.5f;
             }
         }
         
