@@ -37,7 +37,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (player.currentBlockPlayerOn != null)
         {
             player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", blocBaseEmissiveColor);
-            TouchManager.Instance.blockCurrentlySelectedColor = blocBaseEmissiveColor;
+            TouchManager.Instance.blockCurrentlyBaseColor = blocBaseEmissiveColor;
         }
 
         //Foreach possible path compared to the block wich player is currently on

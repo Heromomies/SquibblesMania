@@ -23,13 +23,9 @@ public class NFCManager : MonoBehaviour
     [Serializable]
     public struct ActionPlayerPreset
     {
-        public GameObject playerActionButtons;
+        public GameObject playerActionButton;
+        public GameObject playerPowerButton;
         public TextMeshProUGUI textTakeOffCard;
-        
-        public void SetActive(bool isSetActive)
-        {
-            playerActionButtons.SetActive(isSetActive);
-        }
     }
 
     #endregion
@@ -49,7 +45,7 @@ public class NFCManager : MonoBehaviour
     #region PRIVATE VAR
     
     [HideInInspector] public int numberOfTheCard;
-    [HideInInspector] public char[] charCards;
+    public char[] charCards;
     [HideInInspector] public bool hasRemovedCard;
     [HideInInspector] public bool clicked;
     [HideInInspector] public int changeColor;
@@ -83,19 +79,19 @@ public class NFCManager : MonoBehaviour
         {
             case 0:
                 NFCController.StartPollingAsync(antennaPlayerOne);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerOne));
+                LightController.Colorize(lightIndexesPlayerOne, lightColor[0], false);
                 break;
             case 1:
                 NFCController.StartPollingAsync(antennaPlayerTwo);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerTwo));
+                LightController.Colorize(lightIndexesPlayerTwo, lightColor[1], false);
                 break;
             case 2:
                 NFCController.StartPollingAsync(antennaPlayerThree);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerThree));
+                LightController.Colorize(lightIndexesPlayerThree, lightColor[0], false);
                 break;
             case 3:
                 NFCController.StartPollingAsync(antennaPlayerFour);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerFour));
+                LightController.Colorize(lightIndexesPlayerFour, lightColor[1], false);
                 break;
         }
     }
@@ -151,7 +147,7 @@ public class NFCManager : MonoBehaviour
             case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
         }
 
-        SetActivePlayerActionButton(false);
+        SetActivePlayerActionButton(1,false);
     }
 
     public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
@@ -171,17 +167,30 @@ public class NFCManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
             .PlayerActionPointCardState);
 
-        SetActivePlayerActionButton(false);
+        SetActivePlayerActionButton(0,false);
     }
 
-    public void SetActivePlayerActionButton(bool setActive) // Can activate / deactivate button from everywhere in the script
+    public void SetActivePlayerActionButton(int index, bool setActive) // Can activate / deactivate button from everywhere in the script
     {
-        switch (GameManager.Instance.actualCamPreset.presetNumber)
-        { 
-            case 1: actionPlayerPreset[0].SetActive(setActive); break;
-            case 2: actionPlayerPreset[0].SetActive(setActive); break;
-            case 3: actionPlayerPreset[1].SetActive(setActive); break;
-            case 4: actionPlayerPreset[1].SetActive(setActive); break;
+        if (index == 0)
+        {
+            switch (GameManager.Instance.actualCamPreset.presetNumber)
+            {
+                case 1: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
+                case 2: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
+                case 3: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;
+                case 4: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;
+            }
+        } else if (index == 1)
+        {
+            switch (GameManager.Instance.actualCamPreset.presetNumber)
+            { 
+                case 1: actionPlayerPreset[0].playerPowerButton.SetActive(setActive); break;
+                case 2: actionPlayerPreset[0].playerPowerButton.SetActive(setActive); break;
+                case 3: actionPlayerPreset[1].playerPowerButton.SetActive(setActive); break;
+                case 4: actionPlayerPreset[1].playerPowerButton.SetActive(setActive); break;
+            }
         }
+       
     }
 }
