@@ -50,10 +50,6 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 		for (int i = 0; i < conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered; i++)
 		{
-			//var childPos = childrenBlocs[i + rand].transform.position;
-				
-			//GameObject ashe = PoolManager.Instance.SpawnObjectFromPool("Ashe", new Vector3(childPos.x, childPos.y + heightSpawnParticle, childPos.z), Quaternion.identity, childrenBlocs[i + rand].transform);
-			
 			if (childrenBlocs[i + rand].CompareTag("BlackBlock"))
 			{
 				i++;

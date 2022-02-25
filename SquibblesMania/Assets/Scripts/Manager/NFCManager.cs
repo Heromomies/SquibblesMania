@@ -79,19 +79,19 @@ public class NFCManager : MonoBehaviour
         {
             case 0:
                 NFCController.StartPollingAsync(antennaPlayerOne);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerOne));
+                LightController.Colorize(lightIndexesPlayerOne, lightColor[0], false);
                 break;
             case 1:
                 NFCController.StartPollingAsync(antennaPlayerTwo);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerTwo));
+                LightController.Colorize(lightIndexesPlayerTwo, lightColor[1], false);
                 break;
             case 2:
                 NFCController.StartPollingAsync(antennaPlayerThree);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerThree));
+                LightController.Colorize(lightIndexesPlayerThree, lightColor[0], false);
                 break;
             case 3:
                 NFCController.StartPollingAsync(antennaPlayerFour);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerFour));
+                LightController.Colorize(lightIndexesPlayerFour, lightColor[1], false);
                 break;
         }
     }

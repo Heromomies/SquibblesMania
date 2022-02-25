@@ -5,6 +5,7 @@ using UnityEngine;
 public class Meteorite : MonoBehaviour
 {
 	public float speedTurnAround;
+	public int lifeParticle;
 	
 	private Rigidbody _rb;
 	private int _turn;
@@ -18,14 +19,11 @@ public class Meteorite : MonoBehaviour
 
 	private void Update()
 	{
-		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + 4)
+		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + lifeParticle)
 		{
 			gameObject.GetComponentInParent<Node>().isActive = true;
-			
-			_turn = GameManager.Instance.turnCount;
-			
-			Destroy(_particleFireToDelete);
-			Destroy(gameObject);
+			_particleFireToDelete.gameObject.SetActive(false);
+			gameObject.SetActive(false);
 		}
 
 		if (!_stopRotating)
@@ -74,6 +72,6 @@ public class Meteorite : MonoBehaviour
 	IEnumerator SetActiveFalseBullet(float seconds)
 	{
 		yield return new WaitForSeconds(seconds);
-		gameObject.SetActive(false);
+		gameObject.transform.position = Vector3.positiveInfinity;
 	}
 }

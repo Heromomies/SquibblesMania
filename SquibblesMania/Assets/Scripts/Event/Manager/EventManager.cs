@@ -68,25 +68,6 @@ public class EventManager : MonoBehaviour
 			sliderDangerousness.value = dangerousness;
 		}
 	}
-	
-	/*private void DefineCondition() // Define the condition to activate event
-	{
-		switch (levelOfDanger)
-		{
-			case LevelOfDanger.LevelOne : Debug.Log("Level One");
-				dangerousness = 0;
-				break;
-			case LevelOfDanger.LevelTwo : Debug.Log("Level Two");
-				dangerousness = 1;
-				break;
-			case LevelOfDanger.LevelThree : Debug.Log("Level Three");
-				dangerousness = 2;
-				break;
-			case LevelOfDanger.LevelFour : Debug.Log("Level Four");
-				dangerousness = 3;
-				break;
-		}
-	}*/
 
 	void LaunchEvent() // Launch the event
 	{

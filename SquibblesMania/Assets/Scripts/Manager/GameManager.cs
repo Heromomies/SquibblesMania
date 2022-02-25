@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
         cameraTouchScript.camUI.orthographicSize = cameraOrthoBaseSize;
     }
 
-    private void IncreaseCycle()
+    private void IncreaseDemiCycle()
     {
         EventManager.Instance.CyclePassed();
         PowerManager.Instance.CyclePassed();
@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
         {
-            IncreaseCycle();
+            IncreaseDemiCycle();
             cycleCount++;
         }
 
