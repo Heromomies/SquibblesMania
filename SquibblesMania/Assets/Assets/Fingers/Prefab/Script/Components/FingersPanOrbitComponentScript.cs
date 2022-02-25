@@ -29,7 +29,7 @@ namespace DigitalRubyShared
 
         /// <summary>Whether to look at the target automatically. Set to false if you are controlling this yourself.</summary>
         [Tooltip("Whether to look at the target automatically. Set to false if you are controlling this yourself.")]
-        public bool LookAtTarget = true;
+        public bool LookAtTarget = false;
 
         /// <summary>Clamp camera to specified world space bounds, null for no clamp</summary>
         [Tooltip("Clamp camera to specified world space bounds, null for no clamp")]
@@ -172,11 +172,10 @@ namespace DigitalRubyShared
         /// </summary>
         public TapGestureRecognizer TapGesture { get; private set; }
 
-        private float xDegrees;
+        public float xDegrees;
         private float yDegrees;
-        private Vector2 panVelocity;
+        public Vector2 panVelocity;
         private float zoomSpeed;
-        private Vector3 axisX;
         private Vector3 axisY;
 
         /// <summary>
@@ -184,10 +183,10 @@ namespace DigitalRubyShared
         /// </summary>
         public event System.Action OrbitTargetTapped;
 
-        private float cameraSize;
-        [SerializeField] private Camera camUI;
+        public float cameraSize;
+        public Camera camUI;
 
-        private void OnEnable()
+        public void OnEnable()
         {
             bool isCamButtonActivated = gameObject.GetComponent<CameraButtonManager>().enabled;
 
@@ -226,7 +225,7 @@ namespace DigitalRubyShared
             cameraSize = Camera.main.orthographicSize;
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             if (FingersScript.HasInstance)
             {
@@ -254,7 +253,7 @@ namespace DigitalRubyShared
 
             Vector3 startPos = Orbiter.transform.position;
             UpdateOrbit(panVelocity.x, panVelocity.y);
-            // UpdateZoom();
+            UpdateZoom();
             ClampDistance(startPos);
             panVelocity *= OrbitInertia;
             zoomSpeed *= OrbitInertia;
@@ -388,9 +387,11 @@ namespace DigitalRubyShared
                 else
                 {
                     float addAngle = yVelocity * OrbitXSpeed * Time.deltaTime;
+                    
                     if (OrbitXMaxDegrees > 0.0f)
                     {
                         float newDegrees = xDegrees + addAngle;
+                       
                         if (newDegrees > OrbitXMaxDegrees)
                         {
                             addAngle = OrbitXMaxDegrees - xDegrees;
@@ -401,21 +402,9 @@ namespace DigitalRubyShared
                         }
                     }
 
+                    
                     xDegrees += addAngle;
-
-                    if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-                        GameManager.Instance.actualCamPreset.presetNumber == 2)
-                    {
-                        axisX = Orbiter.transform.right;
-                    }
-                    else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
-                             GameManager.Instance.actualCamPreset.presetNumber == 4)
-                    {
-                        axisX = -Orbiter.transform.right;
-                    }
-
-
-                    Orbiter.RotateAround(OrbitTarget.transform.position, axisX, addAngle);
+                    Orbiter.RotateAround(OrbitTarget.transform.position, Orbiter.transform.right, addAngle);
                 }
             }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
-    public bool isPathRefresh;
+  
     public int turnCount;
     [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
 
@@ -27,7 +28,10 @@ public class GameManager : MonoBehaviour
     public List<CamPreSets> camPreSets;
     public float camRotateClamp = 30f;
     private int _count;
+    [SerializeField] 
+    private float smoothTransitionTime = 0.3f;
 
+    [SerializeField] private float cameraOrthoBaseSize = 11f;
     [Serializable]
     public struct CamPreSets
     {
@@ -42,6 +46,8 @@ public class GameManager : MonoBehaviour
 
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
+    public GameObject crown;
+    public float heightCrownSpawn;
     public ConditionVictory conditionVictory;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
@@ -54,6 +60,8 @@ public class GameManager : MonoBehaviour
         {
             cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
+
+        Application.targetFrameRate = 60;
     }
 
 
@@ -131,28 +139,30 @@ public class GameManager : MonoBehaviour
         TouchManager.Instance.RemoveFingerScriptPassThroughObject();
 
         Transform cameraTransform = cameraTouchScript.transform;
-
-        cameraTransform.position = camPreSets[countTurn].camPos;
-
         Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-
-        cameraTransform.rotation = target;
+        
+        //Smooth Transition
+        cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
+        cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
+        
         actualCamPreset = camPreSets[countTurn];
         
         //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
         TouchManager.Instance.AddFingerScriptPassTroughObject();
-
-
-        if (actualCamPreset.presetNumber == 2 || actualCamPreset.presetNumber == 3)
+            
+        
+        if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
         {
+            ResetCamVars();
             cameraTouchScript.OrbitYMaxDegrees = 0;
             cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
         }
         else
         {
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
+            ResetCamVars();
+            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp + 5f;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
@@ -163,8 +173,16 @@ public class GameManager : MonoBehaviour
             _count = 0;
         }
     }
+    public void ResetCamVars()
+    {
+        cameraTouchScript.panVelocity = Vector2.zero;
+        cameraTouchScript.xDegrees = 0f;
+        cameraTouchScript.cameraSize = cameraOrthoBaseSize;
+        Camera.main.orthographicSize = cameraOrthoBaseSize;
+        cameraTouchScript.camUI.orthographicSize = cameraOrthoBaseSize;
+    }
 
-    private void IncreaseCycle()
+    private void IncreaseDemiCycle()
     {
         EventManager.Instance.CyclePassed();
         PowerManager.Instance.CyclePassed();
@@ -174,7 +192,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
         {
-            IncreaseCycle();
+            IncreaseDemiCycle();
             cycleCount++;
         }
 
@@ -185,10 +203,7 @@ public class GameManager : MonoBehaviour
 
         NFCManager.Instance.PlayerChangeTurn();
         CamConfig(_count);
-        if (CameraButtonManager.Instance.enabled)
-        {
-            UiManager.Instance.PlayerChangeCamButton();
-        }
+      
     }
 
     public void ShowEndZone()
@@ -199,6 +214,11 @@ public class GameManager : MonoBehaviour
             GameObject endZone = Instantiate(conditionVictory.endZone,
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
+
+            var t = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint];
+
+           // Instantiate(crown, new Vector3(t.position.x, t.position.y + heightCrownSpawn, t.position.z), Quaternion.identity, t);
+            
             isConditionVictory = false;
             _isEndZoneShowed = true;
         }
@@ -206,14 +226,9 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
+        Debug.Log("Player Win");
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-        //TODO L'équipe x a gagner la partie on ouvre un panel (dans UIManager) et on met le jeu en pause
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }

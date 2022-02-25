@@ -11,7 +11,10 @@ public class MovementBlockManager : MonoBehaviour
    
     public static MovementBlockManager Instance => _movementBlockManager;
     
-    // Start is called before the first frame update
+    private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.3f);
+    
+    private float _timeForBlocParentMove = 0.5f;
+    private float _timeForPlayersOnBlocMove = 0.2f;
     void Awake()
     {
         _movementBlockManager = this;
@@ -43,8 +46,8 @@ public class MovementBlockManager : MonoBehaviour
 
         TouchManager.Instance.blockParent.DOMove(
             new Vector3(positionBlockParent.x, positionBlockParent.y + 1f, positionBlockParent.z),
-            0.2f);
-        yield return new WaitForSeconds(0.3f);
+            _timeForBlocParentMove);
+     
 
         //We want to substract action point from the current player if he move up/down the block
         GameManager.Instance.currentPlayerTurn.playerActionPoint--;
@@ -59,27 +62,31 @@ public class MovementBlockManager : MonoBehaviour
             {
                 Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
                 playerOnGroupBlock.DOMove(
-                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), 0.2f);
+                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), _timeForPlayersOnBlocMove);
             }
-            yield return new WaitForSeconds(0.3f);
+
+            yield return _timeBetweenBlocMovement;
         }
-
         
-
         ResetPreviewPlatform();
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
 
-        GameManager.Instance.isPathRefresh = true;
+        
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
 
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
+                block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
             }
         }
+
+        yield return _timeBetweenBlocMovement;
+        var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
     IEnumerator PlatformDown()
@@ -92,13 +99,9 @@ public class MovementBlockManager : MonoBehaviour
 
 
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
-        TouchManager.Instance.blockParent.DOMove(
-            new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z),
-            0.2f);
-        yield return new WaitForSeconds(0.3f);
+        TouchManager.Instance.blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z), _timeForBlocParentMove);
 
         GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn
             .playerActionPoint);
 
@@ -111,9 +114,10 @@ public class MovementBlockManager : MonoBehaviour
             {
                 Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
                 playerOnGroupBlock.DOMove(
-                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), 0.2f);
+                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), _timeForPlayersOnBlocMove);
             }
-            yield return new WaitForSeconds(0.3f);
+
+            yield return _timeBetweenBlocMovement;
         }
 
         
@@ -121,24 +125,29 @@ public class MovementBlockManager : MonoBehaviour
 
         isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
-        GameManager.Instance.isPathRefresh = true;
+        
 
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
             foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
             {
-                block.gameObject.GetComponent<Renderer>().materials[2].color = ResetPreviousBlockColor();
+                block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
             }
         }
+
+        yield return _timeBetweenBlocMovement;
+        var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
 
     public Color ResetPreviousBlockColor()
     {
         Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().materials[2];
-        blockCurrentlySelectedMat.color = TouchManager.Instance.blockCurrentlySelectedColor;
-        return blockCurrentlySelectedMat.color;
+        blockCurrentlySelectedMat.SetColor("_EmissionColor", TouchManager.Instance.blockCurrentlyBaseColor);
+        return blockCurrentlySelectedMat.GetColor("_EmissionColor");
     }
 
     private void ResetPreviewPlatform()

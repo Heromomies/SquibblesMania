@@ -68,7 +68,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 95
+    m_Bits: 479
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -94,28 +94,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OrbitTarget: {fileID: 0}
   Orbiter: {fileID: 3226517119791555220}
-  LookAtTarget: 1
+  LookAtTarget: 0
   ClampBounds: {fileID: 0}
-  MinimumDistance: 5
-  MaximumDistance: 20
+  MinimumDistance: 6
+  MaximumDistance: 15
   ZoomSpeed: 8
   ZoomLookAtSpeed: 1
   ZoomThresholdUnits: 0.15
-  OrbitXSpeed: -15
+  OrbitXSpeed: -10
   OrbitXMaxDegrees: 0
   XAxisMovementType: 0
   OrbitXPanSpeed: 1
   OrbitXPanLimit: 0
-  OrbitYSpeed: 15
+  OrbitYSpeed: 10
   OrbitYMaxDegrees: 0
   YAxisMovementType: 0
   OrbitYPanSpeed: 1
   OrbitYPanLimit: 0
   AllowOrbitWhileZooming: 1
-  AllowMovementOnBothAxisSimultaneously: 0
+  AllowMovementOnBothAxisSimultaneously: 1
   OrbitInertia: 0.5
   OrbitMaximumSize: {x: 0, y: 0, z: 0}
   RequireOrbitGesturesToStartOnTarget: 0
+  xDegrees: 0
+  panVelocity: {x: 0, y: 0}
+  cameraSize: 0
   camUI: {fileID: 3226517120416600737}
 --- !u!114 &3226517119791555223
 MonoBehaviour:
@@ -140,7 +143,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -187,15 +190,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  uiButtonCams:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  buttonTopViewMode: {fileID: 0}
-  buttonBaseViewMode: {fileID: 0}
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +249,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 11
   m_Depth: 10
   m_CullingMask:
     serializedVersion: 2

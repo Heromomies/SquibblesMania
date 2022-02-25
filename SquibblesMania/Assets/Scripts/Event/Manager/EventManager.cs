@@ -39,14 +39,7 @@ public class EventManager : MonoBehaviour
 	}
 
 	#endregion
-
-	// Start is called before the first frame update
-	void Start()
-	{
-		sliderDangerousness.value = dangerousness;
-		//DefineCondition();
-	}
-
+	
 	public void CyclePassed() // When a cycle is make, random Number to know if the manager can launch the event
 	{
 		var randomNumber = Random.Range(0, 100);
@@ -73,31 +66,6 @@ public class EventManager : MonoBehaviour
 					break;
 			}
 			sliderDangerousness.value = dangerousness;
-		}
-	}
-	private void Update()
-	{
-		
-		
-		// Launch The Event
-		
-	}
-	private void DefineCondition() // Define the condition to activate event
-	{
-		switch (levelOfDanger)
-		{
-			case LevelOfDanger.LevelOne : Debug.Log("Level One");
-				dangerousness = 0;
-				break;
-			case LevelOfDanger.LevelTwo : Debug.Log("Level Two");
-				dangerousness = 1;
-				break;
-			case LevelOfDanger.LevelThree : Debug.Log("Level Three");
-				dangerousness = 2;
-				break;
-			case LevelOfDanger.LevelFour : Debug.Log("Level Four");
-				dangerousness = 3;
-				break;
 		}
 	}
 

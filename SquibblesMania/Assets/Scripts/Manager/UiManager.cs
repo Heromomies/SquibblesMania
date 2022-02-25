@@ -15,7 +15,6 @@ public class UiManager : MonoBehaviour
     
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-    public GameObject conditionEvent, conditionInventory;
 
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
@@ -24,7 +23,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] [Header("CAM SWITCH PARAMETERS")]
     private bool isSwitchChanged;
 
-    public GameObject[] uiCamGameObject;
+   
 
     private void Awake()
     {
@@ -67,107 +66,36 @@ public class UiManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
-    public void LoadScene(string sceneName)
+    public void LoadScene()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
-
-    public void SeeCondition()
-    {
-        Quaternion conditionEventRotZ = conditionEvent.transform.rotation;
-        Quaternion conditionInventoryRotZ = conditionInventory.transform.rotation;
-
-        if (!conditionEvent.activeSelf)
-        {
-            conditionEventRotZ.z = 0f;
-            conditionInventoryRotZ.z = 0f;
-
-            conditionEvent.SetActive(true);
-            conditionInventory.SetActive(true);
-
-            conditionEvent.transform.rotation = conditionEventRotZ;
-            conditionInventory.transform.rotation = conditionInventoryRotZ;
-
-            if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
-                GameManager.Instance.actualCamPreset.presetNumber == 4)
-            {
-                conditionEventRotZ.z = 180f;
-                conditionInventoryRotZ.z = 180f;
-                conditionEvent.transform.rotation = conditionEventRotZ;
-                conditionInventory.transform.rotation = conditionInventoryRotZ;
-            }
-        }
-        else
-        {
-            conditionEvent.SetActive(false);
-            conditionInventory.SetActive(false);
-        }
-    }
-
+    
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
         winText.text = $"{playerTeam} WIN";
     }
 
-    void SmoothResetCamPosAndRot()
-    {
-        GameObject cam = Camera.main.gameObject;
-        Vector3 targetPos = GameManager.Instance.actualCamPreset.camPos;
-        Quaternion targetRot = Quaternion.Euler(GameManager.Instance.actualCamPreset.camRot);
-
-        cam.transform.DOMove(targetPos, 0.3f);
-        cam.transform.DORotateQuaternion(targetRot, 0.3f);
-    }
-
     public void ButtonChangeCamMoveUi()
     {
-        FingersPanOrbitComponentScript cameraTouchMovement =
-            Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
-
-
+        FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
+        
         if (!CameraButtonManager.Instance.enabled)
         {
             CameraButtonManager.Instance.enabled = true;
             cameraTouchMovement.enabled = false;
-
-            CameraButtonManager.Instance.ResetBaseViewButton();
-            SmoothResetCamPosAndRot();
-            int presetCamNum = GameManager.Instance.actualCamPreset.presetNumber;
-
-            if (presetCamNum == 1 || presetCamNum == 2)
-            {
-                uiCamGameObject[1].SetActive(false);
-                uiCamGameObject[0].SetActive(true);
-            }
-            else if (presetCamNum == 3 || presetCamNum == 4)
-            {
-                uiCamGameObject[0].SetActive(false);
-                uiCamGameObject[1].SetActive(true);
-            }
+            CameraButtonManager.Instance.TopViewMode();
+            GameManager.Instance.ResetCamVars();
         }
         else
         {
             CameraButtonManager.Instance.enabled = false;
             cameraTouchMovement.enabled = true;
-            SmoothResetCamPosAndRot();
+            CameraButtonManager.Instance.BaseViewMode();
+            GameManager.Instance.ResetCamVars();
         }
     }
-
-    public void PlayerChangeCamButton()
-    {
-        int presetCamNum = GameManager.Instance.actualCamPreset.presetNumber;
-
-        if (presetCamNum == 1 || presetCamNum == 2)
-        {
-            uiCamGameObject[1].SetActive(false);
-            uiCamGameObject[0].SetActive(true);
-        }
-        else if (presetCamNum == 3 || presetCamNum == 4)
-        {
-            uiCamGameObject[0].SetActive(false);
-            uiCamGameObject[1].SetActive(true);
-        }
-    }
+    
 }

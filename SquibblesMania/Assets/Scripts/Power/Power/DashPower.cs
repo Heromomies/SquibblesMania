@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -36,12 +37,16 @@ public class DashPower : MonoBehaviour
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[numberDirectionVector], out var hit, dashRange)) // launch the raycast
 		{
-			if (hit.collider.gameObject.layer == 3)
+			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
+				distance = (int) distance;
 
-				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					position + _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
+				if (distance <= 3.5f)
+				{
+					GameManager.Instance.currentPlayerTurn.transform.DOMove(
+						position + _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
+				}
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
 			{

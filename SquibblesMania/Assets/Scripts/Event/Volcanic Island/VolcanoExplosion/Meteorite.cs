@@ -5,6 +5,7 @@ using UnityEngine;
 public class Meteorite : MonoBehaviour
 {
 	public float speedTurnAround;
+	public int lifeParticle;
 	
 	private Rigidbody _rb;
 	private int _turn;
@@ -18,14 +19,11 @@ public class Meteorite : MonoBehaviour
 
 	private void Update()
 	{
-		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + 4)
+		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + lifeParticle)
 		{
 			gameObject.GetComponentInParent<Node>().isActive = true;
-			
-			_turn = GameManager.Instance.turnCount;
-			
-			Destroy(_particleFireToDelete);
-			Destroy(gameObject);
+			_particleFireToDelete.gameObject.SetActive(false);
+			gameObject.SetActive(false);
 		}
 
 		if (!_stopRotating)
@@ -39,7 +37,7 @@ public class Meteorite : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("BlackBlock"))
 		{
-			StartCoroutine(SetActiveFalseBullet());
+			StartCoroutine(SetActiveFalseBullet(2f));
 			
 			other.gameObject.GetComponent<Node>().isActive = false;
 			transform.parent = other.transform;
@@ -47,29 +45,33 @@ public class Meteorite : MonoBehaviour
 
 			transform.rotation = new Quaternion(0,0,0,0);
 			_stopRotating = true;
+
+			var transformPlayer = transform.position;
 			
-			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transform.position, Quaternion.identity, null);
+			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
 			Destroy(explosionPS, 2f);
-			
-			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite", transform.position, Quaternion.identity, null);
+
+			var otherPosition = other.transform.position;
+			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
+				new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, null);
 			_particleFireToDelete = firePS;
 			
 			_rb.constraints = RigidbodyConstraints.FreezeAll;
 			
-			transform.position = new Vector3(other.transform.position.x, transform.position.y -0.1f, other.transform.position.z);
+			transform.position = new Vector3(otherPosition.x, transformPlayer.y -0.1f, otherPosition.z);
 
 			transform.rotation = other.transform.rotation;
 		}
 		else if (other.gameObject.CompareTag("Player"))
 		{
 			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
-			StartCoroutine(SetActiveFalseBullet());
+			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
 	}
 
-	IEnumerator SetActiveFalseBullet()
+	IEnumerator SetActiveFalseBullet(float seconds)
 	{
-		yield return new WaitForSeconds(2f);
-		gameObject.SetActive(false);
+		yield return new WaitForSeconds(seconds);
+		gameObject.transform.position = Vector3.positiveInfinity;
 	}
 }

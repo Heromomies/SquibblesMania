@@ -23,13 +23,9 @@ public class NFCManager : MonoBehaviour
     [Serializable]
     public struct ActionPlayerPreset
     {
-        public GameObject playerActionButtons;
+        public GameObject playerActionButton;
+        public GameObject playerPowerButton;
         public TextMeshProUGUI textTakeOffCard;
-        
-        public void SetActive(bool isSetActive)
-        {
-            playerActionButtons.SetActive(isSetActive);
-        }
     }
 
     #endregion
@@ -49,7 +45,7 @@ public class NFCManager : MonoBehaviour
     #region PRIVATE VAR
     
     [HideInInspector] public int numberOfTheCard;
-    [HideInInspector] public char[] charCards;
+    public char[] charCards;
     [HideInInspector] public bool hasRemovedCard;
     [HideInInspector] public bool clicked;
     [HideInInspector] public int changeColor;
@@ -61,6 +57,10 @@ public class NFCManager : MonoBehaviour
     private static NFCManager nfcManager;
 
     public static NFCManager Instance => nfcManager;
+
+    private WaitForSeconds _timeBetweenTwoLight = new WaitForSeconds(0.5f);
+
+    private WaitForSeconds _timeAntennaOneByOne = new WaitForSeconds(0.2f);
     // Start is called before the first frame update
 
     private void Awake()
@@ -79,25 +79,24 @@ public class NFCManager : MonoBehaviour
         {
             case 0:
                 NFCController.StartPollingAsync(antennaPlayerOne);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerOne, 0.5f));
+                LightController.Colorize(lightIndexesPlayerOne, lightColor[0], false);
                 break;
             case 1:
                 NFCController.StartPollingAsync(antennaPlayerTwo);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerTwo, 0.5f));
+                LightController.Colorize(lightIndexesPlayerTwo, lightColor[1], false);
                 break;
             case 2:
                 NFCController.StartPollingAsync(antennaPlayerThree);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerThree, 0.5f));
+                LightController.Colorize(lightIndexesPlayerThree, lightColor[0], false);
                 break;
             case 3:
                 NFCController.StartPollingAsync(antennaPlayerFour);
-                StartCoroutine(ColorOneRange(lightIndexesPlayerFour, 0.5f));
+                LightController.Colorize(lightIndexesPlayerFour, lightColor[1], false);
                 break;
         }
     }
 
-    private IEnumerator
-        ColorOneRange(LIGHT_INDEX[] lightIndex, float timeBetweenTwoLight) // Color One range with different colors
+    private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex) // Color One range with different colors
     {
         for (int i = 0; i < lightColor.Capacity; i++)
         {
@@ -107,7 +106,7 @@ public class NFCManager : MonoBehaviour
             }
 
             LightController.Colorize(lightIndex, lightColor[i], false);
-            yield return new WaitForSeconds(timeBetweenTwoLight);
+            yield return _timeBetweenTwoLight;
         }
     }
 
@@ -127,7 +126,7 @@ public class NFCManager : MonoBehaviour
             }
 
             LightController.ColorizeOne(fullIndex[i], lightColor[changeColor], false);
-            yield return new WaitForSeconds(0.2f);
+            yield return _timeAntennaOneByOne;
         }
     }
 
@@ -148,7 +147,7 @@ public class NFCManager : MonoBehaviour
             case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
         }
 
-        SetActivePlayerActionButton(false);
+        SetActivePlayerActionButton(1,false);
     }
 
     public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
@@ -168,17 +167,30 @@ public class NFCManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
             .PlayerActionPointCardState);
 
-        SetActivePlayerActionButton(false);
+        SetActivePlayerActionButton(0,false);
     }
 
-    public void SetActivePlayerActionButton(bool setActive) // Can activate / deactivate button from everywhere in the script
+    public void SetActivePlayerActionButton(int index, bool setActive) // Can activate / deactivate button from everywhere in the script
     {
-        switch (GameManager.Instance.actualCamPreset.presetNumber)
-        { 
-            case 1: actionPlayerPreset[0].SetActive(setActive); break;
-            case 2: actionPlayerPreset[0].SetActive(setActive); break;
-            case 3: actionPlayerPreset[1].SetActive(setActive); break;
-            case 4: actionPlayerPreset[1].SetActive(setActive); break;
+        if (index == 0)
+        {
+            switch (GameManager.Instance.actualCamPreset.presetNumber)
+            { 
+                case 1: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
+                case 2: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
+                case 3: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;
+                case 4: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;
+            }
+        } else if (index == 1)
+        {
+            switch (GameManager.Instance.actualCamPreset.presetNumber)
+            { 
+                case 1: actionPlayerPreset[0].playerPowerButton.SetActive(setActive); break;
+                case 2: actionPlayerPreset[0].playerPowerButton.SetActive(setActive); break;
+                case 3: actionPlayerPreset[1].playerPowerButton.SetActive(setActive); break;
+                case 4: actionPlayerPreset[1].playerPowerButton.SetActive(setActive); break;
+            }
         }
+       
     }
 }

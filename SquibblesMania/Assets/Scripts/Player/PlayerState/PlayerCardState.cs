@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Wizama.Hardware.Antenna;
 
 public class PlayerCardState : PlayerBaseState
 {
+	
+	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
 	//The state when player put card on Square one
 	public override void EnterState(PlayerStateManager player)
 	{
@@ -38,10 +41,30 @@ public class PlayerCardState : PlayerBaseState
 		
 		if (GameManager.Instance.currentPlayerTurn.CurrentState == GameManager.Instance.currentPlayerTurn.PlayerCardState && !NFCManager.Instance.clicked)
 		{
-			NFCManager.Instance.SetActivePlayerActionButton(true);
+			
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
+
+			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
+			{
+				NFCManager.Instance.SetActivePlayerActionButton(1,true);
+			}
+			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
+			{
+				NFCManager.Instance.SetActivePlayerActionButton(0,true);
+			}
+
+			foreach (var n in _number)
+			{
+				if (nfcTag.Data.Contains(n.ToString()))
+				{
+					Camera.main.DOShakePosition(1, 0.3f);
+				}
+			}
+			
+			
 			UiManager.Instance.buttonNextTurn.SetActive(false);
-			NFCManager.Instance.hasRemovedCard = false;
+			NFCManager.Instance.hasRemovedCard = false; 
+
 		}
 		else
 		{
@@ -54,7 +77,8 @@ public class PlayerCardState : PlayerBaseState
 		
 		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
-			NFCManager.Instance.SetActivePlayerActionButton(false);
+			NFCManager.Instance.SetActivePlayerActionButton(0,false);
+			NFCManager.Instance.SetActivePlayerActionButton(1,false);
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
@@ -68,7 +92,8 @@ public class PlayerCardState : PlayerBaseState
 		
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !NFCManager.Instance.clicked)
 		{
-			NFCManager.Instance.SetActivePlayerActionButton(false);
+			NFCManager.Instance.SetActivePlayerActionButton(0,false);
+			NFCManager.Instance.SetActivePlayerActionButton(1,false);
 		}
 
 		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded && GameManager.Instance.currentPlayerTurn.shieldCount == 0)

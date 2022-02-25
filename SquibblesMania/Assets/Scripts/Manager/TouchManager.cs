@@ -21,14 +21,13 @@ public class TouchManager : MonoBehaviour
 	[SerializeField] private RectTransform canvasTransform;
 	[SerializeField] private Vector3 offsetPos;
 	public GameObject uiInteractionParentObject;
-	[SerializeField] private Button buttonGoToTheBlock;
+	[SerializeField] private Button buttonGoToTheBlock, buttonMoveDownUp;
 
 	public LayerMask touchLayersMask;
 	private Camera _cam;
 	public RaycastHit Hit;
 	public GameObject blockCurrentlySelected;
-	public Color blockCurrentlySelectedColor;
-	public GameObject seeConditionsEvent;
+	public Color blockCurrentlyBaseColor;
 	private static TouchManager _touchManager;
 
 	public static TouchManager Instance => _touchManager;
@@ -64,8 +63,6 @@ public class TouchManager : MonoBehaviour
 		{
 			FingersScript.Instance.PassThroughObjects.Add(UiManager.Instance.buttonNextTurn);
 		}
-
-		FingersScript.Instance.PassThroughObjects.Add(seeConditionsEvent);
 	}
 
 	private void OnDisable()
@@ -74,8 +71,7 @@ public class TouchManager : MonoBehaviour
 		{
 			FingersScript.Instance.RemoveGesture(PlayerTouchGesture);
 		}
-
-		FingersScript.Instance.PassThroughObjects.Remove(seeConditionsEvent);
+		
 		FingersScript.Instance.PassThroughObjects.Remove(MovementBlockManager.Instance.buttonMoveBlockParentObject);
 		FingersScript.Instance.PassThroughObjects.Remove(uiInteractionParentObject);
 		FingersScript.Instance.PassThroughObjects.Remove(UiManager.Instance.buttonNextTurn);
@@ -113,9 +109,8 @@ public class TouchManager : MonoBehaviour
 				if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
 				{
 					//Previous selected block get his base color back
-
 					MovementBlockManager.Instance.ResetPreviousBlockColor();
-					GameManager.Instance.isPathRefresh = true;
+					
 				}
 
 				PlayerTurnActionStateSelectBlock();
@@ -128,7 +123,6 @@ public class TouchManager : MonoBehaviour
 				    MovementBlockManager.Instance.isMovingBlock)
 				{
 					MovementBlockManager.Instance.ResetPreviousBlockColor();
-					GameManager.Instance.isPathRefresh = true;
 					blockCurrentlySelected = null;
 				}
 
@@ -143,7 +137,7 @@ public class TouchManager : MonoBehaviour
 		if (Hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
 		    GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
 		{
-			if (GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState.previewPath.Contains(Hit.transform) &&
+			if (GameManager.Instance.currentPlayerTurn.nextBlockPath.Contains(Hit.transform) &&
 			    GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 			{
 				MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(false);
@@ -162,13 +156,12 @@ public class TouchManager : MonoBehaviour
 
 				blockCurrentlySelected = Hit.transform.gameObject;
 				blockParent = Hit.collider.gameObject.transform.parent;
-				//If the current block group if below or above the player pos
-				/* if ((int) Math.Abs(blockGroupParentPos.y+currentPlayerPos.y - currentPlayerPos.y) < 0 ||
-				     GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
-				 {
-				     buttonGoToTheBlock.interactable = false;
-				 }*/
 
+				if (blockCurrentlySelected.CompareTag("Untagged"))
+				{
+					buttonMoveDownUp.interactable = false;
+				}
+				//If the current block group if below or above the player pos
 				if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f && blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
 				{
 					buttonGoToTheBlock.interactable = true;
