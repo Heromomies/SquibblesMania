@@ -7238,7 +7238,7 @@ GameObject:
   - component: {fileID: 695319959}
   - component: {fileID: 695319958}
   - component: {fileID: 695319961}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bloc_prefab_None
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9973,7 +9973,7 @@ GameObject:
   - component: {fileID: 968262356}
   - component: {fileID: 968262355}
   - component: {fileID: 968262358}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bloc_prefab_None
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12847,6 +12847,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1415378996}
     - target: {fileID: 851400328471791166, guid: 638efab9503549a4f8c85e3cc958730e, type: 3}
+      propertyPath: buttonMoveDownUp
+      value: 
+      objectReference: {fileID: 1530589334}
+    - target: {fileID: 851400328471791166, guid: 638efab9503549a4f8c85e3cc958730e, type: 3}
       propertyPath: buttonGoToTheBlock
       value: 
       objectReference: {fileID: 1415378997}
@@ -14454,6 +14458,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpsText: {fileID: 1964280514}
   deltaTime: 0
+--- !u!114 &1530589334 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3871494655247663397, guid: 65c0252bac9edec41b1182cc7bbda784, type: 3}
+  m_PrefabInstance: {fileID: 1415378995}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1581967312
 GameObject:
   m_ObjectHideFlags: 0
@@ -17998,7 +18013,7 @@ GameObject:
   - component: {fileID: 2064216749}
   - component: {fileID: 2064216748}
   - component: {fileID: 2064216751}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bloc_prefab_None
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19294,11 +19309,11 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 779840870}
+      objectReference: {fileID: 511786746}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
-      objectReference: {fileID: 511786746}
+      objectReference: {fileID: 1871135483}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[2]
       value: 
@@ -19453,6 +19468,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 829183636}
     m_Modifications:
+    - target: {fileID: 1612286461, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1964280513, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 40843075804912165, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
       propertyPath: m_IsActive
       value: 1
