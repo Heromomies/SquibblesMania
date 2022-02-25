@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7515340929744882972}
   - component: {fileID: 5741858112486586838}
   - component: {fileID: 3661909415893186718}
+  - component: {fileID: 6701769327739663947}
   m_Layer: 0
   m_Name: Bloc_prefab_unmovable
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8d219e4d41cef194a80427907189a4e5, type: 2}
-  - {fileID: 2100000, guid: 24e830c4b204a5d47abe763073e383d0, type: 2}
+  - {fileID: 2100000, guid: 8d219e4d41cef194a80427907189a4e5, type: 2}
   - {fileID: 2100000, guid: e983180ce4b63434eab2ffc6e2e2c206, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -97,3 +98,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.9999998, z: 1}
   m_Center: {x: 0, y: 0.00000032782555, z: 0}
+--- !u!114 &6701769327739663947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6102326883995260931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86a1861101be074896f45294f3d339d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockSizeOffset: 0.5
+  previousBlock: {fileID: 0}
+  isActive: 1
+  possiblePath: []
+  groupBlockParent: {fileID: 0}
+  colorBloc: 0
