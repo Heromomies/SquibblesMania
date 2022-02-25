@@ -146,7 +146,7 @@ public class MovementBlockManager : MonoBehaviour
     public Color ResetPreviousBlockColor()
     {
         Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().materials[2];
-        blockCurrentlySelectedMat.SetColor("_EmissionColor", TouchManager.Instance.blockCurrentlySelectedColor);
+        blockCurrentlySelectedMat.SetColor("_EmissionColor", TouchManager.Instance.blockCurrentlyBaseColor);
         return blockCurrentlySelectedMat.GetColor("_EmissionColor");
     }
 

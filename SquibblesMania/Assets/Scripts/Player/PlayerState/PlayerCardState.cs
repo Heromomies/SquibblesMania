@@ -63,7 +63,8 @@ public class PlayerCardState : PlayerBaseState
 			
 			
 			UiManager.Instance.buttonNextTurn.SetActive(false);
-			NFCManager.Instance.hasRemovedCard = false;
+			NFCManager.Instance.hasRemovedCard = false; 
+
 		}
 		else
 		{

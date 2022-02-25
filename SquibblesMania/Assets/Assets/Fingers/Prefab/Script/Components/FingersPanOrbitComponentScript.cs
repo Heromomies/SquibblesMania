@@ -387,6 +387,7 @@ namespace DigitalRubyShared
                 else
                 {
                     float addAngle = yVelocity * OrbitXSpeed * Time.deltaTime;
+                    
                     if (OrbitXMaxDegrees > 0.0f)
                     {
                         float newDegrees = xDegrees + addAngle;
@@ -400,6 +401,7 @@ namespace DigitalRubyShared
                             addAngle = -OrbitXMaxDegrees - xDegrees;
                         }
                     }
+
                     
                     xDegrees += addAngle;
                     Orbiter.RotateAround(OrbitTarget.transform.position, Orbiter.transform.right, addAngle);

@@ -21,13 +21,13 @@ public class TouchManager : MonoBehaviour
 	[SerializeField] private RectTransform canvasTransform;
 	[SerializeField] private Vector3 offsetPos;
 	public GameObject uiInteractionParentObject;
-	[SerializeField] private Button buttonGoToTheBlock;
+	[SerializeField] private Button buttonGoToTheBlock, buttonMoveDownUp;
 
 	public LayerMask touchLayersMask;
 	private Camera _cam;
 	public RaycastHit Hit;
 	public GameObject blockCurrentlySelected;
-	public Color blockCurrentlySelectedColor;
+	public Color blockCurrentlyBaseColor;
 	private static TouchManager _touchManager;
 
 	public static TouchManager Instance => _touchManager;
@@ -156,6 +156,11 @@ public class TouchManager : MonoBehaviour
 
 				blockCurrentlySelected = Hit.transform.gameObject;
 				blockParent = Hit.collider.gameObject.transform.parent;
+
+				if (blockCurrentlySelected.CompareTag("Untagged"))
+				{
+					buttonMoveDownUp.interactable = false;
+				}
 				//If the current block group if below or above the player pos
 				if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f && blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
 				{
