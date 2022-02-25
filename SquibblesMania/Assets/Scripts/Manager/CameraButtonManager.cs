@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public class CameraButtonManager : MonoBehaviour
 {
     private Transform _cam;
-    [SerializeField] private Transform target;
+    public Transform target;
 
     private static CameraButtonManager _cameraManager;
     public static CameraButtonManager Instance => _cameraManager;
