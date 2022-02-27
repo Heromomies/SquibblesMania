@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public GameObject playerUiButtons;
-        public GameObject panelButtonEvent;
         public GameObject buttonNextTurn;
         public TextMeshProUGUI actionPointText;
     }
@@ -172,7 +171,7 @@ public class GameManager : MonoBehaviour
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
-
+      // cameraTouchScript.OrbitTarget = currentPlayerTurn.transform;
         _count++;
         if (_count >= camPreSets.Count)
         {
