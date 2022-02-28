@@ -412,7 +412,7 @@ MonoBehaviour:
     nextPath: {fileID: 1729895586}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1001 &69376845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1113,7 +1113,7 @@ MonoBehaviour:
     nextPath: {fileID: 2105234206}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1 &170818305
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,6 +1196,68 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170818305}
   m_Mesh: {fileID: -462981019419857548, guid: 32466d5a7c1f82747b241babbe450938, type: 3}
+--- !u!1001 &175105269
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 182178744}
+    m_Modifications:
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197895, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_Name
+      value: Item_Rock
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+--- !u!4 &175105270 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+  m_PrefabInstance: {fileID: 175105269}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &182178743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,7 +1288,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5, y: 1, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 175105270}
   m_Father: {fileID: 939745692}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3046,7 +3109,7 @@ MonoBehaviour:
     nextPath: {fileID: 1967335033}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1 &390319064
 GameObject:
   m_ObjectHideFlags: 0
@@ -3114,6 +3177,10 @@ PrefabInstance:
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: lFour.Array.size
       value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
+      propertyPath: events.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: lThree.Array.size
@@ -3310,7 +3377,7 @@ PrefabInstance:
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: events.Array.data[1]
       value: 
-      objectReference: {fileID: 779651256}
+      objectReference: {fileID: 1814573449}
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: events.Array.data[2]
       value: 
@@ -6336,7 +6403,7 @@ MonoBehaviour:
     nextPath: {fileID: 65940574}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1001 &593132914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7520,7 +7587,7 @@ MonoBehaviour:
   isActive: 1
   possiblePath: []
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1001 &696536282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8082,11 +8149,6 @@ PrefabInstance:
 --- !u!4 &779651255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3539542778933655621, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
-  m_PrefabInstance: {fileID: 779651254}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &779651256 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3539542778933655620, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
   m_PrefabInstance: {fileID: 779651254}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &785736683
@@ -9361,7 +9423,7 @@ MonoBehaviour:
     nextPath: {fileID: 1478353528}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!114 &914016784 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 914016784, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
@@ -10836,7 +10898,7 @@ MonoBehaviour:
     nextPath: {fileID: 557518569}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1001 &1128560967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13052,7 +13114,7 @@ MonoBehaviour:
     nextPath: {fileID: 1988315480}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1 &1436606089
 GameObject:
   m_ObjectHideFlags: 0
@@ -14636,7 +14698,7 @@ MonoBehaviour:
     nextPath: {fileID: 1226956632}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1001 &1637446283
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16246,7 +16308,7 @@ MonoBehaviour:
     nextPath: {fileID: 903502356}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!114 &1803191160 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9024170764948479844, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
@@ -16258,6 +16320,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1814573449 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3657713127491441782, guid: 7abe79c5393c7034392df3ff22eeb466, type: 3}
+  m_PrefabInstance: {fileID: 3657713128268719526}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1817487923
 GameObject:
   m_ObjectHideFlags: 0
@@ -16460,7 +16527,7 @@ MonoBehaviour:
     nextPath: {fileID: 903502356}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!43 &1858218723
 Mesh:
   m_ObjectHideFlags: 0
@@ -16930,7 +16997,7 @@ MonoBehaviour:
     nextPath: {fileID: 634318033}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1 &1934993503
 GameObject:
   m_ObjectHideFlags: 0
@@ -17742,7 +17809,7 @@ MonoBehaviour:
     nextPath: {fileID: 1604470375}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1 &1993515891
 GameObject:
   m_ObjectHideFlags: 0
@@ -18625,7 +18692,7 @@ MonoBehaviour:
     nextPath: {fileID: 158086087}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!43 &2048808979
 Mesh:
   m_ObjectHideFlags: 0
@@ -18914,7 +18981,7 @@ MonoBehaviour:
     nextPath: {fileID: 1634817963}
     isActive: 1
   groupBlockParent: {fileID: 0}
-  colorBloc: 0
+  colorBloc: 4
 --- !u!1 &2097519942
 GameObject:
   m_ObjectHideFlags: 0
@@ -19781,19 +19848,19 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: conditionVictory.endZoneSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1956302789}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: conditionVictory.endZoneSpawnPoints.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1688487355}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: conditionVictory.endZoneSpawnPoints.Array.data[2]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1649673014}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: conditionVictory.endZoneSpawnPoints.Array.data[3]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 676940066}
     - target: {fileID: 3429993922607711533, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: m_RootOrder
       value: 2

@@ -24,45 +24,49 @@ public class TeamInventoryManager : MonoBehaviour
 
 	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam)
 	{
-		if (playerTeam == Player.PlayerTeam.TeamOne)
+		if (!_isFull)
 		{
-			Instantiate(objectTransport[inventory[0].objectAcquired],inventory[0].spawnObject.position, 
-				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
-			inventory[0].objectAcquired += indexObject;
+			if (playerTeam == Player.PlayerTeam.TeamOne)
+			{
+				Instantiate(objectTransport[inventory[0].objectAcquired],inventory[0].spawnObject.position, 
+					inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+				inventory[0].objectAcquired += indexObject;
 			
-			inventory[0].boatObject.Add(objectTransport[0]);
-		}
-		else
-		{
-			Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
-				inventory[0].spawnObject.rotation, inventory[1].spawnObject);
-			inventory[1].objectAcquired += indexObject;
-			inventory[1].boatObject.Add(objectTransport[0]);
-		}
-
-		var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
-		var bloc = EventManager.Instance.cleanList[randomBloc].transform;
-
-		if (bloc.GetComponent<Node>().isActive && !_isFull)
-		{
-			Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
-				Quaternion.identity, bloc);
-		}
-		else
-		{
-			AddResourcesToInventory(0, Player.PlayerTeam.None);
-		}
+				inventory[0].boatObject.Add(objectTransport[0]);
+			}
+			else
+			{
+				Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
+					inventory[0].spawnObject.rotation, inventory[1].spawnObject);
+				inventory[1].objectAcquired += indexObject;
+				inventory[1].boatObject.Add(objectTransport[0]);
+			}
 		
+			if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
+			{
+				Debug.Log("I'm here or not");
+				GameManager.Instance.isConditionVictory = true;
+				GameManager.Instance.ShowEndZone();
+			}
 
-		if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
-		{
-			GameManager.Instance.isConditionVictory = true;
-			GameManager.Instance.ShowEndZone();
-		}
+			if (inventory[0].boatObject.Count == 3 && inventory[1].boatObject.Count == 3)
+			{
+				Debug.Log("I'm here");
+				_isFull = true;
+			}
+		
+			var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
+			var bloc = EventManager.Instance.cleanList[randomBloc].transform;
 
-		if (inventory[0].boatObject.Count == 3 && inventory[1].boatObject.Count == 3)
-		{
-			_isFull = true;
+			if (bloc.GetComponent<Node>().isActive && !_isFull)
+			{
+				Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
+					Quaternion.identity, bloc);
+			}
+			else
+			{
+				AddResourcesToInventory(0, Player.PlayerTeam.None);
+			}
 		}
 	}
 	
