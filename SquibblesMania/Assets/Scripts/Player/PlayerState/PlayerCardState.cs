@@ -6,6 +6,7 @@ using Wizama.Hardware.Antenna;
 
 public class PlayerCardState : PlayerBaseState
 {
+	
 	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
 	//The state when player put card on Square one
 	public override void EnterState(PlayerStateManager player)
@@ -40,6 +41,7 @@ public class PlayerCardState : PlayerBaseState
 		
 		if (GameManager.Instance.currentPlayerTurn.CurrentState == GameManager.Instance.currentPlayerTurn.PlayerCardState && !NFCManager.Instance.clicked)
 		{
+			
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
@@ -58,8 +60,8 @@ public class PlayerCardState : PlayerBaseState
 					Camera.main.DOShakePosition(1, 0.3f);
 				}
 			}
-
-
+			
+			
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 			NFCManager.Instance.hasRemovedCard = false; 
 

@@ -12,9 +12,7 @@ public class EventManager : MonoBehaviour
 	public List<GameObject> cleanList;
 	
 	public int dangerousness;
-	
-	public Slider sliderDangerousness;
-	
+
 	public LevelOfDanger levelOfDanger;
 	
 	public enum LevelOfDanger
@@ -48,7 +46,6 @@ public class EventManager : MonoBehaviour
 			LaunchEvent();
 			levelOfDanger = LevelOfDanger.LevelOne;
 			dangerousness = 0;
-			sliderDangerousness.value = dangerousness;
 			GameManager.Instance.cycleCount = 0;
 		}
 		else
@@ -65,28 +62,8 @@ public class EventManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-			sliderDangerousness.value = dangerousness;
 		}
 	}
-	
-	/*private void DefineCondition() // Define the condition to activate event
-	{
-		switch (levelOfDanger)
-		{
-			case LevelOfDanger.LevelOne : Debug.Log("Level One");
-				dangerousness = 0;
-				break;
-			case LevelOfDanger.LevelTwo : Debug.Log("Level Two");
-				dangerousness = 1;
-				break;
-			case LevelOfDanger.LevelThree : Debug.Log("Level Three");
-				dangerousness = 2;
-				break;
-			case LevelOfDanger.LevelFour : Debug.Log("Level Four");
-				dangerousness = 3;
-				break;
-		}
-	}*/
 
 	void LaunchEvent() // Launch the event
 	{

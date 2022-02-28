@@ -175,7 +175,7 @@ public class NFCManager : MonoBehaviour
         if (index == 0)
         {
             switch (GameManager.Instance.actualCamPreset.presetNumber)
-            {
+            { 
                 case 1: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
                 case 2: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
                 case 3: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;

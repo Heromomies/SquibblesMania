@@ -8,16 +8,12 @@ public class RotateCaméra : MonoBehaviour
 {
     [SerializeField] private Transform cam;
 
-    [SerializeField] private GameObject interactionParentObject, buttonParentUpDown;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
+    [SerializeField] private GameObject interactionParentObject;
+  
     // Update is called once per frame
     void LateUpdate()
     {
-        if (interactionParentObject.activeSelf || buttonParentUpDown.activeSelf)
+        if (interactionParentObject.activeSelf)
         {
             transform.LookAt(transform.position + cam.forward);
         }

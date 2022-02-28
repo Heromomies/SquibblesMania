@@ -10,6 +10,8 @@ public class TeamInventoryManager : MonoBehaviour
 	public List<GameObject> objectTransport;
 	public GameObject objectToSpawn;
 
+	private bool _isFull;
+	
 	private static TeamInventoryManager _teamInventoryManager;
 
 	public static TeamInventoryManager Instance => _teamInventoryManager;
@@ -41,7 +43,7 @@ public class TeamInventoryManager : MonoBehaviour
 		var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
 		var bloc = EventManager.Instance.cleanList[randomBloc].transform;
 
-		if (bloc.GetComponent<Node>().isActive)
+		if (bloc.GetComponent<Node>().isActive && !_isFull)
 		{
 			Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
 				Quaternion.identity, bloc);
@@ -56,6 +58,11 @@ public class TeamInventoryManager : MonoBehaviour
 		{
 			GameManager.Instance.isConditionVictory = true;
 			GameManager.Instance.ShowEndZone();
+		}
+
+		if (inventory[0].boatObject.Count == 3 && inventory[1].boatObject.Count == 3)
+		{
+			_isFull = true;
 		}
 	}
 	
