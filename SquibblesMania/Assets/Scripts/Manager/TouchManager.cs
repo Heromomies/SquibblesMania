@@ -145,16 +145,26 @@ public class TouchManager : MonoBehaviour
 				if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
 				    GameManager.Instance.actualCamPreset.presetNumber == 2)
 				{
-					uiInteraction[0].uiInteractionParentObject.SetActive(false);
+					ResetUiButtonInteraction(0);
 				}
 				else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
 				         GameManager.Instance.actualCamPreset.presetNumber == 4)
 				{
-					uiInteraction[1].uiInteractionParentObject.SetActive(false);
+					ResetUiButtonInteraction(1);
 				}
 
 			}
 		}
+	}
+
+	void ResetUiButtonInteraction(int indexList)
+	{
+		uiInteraction[indexList].buttonGoToBloc.interactable = true;
+		for (int i = 0; i < uiInteraction[indexList].buttonMoveDownUp.Length; i++)
+		{
+			uiInteraction[indexList].buttonMoveDownUp[i].interactable = true;
+		}
+		uiInteraction[indexList].uiInteractionParentObject.SetActive(false);
 	}
 
 	void PlayerTurnActionStateSelectBlock()
@@ -162,7 +172,7 @@ public class TouchManager : MonoBehaviour
 		if (Hit.transform.gameObject.GetComponent<Node>() && !GameManager.Instance.currentPlayerTurn.walking &&
 		    GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
 		{
-			Debug.Log(GameManager.Instance.currentPlayerTurn.nextBlockPath.Contains(Hit.transform));
+			
 			if (GameManager.Instance.currentPlayerTurn.nextBlockPath.Contains(Hit.transform) &&
 			    GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 			{
@@ -170,16 +180,16 @@ public class TouchManager : MonoBehaviour
 				switch (GameManager.Instance.actualCamPreset.presetNumber)
 				{
 					case 1:
-						uiInteraction[0].uiInteractionParentObject.SetActive(false);
+						ResetUiButtonInteraction(0);
 						break;
 					case 2:
-						uiInteraction[0].uiInteractionParentObject.SetActive(false);
+						ResetUiButtonInteraction(0);
 						break;
 					case 3:
-						uiInteraction[1].uiInteractionParentObject.SetActive(false);
+						ResetUiButtonInteraction(1);
 						break;
 					case 4:
-						uiInteraction[1].uiInteractionParentObject.SetActive(false);
+						ResetUiButtonInteraction(1);
 						break;
 				}
 
@@ -213,8 +223,7 @@ public class TouchManager : MonoBehaviour
 
 				if (blockCurrentlySelected.CompareTag("Untagged"))
 				{
-					if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-					    GameManager.Instance.actualCamPreset.presetNumber == 2)
+					if (GameManager.Instance.actualCamPreset.presetNumber == 1 || GameManager.Instance.actualCamPreset.presetNumber == 2)
 					{
 						uiInteraction[0].buttonGoToBloc.interactable = true;
 						for (int i = 0; i < uiInteraction[0].buttonMoveDownUp.Length; i++)
@@ -236,40 +245,45 @@ public class TouchManager : MonoBehaviour
 				}
 
 				//If the current block group if below or above the player pos
-				if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f &&
-				    blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
+				if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f && blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
 				{
 					if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
 					    GameManager.Instance.actualCamPreset.presetNumber == 2)
+					{
 						uiInteraction[0].buttonGoToBloc.interactable = true;
+					}
+						
 					else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
 					         GameManager.Instance.actualCamPreset.presetNumber == 4)
+					{
 						uiInteraction[1].buttonGoToBloc.interactable = true;
+					}
+						
 				}
 				else
 				{
-					if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-					    GameManager.Instance.actualCamPreset.presetNumber == 2)
+					if (GameManager.Instance.actualCamPreset.presetNumber == 1 || GameManager.Instance.actualCamPreset.presetNumber == 2)
+					{
 						uiInteraction[0].buttonGoToBloc.interactable = false;
-					else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
-					         GameManager.Instance.actualCamPreset.presetNumber == 4)
+					}
+					
+					else if (GameManager.Instance.actualCamPreset.presetNumber == 3 || GameManager.Instance.actualCamPreset.presetNumber == 4)
+					{
 						uiInteraction[1].buttonGoToBloc.interactable = false;
+					}
+						
 				}
 
 				if (GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
 				{
-					if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-					    GameManager.Instance.actualCamPreset.presetNumber == 2)
+					if (GameManager.Instance.actualCamPreset.presetNumber == 1 || GameManager.Instance.actualCamPreset.presetNumber == 2)
+					{
 						uiInteraction[0].buttonGoToBloc.interactable = false;
-					for (int i = 0; i < uiInteraction[0].buttonMoveDownUp.Length; i++)
-						uiInteraction[0].buttonMoveDownUp[i].interactable = true;
-				}
-				else if (GameManager.Instance.actualCamPreset.presetNumber == 3 ||
-				         GameManager.Instance.actualCamPreset.presetNumber == 4)
-				{
-					uiInteraction[1].buttonGoToBloc.interactable = false;
-					for (int i = 0; i < uiInteraction[1].buttonMoveDownUp.Length; i++)
-						uiInteraction[1].buttonMoveDownUp[i].interactable = true;
+					}
+					else if (GameManager.Instance.actualCamPreset.presetNumber == 3 || GameManager.Instance.actualCamPreset.presetNumber == 4)
+					{
+						uiInteraction[1].buttonGoToBloc.interactable = false;
+					}
 				}
 				
 			}

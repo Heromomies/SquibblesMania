@@ -355,7 +355,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        ResetColorPreviewPath(previewPath, blocBaseEmissiveColor);
+        ResetColorPreviewPath(player.nextBlockPath, blocBaseEmissiveColor);
 
         player.finalPathFinding.Clear();
         player.walking = false;
