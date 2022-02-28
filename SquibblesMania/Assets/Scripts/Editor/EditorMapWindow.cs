@@ -307,12 +307,12 @@ public class EditorMapWindow : EditorWindow
             ColorizeObject();
         }
 
-        if (isCreating && currentBlocObjectsCreated.Count >= 1)
+        if (isCreating && removedBlocObjectsList.Count >= 1)
         {
             EditorGUILayout.Space(20);
             if (GUILayout.Button("Create map"))
             {
-                foreach (var block in currentBlocObjectsCreated)
+                foreach (var block in removedBlocObjectsList)
                 {
                     if (block.GetComponent<Node>())
                     {

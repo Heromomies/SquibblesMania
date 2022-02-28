@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MovementBlockManager : MonoBehaviour
 {
-    public GameObject buttonMoveBlockParentObject;
     public bool isMovingBlock;
     private static MovementBlockManager _movementBlockManager;
    
@@ -34,7 +33,6 @@ public class MovementBlockManager : MonoBehaviour
     {
         
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
-
 
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
 
@@ -154,7 +152,20 @@ public class MovementBlockManager : MonoBehaviour
     {
         if (TouchManager.Instance.blockParent != null)
         {
-            buttonMoveBlockParentObject.SetActive(false);
+            switch (GameManager.Instance.actualCamPreset.presetNumber)
+            {
+                case 1:
+                    TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
+                case 2:
+                    TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
+                case 3:
+                    TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
+                case 4:
+                    TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
+            }
+           
         }
+        var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
     }
 }
