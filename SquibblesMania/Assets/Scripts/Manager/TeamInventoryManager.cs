@@ -22,7 +22,7 @@ public class TeamInventoryManager : MonoBehaviour
 		_teamInventoryManager = this;
 	}
 
-	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam)
+	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam) // Add resources to the inventory
 	{
 		if (!_isFull)
 		{
@@ -44,14 +44,12 @@ public class TeamInventoryManager : MonoBehaviour
 		
 			if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
 			{
-				Debug.Log("I'm here or not");
 				GameManager.Instance.isConditionVictory = true;
 				GameManager.Instance.ShowEndZone();
 			}
 
 			if (inventory[0].boatObject.Count == 3 && inventory[1].boatObject.Count == 3)
 			{
-				Debug.Log("I'm here");
 				_isFull = true;
 			}
 		
