@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
 
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 1000;
     }
 
 
@@ -220,10 +220,6 @@ public class GameManager : MonoBehaviour
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
 
-            var t = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint];
-
-           // Instantiate(crown, new Vector3(t.position.x, t.position.y + heightCrownSpawn, t.position.z), Quaternion.identity, t);
-            
             isConditionVictory = false;
             _isEndZoneShowed = true;
         }
@@ -235,5 +231,10 @@ public class GameManager : MonoBehaviour
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopAllCoroutines();
     }
 }
