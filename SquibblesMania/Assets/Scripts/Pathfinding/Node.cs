@@ -20,7 +20,8 @@ public class Node : MonoBehaviour
         Red = 0,
         Yellow = 1,
         Blue = 2,
-        Green = 3
+        Green = 3,
+        None = 4
     }
 
     public ColorBloc colorBloc;

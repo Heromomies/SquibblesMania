@@ -26,7 +26,11 @@ public class GameManager : MonoBehaviour
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
-    public float camRotateClamp = 30f;
+    [Header("CAMERA ROTATIONS")]
+    [SerializeField]
+    private float camRotateXMaxDegrees = 50f;
+    [SerializeField]
+    private float camRotateXMinDegrees = 20f;
     private int _count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
@@ -39,7 +43,6 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public GameObject playerUiButtons;
-        public GameObject panelButtonEvent;
         public GameObject buttonNextTurn;
         public TextMeshProUGUI actionPointText;
     }
@@ -157,16 +160,18 @@ public class GameManager : MonoBehaviour
         {
             ResetCamVars();
             cameraTouchScript.OrbitYMaxDegrees = 0;
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
+            cameraTouchScript.orbitXMaxDegrees = camRotateXMaxDegrees;
+            cameraTouchScript.orbitXMinDegrees = -camRotateXMinDegrees;
         }
         else
         {
             ResetCamVars();
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp + 5f;
+            cameraTouchScript.orbitXMaxDegrees = camRotateXMinDegrees;
+            cameraTouchScript.orbitXMinDegrees = -camRotateXMaxDegrees;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
 
-
+      // cameraTouchScript.OrbitTarget = currentPlayerTurn.transform;
         _count++;
         if (_count >= camPreSets.Count)
         {
