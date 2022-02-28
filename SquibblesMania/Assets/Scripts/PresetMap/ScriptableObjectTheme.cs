@@ -10,9 +10,5 @@ public class ScriptableObjectTheme : ScriptableObject
     public List<Material> materials = new List<Material>();
     public GameObject mainThemeObject;
 }
-[CreateAssetMenu(fileName = "Material Color Bloc", menuName = "Scriptable Object/Material Color Bloc Tool")]
-public class ScriptableColorMaterials : ScriptableObject
-{
-    public List<Material> colorMaterials = new List<Material>();
-}
+
 
