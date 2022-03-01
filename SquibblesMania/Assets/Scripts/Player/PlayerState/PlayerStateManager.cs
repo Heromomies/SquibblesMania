@@ -23,6 +23,8 @@ public class PlayerStateManager : Player
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
 
+    public GameObject psStun;
+    
     private float _timeLeft = 1.5f;
     private void Start()
     {
