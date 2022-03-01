@@ -385,18 +385,10 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 switch (GameManager.Instance.actualCamPreset.presetNumber)
                 {
-                    case 1:
-                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
-                        break;
-                    case 2:
-                        NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
-                        break;
-                    case 3:
-                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
-                        break;
-                    case 4:
-                        NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
-                        break;
+                    case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
+                    case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
+                    case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
+                    case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
                 }
             }
         }
