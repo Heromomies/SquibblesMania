@@ -336,6 +336,7 @@ public class EditorMapWindow : EditorWindow
                 }
 
                 allObjectsCreatedOnScene.Clear();
+                DestroyImmediate(mapParent);
                 OnDestroy();
                 ShowWindow();
             }
@@ -383,13 +384,40 @@ public class EditorMapWindow : EditorWindow
             }
         }
 
+       
+     
+        
         DestroyImmediate(planeGo);
         ResetVars();
         SetupScriptsManager();
-        
+        SetUpEnvironment();
         
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         EditorUtility.SetDirty(this);
+    }
+
+    void SetUpEnvironment()
+    {
+        GameObject environmentParent = new GameObject("Environement")
+        {
+            transform =
+            {
+                position = Vector3.zero
+            }
+        };
+
+
+        Node[] nodeBloc = FindObjectsOfType<Node>();
+        foreach (Node bloc in nodeBloc)
+        {
+            if (bloc.CompareTag("Untagged"))
+            {
+                bloc.transform.parent = environmentParent.transform;
+            }
+        }
+
+        mainThemeObject.transform.parent = environmentParent.transform;
+        environmentParent.transform.parent = mapParent.transform;
     }
 
     void SetupScriptsManager()
@@ -449,7 +477,10 @@ public class EditorMapWindow : EditorWindow
         var blockParent = new GameObject("Block parent");
         foreach (var block in neighborsBlocs)
         {
-            block.transform.parent = blockParent.transform;
+            if (block.CompareTag("Platform"))
+            {
+                block.transform.parent = blockParent.transform;
+            }
         }
 
         blockParent.tag = "BlockParent";
