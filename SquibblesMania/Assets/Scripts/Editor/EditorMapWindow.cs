@@ -160,10 +160,10 @@ public class EditorMapWindow : EditorWindow
     {
         if (!mainThemeObject)
         {
+            DestroyImmediate(mainThemeObject);
             switch (theme)
             {
                 case Theme.Volcano:
-             
                     mainThemeObject = scriptableObjectThemes[0].mainThemeObject;
                     mainThemeObject = Instantiate(mainThemeObject, Vector3.zero, Quaternion.identity);
                     break;
@@ -385,8 +385,34 @@ public class EditorMapWindow : EditorWindow
 
         DestroyImmediate(planeGo);
         ResetVars();
+        SetupScriptsManager();
+        
+        
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         EditorUtility.SetDirty(this);
+    }
+
+    void SetupScriptsManager()
+    {
+        GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        EventManager eventManager = FindObjectOfType<EventManager>();
+        if (gameManager != null)
+        {
+            foreach (var parent in parents)
+            {
+                gameManager.allBlocks.Add(parent);
+            }
+
+            Node[] nodeBlocs = FindObjectsOfType<Node>();
+
+            foreach (var bloc in nodeBlocs)
+            {
+                eventManager.cleanList.Add(bloc.gameObject);
+            }
+        }
+        
+        
     }
 
     void DetectBlocs(GameObject currentBloc, List<GameObject> neighborsBlocs)
@@ -537,7 +563,7 @@ public class EditorMapWindow : EditorWindow
             materialBloc[i] = baseMat;
         }
 
-        currentBlocSelected.layer = 0;
+        currentBlocSelected.layer = 3;
         currentBlocSelected.tag = "Untagged";
         currentBlocSelected.gameObject.name = "Bloc_prefab_" + Colors.None;
         currentBlocSelected.GetComponent<Renderer>().sharedMaterials = materialBloc;
@@ -590,6 +616,7 @@ public class EditorMapWindow : EditorWindow
         prefab.GetComponent<Renderer>().sharedMaterials = sharedMat;
         prefab.GetComponent<Node>().colorBloc = colorBloc;
         if (currentBlocSelected.layer != 3) currentBlocSelected.layer = 3;
+        if (!currentBlocSelected.CompareTag("Platform")) currentBlocSelected.tag = "Platform";
     }
 
     #endregion
@@ -599,7 +626,6 @@ public class EditorMapWindow : EditorWindow
     {
         //Call when close the window or clicked on reset button
         ResetVars();
-        DestroyImmediate(mainThemeObject);
         removedBlocObjectsList.Clear();
         OnLoadScriptableObject();
         onMapEditor = false;
