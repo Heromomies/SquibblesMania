@@ -184,21 +184,10 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {
-            case 0:
-                GameManager.Instance.ChangePlayerTurn(1);
-
-                break;
-            case 1:
-                GameManager.Instance.ChangePlayerTurn(2);
-
-                break;
-            case 2:
-                GameManager.Instance.ChangePlayerTurn(3);
-
-                break;
-            case 3:
-                GameManager.Instance.ChangePlayerTurn(0);
-                break;
+            case 0: GameManager.Instance.ChangePlayerTurn(1); break;
+            case 1: GameManager.Instance.ChangePlayerTurn(2); break;
+            case 2: GameManager.Instance.ChangePlayerTurn(3); break;
+            case 3: GameManager.Instance.ChangePlayerTurn(0); break;
         }
     }
 
@@ -214,8 +203,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             Vector3 pathParentPos = path.nextPath.transform.parent.position;
             bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
             //If we have a path who is activated then we add it to the list of nextBlockPath
-            if (path.isActive && isNextPathActive &&
-                PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
+            if (path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
             {
                 nextBlocks.Add(path.nextPath);
 
