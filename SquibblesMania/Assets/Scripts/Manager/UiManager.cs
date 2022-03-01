@@ -41,29 +41,33 @@ public class UiManager : MonoBehaviour
     {
         GameManager.Instance.currentPlayerTurn.currentTouchBlock = TouchManager.Instance.Hit.transform;
         GameManager.Instance.currentPlayerTurn.StartPathFinding();
-        if (GameManager.Instance.actualCamPreset.presetNumber == 1 ||
-            GameManager.Instance.actualCamPreset.presetNumber == 2)
-            TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); 
-        else if (GameManager.Instance.actualCamPreset.presetNumber == 3 || GameManager.Instance.actualCamPreset.presetNumber == 4)
-            TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); 
+        switch (GameManager.Instance.actualCamPreset.presetNumber)
+        {
+            case 1: TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
+            case 2: TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
+            case 3: TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
+            case 4: TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
+        }
     }
 
     public void ButtonUpDownBlock()
     {
-        if (GameManager.Instance.actualCamPreset.presetNumber == 1 || GameManager.Instance.actualCamPreset.presetNumber == 2)
+        switch (GameManager.Instance.actualCamPreset.presetNumber)
         {
-            TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); 
-          //  MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(true);
-          MovementBlockManager.Instance.isMovingBlock = true;
+            case 1: 
+                TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false);
+                MovementBlockManager.Instance.isMovingBlock = true; break;
+            case 2: 
+                TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false);
+                MovementBlockManager.Instance.isMovingBlock = true; break;
+            case 3:  
+                TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false);
+                MovementBlockManager.Instance.isMovingBlock = true; break;
+            case 4: 
+                TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false);
+                MovementBlockManager.Instance.isMovingBlock = true; break;
         }
-          
-        else if (GameManager.Instance.actualCamPreset.presetNumber == 3 || GameManager.Instance.actualCamPreset.presetNumber == 4)
-        {
-            TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); 
-            MovementBlockManager.Instance.isMovingBlock = true;
-        }
-          
-       
+
     }
 
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)

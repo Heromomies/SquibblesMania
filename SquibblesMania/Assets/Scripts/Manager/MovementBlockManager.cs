@@ -59,8 +59,7 @@ public class MovementBlockManager : MonoBehaviour
             foreach (Transform playerOnGroupBlock in groupBlockDetection.playersOnGroupBlock)
             {
                 Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
-                playerOnGroupBlock.DOMove(
-                    new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), _timeForPlayersOnBlocMove);
+                playerOnGroupBlock.DOMove(new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z), _timeForPlayersOnBlocMove);
             }
 
             yield return _timeBetweenBlocMovement;
@@ -154,14 +153,10 @@ public class MovementBlockManager : MonoBehaviour
         {
             switch (GameManager.Instance.actualCamPreset.presetNumber)
             {
-                case 1:
-                    TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
-                case 2:
-                    TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
-                case 3:
-                    TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
-                case 4:
-                    TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
+                case 1: TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
+                case 2: TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
+                case 3: TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
+                case 4: TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
             }
            
         }
