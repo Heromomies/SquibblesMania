@@ -112,6 +112,7 @@ public class PlayerCardState : PlayerBaseState
 		if (player.stunCount <= 0)
 		{
 			player.isPlayerStun = false;
+			player.psStun.SetActive(false);
 		}
 
 		switch (player.playerNumber)
