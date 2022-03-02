@@ -11,19 +11,13 @@ public class PlayerActionPointCardState : PlayerBaseState
     public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
     public Color blocBaseEmissiveColor;
-    private List<GameObject> _pathObjects = new List<GameObject>();
-    
+    public List<GameObject> pathObjects = new List<GameObject>();
+   
     private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
-        foreach (var obj in _pathObjects)
-        {
-            obj.SetActive(false);
-        }
-        _pathObjects.Clear();
         player.nextBlockPath.Clear();
-        blocBaseEmissiveColor = player.currentBlockPlayerOn.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         previewPath.Clear();
         PreviewPath(player.playerActionPoint, player);
@@ -42,7 +36,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Take the base color of the block
         if (player.currentBlockPlayerOn != null)
         {
-            player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", blocBaseEmissiveColor);
+           // player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", blocBaseEmissiveColor);
             TouchManager.Instance.blockCurrentlyBaseColor = blocBaseEmissiveColor;
         }
 
@@ -58,31 +52,42 @@ public class PlayerActionPointCardState : PlayerBaseState
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
             }
+           
         }
-
+      
         finalPreviewPath.Add(player.currentBlockPlayerOn);
-
+     
 
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
 
         ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
+
+        if (finalPreviewPath.Count > 0)
+        {
+            for (int i = 0; i < player.nextBlockPath.Count; i++)
+            {
+                var bPos = player.nextBlockPath[i].transform.position;
+                var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
+                    new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
+                pathObjects.Add(goPathObject);
+            }
+        }
     }
 
     private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, int indexBlockNearby, int actionPoint, PlayerStateManager playerStateManager)
     {
+       
         playerStateManager.nextBlockPath = finalPreviewPath;
-
         indexBlockNearby++;
-
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
-            ResetColorPreviewPath(finalPreviewPath, blocBaseEmissiveColor);
+            ResetColorPreviewPath(finalPreviewPath);
             return;
         }
-
+       
         //The blocks we want to check
         List<Transform> currentCheckedBlocks = new List<Transform>();
 
@@ -103,8 +108,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
 
-        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath,
-            playerStateManager);
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
         for (int i = 0; i < currentCheckedBlocks.Count; i++)
         {
@@ -122,25 +126,10 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     #endregion
 
-  public void ResetColorPreviewPath(List<Transform> finalPreviewPath, Color color)
+    public void ResetColorPreviewPath(List<Transform> finalPreviewPath)
     {
-        foreach (var bloc in finalPreviewPath)
-        {
-            Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2];
-            blocSquareMat.SetColor("_EmissionColor", color);
-        }
-        
         previewPath = finalPreviewPath;
-
-        for (int i = 0; i < finalPreviewPath.Count; i++)
-        {
-            var bPos = finalPreviewPath[i].transform.position;
-            var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
-                new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
-            _pathObjects.Add(goPathObject);
-        }
     }
-    
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
@@ -184,18 +173,20 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         //Update the preview Path of the player 
-
-        if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
-        {
-            PulsingBloc.PulsingEmissiveColorSquareBlocList(blocBaseEmissiveColor, Color.black, player.nextBlockPath, 0.4f);
-        }
     }
 
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-        ResetColorPreviewPath(player.finalPathFinding, blocBaseEmissiveColor);
+        ResetColorPreviewPath(player.finalPathFinding);
         player.indicatorPlayer.SetActive(false);
+        
+        foreach (var obj in pathObjects)
+        {
+            obj.SetActive(false);
+        }
+        pathObjects.Clear();
+        
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {
@@ -358,7 +349,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        ResetColorPreviewPath(player.nextBlockPath, blocBaseEmissiveColor);
+        ResetColorPreviewPath(player.nextBlockPath);
 
         player.finalPathFinding.Clear();
         player.walking = false;
@@ -372,11 +363,23 @@ public class PlayerActionPointCardState : PlayerBaseState
         
         if (player.playerActionPoint > 0)
         {
+            foreach (var obj in pathObjects)
+            {
+                obj.SetActive(false);
+            }
+            pathObjects.Clear();
+            
             EnterState(player);
            
         }
         else
         {
+            foreach (var obj in pathObjects)
+            {
+                obj.SetActive(false);
+            }
+            pathObjects.Clear();
+            
             currentNodePlayerOn.isActive = false;
             if (NFCManager.Instance.hasRemovedCard)
             {

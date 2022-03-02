@@ -12,7 +12,7 @@ public class MovementBlockManager : MonoBehaviour
     
     private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.3f);
     
-    private float _timeForBlocParentMove = 0.5f;
+    private float _timeForBlocParentMove = 0.2f;
     private float _timeForPlayersOnBlocMove = 0.2f;
     void Awake()
     {
@@ -31,7 +31,6 @@ public class MovementBlockManager : MonoBehaviour
 
     IEnumerator PlatformUp()
     {
-        
         GroupBlockDetection groupBlockDetection = TouchManager.Instance.blockParent.GetComponent<GroupBlockDetection>();
 
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
@@ -82,8 +81,9 @@ public class MovementBlockManager : MonoBehaviour
 
         yield return _timeBetweenBlocMovement;
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+        
     }
 
     IEnumerator PlatformDown()
@@ -93,8 +93,7 @@ public class MovementBlockManager : MonoBehaviour
         {
             yield break;
         }
-
-
+        
         Vector3 positionBlockParent = TouchManager.Instance.blockParent.position;
         TouchManager.Instance.blockParent.DOMove(new Vector3(positionBlockParent.x, positionBlockParent.y - 1f, positionBlockParent.z), _timeForBlocParentMove);
 
@@ -135,7 +134,7 @@ public class MovementBlockManager : MonoBehaviour
 
         yield return _timeBetweenBlocMovement;
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
@@ -161,6 +160,12 @@ public class MovementBlockManager : MonoBehaviour
            
         }
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
+        
+        foreach (var obj in player.PlayerActionPointCardState.pathObjects)
+        {
+            obj.SetActive(false);
+        }
+        player.PlayerActionPointCardState.pathObjects.Clear();
     }
 }
