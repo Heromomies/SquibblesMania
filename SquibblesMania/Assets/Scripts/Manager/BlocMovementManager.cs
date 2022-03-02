@@ -12,9 +12,8 @@ public class BlocMovementManager : MonoBehaviour
     
     private readonly List<RaycastResult> raycast = new List<RaycastResult>();
     public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set;}
-    
-    [Header("TOUCH PARAMETERS")]
-    
+
+    [Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
     public LayerMask touchLayersMask;
     private Camera _cam;
     public RaycastHit Hit;
@@ -22,8 +21,10 @@ public class BlocMovementManager : MonoBehaviour
     public Transform blockParent;
     public GameObject blockCurrentlySelected;
     public Color blockCurrentlyBaseColor;
-
+    private Vector3 _blocParentPos;
     public bool isBlocSelected;
+    
+    
     private float _timeForBlocParentMove = 0.5f;
     private float _timeForPlayersOnBlocMove = 0.2f;
     private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.3f);
@@ -40,7 +41,7 @@ public class BlocMovementManager : MonoBehaviour
         LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
         LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
         LongPressBlocMovementGesture.MinimumDurationSeconds = 0.5f;
-        LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
+        //LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
         FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
     }
 
@@ -79,9 +80,10 @@ public class BlocMovementManager : MonoBehaviour
                 }
 
                 blockCurrentlySelected = Hit.collider.gameObject;
+                blockParent = blockCurrentlySelected.transform.parent;
                 isBlocSelected = true;
                 blockCurrentlyBaseColor = blockCurrentlySelected.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-
+                _blocParentPos = blockParent.transform.position;
             }
         }
         else if (gesture.State == GestureRecognizerState.Executing)
@@ -89,10 +91,9 @@ public class BlocMovementManager : MonoBehaviour
             if (isBlocSelected)
             {
                 PulsingBloc.PulsingEmissiveColorSquareBloc(blockCurrentlyBaseColor, Color.red, blockCurrentlySelected.transform, 0.3f);
-                blockParent = blockCurrentlySelected.transform.parent;
-                Vector3 touchPos = new Vector3(gesture.DistanceX, gesture.DistanceY, 0);
-                Debug.Log(touchPos.y);
-                BlocMovement(touchPos);
+               
+                _touchPos = new Vector3(gesture.DistanceX, gesture.DistanceY, 0);
+                BlocMovement(_touchPos);
             }
             
         }
@@ -103,13 +104,13 @@ public class BlocMovementManager : MonoBehaviour
             isBlocSelected = false;
             blockCurrentlySelected = null;
             blockParent = null;
-          
-      
+            _touchPos = Vector3.zero;
         }
     }
 
     private void BlocMovement(Vector3 touchPos)
     {
+        
         if (touchPos.y > 0.0f && isBlocSelected)
         {
             isBlocSelected = false;
@@ -126,12 +127,20 @@ public class BlocMovementManager : MonoBehaviour
     IEnumerator StartBlocMovement(float yPos)
     {
         GroupBlockDetection groupBlocDetection = blockParent.GetComponent<GroupBlockDetection>();
-        Vector3 blocParentPos = blockParent.transform.position;
-        
-        if (yPos > 0.0f && blocParentPos.y < GameManager.Instance.maxHeightBlocMovement)
-        {
-            blockParent.DOMove(new Vector3(blocParentPos.x, blocParentPos.y + 1f, blocParentPos.z), _timeForBlocParentMove);
 
+        Vector3 blocParentNewPos = blockParent.transform.position;
+       
+
+        if (yPos > 0.0f && blocParentNewPos.y < GameManager.Instance.maxHeightBlocMovement)
+        {
+            if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
+            {
+                //TODO Feedback
+                yield break;
+            }
+            
+            blockParent.DOMove(new Vector3(blocParentNewPos.x, blocParentNewPos.y + 1f, blocParentNewPos.z), _timeForBlocParentMove);
+            blocParentNewPos = blockParent.transform.position;
             //Move the player with block
             if (groupBlocDetection.playersOnGroupBlock.Count > 0)
             {
@@ -145,13 +154,24 @@ public class BlocMovementManager : MonoBehaviour
 
                 yield return _timeBetweenBlocMovement;
             }
-            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-         
+            switch (blocParentNewPos.y - _blocParentPos.y >= 0)
+            {
+                case true: GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+                    UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
+                case false: GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+                    UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
+            }
+            
         }
-        else if (yPos < 0.0f && blocParentPos.y > GameManager.Instance.minHeightBlocMovement)
+        else if (yPos < 0.0f && blocParentNewPos.y > GameManager.Instance.minHeightBlocMovement)
         {
-            blockParent.DOMove(new Vector3(blocParentPos.x, blocParentPos.y - 1f, blocParentPos.z), _timeForBlocParentMove);
+            if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0)
+            {
+                //TODO Feedback
+                yield break;
+            }
+            blockParent.DOMove(new Vector3(blocParentNewPos.x, blocParentNewPos.y - 1f, blocParentNewPos.z), _timeForBlocParentMove);
+            blocParentNewPos = blockParent.transform.position;
             //Move the player with block
             if (groupBlocDetection.playersOnGroupBlock.Count > 0)
             {
@@ -163,17 +183,20 @@ public class BlocMovementManager : MonoBehaviour
 
                 yield return _timeBetweenBlocMovement;
             }
-            GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+            switch (blocParentNewPos.y - _blocParentPos.y <= 0)
+             {
+                 case true: GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+                     UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
+                 case false: GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+                     UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
+             }
         }
 
-       
+      
         
         ResetPreviewPlatform();
         //isMovingBlock = false;
         TouchManager.Instance.blockParent = null;
-        
-        
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -182,8 +205,8 @@ public class BlocMovementManager : MonoBehaviour
                 ResetPreviousBlockColor(block.gameObject);
             }
         }
-
         yield return _timeBetweenBlocMovement;
+        _touchPos = Vector3.zero;
         isBlocSelected = true;
         /*var player = GameManager.Instance.currentPlayerTurn;
         player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
