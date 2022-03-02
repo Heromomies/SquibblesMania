@@ -11,11 +11,17 @@ public class PlayerActionPointCardState : PlayerBaseState
     public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
     public Color blocBaseEmissiveColor;
-  
+    private List<GameObject> _pathObjects = new List<GameObject>();
+    
     private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
+        foreach (var obj in _pathObjects)
+        {
+            obj.SetActive(false);
+        }
+        _pathObjects.Clear();
         player.nextBlockPath.Clear();
         blocBaseEmissiveColor = player.currentBlockPlayerOn.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
@@ -123,7 +129,16 @@ public class PlayerActionPointCardState : PlayerBaseState
             Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2];
             blocSquareMat.SetColor("_EmissionColor", color);
         }
+        
         previewPath = finalPreviewPath;
+
+        for (int i = 0; i < finalPreviewPath.Count; i++)
+        {
+            var bPos = finalPreviewPath[i].transform.position;
+            var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
+                new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
+            _pathObjects.Add(goPathObject);
+        }
     }
     
 
