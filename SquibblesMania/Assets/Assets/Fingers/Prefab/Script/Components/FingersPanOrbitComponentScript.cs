@@ -493,14 +493,12 @@ namespace DigitalRubyShared
 
                 return;
             }
-            else
+
+            float xVelocity = gesture.DeltaX;
+            float yVelocity = gesture.DeltaY;
+            if (PanGestureHasEnoughMovementOnOneAxis(ref xVelocity, ref yVelocity))
             {
-                float xVelocity = gesture.DeltaX;
-                float yVelocity = gesture.DeltaY;
-                if (PanGestureHasEnoughMovementOnOneAxis(ref xVelocity, ref yVelocity))
-                {
-                    UpdateOrbit(xVelocity, yVelocity);
-                }
+                UpdateOrbit(xVelocity, yVelocity);
             }
         }
 

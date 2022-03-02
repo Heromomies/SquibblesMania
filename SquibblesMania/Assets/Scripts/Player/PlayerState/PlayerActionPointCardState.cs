@@ -5,13 +5,14 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
     public List<Transform> previewPath = new List<Transform>();
     private int _actionPointText;
     public Color blocBaseEmissiveColor;
-  
+    private bool isPreviewPathDone;
     private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
@@ -55,12 +56,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         finalPreviewPath.Add(player.currentBlockPlayerOn);
-
-
+    
+            
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
 
         ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
+        
     }
 
     private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
@@ -69,7 +71,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         playerStateManager.nextBlockPath = finalPreviewPath;
 
         indexBlockNearby++;
-
+     
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
@@ -95,10 +97,9 @@ public class PlayerActionPointCardState : PlayerBaseState
             currentCheckedBlocks.Add(nextBlocksPath[0]);
             nextBlocksPath.Remove(currentCheckedBlocks[0]);
         }
+        
 
-
-        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath,
-            playerStateManager);
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
         for (int i = 0; i < currentCheckedBlocks.Count; i++)
         {
@@ -130,6 +131,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
     {
+        Debug.Log("hell world");
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
         {
@@ -169,7 +171,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         //Update the preview Path of the player 
-
         if (player.playerActionPoint > 0 && player.isPlayerInActionCardState)
         {
             PulsingBloc.PulsingEmissiveColorSquareBlocList(blocBaseEmissiveColor, Color.black, player.nextBlockPath, 0.4f);
