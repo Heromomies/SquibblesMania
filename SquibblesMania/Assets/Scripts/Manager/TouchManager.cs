@@ -17,11 +17,6 @@ public class TouchManager : MonoBehaviour
 
     [Header("TOUCH MANAGER")] [HideInInspector]
     public Transform blockParent;
-
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private Vector3 offsetPos;
-
-
     public LayerMask touchLayersMask;
     private Camera _cam;
     public RaycastHit Hit;
@@ -131,8 +126,7 @@ public class TouchManager : MonoBehaviour
             else
             {
                 //If player OnSelect the block, the block get his color back
-                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState &&
-                    MovementBlockManager.Instance.isMovingBlock)
+                if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState && MovementBlockManager.Instance.isMovingBlock)
                 {
                     MovementBlockManager.Instance.ResetPreviousBlockColor();
                     blockCurrentlySelected = null;

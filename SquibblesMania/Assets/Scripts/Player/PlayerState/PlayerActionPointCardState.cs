@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
@@ -13,6 +14,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     public Color blocBaseEmissiveColor;
     public List<GameObject> pathObjects = new List<GameObject>();
    
+    private bool isPreviewPathDone;
     private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
@@ -106,7 +108,9 @@ public class PlayerActionPointCardState : PlayerBaseState
             currentCheckedBlocks.Add(nextBlocksPath[0]);
             nextBlocksPath.Remove(currentCheckedBlocks[0]);
         }
+        
 
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
         CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
@@ -134,6 +138,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
     {
+        Debug.Log("hell world");
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
         {
