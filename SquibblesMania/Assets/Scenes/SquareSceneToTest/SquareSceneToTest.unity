@@ -12340,9 +12340,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50556c30186f9a94d8aac1c10a0c2d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchLayersMask:
+  touchLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  blocLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   playerCurrentlySelected: {fileID: 0}
   playerMovementSpeed: 0.1
   isPlayerSelected: 0
@@ -19639,11 +19642,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: maxHeightBlocMovement
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: minHeightBlocMovement
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: allBlocks.Array.data[0]

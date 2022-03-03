@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -11,7 +12,8 @@ public class PlayerMovementManager : MonoBehaviour
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 
 	[Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
-	public LayerMask touchLayersMask;
+	public LayerMask touchLayerMask;
+	public LayerMask blocLayerMask;
 	private Camera _cam;
 	private RaycastHit _hit;
 	[Header("Player PARAMETERS")]
@@ -19,9 +21,9 @@ public class PlayerMovementManager : MonoBehaviour
 	public float playerMovementSpeed;
 	public bool isPlayerSelected;
 
-	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left, Vector3.down};
 	
-	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.1f);
+	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.3f);
 
 	// Start is called before the first frame update
 	void Awake()
@@ -65,7 +67,7 @@ public class PlayerMovementManager : MonoBehaviour
 			// Cast a ray from the camera
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
-			if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayersMask))
+			if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayerMask))
 			{
 				if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 				{
@@ -99,22 +101,47 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartPlayerMovement(float xPos, float zPos)
 	{
-		#region Displacemnt
+		#region Displacement
+		
 		if (xPos > 0.0f && zPos > 0.0f)
 		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,1), out var hit, Mathf.Infinity, blocLayerMask))
+			{
+				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+				{
+					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
+				}
+			}
 		}
 		if (xPos < 0.0f && zPos > 0.0f)
 		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(-1,-0.5f,0), out var hit, Mathf.Infinity, blocLayerMask))
+			{
+				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+				{
+					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
+				}
+			}
 		}
 		if (xPos > 0.0f && zPos < 0.0f)
 		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(1,-0.5f,0), out var hit, Mathf.Infinity, blocLayerMask))
+			{
+				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+				{
+					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
+				}
+			}
 		}
 		if (xPos < 0.0f && zPos < 0.0f)
 		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,-1), out var hit, Mathf.Infinity, blocLayerMask))
+			{
+				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+				{
+					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
+				}
+			}
 		}
 		#endregion
 		

@@ -54,7 +54,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 finalPreviewPath.Add(path.nextPath);
                 path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
             }
-           
         }
       
         finalPreviewPath.Add(player.currentBlockPlayerOn);
