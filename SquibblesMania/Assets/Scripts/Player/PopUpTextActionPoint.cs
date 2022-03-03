@@ -8,7 +8,7 @@ public class PopUpTextActionPoint : MonoBehaviour
 {
     private TextMeshPro _text;
     [SerializeField] private Transform cam;
-
+    private int _actionPoint;
     void Awake()
     {
         _text = GetComponent<TextMeshPro>();
@@ -17,7 +17,8 @@ public class PopUpTextActionPoint : MonoBehaviour
 
     public void SetUpText(int value)
     {
-        _text.SetText(value + "/" + GameManager.Instance.currentPlayerTurn.playerActionPoint);
+        _actionPoint = value;
+        _text.SetText(_actionPoint + "/" + GameManager.Instance.currentPlayerTurn.playerActionPoint);
     }
 
     void LateUpdate()
