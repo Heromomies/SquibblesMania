@@ -18,6 +18,7 @@ public class PlayerMovementManager : MonoBehaviour
 	public GameObject playerCurrentlySelected;
 	public float playerMovementSpeed;
 	public bool isPlayerSelected;
+
 	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 	
 	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.1f);
@@ -98,22 +99,31 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartPlayerMovement(float xPos, float zPos)
 	{
-		if (xPos > 0.0f && zPos > 0.0f)
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
+			if (xPos > 0.0f && zPos > 0.0f)
+			{
+				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
+			}
+			if (xPos < 0.0f && zPos > 0.0f)
+			{
+				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
+			}
+			if (xPos > 0.0f && zPos < 0.0f)
+			{
+				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
+			}
+			if (xPos < 0.0f && zPos < 0.0f)
+			{
+				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
+			}
+			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 		}
-		if (xPos < 0.0f && zPos > 0.0f)
-		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
-		}
-		if (xPos > 0.0f && zPos < 0.0f)
-		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
-		}
-		if (xPos < 0.0f && zPos < 0.0f)
-		{
-			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
-		}
+
 		yield return _timeBetweenPlayerMovement;
 		isPlayerSelected = true;
 	}

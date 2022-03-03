@@ -73,6 +73,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
                     new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
                 pathObjects.Add(goPathObject);
+                Debug.Log(player.nextBlockPath[i]);
             }
         }
     }
