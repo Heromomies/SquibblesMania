@@ -103,9 +103,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartPlayerMovement(float xPos, float zPos)
 	{
-		Debug.Log("xPos : "+xPos);
-		Debug.Log("zPos : "+zPos);
-		
 		#region Displacement
 		
 		if (xPos > 5 && zPos > 5)

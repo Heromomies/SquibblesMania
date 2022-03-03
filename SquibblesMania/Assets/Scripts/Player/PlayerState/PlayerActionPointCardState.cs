@@ -144,7 +144,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 }
             }
         }
-       
     }
 
     bool CurrentCheckedBlocPosComparedToNextBlocPos(Vector3 checkedBlocPos, Vector3 nextBlocPoS)
