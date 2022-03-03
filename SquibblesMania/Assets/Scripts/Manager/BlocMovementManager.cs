@@ -231,7 +231,7 @@ public class BlocMovementManager : MonoBehaviour
            
         }
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
+        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
     }
     // Update is called once per frame
     void Update()
