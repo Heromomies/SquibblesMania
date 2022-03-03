@@ -22,8 +22,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] [Header("CAM SWITCH PARAMETERS")]
     private bool isSwitchChanged;
-
-   
+    
 
     private void Awake()
     {
@@ -76,8 +75,6 @@ public class UiManager : MonoBehaviour
         localManager.SetParameterValue("ACTIONPOINT", actionPointText.ToString());
     }
 
-
-    
 
     public void ButtonNextTurn()
     {

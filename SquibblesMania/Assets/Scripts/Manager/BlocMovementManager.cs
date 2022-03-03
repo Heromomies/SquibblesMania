@@ -23,8 +23,11 @@ public class BlocMovementManager : MonoBehaviour
     public Color blockCurrentlyBaseColor;
     private Vector3 _blocParentPos;
     public bool isBlocSelected;
-    
-   
+    [SerializeField]
+    private int totalCurrentActionPoint;
+    private GameObject textActionPointPopUp;
+    [SerializeField]
+    private Vector3 offsetText;
     private float _timeForMovement= 0.5f;
     private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.3f);
     // Start is called before the first frame update
@@ -85,6 +88,7 @@ public class BlocMovementManager : MonoBehaviour
                 isBlocSelected = true;
                 blockCurrentlyBaseColor = blockCurrentlySelected.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
                 _blocParentPos = blockParent.transform.position;
+                totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
             }
         }
         //If press is currently executing
@@ -124,26 +128,22 @@ public class BlocMovementManager : MonoBehaviour
 
     private void BlocMovement(Vector3 touchPos)
     {
-        if (touchPos.y > 0.0f && isBlocSelected)
-        {
-            isBlocSelected = false;
-            StartCoroutine(StartBlocMovement(touchPos.y));
-        }
-        else if (touchPos.y < 0.0f && isBlocSelected)
-        {
-            isBlocSelected = false;
-            StartCoroutine(StartBlocMovement(touchPos.y));
-        }
-      
+        isBlocSelected = false;
+        StartCoroutine(StartBlocMovement(touchPos.y));
     }
 
     IEnumerator StartBlocMovement(float yPos)
     {
         GroupBlockDetection groupBlocDetection = blockParent.GetComponent<GroupBlockDetection>();
-
+        Transform currentPlayer = GameManager.Instance.currentPlayerTurn.transform;
         Vector3 blocParentNewPos = blockParent.transform.position;
-       
-
+        
+        if (!textActionPointPopUp)
+        {
+            textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
+            textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint);
+        }
+        
         if (yPos > 0.0f && blocParentNewPos.y < GameManager.Instance.maxHeightBlocMovement)
         {
             if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
@@ -167,14 +167,23 @@ public class BlocMovementManager : MonoBehaviour
 
                 yield return _timeBetweenBlocMovement;
             }
-            switch (blocParentNewPos.y - _blocParentPos.y >= 0)
-            {
-                case true: GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-                    UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
-                case false: GameManager.Instance.currentPlayerTurn.playerActionPoint++;
-                    UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
-            }
+
             
+            switch (blocParentNewPos.y - _blocParentPos.y >= 0)
+            { 
+                case true:
+                    textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint-1);
+                    totalCurrentActionPoint--; break;
+                    //GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+                    //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
+                case false:
+                    textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint+1);
+                    totalCurrentActionPoint++; break;
+                   // GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+                    //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
+            }
+
+           
         }
         else if (yPos < 0.0f && blocParentNewPos.y > GameManager.Instance.minHeightBlocMovement)
         {
@@ -198,10 +207,14 @@ public class BlocMovementManager : MonoBehaviour
             }
             switch (blocParentNewPos.y - _blocParentPos.y <= 0)
              {
-                 case true: GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-                     UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
-                 case false: GameManager.Instance.currentPlayerTurn.playerActionPoint++;
-                     UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); break;
+                 case true: //GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+                     //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+                     textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint-1);
+                     totalCurrentActionPoint--; break;
+                 case false: //GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+                    // UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
+                    textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint+1);
+                    totalCurrentActionPoint++; break;
              }
         }
 

@@ -121,6 +121,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
         List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
     {
+       
         //Foreach currents checked block in our list
         foreach (Transform checkedBlock in currentCheckedBlocks)
         {
@@ -143,6 +144,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                     path.nextPath.GetComponent<Node>().previousBlock = checkedBlock;
                 }
             }
+            
         }
     }
 
