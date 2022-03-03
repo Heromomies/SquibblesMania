@@ -20,10 +20,12 @@ public class PlayerMovementManager : MonoBehaviour
 	public GameObject playerCurrentlySelected;
 	public float playerMovementSpeed;
 	public bool isPlayerSelected;
-
+	public float valueInputDisplacement;
+	public float raycastDistance;
+	
 	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left, Vector3.down};
 	
-	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.3f);
+	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
 
 	// Start is called before the first frame update
 	void Awake()
@@ -101,11 +103,14 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartPlayerMovement(float xPos, float zPos)
 	{
+		Debug.Log("xPos : "+xPos);
+		Debug.Log("zPos : "+zPos);
+		
 		#region Displacement
 		
-		if (xPos > 0.0f && zPos > 0.0f)
+		if (xPos > 5 && zPos > 5)
 		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,1), out var hit, Mathf.Infinity, blocLayerMask))
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,1), out var hit, raycastDistance, blocLayerMask))
 			{
 				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 				{
@@ -113,29 +118,9 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 			}
 		}
-		if (xPos < 0.0f && zPos > 0.0f)
+		if (xPos < -2 && zPos < -2)
 		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(-1,-0.5f,0), out var hit, Mathf.Infinity, blocLayerMask))
-			{
-				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
-				{
-					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
-				}
-			}
-		}
-		if (xPos > 0.0f && zPos < 0.0f)
-		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(1,-0.5f,0), out var hit, Mathf.Infinity, blocLayerMask))
-			{
-				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
-				{
-					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
-				}
-			}
-		}
-		if (xPos < 0.0f && zPos < 0.0f)
-		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,-1), out var hit, Mathf.Infinity, blocLayerMask))
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,-1), out var hit, raycastDistance, blocLayerMask))
 			{
 				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 				{
@@ -143,6 +128,28 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 			}
 		}
+		if (xPos > 2.5f && zPos < -5)
+		{
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(1,-0.5f,0), out var hit, raycastDistance, blocLayerMask))
+			{
+				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+				{
+					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
+				}
+			}
+		}
+
+		if (xPos < -8 && zPos > 2.5f)
+		{
+			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(-1,-0.5f,0), out var hit, raycastDistance, blocLayerMask))
+			{
+				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+				{
+					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
+				}
+			}
+		}
+	
 		#endregion
 		
 		/*if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
