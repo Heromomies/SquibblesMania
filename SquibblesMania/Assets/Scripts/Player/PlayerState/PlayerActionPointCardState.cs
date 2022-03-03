@@ -64,18 +64,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         pastBlocks.Add(player.currentBlockPlayerOn);
 
         ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
-
-        if (finalPreviewPath.Count > 0)
-        {
-            for (int i = 0; i < player.nextBlockPath.Count; i++)
-            {
-                var bPos = player.nextBlockPath[i].transform.position;
-                var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
-                    new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
-                pathObjects.Add(goPathObject);
-                Debug.Log(player.nextBlockPath[i]);
-            }
-        }
     }
 
     private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
@@ -109,9 +97,6 @@ public class PlayerActionPointCardState : PlayerBaseState
             currentCheckedBlocks.Add(nextBlocksPath[0]);
             nextBlocksPath.Remove(currentCheckedBlocks[0]);
         }
-        
-
-        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
         CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
 
@@ -119,14 +104,12 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             //We add in our list of path who are already visited, our currently checked blocks
             previousBlocksPath.Add(currentCheckedBlocks[i]);
-        }
-
-        //If in our list, he stay a element, we restart the void
-        if (nextBlocksPath.Any())
-        {
-            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby, actionPoint,
-                playerStateManager);
-        }
+            
+            var bPos = currentCheckedBlocks[i].position;
+            var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
+                new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
+            pathObjects.Add(goPathObject);
+        }   
     }
 
     #endregion

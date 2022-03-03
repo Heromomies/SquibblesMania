@@ -99,7 +99,26 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartPlayerMovement(float xPos, float zPos)
 	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+		#region Displacemnt
+		if (xPos > 0.0f && zPos > 0.0f)
+		{
+			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
+		}
+		if (xPos < 0.0f && zPos > 0.0f)
+		{
+			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
+		}
+		if (xPos > 0.0f && zPos < 0.0f)
+		{
+			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
+		}
+		if (xPos < 0.0f && zPos < 0.0f)
+		{
+			playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
+		}
+		#endregion
+		
+		/*if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 		{
 			if (xPos > 0.0f && zPos > 0.0f)
 			{
@@ -122,7 +141,7 @@ public class PlayerMovementManager : MonoBehaviour
 				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
 			}
 			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-		}
+		}*/
 
 		yield return _timeBetweenPlayerMovement;
 		isPlayerSelected = true;
