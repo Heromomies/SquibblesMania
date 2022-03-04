@@ -16,16 +16,22 @@ public class PlayerMovementManager : MonoBehaviour
 	public LayerMask blocLayerMask;
 	private Camera _cam;
 	private RaycastHit _hit;
-	[Header("Player PARAMETERS")]
+	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
+	public List<GameObject> sphereList = new List<GameObject>();
+	
 	public GameObject playerCurrentlySelected;
+	public GameObject ghostPlayer;
 	public float playerMovementSpeed;
 	public bool isPlayerSelected;
-	public float valueInputDisplacement;
 	public float raycastDistance;
-	
-	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left, Vector3.down};
-	
+
+	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+
+	private readonly List<Vector3> _directionRaycast = new List<Vector3>
+		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
+
 	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
+	private WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.01f);
 
 	// Start is called before the first frame update
 	void Awake()
@@ -39,7 +45,7 @@ public class PlayerMovementManager : MonoBehaviour
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
 		LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
-		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.3f;
+		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
 		//LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 	}
@@ -75,6 +81,18 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					playerCurrentlySelected = _hit.collider.gameObject;
 					isPlayerSelected = true;
+					
+					var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn; // Get bloc player on
+					previewPath.Add(blockPlayerOn);
+		
+					var blockPlayerOnPosition = blockPlayerOn.position;
+		
+					GameObject sphere = PoolManager.Instance.SpawnObjectFromPool(
+						"SphereShowPath", new Vector3(blockPlayerOnPosition.x, 
+							blockPlayerOnPosition.y + 1.2f, blockPlayerOnPosition.z), Quaternion.identity,
+						null); // Instantiate sphere on the player current position
+			
+					sphereList.Add(sphere); 
 				}
 			}
 		}
@@ -95,87 +113,83 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 	}
 
-	private void PlayerMovement(Vector3 touchPos)
+	private void PlayerMovement(Vector3 touchPos) // When we select the player 
 	{
 		isPlayerSelected = false;
 		StartCoroutine(StartPlayerMovement(touchPos.x, touchPos.y));
 	}
 
-	IEnumerator StartPlayerMovement(float xPos, float zPos)
+	IEnumerator StartPlayerMovement(float xPos, float zPos) // Depends on the position the player wants to go, he moves in the wished direction
 	{
-		#region Displacement
+		//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0){}
 		
-		if (xPos > 5 && zPos > 5)
-		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,1), out var hit, raycastDistance, blocLayerMask))
-			{
-				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
-				{
-					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
-				}
-			}
-		}
+		#region Displacement
+
 		if (xPos < -2 && zPos < -2)
 		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(0,-0.5f,-1), out var hit, raycastDistance, blocLayerMask))
-			{
-				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
-				{
-					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
-				}
-			}
+			PreviewPath(0);
 		}
+
+		if (xPos > 5 && zPos > 5)
+		{
+			PreviewPath(1);
+		}
+
 		if (xPos > 2.5f && zPos < -5)
 		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(1,-0.5f,0), out var hit, raycastDistance, blocLayerMask))
-			{
-				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
-				{
-					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
-				}
-			}
+			PreviewPath(2);
 		}
 
 		if (xPos < -8 && zPos > 2.5f)
 		{
-			if (Physics.Raycast(playerCurrentlySelected.transform.position, new Vector3(-1,-0.5f,0), out var hit, raycastDistance, blocLayerMask))
-			{
-				if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
-				{
-					playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
-				}
-			}
+			PreviewPath(3);
 		}
-	
+
 		#endregion
 		
-		/*if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
-		{
-			if (xPos > 0.0f && zPos > 0.0f)
-			{
-				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[1], playerMovementSpeed);
-			}
-			if (xPos < 0.0f && zPos > 0.0f)
-			{
-				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[3], playerMovementSpeed);
-			}
-			if (xPos > 0.0f && zPos < 0.0f)
-			{
-				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[2], playerMovementSpeed);
-			}
-			if (xPos < 0.0f && zPos < 0.0f)
-			{
-				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-				playerCurrentlySelected.transform.DOMove(playerCurrentlySelected.transform.position + _directionPlayer[0], playerMovementSpeed);
-			}
-			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-		}*/
-
 		yield return _timeBetweenPlayerMovement;
+
 		isPlayerSelected = true;
 	}
-	
+
+	void PreviewPath(int value)
+	{
+		if (Physics.Raycast(playerCurrentlySelected.transform.position, _directionRaycast[value], out var hit, raycastDistance, blocLayerMask))
+		{
+			if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
+			{
+				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+				playerCurrentlySelected.transform.position += _directionPlayer[value];
+
+				StartCoroutine(WaitBeforeCheckUnderPlayer());
+			}
+		}
+		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+	}
+
+	IEnumerator WaitBeforeCheckUnderPlayer()
+	{
+		yield return _timeBetweenDeactivateSphere;
+
+		var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+		var blockPlayerOnPosition = cBlockPlayerOn.position;
+		
+		if (!previewPath.Contains(cBlockPlayerOn))
+		{
+			previewPath.Add(cBlockPlayerOn);
+			
+			GameObject sphere = PoolManager.Instance.SpawnObjectFromPool(
+				"SphereShowPath", new Vector3(blockPlayerOnPosition.x, blockPlayerOnPosition.y + 1.2f, blockPlayerOnPosition.z), Quaternion.identity,
+				null);
+			
+			sphereList.Add(sphere);
+		}
+		else
+		{
+			previewPath.Remove(previewPath[previewPath.Count -1]);
+			
+			sphereList[sphereList.Count -1].SetActive(false);
+			sphereList.Remove(sphereList[sphereList.Count - 1]);
+		}
+	}
 }
