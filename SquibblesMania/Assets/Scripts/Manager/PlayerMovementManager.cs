@@ -18,7 +18,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private RaycastHit _hit;
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
-	
+
 	public GameObject playerCurrentlySelected;
 	public GameObject ghostPlayer;
 	public float playerMovementSpeed;
@@ -31,13 +31,23 @@ public class PlayerMovementManager : MonoBehaviour
 		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
 
 	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
-	private WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.01f);
+	private WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.1f);
+
+	#region Singleton
+
+	private static PlayerMovementManager playerMovementManager;
+
+	public static PlayerMovementManager Instance => playerMovementManager;
 
 	// Start is called before the first frame update
-	void Awake()
+
+	private void Awake()
 	{
+		playerMovementManager = this;
 		_cam = Camera.main;
 	}
+
+	#endregion
 
 	private void OnEnable()
 	{
@@ -81,18 +91,17 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					playerCurrentlySelected = _hit.collider.gameObject;
 					isPlayerSelected = true;
-					
-					var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn; // Get bloc player on
-					previewPath.Add(blockPlayerOn);
-		
-					var blockPlayerOnPosition = blockPlayerOn.position;
-		
-					GameObject sphere = PoolManager.Instance.SpawnObjectFromPool(
-						"SphereShowPath", new Vector3(blockPlayerOnPosition.x, 
-							blockPlayerOnPosition.y + 1.2f, blockPlayerOnPosition.z), Quaternion.identity,
-						null); // Instantiate sphere on the player current position
-			
-					sphereList.Add(sphere); 
+
+
+					var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+					var cBlockPlayerOnPosition = cBlockPlayerOn.position;
+
+					if (!previewPath.Contains(cBlockPlayerOn))
+					{
+						previewPath.Add(cBlockPlayerOn);
+
+						LaunchBullet(cBlockPlayerOnPosition);
+					}
 				}
 			}
 		}
@@ -122,9 +131,9 @@ public class PlayerMovementManager : MonoBehaviour
 	IEnumerator StartPlayerMovement(float xPos, float zPos) // Depends on the position the player wants to go, he moves in the wished direction
 	{
 		//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0){}
-		
-		#region Displacement
 
+		#region Displacement
+		
 		if (xPos < -2 && zPos < -2)
 		{
 			PreviewPath(0);
@@ -146,7 +155,7 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 
 		#endregion
-		
+
 		yield return _timeBetweenPlayerMovement;
 
 		isPlayerSelected = true;
@@ -158,12 +167,18 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 			{
-				GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-				playerCurrentlySelected.transform.position += _directionPlayer[value];
+				var positionList = previewPath.IndexOf(hit.transform);
 
-				StartCoroutine(WaitBeforeCheckUnderPlayer());
+				if (!previewPath.Contains(hit.transform) || previewPath.Count-1 == positionList+1)
+				{
+					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+					playerCurrentlySelected.transform.position += _directionPlayer[value];
+
+					StartCoroutine(WaitBeforeCheckUnderPlayer());
+				}
 			}
 		}
+
 		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 	}
 
@@ -172,24 +187,28 @@ public class PlayerMovementManager : MonoBehaviour
 		yield return _timeBetweenDeactivateSphere;
 
 		var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-		var blockPlayerOnPosition = cBlockPlayerOn.position;
-		
-		if (!previewPath.Contains(cBlockPlayerOn))
+		var pCount = previewPath.Count - 1;
+		var pCountPos = previewPath[pCount].position;
+		var positionList = previewPath.IndexOf(cBlockPlayerOn);
+
+		if (!previewPath.Contains(cBlockPlayerOn) && cBlockPlayerOn != previewPath[pCount])
 		{
 			previewPath.Add(cBlockPlayerOn);
-			
-			GameObject sphere = PoolManager.Instance.SpawnObjectFromPool(
-				"SphereShowPath", new Vector3(blockPlayerOnPosition.x, blockPlayerOnPosition.y + 1.2f, blockPlayerOnPosition.z), Quaternion.identity,
-				null);
-			
-			sphereList.Add(sphere);
+
+			LaunchBullet(pCountPos);
 		}
 		else
 		{
-			previewPath.Remove(previewPath[previewPath.Count -1]);
-			
-			sphereList[sphereList.Count -1].SetActive(false);
-			sphereList.Remove(sphereList[sphereList.Count - 1]);
+			previewPath.Remove(previewPath[positionList + 1]);
 		}
+	}
+
+	void LaunchBullet(Vector3 positionToInstantiate)
+	{
+		GameObject sphere = PoolManager.Instance.SpawnObjectFromPool(
+			"SphereShowPath", new Vector3(positionToInstantiate.x, positionToInstantiate.y + 1.2f, positionToInstantiate.z), Quaternion.identity,
+			null);
+
+		sphereList.Add(sphere);
 	}
 }
