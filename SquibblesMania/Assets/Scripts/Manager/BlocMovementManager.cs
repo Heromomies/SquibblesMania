@@ -84,11 +84,16 @@ public class BlocMovementManager : MonoBehaviour
                 }
 
                 blockCurrentlySelected = _hit.collider.gameObject;
-                blockParent = blockCurrentlySelected.transform.parent;
+               
                 isBlocSelected = true;
                 blockCurrentlyBaseColor = blockCurrentlySelected.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-                _blocParentPos = blockParent.transform.position;
-                totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+                if (!blockParent)
+                {
+                    blockParent = blockCurrentlySelected.transform.parent;
+                    _blocParentPos = blockParent.transform.position;
+                    totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+                }
+               
             }
         }
         //If press is currently executing
@@ -107,8 +112,7 @@ public class BlocMovementManager : MonoBehaviour
                     PulsingBloc.PulsingEmissiveColorSquareBloc(blockCurrentlyBaseColor, Color.green, child, 0.3f);
                 }
             }
-           
-            
+
         }
         //If press is ended
         else if (gesture.State == GestureRecognizerState.Ended)
@@ -118,10 +122,8 @@ public class BlocMovementManager : MonoBehaviour
             {
                 ResetPreviousBlockColor(bloc.gameObject);
             }
-            
+
             isBlocSelected = false;
-            blockCurrentlySelected = null;
-            blockParent = null;
             _touchPos = Vector3.zero;
         }
     }
@@ -141,9 +143,9 @@ public class BlocMovementManager : MonoBehaviour
         if (!textActionPointPopUp)
         {
             textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
-            textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint);
+            textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
         }
-        
+      
         if (yPos > 0.0f && blocParentNewPos.y < GameManager.Instance.maxHeightBlocMovement)
         {
             if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
@@ -151,39 +153,19 @@ public class BlocMovementManager : MonoBehaviour
                 //TODO Feedback can't move bloc
                 yield break;
             }
-            
-            blockParent.DOMove(new Vector3(blocParentNewPos.x, blocParentNewPos.y + 1f, blocParentNewPos.z), _timeForMovement);
-            blocParentNewPos = blockParent.transform.position;
-            //Move the player with block
-            if (groupBlocDetection.playersOnGroupBlock.Count > 0)
-            {
-                foreach (Transform playerOnGroupBlock in groupBlocDetection.playersOnGroupBlock)
-                {
-                    Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
-                    playerOnGroupBlock.DOMove(
-                        new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + 1f, playerOnGroupBlockPos.z),
-                        _timeForMovement);
-                }
 
-                yield return _timeBetweenBlocMovement;
-            }
-
-            
+            MovementBlocAndPlayer(1f, blockParent, blocParentNewPos, groupBlocDetection);
+            yield return _timeBetweenBlocMovement;
             switch (blocParentNewPos.y - _blocParentPos.y >= 0)
             { 
-                case true:
-                    textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint-1);
-                    totalCurrentActionPoint--; break;
+                case true: UpdateActionPointText(totalCurrentActionPoint--); break;
                     //GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-                    //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
-                case false:
-                    textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint+1);
-                    totalCurrentActionPoint++; break;
-                   // GameManager.Instance.currentPlayerTurn.playerActionPoint++;
+                
+                case false: UpdateActionPointText(totalCurrentActionPoint++); break;
+                    // GameManager.Instance.currentPlayerTurn.playerActionPoint++;
                     //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
             }
 
-           
         }
         else if (yPos < 0.0f && blocParentNewPos.y > GameManager.Instance.minHeightBlocMovement)
         {
@@ -192,33 +174,16 @@ public class BlocMovementManager : MonoBehaviour
                 //TODO Feedback can't move bloc
                 yield break;
             }
-            blockParent.DOMove(new Vector3(blocParentNewPos.x, blocParentNewPos.y - 1f, blocParentNewPos.z), _timeForMovement);
-            blocParentNewPos = blockParent.transform.position;
-            //Move the player with block
-            if (groupBlocDetection.playersOnGroupBlock.Count > 0)
-            {
-                foreach (Transform playerOnGroupBlock in groupBlocDetection.playersOnGroupBlock)
-                {
-                    Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
-                    playerOnGroupBlock.DOMove(new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y - 1f, playerOnGroupBlockPos.z), _timeForMovement);
-                }
 
-                yield return _timeBetweenBlocMovement;
-            }
+            MovementBlocAndPlayer(-1f, blockParent, blocParentNewPos, groupBlocDetection);
+            yield return _timeBetweenBlocMovement;
             switch (blocParentNewPos.y - _blocParentPos.y <= 0)
              {
-                 case true: //GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-                     //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-                     textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint-1);
-                     totalCurrentActionPoint--; break;
-                 case false: //GameManager.Instance.currentPlayerTurn.playerActionPoint++;
-                    // UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
-                    textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(totalCurrentActionPoint+1);
-                    totalCurrentActionPoint++; break;
+                 case true: UpdateActionPointText(totalCurrentActionPoint--); break;
+                 
+                 case false: UpdateActionPointText(totalCurrentActionPoint++); break;
              }
         }
-
-      
         
         ResetPreviewPlatform();
         //isMovingBlock = false;
@@ -238,6 +203,29 @@ public class BlocMovementManager : MonoBehaviour
         player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath, player.PlayerActionPointCardState.blocBaseEmissiveColor);
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);*/
     }
+
+    private void UpdateActionPointText (int actionPoint)
+    {
+        actionPoint = totalCurrentActionPoint > 0 ? totalCurrentActionPoint : -totalCurrentActionPoint;
+        textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPoint);
+        
+    }
+
+   private void MovementBlocAndPlayer(float value, Transform blocParent, Vector3 blocParentNewPos, GroupBlockDetection groupBlocDetection)
+    {
+        blocParent.DOMove(new Vector3(blocParentNewPos.x, blocParentNewPos.y + value, blocParentNewPos.z), _timeForMovement);
+        //Move the player with block
+        if (groupBlocDetection.playersOnGroupBlock.Count > 0)
+        {
+            foreach (Transform playerOnGroupBlock in groupBlocDetection.playersOnGroupBlock)
+            {
+                Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
+                playerOnGroupBlock.DOMove(new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + value, playerOnGroupBlockPos.z), _timeForMovement);
+            }
+        }
+    }
+   
+    
     private void ResetPreviousBlockColor(GameObject bloc)
     {
         Material blockCurrentlySelectedMat = bloc.GetComponent<Renderer>().materials[2];
