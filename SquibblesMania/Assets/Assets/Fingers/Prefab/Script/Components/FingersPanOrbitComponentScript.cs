@@ -183,7 +183,7 @@ namespace DigitalRubyShared
         public event System.Action OrbitTargetTapped;
 
         public float cameraSize;
-        public Camera camUI;
+        public Camera[] cams;
 
         public void OnEnable()
         {
@@ -355,7 +355,7 @@ namespace DigitalRubyShared
             cameraSize -= (zoomSpeed * Time.deltaTime);
             cameraSize = Mathf.Clamp(cameraSize, MinimumDistance, MaximumDistance);
             Camera.main.orthographicSize = cameraSize;
-            camUI.orthographicSize = cameraSize;
+           
         }
 
         private void PerformPan(Vector3 pan, float limit)
