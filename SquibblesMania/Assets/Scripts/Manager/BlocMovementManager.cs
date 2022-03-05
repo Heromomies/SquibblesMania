@@ -79,16 +79,8 @@ public class BlocMovementManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayersMask))
             {
-                if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
-                {
-                    foreach (Transform child in blockParent.transform)
-                    {
-                       ResetPreviousBlockColor(child.gameObject);
-                    }
-                }
-
+                
                 blockCurrentlySelected = _hit.collider.gameObject;
-               
                 isBlocSelected = true;
                 blockCurrentlyBaseColor = blockCurrentlySelected.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
                 Transform currentPlayer = GameManager.Instance.currentPlayerTurn.transform;
@@ -114,24 +106,12 @@ public class BlocMovementManager : MonoBehaviour
                 BlocMovement(_touchPos);
             }
 
-            if (blockCurrentlySelected != null)
-            {
-                foreach (Transform child in blockParent.transform)
-                {
-                    PulsingBloc.PulsingEmissiveColorSquareBloc(blockCurrentlyBaseColor, Color.green, child, 0.3f);
-                }
-            }
-
         }
         //If press is ended
         else if (gesture.State == GestureRecognizerState.Ended)
         {
             //End of the drag
-            foreach (Transform bloc in blockParent)
-            {
-                ResetPreviousBlockColor(bloc.gameObject);
-            }
-
+            ResetBlocPreviewMesh();
             isBlocSelected = false;
             _touchPos = Vector3.zero;
             GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
@@ -253,10 +233,6 @@ public class BlocMovementManager : MonoBehaviour
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
-            foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
-            {
-                ResetPreviousBlockColor(block.gameObject);
-            }
         }
         yield return _timeBetweenBlocMovement;
         
@@ -288,12 +264,7 @@ public class BlocMovementManager : MonoBehaviour
         }
     }
    
-    
-    private void ResetPreviousBlockColor(GameObject bloc)
-    {
-        Material blockCurrentlySelectedMat = bloc.GetComponent<Renderer>().materials[2];
-        blockCurrentlySelectedMat.SetColor("_EmissionColor", blockCurrentlyBaseColor);
-    }
+   
     private void ResetPreviewPlatform()
     {
         if (TouchManager.Instance.blockParent != null)
