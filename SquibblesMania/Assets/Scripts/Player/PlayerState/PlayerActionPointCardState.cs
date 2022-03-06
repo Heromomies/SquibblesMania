@@ -34,13 +34,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         List<Transform> finalPreviewPath = new List<Transform>();
 
         int indexBlockNearby = 0;
-
-        //Take the base color of the block
-        if (player.currentBlockPlayerOn != null)
-        {
-           // player.currentBlockPlayerOn.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", blocBaseEmissiveColor);
-            TouchManager.Instance.blockCurrentlyBaseColor = blocBaseEmissiveColor;
-        }
+        
 
         //Foreach possible path compared to the block wich player is currently on
         foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
