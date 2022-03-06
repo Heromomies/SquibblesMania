@@ -279,7 +279,7 @@ public class BlocMovementManager : MonoBehaviour
            
         }
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
+        player.PlayerActionPointCardState.PreviewPathSpawnGameObjects(player.PlayerActionPointCardState.previewPath);
     }
     
   

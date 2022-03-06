@@ -58,7 +58,7 @@ public class PlayerActionPointCardState : PlayerBaseState
       
         finalPreviewPath.Add(player.currentBlockPlayerOn);
      
-
+        
         //We add in our list of past blocks, the block which the player is currently on
         pastBlocks.Add(player.currentBlockPlayerOn);
 
@@ -74,13 +74,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         //If our current block is == to the player selected block then out of the loop
         if (indexBlockNearby == actionPoint)
         {
-            ResetColorPreviewPath(finalPreviewPath);
+            PreviewPathSpawnGameObjects(finalPreviewPath);
             return;
         }
-       
+        
         //The blocks we want to check
         List<Transform> currentCheckedBlocks = new List<Transform>();
-
+        
         // if we have multiple block around the player
         if (nextBlocksPath.Count > 1)
         {
@@ -96,25 +96,41 @@ public class PlayerActionPointCardState : PlayerBaseState
             currentCheckedBlocks.Add(nextBlocksPath[0]);
             nextBlocksPath.Remove(currentCheckedBlocks[0]);
         }
-
-        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
+    
 
         for (int i = 0; i < currentCheckedBlocks.Count; i++)
         {
             //We add in our list of path who are already visited, our currently checked blocks
             previousBlocksPath.Add(currentCheckedBlocks[i]);
-            
-            var bPos = currentCheckedBlocks[i].position;
-            var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
-                new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
-            pathObjects.Add(goPathObject);
-        }   
+        }
+        
+        CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
+        
+        if (nextBlocksPath.Any())
+        {
+            ExplorePreviewPath(nextBlocksPath, previousBlocksPath, finalPreviewPath, indexBlockNearby,actionPoint, playerStateManager );
+        }
+        else
+        {
+            PreviewPathSpawnGameObjects(finalPreviewPath);
+        }
+
     }
 
     #endregion
 
-    public void ResetColorPreviewPath(List<Transform> finalPreviewPath)
+    public void PreviewPathSpawnGameObjects(List<Transform> finalPreviewPath)
     {
+        for (int i = 0; i < finalPreviewPath.Count; i++)
+        {
+                
+            var bPos = finalPreviewPath[i].position;
+            var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
+                new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
+            pathObjects.Add(goPathObject);
+        }  
+        
+        
         previewPath = finalPreviewPath;
     }
 
@@ -133,9 +149,8 @@ public class PlayerActionPointCardState : PlayerBaseState
                 bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
 
                 //We look if in our list of previousBlockPath, she's not already contains the next block and if the next block is active
-                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isNextPathActive &&
-                    PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position) &&
-                    CurrentCheckedBlocPosComparedToNextBlocPos(checkedBlockPos, path.nextPath.transform.position))
+                if (!previousBlocksPath.Contains(path.nextPath) && path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position) && 
+                    CurrentCheckedBlocPosComparedToNextBlocPos(checkedBlockPos, path.nextPath.transform.position) && !finalPreviewPath.Contains(path.nextPath))
                 {
                     //We add in our list the next block
                     nextBlocksPath.Add(path.nextPath);
@@ -166,7 +181,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-        ResetColorPreviewPath(player.finalPathFinding);
+        PreviewPathSpawnGameObjects(player.finalPathFinding);
         player.indicatorPlayer.SetActive(false);
         
         foreach (var obj in pathObjects)
@@ -337,7 +352,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        ResetColorPreviewPath(player.nextBlockPath);
+        PreviewPathSpawnGameObjects(player.nextBlockPath);
 
         player.finalPathFinding.Clear();
         player.walking = false;

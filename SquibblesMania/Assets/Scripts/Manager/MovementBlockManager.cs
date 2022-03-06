@@ -81,7 +81,7 @@ public class MovementBlockManager : MonoBehaviour
 
         yield return _timeBetweenBlocMovement;
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
+        player.PlayerActionPointCardState.PreviewPathSpawnGameObjects(player.PlayerActionPointCardState.previewPath);
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
         
     }
@@ -134,7 +134,7 @@ public class MovementBlockManager : MonoBehaviour
 
         yield return _timeBetweenBlocMovement;
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
+        player.PlayerActionPointCardState.PreviewPathSpawnGameObjects(player.PlayerActionPointCardState.previewPath);
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
@@ -160,7 +160,7 @@ public class MovementBlockManager : MonoBehaviour
            
         }
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
+        player.PlayerActionPointCardState.PreviewPathSpawnGameObjects(player.PlayerActionPointCardState.previewPath);
         
         foreach (var obj in player.PlayerActionPointCardState.pathObjects)
         {
