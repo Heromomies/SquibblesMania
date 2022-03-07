@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovementManager : MonoBehaviour
 {
-	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 
 	[Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
@@ -82,8 +82,8 @@ public class PlayerMovementManager : MonoBehaviour
 			PointerEventData p = new PointerEventData(EventSystem.current);
 			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
-			raycast.Clear();
-			EventSystem.current.RaycastAll(p, raycast);
+			_raycast.Clear();
+			EventSystem.current.RaycastAll(p, _raycast);
 			// Cast a ray from the camera
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
@@ -91,11 +91,12 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 				{
-					GameObject gPlayer = Instantiate(ghostPlayer, _hit.collider.transform.position, Quaternion.identity);
+					playerCurrentlySelected = _hit.transform.gameObject;
+					var hitObj = _hit.transform.position;
+					GameObject gPlayer = Instantiate(ghostPlayer, new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z), Quaternion.identity);
 					ghostPlayer = gPlayer;
-					//ghostPlayer = _hit.collider.gameObject;
-					
-					Debug.Log(ghostPlayer.name);
+					playerCurrentlySelected = ghostPlayer;
+
 					isPlayerSelected = true;
 
 					var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
@@ -122,6 +123,16 @@ public class PlayerMovementManager : MonoBehaviour
 		else if (gesture.State == GestureRecognizerState.Ended)
 		{
 			//End of the drag
+			GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
+			for (int i = 0; i < sphereList.Count; i++)
+			{
+				sphereList[i].SetActive(false);
+			}
+			
+			previewPath.Clear();
+			sphereList.Clear();
+			ghostPlayer.SetActive(false);
+			
 			isPlayerSelected = false;
 			playerCurrentlySelected = null;
 			_touchPos = Vector3.zero;
@@ -175,8 +186,6 @@ public class PlayerMovementManager : MonoBehaviour
 					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
 					ghostPlayer.transform.position += _directionPlayer[value];
 
-					Debug.Log(ghostPlayer.name);
-					
 					StartCoroutine(WaitBeforeCheckUnderPlayer());
 				}
 			}
@@ -188,15 +197,19 @@ public class PlayerMovementManager : MonoBehaviour
 	IEnumerator WaitBeforeCheckUnderPlayer()
 	{
 		yield return _timeBetweenDeactivateSphere;
-
-		var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+		
+		ghostPlayer.GetComponent<CheckUnderGhost>().GhostMoved();
+		
+		yield return _timeBetweenDeactivateSphere;
+		
+		var cBlockGhostOn = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		var pCount = previewPath.Count - 1;
 		var pCountPos = previewPath[pCount].position;
-		var positionList = previewPath.IndexOf(cBlockPlayerOn);
+		var positionList = previewPath.IndexOf(cBlockGhostOn);
 
-		if (!previewPath.Contains(cBlockPlayerOn) && cBlockPlayerOn != previewPath[pCount])
+		if (!previewPath.Contains(cBlockGhostOn) && cBlockGhostOn != previewPath[pCount])
 		{
-			previewPath.Add(cBlockPlayerOn);
+			previewPath.Add(cBlockGhostOn);
 
 			LaunchBullet(pCountPos);
 		}
