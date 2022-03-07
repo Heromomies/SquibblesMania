@@ -9,6 +9,8 @@ public class OnTriggerShowPath : MonoBehaviour
    {
       if (other.CompareTag("Player"))
       {
+         GameManager.Instance.currentPlayerTurn.playerActionPoint+=2;
+         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
          PlayerMovementManager.Instance.sphereList.Remove(gameObject);
          gameObject.SetActive(false);
       }

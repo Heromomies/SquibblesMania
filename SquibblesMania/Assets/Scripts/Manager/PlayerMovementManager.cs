@@ -21,7 +21,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 	public GameObject playerCurrentlySelected;
 	public GameObject ghostPlayer;
-	public float playerMovementSpeed;
 	public bool isPlayerSelected;
 	public float raycastDistance;
 
@@ -30,8 +29,8 @@ public class PlayerMovementManager : MonoBehaviour
 	private readonly List<Vector3> _directionRaycast = new List<Vector3>
 		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
 
-	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
-	private WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.1f);
+	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
+	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.1f);
 
 	#region Singleton
 
@@ -75,8 +74,11 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 		}*/
 
+
 		if (gesture.State == GestureRecognizerState.Began)
 		{
+			//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0) { }
+
 			PointerEventData p = new PointerEventData(EventSystem.current);
 			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
@@ -89,9 +91,12 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 				{
-					playerCurrentlySelected = _hit.collider.gameObject;
+					GameObject gPlayer = Instantiate(ghostPlayer, _hit.collider.transform.position, Quaternion.identity);
+					ghostPlayer = gPlayer;
+					//ghostPlayer = _hit.collider.gameObject;
+					
+					Debug.Log(ghostPlayer.name);
 					isPlayerSelected = true;
-
 
 					var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
 					var cBlockPlayerOnPosition = cBlockPlayerOn.position;
@@ -100,6 +105,7 @@ public class PlayerMovementManager : MonoBehaviour
 					{
 						previewPath.Add(cBlockPlayerOn);
 
+						GameManager.Instance.currentPlayerTurn.playerActionPoint -= 2;
 						LaunchBullet(cBlockPlayerOnPosition);
 					}
 				}
@@ -130,31 +136,26 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartPlayerMovement(float xPos, float zPos) // Depends on the position the player wants to go, he moves in the wished direction
 	{
-		//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0){}
-
-		#region Displacement
-		
-		if (xPos < -2 && zPos < -2)
+		if (xPos < 0 && zPos < 0)
 		{
 			PreviewPath(0);
 		}
 
-		if (xPos > 5 && zPos > 5)
+		if (xPos > 0 && zPos > 0)
 		{
 			PreviewPath(1);
 		}
 
-		if (xPos > 2.5f && zPos < -5)
+		if (xPos > 0 && zPos < 0)
 		{
 			PreviewPath(2);
 		}
 
-		if (xPos < -8 && zPos > 2.5f)
+		if (xPos < 0 && zPos > 0)
 		{
 			PreviewPath(3);
 		}
 
-		#endregion
 
 		yield return _timeBetweenPlayerMovement;
 
@@ -163,17 +164,19 @@ public class PlayerMovementManager : MonoBehaviour
 
 	void PreviewPath(int value)
 	{
-		if (Physics.Raycast(playerCurrentlySelected.transform.position, _directionRaycast[value], out var hit, raycastDistance, blocLayerMask))
+		if (Physics.Raycast(ghostPlayer.transform.position, _directionRaycast[value], out var hit, raycastDistance, blocLayerMask))
 		{
 			if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 			{
 				var positionList = previewPath.IndexOf(hit.transform);
 
-				if (!previewPath.Contains(hit.transform) || previewPath.Count-1 == positionList+1)
+				if (!previewPath.Contains(hit.transform) || previewPath.Count - 1 == positionList + 1)
 				{
 					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-					playerCurrentlySelected.transform.position += _directionPlayer[value];
+					ghostPlayer.transform.position += _directionPlayer[value];
 
+					Debug.Log(ghostPlayer.name);
+					
 					StartCoroutine(WaitBeforeCheckUnderPlayer());
 				}
 			}

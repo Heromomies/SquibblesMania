@@ -114,12 +114,6 @@ public class TouchManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out Hit, Mathf.Infinity, touchLayersMask))
             {
-                if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
-                {
-                    //Previous selected block get his base color back
-                    MovementBlockManager.Instance.ResetPreviousBlockColor();
-                }
-
                 PlayerTurnActionStateSelectBlock();
             }
 
@@ -168,93 +162,11 @@ public class TouchManager : MonoBehaviour
                     case 3: ResetUiButtonsInteraction(1); break;
                     case 4: ResetUiButtonsInteraction(1); break;
                 }
-
-                //Take the block group parent from hit block gameobject
-                GroupBlockDetection blockGroupParent = Hit.transform.parent.GetComponent<GroupBlockDetection>();
-
-
-                //Take the current player position
-                Vector3 currentPlayerPos = GameManager.Instance.currentPlayerTurn.gameObject.transform.position;
-                //Take the current block group selected position
-                Vector3 blockGroupParentPos = blockGroupParent.gameObject.transform.position;
                 
-                switch (GameManager.Instance.actualCamPreset.presetNumber)
-                {
-                    case 1: uiInteraction[0].uiInteractionParentObject.SetActive(true); break;
-                    case 2: uiInteraction[0].uiInteractionParentObject.SetActive(true); break;
-                    case 3: uiInteraction[1].uiInteractionParentObject.SetActive(true); break;
-                    case 4: uiInteraction[1].uiInteractionParentObject.SetActive(true); break;
-                }
-               
                 blockCurrentlySelected = Hit.transform.gameObject;
                 blockParent = Hit.collider.gameObject.transform.parent;
 
-                if (blockCurrentlySelected.CompareTag("Untagged"))
-                {
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
-                    {
-                        case 1: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, true);
-                                ButtonSetInteractable(uiInteraction[0].buttonMoveDownUp, false); break;
-                        
-                        case 2: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, true);
-                                ButtonSetInteractable(uiInteraction[0].buttonMoveDownUp, false); break;
-                        
-                        case 3: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, true);
-                                ButtonSetInteractable(uiInteraction[1].buttonMoveDownUp, false); break;
-                        
-                        case 4: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, true);
-                                ButtonSetInteractable(uiInteraction[1].buttonMoveDownUp, false); break;
-                    }
-                  
-                }
-
-                //If the current block group if below or above the player pos
-                if (blockGroupParentPos.y + 2.5f - currentPlayerPos.y > -0.1f && blockGroupParentPos.y + 2.5f - currentPlayerPos.y < 0.1f)
-                {
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
-                    {
-                        case 1: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, true); break;
-                        case 2: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, true); break;
-                        case 3: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, true); break;
-                        case 4: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, true); break;
-                    }
-                }
-                else
-                {
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
-                    {
-                        case 1: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, false); break;
-                        case 2: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, false); break;
-                        case 3: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, false); break;
-                        case 4: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, false); break;
-                    }
-                }
-
-                if (GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn == blockCurrentlySelected.transform)
-                {
-                    switch (GameManager.Instance.actualCamPreset.presetNumber)
-                    {
-                        case 1: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, false); break;
-                        case 2: ButtonSetInteractable(uiInteraction[0].buttonGoToBloc, false); break;
-                        case 3: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, false); break;
-                        case 4: ButtonSetInteractable(uiInteraction[1].buttonGoToBloc, false); break;
-                    }
-                }
             }
         }
     }
-
- private void ButtonSetInteractable(Button button, bool isInteractable)
-    {
-        button.interactable = isInteractable;
-    }
-
-   private void ButtonSetInteractable(Button[] buttons, bool isInteractable)
-    {
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            buttons[i].interactable = isInteractable;
-        }
-    }
-    
 }
