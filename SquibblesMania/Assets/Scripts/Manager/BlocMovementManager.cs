@@ -29,7 +29,7 @@ public class BlocMovementManager : MonoBehaviour
     [SerializeField]
     private Vector3 offsetText;
     private float _timeForMovement= 0.5f;
-    private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.3f);
+    private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.5f);
 
     [SerializeField] private List<Transform> nextBlocUpMeshPos;
     [SerializeField]
@@ -90,11 +90,10 @@ public class BlocMovementManager : MonoBehaviour
                     _blocParentPos = blockParent.transform.position;
                     totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
                     textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
-                    SetUpPreviewBloc(blockParent);
                 }
                 textActionPointPopUp.SetActive(true);
                 textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-                
+                SetUpPreviewBloc(blockParent);
             }
         }
         //If press is currently executing

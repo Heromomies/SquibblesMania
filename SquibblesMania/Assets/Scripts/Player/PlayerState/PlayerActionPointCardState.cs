@@ -117,13 +117,11 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         for (int i = 0; i < finalPreviewPath.Count; i++)
         {
-                
             var bPos = finalPreviewPath[i].position;
             var goPathObject =  PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
                 new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
             pathObjects.Add(goPathObject);
         }  
-        
         
         previewPath = finalPreviewPath;
     }
@@ -175,7 +173,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-        PreviewPathSpawnGameObjects(player.finalPathFinding);
         player.indicatorPlayer.SetActive(false);
         
         foreach (var obj in pathObjects)
@@ -224,8 +221,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         BuildPath(player);
     }
 
-    private void ExplorePath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
-        PlayerStateManager player)
+    private void ExplorePath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, PlayerStateManager player)
     {
         //The block wich the player is currently on
         Transform currentBlock = nextBlocksPath[0];
@@ -332,6 +328,15 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.playerActionPoint = _actionPointText;
         Clear(player);
     }
+    
+    public void SetFalsePathObjects ()
+    {
+        foreach (var obj in pathObjects)
+        {
+            obj.SetActive(false);
+        }
+        pathObjects.Clear();
+    }
 
     private void Clear(PlayerStateManager player)
     {
@@ -346,8 +351,6 @@ public class PlayerActionPointCardState : PlayerBaseState
             t.GetComponent<Node>().previousBlock = null;
         }
 
-        PreviewPathSpawnGameObjects(player.nextBlockPath);
-
         player.finalPathFinding.Clear();
         player.walking = false;
         
@@ -360,23 +363,12 @@ public class PlayerActionPointCardState : PlayerBaseState
         
         if (player.playerActionPoint > 0)
         {
-            foreach (var obj in pathObjects)
-            {
-                obj.SetActive(false);
-            }
-            pathObjects.Clear();
-            
             EnterState(player);
-           
+            SetFalsePathObjects();
         }
         else
         {
-            foreach (var obj in pathObjects)
-            {
-                obj.SetActive(false);
-            }
-            pathObjects.Clear();
-            
+            SetFalsePathObjects();
             currentNodePlayerOn.isActive = false;
             if (NFCManager.Instance.hasRemovedCard)
             {
