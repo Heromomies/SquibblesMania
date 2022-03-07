@@ -193,6 +193,10 @@ public class BlocMovementManager : MonoBehaviour
                 yield break;
             }
 
+            foreach (var nextBlocDownMesh in nextBlocDownMeshPos)
+            {
+                nextBlocDownMesh.gameObject.SetActive(false);
+            }
             MovementBlocAndPlayer(1f, blockParent, blocParentNewPos, groupBlocDetection);
             yield return _timeBetweenBlocMovement;
             switch (blocParentNewPos.y - _blocParentPos.y >= 0)
@@ -215,6 +219,10 @@ public class BlocMovementManager : MonoBehaviour
                 yield break;
             }
 
+            foreach (var nextBlocUpMesh in nextBlocUpMeshPos)
+            {
+                nextBlocUpMesh.gameObject.SetActive(false);
+            }
             MovementBlocAndPlayer(-1f, blockParent, blocParentNewPos, groupBlocDetection);
             yield return _timeBetweenBlocMovement;
             switch (blocParentNewPos.y - _blocParentPos.y <= 0)
@@ -278,6 +286,7 @@ public class BlocMovementManager : MonoBehaviour
            
         }
         var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.SetFalsePathObjects();
         player.PlayerActionPointCardState.PreviewPathSpawnGameObjects(player.PlayerActionPointCardState.previewPath);
     }
     
