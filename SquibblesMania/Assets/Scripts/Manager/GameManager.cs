@@ -184,7 +184,11 @@ public class GameManager : MonoBehaviour
         cameraTouchScript.xDegrees = 0f;
         cameraTouchScript.cameraSize = cameraOrthoBaseSize;
         Camera.main.orthographicSize = cameraOrthoBaseSize;
-        cameraTouchScript.camUI.orthographicSize = cameraOrthoBaseSize;
+        foreach (var camera in cameraTouchScript.cams)
+        {
+            camera.orthographicSize = cameraOrthoBaseSize;
+        }
+        
     }
 
     private void IncreaseDemiCycle()

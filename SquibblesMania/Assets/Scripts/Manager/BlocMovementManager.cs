@@ -30,6 +30,10 @@ public class BlocMovementManager : MonoBehaviour
     private Vector3 offsetText;
     private float _timeForMovement= 0.5f;
     private WaitForSeconds _timeBetweenBlocMovement = new WaitForSeconds(0.3f);
+
+    [SerializeField] private List<Transform> nextBlocUpMeshPos;
+    [SerializeField]
+    private List<Transform> nextBlocDownMeshPos;
     // Start is called before the first frame update
     void Awake()
     {
@@ -75,25 +79,22 @@ public class BlocMovementManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayersMask))
             {
-                if (blockCurrentlySelected != null && !GameManager.Instance.currentPlayerTurn.walking)
-                {
-                    foreach (Transform child in blockParent.transform)
-                    {
-                       ResetPreviousBlockColor(child.gameObject);
-                    }
-                }
-
+                
                 blockCurrentlySelected = _hit.collider.gameObject;
-               
                 isBlocSelected = true;
                 blockCurrentlyBaseColor = blockCurrentlySelected.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
+                Transform currentPlayer = GameManager.Instance.currentPlayerTurn.transform;
                 if (!blockParent)
                 {
                     blockParent = blockCurrentlySelected.transform.parent;
                     _blocParentPos = blockParent.transform.position;
                     totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+                    textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
+                    SetUpPreviewBloc(blockParent);
                 }
-               
+                textActionPointPopUp.SetActive(true);
+                textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+                
             }
         }
         //If press is currently executing
@@ -105,27 +106,73 @@ public class BlocMovementManager : MonoBehaviour
                 BlocMovement(_touchPos);
             }
 
-            if (blockCurrentlySelected != null)
-            {
-                foreach (Transform child in blockParent.transform)
-                {
-                    PulsingBloc.PulsingEmissiveColorSquareBloc(blockCurrentlyBaseColor, Color.green, child, 0.3f);
-                }
-            }
-
         }
         //If press is ended
         else if (gesture.State == GestureRecognizerState.Ended)
         {
             //End of the drag
-            foreach (Transform bloc in blockParent)
-            {
-                ResetPreviousBlockColor(bloc.gameObject);
-            }
-
+            ResetBlocPreviewMesh();
             isBlocSelected = false;
             _touchPos = Vector3.zero;
+            GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
+            UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+            textActionPointPopUp.SetActive(false);
         }
+    }
+
+   private void ResetBlocPreviewMesh()
+    {
+        if (nextBlocDownMeshPos.Count > 0 || nextBlocUpMeshPos.Count > 0)
+        {
+            foreach (var nextBlocDownMesh in nextBlocDownMeshPos)
+            {
+                nextBlocDownMesh.gameObject.SetActive(false);
+            }
+            foreach (var nextBlocUpMesh in nextBlocUpMeshPos)
+            {
+                nextBlocUpMesh.gameObject.SetActive(false);
+            }
+               
+        }
+        nextBlocUpMeshPos.Clear();
+        nextBlocDownMeshPos.Clear();
+    }
+
+    private void SetUpPreviewBloc(Transform blocParent)
+    {
+        ResetBlocPreviewMesh();
+        foreach (Transform bloc in blocParent.transform)
+        {
+            var blocPosition = bloc.position;
+            
+            
+            GameObject blocPreviewUp = PoolManager.Instance.SpawnObjectFromPool("BlocPreview", blocPosition + Vector3.up, Quaternion.identity, null);
+            GameObject blocPreviewDown = PoolManager.Instance.SpawnObjectFromPool("BlocPreview", blocPosition + Vector3.down * 2, Quaternion.identity, null);
+
+            RoundYBlocPreviewPos(blocPreviewUp);
+            RoundYBlocPreviewPos(blocPreviewDown);
+            
+            
+            if (Mathf.RoundToInt(blocPreviewUp.transform.position.y) > GameManager.Instance.maxHeightBlocMovement+1)
+            {
+                blocPreviewUp.SetActive(false);
+            }
+                
+            if (Mathf.RoundToInt(blocPreviewDown.transform.position.y)  < GameManager.Instance.minHeightBlocMovement)
+            {
+                blocPreviewDown.SetActive(false);
+            }
+            
+            nextBlocUpMeshPos.Add(blocPreviewUp.transform);
+            nextBlocDownMeshPos.Add(blocPreviewDown.transform);
+        }
+    }
+
+    void RoundYBlocPreviewPos(GameObject bloc)
+    {
+        var previewPos = bloc.transform.position;
+        previewPos.y = Mathf.Round(previewPos.y);
+        bloc.transform.position = previewPos;
     }
 
     private void BlocMovement(Vector3 touchPos)
@@ -137,15 +184,8 @@ public class BlocMovementManager : MonoBehaviour
     IEnumerator StartBlocMovement(float yPos)
     {
         GroupBlockDetection groupBlocDetection = blockParent.GetComponent<GroupBlockDetection>();
-        Transform currentPlayer = GameManager.Instance.currentPlayerTurn.transform;
         Vector3 blocParentNewPos = blockParent.transform.position;
         
-        if (!textActionPointPopUp)
-        {
-            textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
-            textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-        }
-      
         if (yPos > 0.0f && blocParentNewPos.y < GameManager.Instance.maxHeightBlocMovement)
         {
             if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
@@ -164,7 +204,8 @@ public class BlocMovementManager : MonoBehaviour
                 case false: UpdateActionPointText(totalCurrentActionPoint++); break;
                     // GameManager.Instance.currentPlayerTurn.playerActionPoint++;
                     //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint); 
-            }
+            } 
+            SetUpPreviewBloc(blockParent);
 
         }
         else if (yPos < 0.0f && blocParentNewPos.y > GameManager.Instance.minHeightBlocMovement)
@@ -183,6 +224,7 @@ public class BlocMovementManager : MonoBehaviour
                  
                  case false: UpdateActionPointText(totalCurrentActionPoint++); break;
              }
+            SetUpPreviewBloc(blockParent);
         }
         
         ResetPreviewPlatform();
@@ -191,12 +233,9 @@ public class BlocMovementManager : MonoBehaviour
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
-            foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
-            {
-                ResetPreviousBlockColor(block.gameObject);
-            }
         }
         yield return _timeBetweenBlocMovement;
+        
         _touchPos = Vector3.zero;
         isBlocSelected = true;
         /*var player = GameManager.Instance.currentPlayerTurn;
@@ -225,12 +264,7 @@ public class BlocMovementManager : MonoBehaviour
         }
     }
    
-    
-    private void ResetPreviousBlockColor(GameObject bloc)
-    {
-        Material blockCurrentlySelectedMat = bloc.GetComponent<Renderer>().materials[2];
-        blockCurrentlySelectedMat.SetColor("_EmissionColor", blockCurrentlyBaseColor);
-    }
+   
     private void ResetPreviewPlatform()
     {
         if (TouchManager.Instance.blockParent != null)
@@ -245,7 +279,7 @@ public class BlocMovementManager : MonoBehaviour
            
         }
         var player = GameManager.Instance.currentPlayerTurn;
-        player.PlayerActionPointCardState.ResetColorPreviewPath(player.PlayerActionPointCardState.previewPath);
+        player.PlayerActionPointCardState.PreviewPathSpawnGameObjects(player.PlayerActionPointCardState.previewPath);
     }
     
   

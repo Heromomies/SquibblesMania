@@ -1663,6 +1663,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3226517119791555223, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3226517119791555223, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+      propertyPath: m_Cameras.Array.data[0]
+      value: 
+      objectReference: {fileID: 574966958}
+    - target: {fileID: 3226517119791555223, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+      propertyPath: m_Cameras.Array.data[1]
+      value: 
+      objectReference: {fileID: 571973380}
     - target: {fileID: 3226517119791555227, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -5887,6 +5899,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570080897}
   m_Mesh: {fileID: 2709882932678351358, guid: d7205f740c20b714385d97b4dd96ac70, type: 3}
+--- !u!20 &571973380 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7421729194184876933, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+  m_PrefabInstance: {fileID: 206503884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &574966958 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 3226517120416600737, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
@@ -9047,6 +9064,8 @@ MonoBehaviour:
   isBlocSelected: 0
   totalCurrentActionPoint: 0
   offsetText: {x: 0, y: 1.5, z: 1}
+  nextBlocUpMeshPos: []
+  nextBlocDownMeshPos: []
 --- !u!1 &949436256
 GameObject:
   m_ObjectHideFlags: 0
