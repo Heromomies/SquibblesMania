@@ -139,6 +139,11 @@ public class PlayerMovementManager : MonoBehaviour
 		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
 		{
 			ClearListAfterRelease();
+			
+			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+			{
+				UiManager.Instance.buttonNextTurn.SetActive(true);
+			}
 		}
 	}
 
