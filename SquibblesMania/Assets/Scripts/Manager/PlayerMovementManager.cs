@@ -33,8 +33,8 @@ public class PlayerMovementManager : MonoBehaviour
 	private readonly List<Vector3> _directionRaycast = new List<Vector3>
 		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
 
-	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
-	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.1f);
+	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.1f);
+	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.01f);
 
 	#region Singleton
 
