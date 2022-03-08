@@ -19,6 +19,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
+        player.isPlayerInActionCardState = true;
         player.nextBlockPath.Clear();
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         previewPath.Clear();
