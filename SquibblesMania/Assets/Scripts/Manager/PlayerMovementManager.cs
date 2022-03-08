@@ -8,26 +8,23 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovementManager : MonoBehaviour
 {
-	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
-	public SwipeGestureRecognizerEndMode SwipeMode = SwipeGestureRecognizerEndMode.EndContinusously;
-	private SwipeGestureRecognizer swipe;
 
-	[Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
-	public LayerMask touchLayerMask;
+	[Header("TOUCH PARAMETERS")] public LayerMask touchLayerMask;
 	public LayerMask blocLayerMask;
-	[Range(1, 10)] public int SwipeTouchCount = 1;
-	[Range(0.0f, 10.0f)] public float SwipeThresholdSeconds;
-	private Camera _cam;
-	private RaycastHit _hit;
+	[Range(1, 10)] public int swipeTouchCount = 1;
+	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
+
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
-
 	public GameObject playerCurrentlySelected;
 	public GameObject ghostPlayer;
-	public bool isPlayerSelected;
 	public float raycastDistance;
 
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
+	private SwipeGestureRecognizer _swipe;
+	private Camera _cam;
+	private RaycastHit _hit;
 	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
 	private readonly List<Vector3> _directionRaycast = new List<Vector3>
@@ -55,13 +52,13 @@ public class PlayerMovementManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Set up the new gesture 
-		swipe = new SwipeGestureRecognizer();
-		swipe.StateUpdated += Swipe_Updated;
-		swipe.DirectionThreshold = 0;
-		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = SwipeTouchCount;
-		swipe.ThresholdSeconds = SwipeThresholdSeconds;
-		swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
-		FingersScript.Instance.AddGesture(swipe);
+		_swipe = new SwipeGestureRecognizer();
+		_swipe.StateUpdated += Swipe_Updated;
+		_swipe.DirectionThreshold = 0;
+		_swipe.MinimumNumberOfTouchesToTrack = _swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
+		_swipe.ThresholdSeconds = swipeThresholdSeconds;
+		_swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
+		FingersScript.Instance.AddGesture(_swipe);
 
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
@@ -79,10 +76,10 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			switch (swipe.EndDirection)
 			{
-				case SwipeGestureRecognizerDirection.Down : StartCoroutine(StartPlayerMovement(0)); break;
-				case SwipeGestureRecognizerDirection.Up : StartCoroutine(StartPlayerMovement(1)); break;
-				case SwipeGestureRecognizerDirection.Right : StartCoroutine(StartPlayerMovement(2)); break;
-				case SwipeGestureRecognizerDirection.Left : StartCoroutine(StartPlayerMovement(3)); break;
+				case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+				case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+				case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+				case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
 			}
 		}
 	}
@@ -98,66 +95,76 @@ public class PlayerMovementManager : MonoBehaviour
 	//Update method of the long press gesture
 	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
 	{
-		if (gesture.State == GestureRecognizerState.Began)
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 		{
-			//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0) { }
-
-			PointerEventData p = new PointerEventData(EventSystem.current);
-			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
-
-			_raycast.Clear();
-			EventSystem.current.RaycastAll(p, _raycast);
-			// Cast a ray from the camera
-			Ray ray = _cam.ScreenPointToRay(p.position);
-
-			if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayerMask))
+			if (gesture.State == GestureRecognizerState.Began)
 			{
-				if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
+				PointerEventData p = new PointerEventData(EventSystem.current);
+				p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+
+				_raycast.Clear();
+				EventSystem.current.RaycastAll(p, _raycast);
+				// Cast a ray from the camera
+				Ray ray = _cam.ScreenPointToRay(p.position);
+
+				if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayerMask))
 				{
-					playerCurrentlySelected = _hit.transform.gameObject;
-					var hitObj = _hit.transform.position;
-					GameObject gPlayer = Instantiate(ghostPlayer, new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z), Quaternion.identity);
-					ghostPlayer = gPlayer;
-					playerCurrentlySelected = ghostPlayer;
-
-					isPlayerSelected = true;
-
-					var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-					var cBlockPlayerOnPosition = cBlockPlayerOn.position;
-
-					if (!previewPath.Contains(cBlockPlayerOn))
+					if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 					{
-						previewPath.Add(cBlockPlayerOn);
+						playerCurrentlySelected = _hit.transform.gameObject;
+						var hitObj = _hit.transform.position;
+						GameObject gPlayer = Instantiate(ghostPlayer, new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z), Quaternion.identity);
+						gPlayer.SetActive(true);
+						ghostPlayer = gPlayer;
+						playerCurrentlySelected = ghostPlayer;
+						
+						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
 
-						GameManager.Instance.currentPlayerTurn.playerActionPoint -= 2;
-						LaunchBullet(cBlockPlayerOnPosition);
+						var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+						var cBlockPlayerOnPosition = cBlockPlayerOn.position;
+
+						if (!previewPath.Contains(cBlockPlayerOn))
+						{
+							previewPath.Add(cBlockPlayerOn);
+
+							GameManager.Instance.currentPlayerTurn.playerActionPoint ++;
+							LaunchBullet(cBlockPlayerOnPosition);
+						}
+						
+						GameManager.Instance.currentPlayerTurn.playerActionPoint-=3;
 					}
 				}
 			}
-		}
-		else if (gesture.State == GestureRecognizerState.Ended)
-		{
-			//End of the drag
-			GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
-			for (int i = 0; i < sphereList.Count; i++)
+			else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
 			{
-				sphereList[i].SetActive(false);
+				ClearListAfterRelease();
 			}
-
-			previewPath.Clear();
-			sphereList.Clear();
-			ghostPlayer.SetActive(false);
-
-			isPlayerSelected = false;
-			playerCurrentlySelected = null;
-			_touchPos = Vector3.zero;
 		}
+		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
+		{
+			ClearListAfterRelease();
+		}
+	}
+
+	void ClearListAfterRelease()
+	{
+		GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
+		for (int i = 0; i < sphereList.Count; i++)
+		{
+			sphereList[i].SetActive(false);
+		}
+
+		previewPath.Clear();
+		sphereList.Clear();
+		ghostPlayer.SetActive(false);
+
+		_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = true;
+
+		playerCurrentlySelected = null;
 	}
 
 	IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
 	{
-		isPlayerSelected = false;
-
 		switch (direction)
 		{
 			case 0: PreviewPath(0); break;
@@ -167,8 +174,6 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 
 		yield return _timeBetweenPlayerMovement;
-
-		isPlayerSelected = true;
 	}
 
 	void PreviewPath(int value)
@@ -177,14 +182,17 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 			{
-				var positionList = previewPath.IndexOf(hit.transform);
-
-				if (!previewPath.Contains(hit.transform) || previewPath.Count - 1 == positionList + 1)
+				if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 				{
-					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-					ghostPlayer.transform.position += _directionPlayer[value];
+					var positionList = previewPath.IndexOf(hit.transform);
 
-					StartCoroutine(WaitBeforeCheckUnderPlayer());
+					if (!previewPath.Contains(hit.transform) || previewPath.Count - 1 == positionList + 1)
+					{
+						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+						ghostPlayer.transform.position += _directionPlayer[value];
+
+						StartCoroutine(WaitBeforeCheckUnderPlayer());
+					}
 				}
 			}
 		}
