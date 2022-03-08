@@ -121,17 +121,13 @@ public class PlayerMovementManager : MonoBehaviour
 						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
 
 						var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-						var cBlockPlayerOnPosition = cBlockPlayerOn.position;
 
 						if (!previewPath.Contains(cBlockPlayerOn))
 						{
 							previewPath.Add(cBlockPlayerOn);
 
 							GameManager.Instance.currentPlayerTurn.playerActionPoint ++;
-							LaunchBullet(cBlockPlayerOnPosition);
 						}
-						
-						GameManager.Instance.currentPlayerTurn.playerActionPoint-=3;
 					}
 				}
 			}
@@ -143,6 +139,16 @@ public class PlayerMovementManager : MonoBehaviour
 		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
 		{
 			ClearListAfterRelease();
+		}
+	}
+
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			GameManager.Instance.currentPlayerTurn.playerActionPoint += 5;
+			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 		}
 	}
 
@@ -182,10 +188,9 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 			{
+				var positionList = previewPath.IndexOf(hit.transform);
 				if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 				{
-					var positionList = previewPath.IndexOf(hit.transform);
-
 					if (!previewPath.Contains(hit.transform) || previewPath.Count - 1 == positionList + 1)
 					{
 						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
@@ -193,6 +198,13 @@ public class PlayerMovementManager : MonoBehaviour
 
 						StartCoroutine(WaitBeforeCheckUnderPlayer());
 					}
+				}
+				else if(previewPath.Count - 1 == positionList + 1)
+				{
+					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+					ghostPlayer.transform.position += _directionPlayer[value];
+
+					StartCoroutine(WaitBeforeCheckUnderPlayer());
 				}
 			}
 		}
