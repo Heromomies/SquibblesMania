@@ -10,10 +10,14 @@ public class PlayerMovementManager : MonoBehaviour
 {
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
+	public SwipeGestureRecognizerEndMode SwipeMode = SwipeGestureRecognizerEndMode.EndContinusously;
+	private SwipeGestureRecognizer swipe;
 
 	[Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
 	public LayerMask touchLayerMask;
 	public LayerMask blocLayerMask;
+	[Range(1, 10)] public int SwipeTouchCount = 1;
+	[Range(0.0f, 10.0f)] public float SwipeThresholdSeconds;
 	private Camera _cam;
 	private RaycastHit _hit;
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
@@ -51,30 +55,49 @@ public class PlayerMovementManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Set up the new gesture 
+		swipe = new SwipeGestureRecognizer();
+		swipe.StateUpdated += Swipe_Updated;
+		swipe.DirectionThreshold = 0;
+		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = SwipeTouchCount;
+		swipe.ThresholdSeconds = SwipeThresholdSeconds;
+		swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
+		FingersScript.Instance.AddGesture(swipe);
+
+		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
 		LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
 		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
-		//LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
+		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
+	}
+
+	private void Swipe_Updated(GestureRecognizer gesture)
+	{
+		SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
+		if (swipe.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
+		{
+			switch (swipe.EndDirection)
+			{
+				case SwipeGestureRecognizerDirection.Down : StartCoroutine(StartPlayerMovement(0)); break;
+				case SwipeGestureRecognizerDirection.Up : StartCoroutine(StartPlayerMovement(1)); break;
+				case SwipeGestureRecognizerDirection.Right : StartCoroutine(StartPlayerMovement(2)); break;
+				case SwipeGestureRecognizerDirection.Left : StartCoroutine(StartPlayerMovement(3)); break;
+			}
+		}
 	}
 
 	private void OnDisable()
 	{
 		if (FingersScript.HasInstance)
 		{
-			FingersScript.Instance.RemoveGesture(LongPressBlocMovementGesture);
+			//FingersScript.Instance.RemoveGesture(longPress);
 		}
 	}
 
 	//Update method of the long press gesture
 	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
 	{
-		/*if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
-		{
-		}*/
-
-
 		if (gesture.State == GestureRecognizerState.Began)
 		{
 			//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0) { }
@@ -112,14 +135,6 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 			}
 		}
-		else if (gesture.State == GestureRecognizerState.Executing)
-		{
-			if (isPlayerSelected)
-			{
-				_touchPos = new Vector3(gesture.DeltaX, gesture.DeltaY, 0);
-				PlayerMovement(_touchPos);
-			}
-		}
 		else if (gesture.State == GestureRecognizerState.Ended)
 		{
 			//End of the drag
@@ -128,45 +143,28 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				sphereList[i].SetActive(false);
 			}
-			
+
 			previewPath.Clear();
 			sphereList.Clear();
 			ghostPlayer.SetActive(false);
-			
+
 			isPlayerSelected = false;
 			playerCurrentlySelected = null;
 			_touchPos = Vector3.zero;
 		}
 	}
 
-	private void PlayerMovement(Vector3 touchPos) // When we select the player 
+	IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
 	{
 		isPlayerSelected = false;
-		StartCoroutine(StartPlayerMovement(touchPos.x, touchPos.y));
-	}
 
-	IEnumerator StartPlayerMovement(float xPos, float zPos) // Depends on the position the player wants to go, he moves in the wished direction
-	{
-		if (xPos < 0 && zPos < 0)
+		switch (direction)
 		{
-			PreviewPath(0);
+			case 0: PreviewPath(0); break;
+			case 1: PreviewPath(1); break;
+			case 2: PreviewPath(2); break;
+			case 3: PreviewPath(3); break;
 		}
-
-		if (xPos > 0 && zPos > 0)
-		{
-			PreviewPath(1);
-		}
-
-		if (xPos > 0 && zPos < 0)
-		{
-			PreviewPath(2);
-		}
-
-		if (xPos < 0 && zPos > 0)
-		{
-			PreviewPath(3);
-		}
-
 
 		yield return _timeBetweenPlayerMovement;
 
@@ -197,11 +195,11 @@ public class PlayerMovementManager : MonoBehaviour
 	IEnumerator WaitBeforeCheckUnderPlayer()
 	{
 		yield return _timeBetweenDeactivateSphere;
-		
+
 		ghostPlayer.GetComponent<CheckUnderGhost>().GhostMoved();
-		
+
 		yield return _timeBetweenDeactivateSphere;
-		
+
 		var cBlockGhostOn = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		var pCount = previewPath.Count - 1;
 		var pCountPos = previewPath[pCount].position;
