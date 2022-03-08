@@ -115,7 +115,7 @@ public class BlocMovementManager : MonoBehaviour
 
         }
         //If press is ended
-        else if (gesture.State == GestureRecognizerState.Ended)
+        else if (gesture.State == GestureRecognizerState.Ended || gesture.State == GestureRecognizerState.EndPending)
         {
             //End of the drag
             ResetPreviewPlatform();
@@ -128,6 +128,7 @@ public class BlocMovementManager : MonoBehaviour
             textActionPointPopUp = null;
             hasStopMovingBloc = false;
         }
+        
         
         }
         
@@ -181,7 +182,7 @@ public class BlocMovementManager : MonoBehaviour
         }
     }
 
-    void RoundYBlocPreviewPos(GameObject bloc)
+   private void RoundYBlocPreviewPos(GameObject bloc)
     {
         var previewPos = bloc.transform.position;
         previewPos.y = Mathf.Round(previewPos.y);
@@ -245,14 +246,14 @@ public class BlocMovementManager : MonoBehaviour
             SetUpPreviewBloc(blockParent);
         }
         
-        ResetPreviewPlatform();
+       
         
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
         }
+        ResetPreviewPlatform();
         yield return _timeBetweenBlocMovement;
-        
         _touchPos = Vector3.zero;
         isBlocSelected = true;
       
@@ -285,7 +286,7 @@ public class BlocMovementManager : MonoBehaviour
     {
         var player = GameManager.Instance.currentPlayerTurn;
         player.PlayerActionPointCardState.SetFalsePathObjects();
-        player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+        player.PlayerActionPointCardState.EnterState(player);
     }
     
   
