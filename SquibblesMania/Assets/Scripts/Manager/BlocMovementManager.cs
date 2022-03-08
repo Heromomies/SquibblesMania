@@ -69,7 +69,7 @@ public class BlocMovementManager : MonoBehaviour
     //Update method of the long press gesture
     private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
     {
-        if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+        if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState) 
         { 
             PlayerStateManager currentPlayerTurn = GameManager.Instance.currentPlayerTurn; 
             //If press is began
@@ -118,17 +118,19 @@ public class BlocMovementManager : MonoBehaviour
         else if (gesture.State == GestureRecognizerState.Ended)
         {
             //End of the drag
+            ResetPreviewPlatform();
             ResetBlocPreviewMesh();
             isBlocSelected = false;
             _touchPos = Vector3.zero;
             GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
             UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
             textActionPointPopUp.SetActive(false);
-        }
-            
+            textActionPointPopUp = null;
+            hasStopMovingBloc = false;
         }
         
-       
+        }
+        
     }
 
    private void ResetBlocPreviewMesh()
@@ -197,7 +199,6 @@ public class BlocMovementManager : MonoBehaviour
         GroupBlockDetection groupBlocDetection = blockParent.GetComponent<GroupBlockDetection>();
         Vector3 blocParentNewPos = blockParent.transform.position;
         
-        
         if (yPos > 0.0f)
         {
             if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
@@ -239,7 +240,6 @@ public class BlocMovementManager : MonoBehaviour
             switch (blocParentNewPos.y - _blocParentPos.y <= 0)
              {
                  case true: UpdateActionPointText(totalCurrentActionPoint--); break;
-                 
                  case false: UpdateActionPointText(totalCurrentActionPoint++); break;
              }
             SetUpPreviewBloc(blockParent);
