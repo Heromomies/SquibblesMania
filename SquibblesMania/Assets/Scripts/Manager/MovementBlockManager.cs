@@ -72,11 +72,6 @@ public class MovementBlockManager : MonoBehaviour
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
-
-            foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
-            {
-                block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
-            }
         }
 
         yield return _timeBetweenBlocMovement;
@@ -126,10 +121,6 @@ public class MovementBlockManager : MonoBehaviour
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
-            foreach (var block in GameManager.Instance.currentPlayerTurn.nextBlockPath)
-            {
-                block.gameObject.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", ResetPreviousBlockColor());
-            }
         }
 
         yield return _timeBetweenBlocMovement;
@@ -138,13 +129,7 @@ public class MovementBlockManager : MonoBehaviour
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 
-
-    public Color ResetPreviousBlockColor()
-    {
-        Material blockCurrentlySelectedMat = TouchManager.Instance.blockCurrentlySelected.GetComponent<Renderer>().materials[2];
-        blockCurrentlySelectedMat.SetColor("_EmissionColor", TouchManager.Instance.blockCurrentlyBaseColor);
-        return blockCurrentlySelectedMat.GetColor("_EmissionColor");
-    }
+    
 
     private void ResetPreviewPlatform()
     {

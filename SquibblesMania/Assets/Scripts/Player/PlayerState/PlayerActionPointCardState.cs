@@ -353,7 +353,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-        
+        BlocMovementManager.Instance.hasStopMovingBloc = false;
         
         if (EndZoneManager.Instance != null)
         {
@@ -363,8 +363,8 @@ public class PlayerActionPointCardState : PlayerBaseState
         
         if (player.playerActionPoint > 0)
         {
-            EnterState(player);
             SetFalsePathObjects();
+            PreviewPath(player.playerActionPoint, player);
         }
         else
         {

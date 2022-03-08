@@ -21,7 +21,7 @@ public class TouchManager : MonoBehaviour
     private Camera _cam;
     public RaycastHit Hit;
     public GameObject blockCurrentlySelected;
-    public Color blockCurrentlyBaseColor;
+   
     private static TouchManager _touchManager;
 
     public static TouchManager Instance => _touchManager;
@@ -122,7 +122,6 @@ public class TouchManager : MonoBehaviour
                 //If player OnSelect the block, the block get his color back
                 if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState && MovementBlockManager.Instance.isMovingBlock)
                 {
-                    MovementBlockManager.Instance.ResetPreviousBlockColor();
                     blockCurrentlySelected = null;
                 }
 
