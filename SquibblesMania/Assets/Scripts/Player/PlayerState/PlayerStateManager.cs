@@ -82,8 +82,6 @@ public class PlayerStateManager : Player
         Ray ray = new Ray(transform.position, -transform.up);
         RaycastHit hit;
 
-        Debug.DrawRay(transform.position, -transform.up, Color.red);
-
         if (Physics.Raycast(ray, out hit, 1.1f))
         {
             if (hit.collider.gameObject.GetComponent<Node>() != null)

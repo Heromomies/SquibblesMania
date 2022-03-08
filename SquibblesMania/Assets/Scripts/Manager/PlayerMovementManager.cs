@@ -8,30 +8,30 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovementManager : MonoBehaviour
 {
-	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 
-	[Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
-	public LayerMask touchLayerMask;
+	[Header("TOUCH PARAMETERS")] public LayerMask touchLayerMask;
 	public LayerMask blocLayerMask;
-	private Camera _cam;
-	private RaycastHit _hit;
+	[Range(1, 10)] public int swipeTouchCount = 1;
+	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
+
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
-
 	public GameObject playerCurrentlySelected;
 	public GameObject ghostPlayer;
-	public float playerMovementSpeed;
-	public bool isPlayerSelected;
 	public float raycastDistance;
 
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
+	private SwipeGestureRecognizer _swipe;
+	private Camera _cam;
+	private RaycastHit _hit;
 	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
 	private readonly List<Vector3> _directionRaycast = new List<Vector3>
 		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
 
-	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
-	private WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.1f);
+	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.8f);
+	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.01f);
 
 	#region Singleton
 
@@ -52,127 +52,162 @@ public class PlayerMovementManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Set up the new gesture 
+		_swipe = new SwipeGestureRecognizer();
+		_swipe.StateUpdated += Swipe_Updated;
+		_swipe.DirectionThreshold = 0;
+		_swipe.MinimumNumberOfTouchesToTrack = _swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
+		_swipe.ThresholdSeconds = swipeThresholdSeconds;
+		_swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
+		FingersScript.Instance.AddGesture(_swipe);
+
+		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
 		LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
 		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
-		//LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
+		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
+	}
+
+	private void Swipe_Updated(GestureRecognizer gesture)
+	{
+		SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
+		if (swipe.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
+		{
+			switch (swipe.EndDirection)
+			{
+				case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+				case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+				case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+				case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+			}
+		}
 	}
 
 	private void OnDisable()
 	{
 		if (FingersScript.HasInstance)
 		{
-			FingersScript.Instance.RemoveGesture(LongPressBlocMovementGesture);
+			//FingersScript.Instance.RemoveGesture(longPress);
 		}
 	}
 
 	//Update method of the long press gesture
 	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
 	{
-		/*if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
 		{
-		}*/
-
-		if (gesture.State == GestureRecognizerState.Began)
-		{
-			PointerEventData p = new PointerEventData(EventSystem.current);
-			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
-
-			raycast.Clear();
-			EventSystem.current.RaycastAll(p, raycast);
-			// Cast a ray from the camera
-			Ray ray = _cam.ScreenPointToRay(p.position);
-
-			if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayerMask))
+			if (gesture.State == GestureRecognizerState.Began)
 			{
-				if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
+				PointerEventData p = new PointerEventData(EventSystem.current);
+				p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+
+				_raycast.Clear();
+				EventSystem.current.RaycastAll(p, _raycast);
+				// Cast a ray from the camera
+				Ray ray = _cam.ScreenPointToRay(p.position);
+
+				if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayerMask))
 				{
-					playerCurrentlySelected = _hit.collider.gameObject;
-					isPlayerSelected = true;
-
-
-					var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-					var cBlockPlayerOnPosition = cBlockPlayerOn.position;
-
-					if (!previewPath.Contains(cBlockPlayerOn))
+					if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 					{
-						previewPath.Add(cBlockPlayerOn);
+						playerCurrentlySelected = _hit.transform.gameObject;
+						var hitObj = _hit.transform.position;
+						GameObject gPlayer = Instantiate(ghostPlayer, new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z), Quaternion.identity);
+						gPlayer.SetActive(true);
+						ghostPlayer = gPlayer;
+						playerCurrentlySelected = ghostPlayer;
+						
+						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
 
-						LaunchBullet(cBlockPlayerOnPosition);
+						var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+
+						if (!previewPath.Contains(cBlockPlayerOn))
+						{
+							previewPath.Add(cBlockPlayerOn);
+
+							GameManager.Instance.currentPlayerTurn.playerActionPoint ++;
+						}
 					}
 				}
 			}
-		}
-		else if (gesture.State == GestureRecognizerState.Executing)
-		{
-			if (isPlayerSelected)
+			else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
 			{
-				_touchPos = new Vector3(gesture.DeltaX, gesture.DeltaY, 0);
-				PlayerMovement(_touchPos);
+				ClearListAfterRelease();
 			}
 		}
-		else if (gesture.State == GestureRecognizerState.Ended)
+		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
 		{
-			//End of the drag
-			isPlayerSelected = false;
-			playerCurrentlySelected = null;
-			_touchPos = Vector3.zero;
+			ClearListAfterRelease();
+			
+			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+			{
+				UiManager.Instance.buttonNextTurn.SetActive(true);
+			}
 		}
 	}
 
-	private void PlayerMovement(Vector3 touchPos) // When we select the player 
+
+	private void Update()
 	{
-		isPlayerSelected = false;
-		StartCoroutine(StartPlayerMovement(touchPos.x, touchPos.y));
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			GameManager.Instance.currentPlayerTurn.playerActionPoint += 5;
+			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+		}
 	}
 
-	IEnumerator StartPlayerMovement(float xPos, float zPos) // Depends on the position the player wants to go, he moves in the wished direction
+	void ClearListAfterRelease()
 	{
-		//if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0){}
-
-		#region Displacement
-		
-		if (xPos < -2 && zPos < -2)
+		GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
+		for (int i = 0; i < sphereList.Count; i++)
 		{
-			PreviewPath(0);
+			sphereList[i].SetActive(false);
 		}
 
-		if (xPos > 5 && zPos > 5)
-		{
-			PreviewPath(1);
-		}
+		previewPath.Clear();
+		sphereList.Clear();
+		ghostPlayer.SetActive(false);
 
-		if (xPos > 2.5f && zPos < -5)
-		{
-			PreviewPath(2);
-		}
+		_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = true;
 
-		if (xPos < -8 && zPos > 2.5f)
-		{
-			PreviewPath(3);
-		}
+		playerCurrentlySelected = null;
+	}
 
-		#endregion
+	IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
+	{
+		switch (direction)
+		{
+			case 0: PreviewPath(0); break;
+			case 1: PreviewPath(1); break;
+			case 2: PreviewPath(2); break;
+			case 3: PreviewPath(3); break;
+		}
 
 		yield return _timeBetweenPlayerMovement;
-
-		isPlayerSelected = true;
 	}
 
 	void PreviewPath(int value)
 	{
-		if (Physics.Raycast(playerCurrentlySelected.transform.position, _directionRaycast[value], out var hit, raycastDistance, blocLayerMask))
+		if (Physics.Raycast(ghostPlayer.transform.position, _directionRaycast[value], out var hit, raycastDistance, blocLayerMask))
 		{
 			if (Math.Abs(hit.transform.position.y - GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.position.y) < 0.1f)
 			{
 				var positionList = previewPath.IndexOf(hit.transform);
+				if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+				{
+					if (!previewPath.Contains(hit.transform) || previewPath.Count - 1 == positionList + 1)
+					{
+						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+						ghostPlayer.transform.position += _directionPlayer[value];
 
-				if (!previewPath.Contains(hit.transform) || previewPath.Count-1 == positionList+1)
+						StartCoroutine(WaitBeforeCheckUnderPlayer());
+					}
+				}
+				else if(previewPath.Count - 1 == positionList + 1)
 				{
 					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-					playerCurrentlySelected.transform.position += _directionPlayer[value];
+					ghostPlayer.transform.position += _directionPlayer[value];
 
 					StartCoroutine(WaitBeforeCheckUnderPlayer());
 				}
@@ -186,14 +221,18 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		yield return _timeBetweenDeactivateSphere;
 
-		var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+		ghostPlayer.GetComponent<CheckUnderGhost>().GhostMoved();
+
+		yield return _timeBetweenDeactivateSphere;
+
+		var cBlockGhostOn = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		var pCount = previewPath.Count - 1;
 		var pCountPos = previewPath[pCount].position;
-		var positionList = previewPath.IndexOf(cBlockPlayerOn);
+		var positionList = previewPath.IndexOf(cBlockGhostOn);
 
-		if (!previewPath.Contains(cBlockPlayerOn) && cBlockPlayerOn != previewPath[pCount])
+		if (!previewPath.Contains(cBlockGhostOn) && cBlockGhostOn != previewPath[pCount])
 		{
-			previewPath.Add(cBlockPlayerOn);
+			previewPath.Add(cBlockGhostOn);
 
 			LaunchBullet(pCountPos);
 		}
