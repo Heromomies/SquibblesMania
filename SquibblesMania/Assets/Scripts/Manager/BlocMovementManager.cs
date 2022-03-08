@@ -39,7 +39,7 @@ public class BlocMovementManager : MonoBehaviour
 
     public static BlocMovementManager Instance => _blocMovementManager;
 
-    private List<int> _yPosBlocs = new List<int>();
+    private Vector3 _lastDirectionBloc;
     // Start is called before the first frame update
     void Awake()
     {
@@ -192,17 +192,25 @@ public class BlocMovementManager : MonoBehaviour
     private void BlocMovement(Vector3 touchPos)
     {
         isBlocSelected = false;
-        StartCoroutine(StartBlocMovement(touchPos.y));
+        Vector3 direction = touchPos.normalized;
+        StartCoroutine(StartBlocMovement(touchPos.y, direction));
+        
     }
 
-    IEnumerator StartBlocMovement(float yPos)
+    IEnumerator StartBlocMovement(float yPos, Vector3 direction)
     {
         GroupBlockDetection groupBlocDetection = blockParent.GetComponent<GroupBlockDetection>();
         Vector3 blocParentNewPos = blockParent.transform.position;
-        
+        if (_lastDirectionBloc == Vector3.zero)
+        {
+            _lastDirectionBloc = direction;
+        }
+       
+        Debug.Log(_lastDirectionBloc);
         if (yPos > 0.0f)
         {
-            if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
+
+            if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
             {
                 //TODO Feedback can't move bloc
                 yield break;
@@ -222,15 +230,21 @@ public class BlocMovementManager : MonoBehaviour
                 
             } 
             SetUpPreviewBloc(blockParent);
-
+            _lastDirectionBloc = direction;
         }
         else if (yPos < 0.0f)
         {
-            if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0)
+            if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
             {
                 //TODO Feedback can't move bloc
                 yield break;
             }
+            if (totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
+            {
+           
+                yield break;
+            }
+
 
             foreach (var nextBlocUpMesh in _nextBlocUpMeshPos)
             {
@@ -244,6 +258,7 @@ public class BlocMovementManager : MonoBehaviour
                  case false: UpdateActionPointText(totalCurrentActionPoint++); break;
              }
             SetUpPreviewBloc(blockParent);
+            _lastDirectionBloc = direction;
         }
         
        
@@ -256,7 +271,7 @@ public class BlocMovementManager : MonoBehaviour
         yield return _timeBetweenBlocMovement;
         _touchPos = Vector3.zero;
         isBlocSelected = true;
-      
+        
     }
     
     private void UpdateActionPointText (int actionPoint)
