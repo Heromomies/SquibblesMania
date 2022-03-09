@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
     public Transform[] playersSpawnPoints;
-    public int numberPlayers;
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
@@ -139,7 +138,6 @@ public class GameManager : MonoBehaviour
             actualCamPreset.buttonNextTurn.SetActive(false);
         }
 
-        TouchManager.Instance.RemoveFingerScriptPassThroughObject();
 
         Transform cameraTransform = cameraTouchScript.transform;
         Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
@@ -153,9 +151,8 @@ public class GameManager : MonoBehaviour
         //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
-        TouchManager.Instance.AddFingerScriptPassTroughObject();
-            
-        
+
+
         if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
         {
             ResetCamVars();
