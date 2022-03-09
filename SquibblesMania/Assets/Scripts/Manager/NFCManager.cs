@@ -150,7 +150,7 @@ public class NFCManager : MonoBehaviour
         SetActivePlayerActionButton(1,false);
     }
 
-    public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
+   /* public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
     {
         clicked = true;
         numberOfTheCard = charCards[0] - '0';
@@ -167,8 +167,9 @@ public class NFCManager : MonoBehaviour
 
         SetActivePlayerActionButton(0,false);
     }
-
-    public void SetActivePlayerActionButton(int index, bool setActive) // Can activate / deactivate button from everywhere in the script
+*/
+    
+   public void SetActivePlayerActionButton(int index, bool setActive) // Can activate / deactivate button from everywhere in the script
     {
         if (index == 0)
         {
