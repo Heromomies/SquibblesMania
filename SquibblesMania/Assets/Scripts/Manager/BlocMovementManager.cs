@@ -134,7 +134,10 @@ public class BlocMovementManager : MonoBehaviour
             _touchPos = Vector3.zero;
             GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
             UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-            textActionPointPopUp.SetActive(false);
+            if (textActionPointPopUp)
+            {
+                textActionPointPopUp.SetActive(false);
+            }
             _lastDirectionBloc = Vector3.zero;
             hasStopMovingBloc = false;
             playerMovementManager.enabled = true;
