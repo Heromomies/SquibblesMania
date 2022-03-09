@@ -33,6 +33,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.8f);
 	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.01f);
+	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.2f);
 
 	#region Singleton
 
@@ -85,7 +86,7 @@ public class PlayerMovementManager : MonoBehaviour
 						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
 						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
 					} break;
-				case 3:
+				case 3 :
 					switch (swipe.EndDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
@@ -195,6 +196,8 @@ public class PlayerMovementManager : MonoBehaviour
 		blocMovementManager.SetActive(true);
 
 		playerCurrentlySelected = null;
+		
+		StartCoroutine(ResetPreviewPlatform());
 	}
 
 	private IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
@@ -280,5 +283,14 @@ public class PlayerMovementManager : MonoBehaviour
 			null);
 
 		sphereList.Add(sphere);
+	}
+	
+	IEnumerator ResetPreviewPlatform()
+	{
+		yield return _timeBetweenReloadPath;
+		
+		var player = GameManager.Instance.currentPlayerTurn;
+		player.PlayerActionPointCardState.SetFalsePathObjects();
+		player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
 	}
 }
