@@ -8,11 +8,7 @@ public class CheatCodeManager : MonoBehaviour
     [SerializeField] private int actionPointToAdd;
 
     [SerializeField] private bool isActivated = true;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+   
 
     // Update is called once per frame
     void Update()
@@ -30,4 +26,6 @@ public class CheatCodeManager : MonoBehaviour
         
        
     }
+    
+    
 }

@@ -75,12 +75,40 @@ public class PlayerMovementManager : MonoBehaviour
 		SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
 		if (swipe.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
-			switch (swipe.EndDirection)
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
-				case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
-				case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
-				case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+				case 1:
+					switch (swipe.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+					} break;
+				case 3:
+					switch (swipe.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+					} break;
+				case 2:
+					switch (swipe.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break; 
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break; 
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
+					} break;
+				case 4:
+					switch (swipe.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
+					} break;
 			}
 		}
 	}
@@ -118,32 +146,32 @@ public class PlayerMovementManager : MonoBehaviour
 						gPlayer.SetActive(true);
 						ghostPlayer = gPlayer;
 						playerCurrentlySelected = ghostPlayer;
-						
+
 						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
 						blocMovementManager.SetActive(false);
 
 						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
-						
+
 						var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
 
 						if (!previewPath.Contains(cBlockPlayerOn))
 						{
 							previewPath.Add(cBlockPlayerOn);
 
-							GameManager.Instance.currentPlayerTurn.playerActionPoint ++;
+							GameManager.Instance.currentPlayerTurn.playerActionPoint++;
 						}
 					}
 				}
 			}
-			else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
+			else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 			{
 				ClearListAfterRelease();
 			}
 		}
-		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected !=null)
+		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
 			ClearListAfterRelease();
-			
+
 			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
 			{
 				UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -173,10 +201,18 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		switch (direction)
 		{
-			case 0: PreviewPath(0); break;
-			case 1: PreviewPath(1); break;
-			case 2: PreviewPath(2); break;
-			case 3: PreviewPath(3); break;
+			case 0:
+				PreviewPath(0);
+				break;
+			case 1:
+				PreviewPath(1);
+				break;
+			case 2:
+				PreviewPath(2);
+				break;
+			case 3:
+				PreviewPath(3);
+				break;
 		}
 
 		yield return _timeBetweenPlayerMovement;
@@ -199,7 +235,7 @@ public class PlayerMovementManager : MonoBehaviour
 						StartCoroutine(WaitBeforeCheckUnderPlayer());
 					}
 				}
-				else if(previewPath.Count - 1 == positionList + 1)
+				else if (previewPath.Count - 1 == positionList + 1)
 				{
 					GameManager.Instance.currentPlayerTurn.playerActionPoint--;
 					ghostPlayer.transform.position += _directionPlayer[value];
