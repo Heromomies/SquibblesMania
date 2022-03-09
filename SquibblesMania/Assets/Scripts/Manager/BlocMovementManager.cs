@@ -39,7 +39,7 @@ public class BlocMovementManager : MonoBehaviour
 
     public static BlocMovementManager Instance => _blocMovementManager;
 
-    private List<int> _yPosBlocs = new List<int>();
+    private Vector3 _lastDirectionBloc;
     // Start is called before the first frame update
     void Awake()
     {
@@ -69,7 +69,7 @@ public class BlocMovementManager : MonoBehaviour
     //Update method of the long press gesture
     private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
     {
-        if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+        if (GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState) 
         { 
             PlayerStateManager currentPlayerTurn = GameManager.Instance.currentPlayerTurn; 
             //If press is began
@@ -115,20 +115,23 @@ public class BlocMovementManager : MonoBehaviour
 
         }
         //If press is ended
-        else if (gesture.State == GestureRecognizerState.Ended)
+        else if (gesture.State == GestureRecognizerState.Ended || gesture.State == GestureRecognizerState.EndPending)
         {
             //End of the drag
+            ResetPreviewPlatform();
             ResetBlocPreviewMesh();
             isBlocSelected = false;
             _touchPos = Vector3.zero;
             GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
             UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
             textActionPointPopUp.SetActive(false);
-        }
-            
+            textActionPointPopUp = null;
+            hasStopMovingBloc = false;
         }
         
-       
+        
+        }
+        
     }
 
    private void ResetBlocPreviewMesh()
@@ -179,7 +182,7 @@ public class BlocMovementManager : MonoBehaviour
         }
     }
 
-    void RoundYBlocPreviewPos(GameObject bloc)
+   private void RoundYBlocPreviewPos(GameObject bloc)
     {
         var previewPos = bloc.transform.position;
         previewPos.y = Mathf.Round(previewPos.y);
@@ -189,18 +192,25 @@ public class BlocMovementManager : MonoBehaviour
     private void BlocMovement(Vector3 touchPos)
     {
         isBlocSelected = false;
-        StartCoroutine(StartBlocMovement(touchPos.y));
+        Vector3 direction = touchPos.normalized;
+        StartCoroutine(StartBlocMovement(touchPos.y, direction));
+        
     }
 
-    IEnumerator StartBlocMovement(float yPos)
+    IEnumerator StartBlocMovement(float yPos, Vector3 direction)
     {
         GroupBlockDetection groupBlocDetection = blockParent.GetComponent<GroupBlockDetection>();
         Vector3 blocParentNewPos = blockParent.transform.position;
-        
-        
+        if (_lastDirectionBloc == Vector3.zero)
+        {
+            _lastDirectionBloc = direction;
+        }
+       
+        Debug.Log(_lastDirectionBloc);
         if (yPos > 0.0f)
         {
-            if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0)
+
+            if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
             {
                 //TODO Feedback can't move bloc
                 yield break;
@@ -220,15 +230,21 @@ public class BlocMovementManager : MonoBehaviour
                 
             } 
             SetUpPreviewBloc(blockParent);
-
+            _lastDirectionBloc = direction;
         }
         else if (yPos < 0.0f)
         {
-            if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0)
+            if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
             {
                 //TODO Feedback can't move bloc
                 yield break;
             }
+            if (totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
+            {
+           
+                yield break;
+            }
+
 
             foreach (var nextBlocUpMesh in _nextBlocUpMeshPos)
             {
@@ -239,23 +255,23 @@ public class BlocMovementManager : MonoBehaviour
             switch (blocParentNewPos.y - _blocParentPos.y <= 0)
              {
                  case true: UpdateActionPointText(totalCurrentActionPoint--); break;
-                 
                  case false: UpdateActionPointText(totalCurrentActionPoint++); break;
              }
             SetUpPreviewBloc(blockParent);
+            _lastDirectionBloc = direction;
         }
         
-        ResetPreviewPlatform();
+       
         
         if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
         }
+        ResetPreviewPlatform();
         yield return _timeBetweenBlocMovement;
-        
         _touchPos = Vector3.zero;
         isBlocSelected = true;
-      
+        
     }
     
     private void UpdateActionPointText (int actionPoint)
@@ -285,7 +301,7 @@ public class BlocMovementManager : MonoBehaviour
     {
         var player = GameManager.Instance.currentPlayerTurn;
         player.PlayerActionPointCardState.SetFalsePathObjects();
-        player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+        player.PlayerActionPointCardState.EnterState(player);
     }
     
   
