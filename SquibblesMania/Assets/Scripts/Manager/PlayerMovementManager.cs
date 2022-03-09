@@ -14,6 +14,7 @@ public class PlayerMovementManager : MonoBehaviour
 	public LayerMask blocLayerMask;
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
+	public GameObject blocMovementManager;
 
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
@@ -53,7 +54,7 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		//Set up the new gesture 
 		_swipe = new SwipeGestureRecognizer();
-		_swipe.StateUpdated += Swipe_Updated;
+		_swipe.StateUpdated += SwipeUpdated;
 		_swipe.DirectionThreshold = 0;
 		_swipe.MinimumNumberOfTouchesToTrack = _swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
 		_swipe.ThresholdSeconds = swipeThresholdSeconds;
@@ -69,7 +70,7 @@ public class PlayerMovementManager : MonoBehaviour
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 	}
 
-	private void Swipe_Updated(GestureRecognizer gesture)
+	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
 	{
 		SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
 		if (swipe.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
@@ -119,7 +120,10 @@ public class PlayerMovementManager : MonoBehaviour
 						playerCurrentlySelected = ghostPlayer;
 						
 						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
+						blocMovementManager.SetActive(false);
 
+						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
+						
 						var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
 
 						if (!previewPath.Contains(cBlockPlayerOn))
@@ -147,17 +151,7 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 	}
 
-
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			GameManager.Instance.currentPlayerTurn.playerActionPoint += 5;
-			UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-		}
-	}
-
-	void ClearListAfterRelease()
+	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
 		GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
 		for (int i = 0; i < sphereList.Count; i++)
@@ -170,11 +164,12 @@ public class PlayerMovementManager : MonoBehaviour
 		ghostPlayer.SetActive(false);
 
 		_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = true;
+		blocMovementManager.SetActive(true);
 
 		playerCurrentlySelected = null;
 	}
 
-	IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
+	private IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
 	{
 		switch (direction)
 		{
@@ -187,7 +182,7 @@ public class PlayerMovementManager : MonoBehaviour
 		yield return _timeBetweenPlayerMovement;
 	}
 
-	void PreviewPath(int value)
+	private void PreviewPath(int value) // Move the player 
 	{
 		if (Physics.Raycast(ghostPlayer.transform.position, _directionRaycast[value], out var hit, raycastDistance, blocLayerMask))
 		{
@@ -217,7 +212,7 @@ public class PlayerMovementManager : MonoBehaviour
 		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 	}
 
-	IEnumerator WaitBeforeCheckUnderPlayer()
+	private IEnumerator WaitBeforeCheckUnderPlayer() // Check the block under the ghost
 	{
 		yield return _timeBetweenDeactivateSphere;
 
@@ -242,7 +237,7 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 	}
 
-	void LaunchBullet(Vector3 positionToInstantiate)
+	private void LaunchBullet(Vector3 positionToInstantiate) // Launch bullet 
 	{
 		GameObject sphere = PoolManager.Instance.SpawnObjectFromPool(
 			"SphereShowPath", new Vector3(positionToInstantiate.x, positionToInstantiate.y + 1.2f, positionToInstantiate.z), Quaternion.identity,

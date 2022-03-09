@@ -50,7 +50,18 @@ public class PlayerCardState : PlayerBaseState
 			}
 			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
-				NFCManager.Instance.SetActivePlayerActionButton(0,true);
+				NFCManager.Instance.clicked = true;
+				NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
+				GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
+        
+				if (GameManager.Instance.currentPlayerTurn.isPlayerShielded)
+				{
+					GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
+				}
+
+				UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
+					.PlayerActionPointCardState);
 			}
 
 			foreach (var n in _number)
