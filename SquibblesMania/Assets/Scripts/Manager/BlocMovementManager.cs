@@ -40,6 +40,8 @@ public class BlocMovementManager : MonoBehaviour
     public static BlocMovementManager Instance => _blocMovementManager;
 
     private Vector3 _lastDirectionBloc;
+    [SerializeField]
+    private PlayerMovementManager playerMovementManager;
     // Start is called before the first frame update
     void Awake()
     {
@@ -86,6 +88,7 @@ public class BlocMovementManager : MonoBehaviour
             {
                 if (_hit.collider.gameObject.GetComponent<Node>() && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform))
                 {
+                    playerMovementManager.enabled = false;
                     if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
                     {
                           
@@ -134,6 +137,7 @@ public class BlocMovementManager : MonoBehaviour
             textActionPointPopUp.SetActive(false);
             _lastDirectionBloc = Vector3.zero;
             hasStopMovingBloc = false;
+            playerMovementManager.enabled = true;
             if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
                 UiManager.Instance.buttonNextTurn.SetActive(true);
             else
