@@ -69,6 +69,9 @@ public class PlayerMovementManager : MonoBehaviour
 		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
 		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
+		
+		GameObject gPlayer = Instantiate(ghostPlayer, transform.position, Quaternion.identity);
+		ghostPlayer = gPlayer;
 	}
 
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
@@ -141,11 +144,11 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 					{
+						ghostPlayer.SetActive(true);
 						playerCurrentlySelected = _hit.transform.gameObject;
 						var hitObj = _hit.transform.position;
-						GameObject gPlayer = Instantiate(ghostPlayer, new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z), Quaternion.identity);
-						gPlayer.SetActive(true);
-						ghostPlayer = gPlayer;
+						ghostPlayer.transform.position = new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z);
+						
 						playerCurrentlySelected = ghostPlayer;
 
 						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
@@ -191,6 +194,7 @@ public class PlayerMovementManager : MonoBehaviour
 		previewPath.Clear();
 		sphereList.Clear();
 		ghostPlayer.SetActive(false);
+		Debug.Log(ghostPlayer.name);
 
 		_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = true;
 		blocMovementManager.SetActive(true);
