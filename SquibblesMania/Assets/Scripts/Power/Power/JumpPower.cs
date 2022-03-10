@@ -78,7 +78,13 @@ public class JumpPower : MonoBehaviour
 
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerBlocTouched))
 			{
-				var rbPlayer = GameManager.Instance.currentPlayerTurn.GetComponent<Rigidbody>();
+				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
+				var posHitInfo = hitInfo.transform.position;
+				
+				tCurrentPlayerTurn.position = new Vector3(posHitInfo.x, posHitInfo.y +0.5f, posHitInfo.z);
+
+				hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform.position += Vector3.down;
+				/*var rbPlayer = GameManager.Instance.currentPlayerTurn.GetComponent<Rigidbody>();
 				GameManager.Instance.currentPlayerTurn.isInJump = true;
 				
 				rbPlayer.constraints = RigidbodyConstraints.None;
@@ -86,7 +92,8 @@ public class JumpPower : MonoBehaviour
 				
 				Vector3 vo = CalculateVelocity(hitInfo.transform.position, transform.position, speed);
 				GameManager.Instance.currentPlayerTurn.transform.rotation = Quaternion.LookRotation(vo);
-				rbPlayer.velocity = vo;
+				rbPlayer.velocity = vo;*/
+				Clear();
 			}
 			else
 			{
@@ -94,7 +101,25 @@ public class JumpPower : MonoBehaviour
 			}
 		}
 	}
-	
+
+	private void Clear()
+	{
+		foreach (var colFinished in collidersFinished)
+		{
+			colFinished.GetComponent<Renderer>().materials[2] = firstMat;
+			colFinished.gameObject.layer = 3;
+		}
+		
+		for ( int i = 0; i < collidersMax.Length; i++)
+		{
+			collidersMax[i] = null;
+		}
+		for ( int i = 0; i < collidersMin.Length; i++)
+		{
+			collidersMin[i] = null;
+		}
+		collidersFinished.Clear();
+	}
 	Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola
 	{
 		//define the distance x and y first
