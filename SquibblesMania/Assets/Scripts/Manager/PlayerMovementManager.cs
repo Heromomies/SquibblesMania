@@ -15,7 +15,8 @@ public class PlayerMovementManager : MonoBehaviour
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	public GameObject blocMovementManager;
-
+	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
+	
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
 	public GameObject playerCurrentlySelected;
@@ -59,6 +60,7 @@ public class PlayerMovementManager : MonoBehaviour
 		_swipe.DirectionThreshold = 0;
 		_swipe.MinimumNumberOfTouchesToTrack = _swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
 		_swipe.ThresholdSeconds = swipeThresholdSeconds;
+		_swipe.MinimumDistanceUnits = minimumDistanceUnits;
 		_swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
 		FingersScript.Instance.AddGesture(_swipe);
 
@@ -185,7 +187,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
-		GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
 		for (int i = 0; i < sphereList.Count; i++)
 		{
 			sphereList[i].SetActive(false);
@@ -194,7 +195,6 @@ public class PlayerMovementManager : MonoBehaviour
 		previewPath.Clear();
 		sphereList.Clear();
 		ghostPlayer.SetActive(false);
-		Debug.Log(ghostPlayer.name);
 
 		_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = true;
 		blocMovementManager.SetActive(true);
@@ -202,6 +202,9 @@ public class PlayerMovementManager : MonoBehaviour
 		playerCurrentlySelected = null;
 		
 		StartCoroutine(ResetPreviewPlatform());
+
+		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
+		GameManager.Instance.currentPlayerTurn.StartPathFinding();
 	}
 
 	private IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
@@ -293,8 +296,11 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		yield return _timeBetweenReloadPath;
 		
-		var player = GameManager.Instance.currentPlayerTurn;
-		player.PlayerActionPointCardState.SetFalsePathObjects();
-		player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+		if (!GameManager.Instance.currentPlayerTurn.walking)
+		{
+			var player = GameManager.Instance.currentPlayerTurn;
+			player.PlayerActionPointCardState.SetFalsePathObjects();
+			player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+		}
 	}
 }
