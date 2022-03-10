@@ -263,13 +263,14 @@ public class BlocMovementManager : MonoBehaviour
         {
             _lastDirectionBloc = direction;
         }
-
-        if (GameManager.Instance.actualCamPreset.presetNumber == 1 || GameManager.Instance.actualCamPreset.presetNumber == 2)
+        
+        
+        if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
         {
             yPos = +yPos;
         }
 
-        else if (GameManager.Instance.actualCamPreset.presetNumber == 3 || GameManager.Instance.actualCamPreset.presetNumber == 4)
+        else if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamTwo)
         {
             yPos = -yPos;
             direction = -direction;
@@ -379,3 +380,4 @@ public class BlocMovementManager : MonoBehaviour
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
     }
 }
+

@@ -387,21 +387,15 @@ public class PlayerActionPointCardState : PlayerBaseState
 			}
 			else
 			{
-				switch (GameManager.Instance.actualCamPreset.presetNumber)
+				if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
 				{
-					case 1:
-						NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
-						break;
-					case 2:
-						NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
-						break;
-					case 3:
-						NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
-						break;
-					case 4:
-						NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
-						break;
+					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
 				}
+				else if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamTwo)
+				{
+					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
+				}
+				
 			}
 		}
 	}
