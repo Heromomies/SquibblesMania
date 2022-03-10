@@ -16,6 +16,7 @@ public class PlayerMovementManager : MonoBehaviour
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	public GameObject blocMovementManager;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
+	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
 	
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
@@ -67,8 +68,8 @@ public class PlayerMovementManager : MonoBehaviour
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
-		LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
-		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
+		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
+		LongPressBlocMovementGesture.MinimumDurationSeconds = minimumDurationSeconds;
 		LongPressBlocMovementGesture.AllowSimultaneousExecution(_swipe);
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 		

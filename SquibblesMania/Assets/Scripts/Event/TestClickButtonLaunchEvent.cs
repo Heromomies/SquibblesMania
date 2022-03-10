@@ -6,6 +6,14 @@ using UnityEngine;
 public class TestClickButtonLaunchEvent : MonoBehaviour
 {
    public List<GameObject> eventToTest;
+   public GameObject powerToTest;
+   private void Update()
+   {
+      if (Input.GetKeyDown(KeyCode.E))
+      {
+         powerToTest.SetActive(true);
+      }
+   }
 
    public void OnClicked()
    {

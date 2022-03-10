@@ -15,7 +15,7 @@ public class SwapPower : MonoBehaviour
 	private Camera _cam;
 
 	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
-	public PanGestureRecognizer PlayerTouchGesture { get; private set; }
+	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	private void Awake()
 	{
@@ -24,13 +24,13 @@ public class SwapPower : MonoBehaviour
 
 	private void OnEnable()
 	{
-		PlayerTouchGesture = new PanGestureRecognizer();
-		PlayerTouchGesture.ThresholdUnits = 0.0f; // start right away
+		SwapTouchGesture = new PanGestureRecognizer();
+		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
 		//Add new gesture
-		PlayerTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
-		PlayerTouchGesture.AllowSimultaneousExecutionWithAllGestures();
+		SwapTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
+		SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
-		FingersScript.Instance.AddGesture(PlayerTouchGesture);
+		FingersScript.Instance.AddGesture(SwapTouchGesture);
 		
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
@@ -89,7 +89,7 @@ public class SwapPower : MonoBehaviour
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
 		
-		PlayerTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
+		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 		
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
