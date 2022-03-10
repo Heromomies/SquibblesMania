@@ -43,14 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fef144e83469cc4daeacd34319eaed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchLayersMask:
+  blocMoveLayersMask:
     serializedVersion: 2
     m_Bits: 8
   hasStopMovingBloc: 0
-  blockParent: {fileID: 0}
+  blockParentCurrentlySelected: {fileID: 0}
   blockCurrentlySelected: {fileID: 0}
   movementBlocAmount: 1
   isBlocSelected: 0
   totalCurrentActionPoint: 0
+  textActionPointPopUp: {fileID: 0}
   offsetText: {x: 0, y: 1.5, z: 1}
-  _yPosBlocs: 
+  playerMovementManager: {fileID: 0}
