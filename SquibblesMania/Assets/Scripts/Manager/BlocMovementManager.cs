@@ -59,6 +59,7 @@ public class BlocMovementManager : MonoBehaviour
         LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
         LongPressBlocMovementGesture.MinimumDurationSeconds = 0.3f;
         LongPressBlocMovementGesture.AllowSimultaneousExecution(playerMovementManager.LongPressBlocMovementGesture);
+        LongPressBlocMovementGesture.AllowSimultaneousExecution(playerMovementManager.swipe);
         FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
     }
 
