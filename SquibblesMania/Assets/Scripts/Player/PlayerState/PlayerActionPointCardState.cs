@@ -38,28 +38,31 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 		int indexBlockNearby = 0;
 
-
-		//Foreach possible path compared to the block wich player is currently on
-		foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
+		if (actionPoint > 0)
 		{
-			Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
-			bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
-
-			if (path.isActive && isNextPathActive && actualNode.isActive)
+			//Foreach possible path compared to the block wich player is currently on
+			foreach (GamePath path in player.currentBlockPlayerOn.GetComponent<Node>().possiblePath)
 			{
-				possiblePath.Add(path.nextPath);
-				finalPreviewPath.Add(path.nextPath);
-				path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
+				Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
+				bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
+
+				if (path.isActive && isNextPathActive && actualNode.isActive)
+				{
+					possiblePath.Add(path.nextPath);
+					finalPreviewPath.Add(path.nextPath);
+					path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
+				}
 			}
+
+			finalPreviewPath.Add(player.currentBlockPlayerOn);
+
+
+			//We add in our list of past blocks, the block which the player is currently on
+			pastBlocks.Add(player.currentBlockPlayerOn);
+
+			ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
 		}
-
-		finalPreviewPath.Add(player.currentBlockPlayerOn);
-
-
-		//We add in our list of past blocks, the block which the player is currently on
-		pastBlocks.Add(player.currentBlockPlayerOn);
-
-		ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
+		
 	}
 
 	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,

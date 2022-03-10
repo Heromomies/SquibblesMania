@@ -153,7 +153,6 @@ public class BlocMovementManager : MonoBehaviour
         if (currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
-            ResetPreviewPathObjects();
         }
 
         else

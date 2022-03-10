@@ -35,6 +35,7 @@ public class PlayerStateManager : Player
         GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
         currentNodePlayerOn.isActive = false;
+        playerMovementManager = PlayerMovementManager.Instance;
     }
 
 
