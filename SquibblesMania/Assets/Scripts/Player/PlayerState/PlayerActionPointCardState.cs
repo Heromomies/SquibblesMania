@@ -284,9 +284,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 		//While the player selected block is != to the block wich player supposed to be 
 		while (block != player.currentBlockPlayerOn)
 		{
-			//We add this block to our list final pathfinding
-			player.finalPathFinding.Add(block);
-
 			//If in our selected block, the precedent block is not nul then the block become the past block
 			if (block.GetComponent<Node>().previousBlock != null)
 			{
@@ -297,13 +294,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 				return;
 			}
 		}
-
-		player.finalPathFinding.Insert(0, player.currentTouchBlock);
-
-
+		
 		if (!player.walking)
 		{
 			player.walking = true;
+			player.finalPathFinding = player.nextBlockPath; 
+			
 			player.StartCoroutine(FollowPath(player));
 		}
 	}
@@ -311,9 +307,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 	//Movement of player
 	private IEnumerator FollowPath(PlayerStateManager player)
 	{
-		for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
+		for (int i = player.finalPathFinding.Count -1; i > 0; i--)
 		{
-			Vector3 walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
+			Vector3 walkPoint = player.finalPathFinding[1].GetComponent<Node>().GetWalkPoint();
 
 			Vector3 movePos = walkPoint + new Vector3(0, 1, 0);
 			Vector3 direction = (movePos - player.transform.position).normalized;
@@ -322,7 +318,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 			player.transform.DOMove(movePos, player.timeMoveSpeed);
 			player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
-			player.finalPathFinding.Remove(player.finalPathFinding[i]);
+			player.finalPathFinding.Remove(player.finalPathFinding[1]);
 
 			yield return _timeBetweenPlayerMovement;
 		}
@@ -347,6 +343,14 @@ public class PlayerActionPointCardState : PlayerBaseState
 		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
 		groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
 
+		var pMovementManager = player.playerMovementManager;
+		
+		pMovementManager.blocMovementManager.SetActive(true);
+		pMovementManager.playerCurrentlySelected = null;
+		pMovementManager.previewPath.Clear();
+		pMovementManager.sphereList.Clear();
+		pMovementManager.ghostPlayer.SetActive(false);
+		
 		//Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
 		foreach (Transform t in player.finalPathFinding)
 		{

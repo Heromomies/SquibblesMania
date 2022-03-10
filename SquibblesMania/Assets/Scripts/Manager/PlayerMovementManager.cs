@@ -69,11 +69,12 @@ public class PlayerMovementManager : MonoBehaviour
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
 		LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
 		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
-		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
+		LongPressBlocMovementGesture.AllowSimultaneousExecution(_swipe);
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 		
 		GameObject gPlayer = Instantiate(ghostPlayer, transform.position, Quaternion.identity);
 		ghostPlayer = gPlayer;
+		ghostPlayer.SetActive(false);
 	}
 
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
@@ -152,8 +153,7 @@ public class PlayerMovementManager : MonoBehaviour
 						ghostPlayer.transform.position = new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z);
 						
 						playerCurrentlySelected = ghostPlayer;
-
-						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
+						
 						blocMovementManager.SetActive(false);
 
 						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
@@ -187,42 +187,27 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
+		GameManager.Instance.currentPlayerTurn.nextBlockPath = previewPath;
+		
 		for (int i = 0; i < sphereList.Count; i++)
 		{
 			sphereList[i].SetActive(false);
 		}
-
-		previewPath.Clear();
-		sphereList.Clear();
-		ghostPlayer.SetActive(false);
-
-		_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = true;
-		blocMovementManager.SetActive(true);
-
-		playerCurrentlySelected = null;
 		
-		StartCoroutine(ResetPreviewPlatform());
-
 		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		GameManager.Instance.currentPlayerTurn.StartPathFinding();
+
+		StartCoroutine(ResetPreviewPlatform());
 	}
 
 	private IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
 	{
 		switch (direction)
 		{
-			case 0:
-				PreviewPath(0);
-				break;
-			case 1:
-				PreviewPath(1);
-				break;
-			case 2:
-				PreviewPath(2);
-				break;
-			case 3:
-				PreviewPath(3);
-				break;
+			case 0: PreviewPath(0); break;
+			case 1: PreviewPath(1); break;
+			case 2: PreviewPath(2); break;
+			case 3: PreviewPath(3); break;
 		}
 
 		yield return _timeBetweenPlayerMovement;
