@@ -15,7 +15,8 @@ public class PlayerMovementManager : MonoBehaviour
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	public GameObject blocMovementManager;
-
+	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
+	
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
 	public GameObject playerCurrentlySelected;
@@ -33,6 +34,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.8f);
 	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.01f);
+	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.2f);
 
 	#region Singleton
 
@@ -58,6 +60,7 @@ public class PlayerMovementManager : MonoBehaviour
 		_swipe.DirectionThreshold = 0;
 		_swipe.MinimumNumberOfTouchesToTrack = _swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
 		_swipe.ThresholdSeconds = swipeThresholdSeconds;
+		_swipe.MinimumDistanceUnits = minimumDistanceUnits;
 		_swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
 		FingersScript.Instance.AddGesture(_swipe);
 
@@ -68,6 +71,9 @@ public class PlayerMovementManager : MonoBehaviour
 		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
 		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
+		
+		GameObject gPlayer = Instantiate(ghostPlayer, transform.position, Quaternion.identity);
+		ghostPlayer = gPlayer;
 	}
 
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
@@ -85,7 +91,7 @@ public class PlayerMovementManager : MonoBehaviour
 						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
 						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
 					} break;
-				case 3:
+				case 3 :
 					switch (swipe.EndDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
@@ -140,11 +146,11 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 					{
+						ghostPlayer.SetActive(true);
 						playerCurrentlySelected = _hit.transform.gameObject;
 						var hitObj = _hit.transform.position;
-						GameObject gPlayer = Instantiate(ghostPlayer, new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z), Quaternion.identity);
-						gPlayer.SetActive(true);
-						ghostPlayer = gPlayer;
+						ghostPlayer.transform.position = new Vector3(hitObj.x, hitObj.y - 0.5f, hitObj.z);
+						
 						playerCurrentlySelected = ghostPlayer;
 
 						_cam.GetComponent<FingersPanOrbitComponentScript>().enabled = false;
@@ -181,7 +187,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
-		GameManager.Instance.currentPlayerTurn.transform.position = ghostPlayer.transform.position;
 		for (int i = 0; i < sphereList.Count; i++)
 		{
 			sphereList[i].SetActive(false);
@@ -195,6 +200,11 @@ public class PlayerMovementManager : MonoBehaviour
 		blocMovementManager.SetActive(true);
 
 		playerCurrentlySelected = null;
+		
+		StartCoroutine(ResetPreviewPlatform());
+
+		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
+		GameManager.Instance.currentPlayerTurn.StartPathFinding();
 	}
 
 	private IEnumerator StartPlayerMovement(int direction) // Depends on the position the player wants to go, he moves in the wished direction
@@ -280,5 +290,17 @@ public class PlayerMovementManager : MonoBehaviour
 			null);
 
 		sphereList.Add(sphere);
+	}
+	
+	IEnumerator ResetPreviewPlatform()
+	{
+		yield return _timeBetweenReloadPath;
+		
+		if (!GameManager.Instance.currentPlayerTurn.walking)
+		{
+			var player = GameManager.Instance.currentPlayerTurn;
+			player.PlayerActionPointCardState.SetFalsePathObjects();
+			player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+		}
 	}
 }
