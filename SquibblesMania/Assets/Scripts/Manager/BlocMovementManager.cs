@@ -58,6 +58,7 @@ public class BlocMovementManager : MonoBehaviour
         LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
         LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
         LongPressBlocMovementGesture.MinimumDurationSeconds = 0.3f;
+        LongPressBlocMovementGesture.AllowSimultaneousExecution(playerMovementManager.LongPressBlocMovementGesture);
         FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
     }
 
@@ -66,6 +67,7 @@ public class BlocMovementManager : MonoBehaviour
         if (FingersScript.HasInstance)
         {
             FingersScript.Instance.RemoveGesture(LongPressBlocMovementGesture);
+            
         }
     }
 
@@ -87,13 +89,12 @@ public class BlocMovementManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out _hit, Mathf.Infinity, blocMoveLayersMask))
                 {
-                    playerMovementManager.enabled = false;
                     Node.ColorBloc colorBloc = _hit.collider.gameObject.GetComponent<Node>().colorBloc;
 
                     if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform))
                     {
                         //If current player have more than 0 action point then he can move bloc
-                        if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+                        if (currentPlayerTurn.playerActionPoint > 0)
                         {
                             blockCurrentlySelected = _hit.collider.gameObject;
                             isBlocSelected = true;
@@ -147,9 +148,12 @@ public class BlocMovementManager : MonoBehaviour
 
                     _lastDirectionBloc = Vector3.zero;
                     hasStopMovingBloc = false;
-                    playerMovementManager.enabled = true;
-                    if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
+                    if (currentPlayerTurn.playerActionPoint <= 0)
+                    {
                         UiManager.Instance.buttonNextTurn.SetActive(true);
+                        ResetPreviewPathObjects();
+                    }
+               
                     else
                     {
                         UiManager.Instance.buttonNextTurn.SetActive(false);
@@ -279,8 +283,9 @@ public class BlocMovementManager : MonoBehaviour
             }
         }
 
-        ResetPreviewPathObjects();
+     
         yield return _timeInSecondsBetweenBlocMovement;
+        ResetPreviewPathObjects();
         _touchPos = Vector3.zero;
         isBlocSelected = true;
     }
@@ -312,6 +317,8 @@ public class BlocMovementManager : MonoBehaviour
         }
 
         SetUpBlocPreviewMesh(blockParentCurrentlySelected);
+        var player = GameManager.Instance.currentPlayerTurn;
+        player.PlayerActionPointCardState.SetFalsePathObjects();
         _lastDirectionBloc = direction;
     }
 
