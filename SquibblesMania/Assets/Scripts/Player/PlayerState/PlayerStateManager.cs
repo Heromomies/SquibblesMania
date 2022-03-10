@@ -22,7 +22,8 @@ public class PlayerStateManager : Player
     [Header("PLAYER UTILITIES")] public int playerNumber;
     public bool isPlayerInActionCardState;
     public List<Transform> nextBlockPath;
-
+    public PlayerMovementManager playerMovementManager;
+    
     public GameObject psStun;
     
     private float _timeLeft = 1.5f;
