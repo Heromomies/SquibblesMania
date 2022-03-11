@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GrabPower : MonoBehaviour
 {
-	public int grabRange;
+	/*public int grabRange;
 
 	public List<GameObject> buttons;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -72,5 +72,5 @@ public class GrabPower : MonoBehaviour
 				button.SetActive(false);
 			}
 		}
-	}
+	}*/
 }

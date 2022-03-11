@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5365709616806789223}
-  - component: {fileID: 5365709616806789222}
+  - component: {fileID: 2355224435190384680}
   m_Layer: 0
-  m_Name: Grab Power
+  m_Name: Jump Power
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5365709616806789223
 Transform:
   m_ObjectHideFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5365709616806789222
+--- !u!114 &2355224435190384680
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,8 +40,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 5365709616806789220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5d89484a63352468ff83d7774fa20d, type: 3}
+  m_Script: {fileID: 11500000, guid: e17cb7a137f520d4c806abb8a6e1b9fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grabRange: 4
-  buttons: []
+  radiusMin: 2
+  radiusMax: 3
+  speed: 1
+  layer:
+    serializedVersion: 2
+    m_Bits: 8
+  layerBlocTouched:
+    serializedVersion: 2
+    m_Bits: 0
+  collidersMin: []
+  collidersMax: []
+  collidersFinished: []
+  firstMat: {fileID: 2100000, guid: e983180ce4b63434eab2ffc6e2e2c206, type: 2}
+  secondMat: {fileID: 2100000, guid: a8c9a9c5099158a468c204df7979c808, type: 2}

@@ -16,6 +16,7 @@ public class PlayerMovementManager : MonoBehaviour
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	public GameObject blocMovementManager;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
+	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
 	
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
@@ -67,8 +68,8 @@ public class PlayerMovementManager : MonoBehaviour
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
-		LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
-		LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
+		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
+		LongPressBlocMovementGesture.MinimumDurationSeconds = minimumDurationSeconds;
 		LongPressBlocMovementGesture.AllowSimultaneousExecution(swipe);
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 		
@@ -95,10 +96,10 @@ public class PlayerMovementManager : MonoBehaviour
 				case 3 :
 					switch (swipe.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
 					} break;
 				case 2:
 					switch (swipe.EndDirection)
@@ -111,10 +112,10 @@ public class PlayerMovementManager : MonoBehaviour
 				case 4:
 					switch (swipe.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
 					} break;
 			}
 		}

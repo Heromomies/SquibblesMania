@@ -18,7 +18,7 @@ public static class PulsingBloc
     public static void PulsingEmissiveColorSquareBloc(Color baseSquareColorBloc, Color colorTo, Transform bloc, float length)
     {
         Material blocSquareMat = bloc.GetComponent<Renderer>().materials[2];
-        blocSquareMat.SetColor("_EmissionColor", Color.Lerp(colorTo, baseSquareColorBloc, Mathf.PingPong(Time.time, length))); 
+        blocSquareMat.SetColor("_EmissionColor", Color.Lerp(colorTo, baseSquareColorBloc, Mathf.PingPong(Time.deltaTime, length))); 
     }
     
 }
