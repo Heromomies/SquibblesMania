@@ -25,7 +25,7 @@ public class PlayerMovementManager : MonoBehaviour
 	public float raycastDistance;
 
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
-	private SwipeGestureRecognizer _swipe;
+	public SwipeGestureRecognizer swipe;
 	private Camera _cam;
 	private RaycastHit _hit;
 	private readonly List<Vector3> _directionPlayer = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -56,14 +56,14 @@ public class PlayerMovementManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Set up the new gesture 
-		_swipe = new SwipeGestureRecognizer();
-		_swipe.StateUpdated += SwipeUpdated;
-		_swipe.DirectionThreshold = 0;
-		_swipe.MinimumNumberOfTouchesToTrack = _swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
-		_swipe.ThresholdSeconds = swipeThresholdSeconds;
-		_swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		_swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
-		FingersScript.Instance.AddGesture(_swipe);
+		swipe = new SwipeGestureRecognizer();
+		swipe.StateUpdated += SwipeUpdated;
+		swipe.DirectionThreshold = 0;
+		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
+		swipe.ThresholdSeconds = swipeThresholdSeconds;
+		swipe.MinimumDistanceUnits = minimumDistanceUnits;
+		swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
+		FingersScript.Instance.AddGesture(swipe);
 
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
