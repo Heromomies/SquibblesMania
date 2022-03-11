@@ -26,7 +26,7 @@ public class BlocMovementManager : MonoBehaviour
     [SerializeField] private bool isBlocSelected;
     private Vector3 _lastDirectionBloc;
     private float _timeInSecondsForBlocMove = 0.5f;
-    private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.5f);
+    private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.3f);
     
     [Header("POP UP TEXT PARAMETERS")] 
     [SerializeField] private int totalCurrentActionPoint;
@@ -57,7 +57,7 @@ public class BlocMovementManager : MonoBehaviour
         LongPressBlocMovementGesture = new LongPressGestureRecognizer();
         LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
         LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
-        LongPressBlocMovementGesture.MinimumDurationSeconds = 0.3f;
+        LongPressBlocMovementGesture.MinimumDurationSeconds = 0.1f;
         LongPressBlocMovementGesture.AllowSimultaneousExecution(playerMovementManager.LongPressBlocMovementGesture);
         LongPressBlocMovementGesture.AllowSimultaneousExecution(playerMovementManager.swipe);
         FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
