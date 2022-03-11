@@ -2296,7 +2296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventToTest:
   - {fileID: 1198056434}
-  powerToTest: {fileID: 1387475368}
+  powerToTest: {fileID: 371488780}
 --- !u!1 &331189454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2943,17 +2943,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6814452967727376479, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
   m_PrefabInstance: {fileID: 696536282}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &371488781 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6814452967727376478, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
-  m_PrefabInstance: {fileID: 696536282}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371488780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81b6c07202eff984590a9f833182e43d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &381350127
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7657,11 +7646,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6814452967727376479, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: m_Name
-      value: Shield Power
+      value: Miror Power
       objectReference: {fileID: 0}
-    - target: {fileID: 6814452967727376479, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: firstMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 4ab3d27d63836fa40a01a55024c4ade1, type: 2}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: dashRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: secondMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 15325a34de779894c840c342971ef6c5, type: 2}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: buttons.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: layerPlayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: rangeDetectionPlayer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: buttons.Array.data[0]
+      value: 
+      objectReference: {fileID: 1888613249}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: buttons.Array.data[1]
+      value: 
+      objectReference: {fileID: 2127919573}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: layerMaskInteractableAndPlayer.m_Bits
+      value: 72
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
@@ -15257,7 +15278,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1476
+  m_Name: pb_Mesh128630
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15627,7 +15648,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1684
+  m_Name: pb_Mesh128764
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15791,7 +15812,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1462
+  m_Name: pb_Mesh130146
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16798,7 +16819,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1486
+  m_Name: pb_Mesh128078
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18962,7 +18983,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1676
+  m_Name: pb_Mesh129664
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -21349,7 +21370,7 @@ PrefabInstance:
     - target: {fileID: 9130979813744952664, guid: faad57f67a9460447866d2d519a8cf54, type: 3}
       propertyPath: shield
       value: 
-      objectReference: {fileID: 371488781}
+      objectReference: {fileID: 0}
     - target: {fileID: 9130979813744952664, guid: faad57f67a9460447866d2d519a8cf54, type: 3}
       propertyPath: buttonOne
       value: 

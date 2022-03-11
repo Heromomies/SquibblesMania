@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,7 +14,7 @@ public class SwapPower : MonoBehaviour
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
-
+	[HideInInspector] public Collider[] players;
 	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
@@ -39,7 +40,7 @@ public class SwapPower : MonoBehaviour
 
 	private void ShowPower() // Show the sphere and admit the player to chose the other player to swap
 	{
-		Collider[] players = Physics.OverlapSphere(transform.position, range, layer);
+		 players = Physics.OverlapSphere(transform.position, range, layer);
 
 		_playerOne = GameManager.Instance.currentPlayerTurn.gameObject.GetComponent<Collider>();
 		
@@ -66,9 +67,11 @@ public class SwapPower : MonoBehaviour
 
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layer))
 			{
-				_playerTwo = hitInfo.collider;
-
-				LaunchPower();
+				if (players.ToList().Contains(hitInfo.collider))
+				{
+					_playerTwo = hitInfo.collider;
+					LaunchPower();
+				}
 			}
 			else
 			{
