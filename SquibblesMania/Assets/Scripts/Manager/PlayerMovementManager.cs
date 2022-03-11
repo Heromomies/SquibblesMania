@@ -96,10 +96,10 @@ public class PlayerMovementManager : MonoBehaviour
 				case 3 :
 					switch (swipe.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
 					} break;
 				case 2:
 					switch (swipe.EndDirection)
@@ -112,10 +112,10 @@ public class PlayerMovementManager : MonoBehaviour
 				case 4:
 					switch (swipe.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
 					} break;
 			}
 		}
