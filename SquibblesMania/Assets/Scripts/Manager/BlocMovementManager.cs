@@ -25,8 +25,8 @@ public class BlocMovementManager : MonoBehaviour
     private Vector3 _blocParentCurrentlySelectedPos;
     [SerializeField] private bool isBlocSelected;
     private Vector3 _lastDirectionBloc;
-    private float _timeInSecondsForBlocMove = 0.5f;
-    private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.3f);
+    private float _timeInSecondsForBlocMove = 0.4f;
+    private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.4f);
     
     [Header("POP UP TEXT PARAMETERS")] 
     [SerializeField] private int totalCurrentActionPoint;
@@ -117,11 +117,13 @@ public class BlocMovementManager : MonoBehaviour
                     _touchPos = new Vector3(gesture.DeltaX, gesture.DeltaY, 0);
                     BlocMovement(_touchPos);
                     isBlocSelected = false;
+                  
                 }
             }
             //If press is ended
             else if (gesture.State == GestureRecognizerState.Ended)
             {
+                hasStopMovingBloc = true;
                 //playerMovementManager.enabled = true;
                 if (hasStopMovingBloc)
                 {
@@ -129,6 +131,7 @@ public class BlocMovementManager : MonoBehaviour
                     EndMovingBloc(currentPlayerTurn);
                 }
             }
+           
         }
     }
 
@@ -149,7 +152,7 @@ public class BlocMovementManager : MonoBehaviour
 
      
         _lastDirectionBloc = Vector3.zero;
-        hasStopMovingBloc = false;
+      
         if (currentPlayerTurn.playerActionPoint <= 0)
         {
             UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -306,17 +309,19 @@ public class BlocMovementManager : MonoBehaviour
             }
         }
 
-     
+        
         yield return _timeInSecondsBetweenBlocMovement;
         ResetPreviewPathObjects();
         _touchPos = Vector3.zero;
         isBlocSelected = true;
+        hasStopMovingBloc = false;
     }
 
     #region MovingBloc
 
     private void StartMoveBloc(List<Transform> previewBlocsMesh, GroupBlockDetection groupBlocDetection, Vector3 blocParentNewPos, float moveBlocAmount)
     {
+        ResetBlocPreviewMesh();
         foreach (var blocMesh in previewBlocsMesh)
         {
             blocMesh.gameObject.SetActive(false);
@@ -339,7 +344,11 @@ public class BlocMovementManager : MonoBehaviour
                 break;
         }
 
-        SetUpBlocPreviewMesh(blockParentCurrentlySelected);
+       
+        if (!hasStopMovingBloc)
+        {
+            SetUpBlocPreviewMesh(blockParentCurrentlySelected);
+        }
         var player = GameManager.Instance.currentPlayerTurn;
         player.PlayerActionPointCardState.SetFalsePathObjects();
         _lastDirectionBloc = direction;
