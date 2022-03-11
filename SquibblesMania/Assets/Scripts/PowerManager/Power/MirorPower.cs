@@ -17,9 +17,7 @@ public class MirorPower : MonoBehaviour
     public List<GameObject> buttons;
     public LayerMask layerMaskInteractableAndPlayer;
     
-    [Space]
-    public Material firstMat;
-    public Material secondMat;
+    private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
     private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
     
     private readonly List<RaycastResult> raycast = new List<RaycastResult>();
@@ -56,7 +54,6 @@ public class MirorPower : MonoBehaviour
             
             if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerPlayer))
             {
-	            Debug.Log("I'm here");
 	            zombiePlayer = hitInfo.collider.gameObject;
 
 	            switch (GameManager.Instance.actualCamPreset.presetNumber)
@@ -172,25 +169,32 @@ public class MirorPower : MonoBehaviour
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
 
-		var positionZombiePlayer = zombiePlayer.transform.position;
+		StartCoroutine(DisplaceZombiePlayer(numberDirectionVector));
+	}
+
+    IEnumerator DisplaceZombiePlayer(int numberDirectionVector)
+    {
+	    yield return _timeBetweenPlayerZombieMovement;
+	    
+	    var positionZombiePlayer = zombiePlayer.transform.position;
 		transform.position = positionZombiePlayer;
 
 		if (Physics.Raycast(transform.position, -_vectorRaycast[numberDirectionVector], out var hitZombie, dashRange)) // launch the raycast
 		{
 			if (hitZombie.collider.gameObject.layer == 3 || hitZombie.collider.gameObject.layer == 0)
 			{
-				var distance = Vector3.Distance(position, hitZombie.collider.transform.position);
+				var distance = Vector3.Distance(positionZombiePlayer, hitZombie.collider.transform.position);
 				distance = (int) distance;
 
 				if (distance <= 3.5f)
 				{
 					zombiePlayer.transform.DOMove(
-						position - _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
+						positionZombiePlayer - _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
 				}
 			}
 			else if (hitZombie.collider.gameObject.layer == 6) // When the raycast touch another player
 			{
-				var distanceBetweenTwoPlayers = Vector3.Distance(position, hitZombie.collider.transform.position);
+				var distanceBetweenTwoPlayers = Vector3.Distance(positionZombiePlayer, hitZombie.collider.transform.position);
 				distanceBetweenTwoPlayers += 0.1f;
 				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers; // check distance between two players
 
@@ -212,7 +216,7 @@ public class MirorPower : MonoBehaviour
 					distanceBetweenBlockAndPlayerTouched += 0.1f;
 					distanceBetweenBlockAndPlayerTouched = (int) distanceBetweenBlockAndPlayerTouched; //Check distance between himself and the block behind him
 
-					var distanceBetweenTwoPlayersWhenABlockIsBehind = Vector3.Distance(position, hitZombie.collider.transform.position);
+					var distanceBetweenTwoPlayersWhenABlockIsBehind = Vector3.Distance(positionZombiePlayer, hitZombie.collider.transform.position);
 					distanceBetweenTwoPlayersWhenABlockIsBehind += 0.1f;
 					distanceBetweenTwoPlayersWhenABlockIsBehind =
 						(int) distanceBetweenTwoPlayersWhenABlockIsBehind; // Check the distance between the two players
@@ -233,12 +237,12 @@ public class MirorPower : MonoBehaviour
 						{
 							case 2:
 								zombiePlayer.transform.DOMove(
-									position - _vectorRaycast[numberDirectionVector] *
+									positionZombiePlayer - _vectorRaycast[numberDirectionVector] *
 									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
 								break;
 							case 3:
 								zombiePlayer.transform.DOMove(
-									position - _vectorRaycast[numberDirectionVector] *
+									positionZombiePlayer - _vectorRaycast[numberDirectionVector] *
 									(distanceBetweenTwoPlayers - 1), 0.05f);
 								break;
 						}
@@ -251,7 +255,7 @@ public class MirorPower : MonoBehaviour
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					zombiePlayer.transform.DOMove(
-						position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
+						positionZombiePlayer - _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 					hitZombie.collider.transform.DOMove(hitZombie.collider.transform.position
 					                                    - _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, 1f);
 				}
@@ -259,13 +263,13 @@ public class MirorPower : MonoBehaviour
 			else if (hitZombie.collider.gameObject.layer == 0)
 			{
 				zombiePlayer.transform.DOMove(
-					position - _vectorRaycast[numberDirectionVector] * dashRange, 0.1f);
+					positionZombiePlayer - _vectorRaycast[numberDirectionVector] * dashRange, 0.1f);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			zombiePlayer.transform.DOMove(
-				position - _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
+				positionZombiePlayer - _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
 		
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
@@ -278,5 +282,5 @@ public class MirorPower : MonoBehaviour
 				button.SetActive(false);
 			}
 		}
-	}
+    }
 }
