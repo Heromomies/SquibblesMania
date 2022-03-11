@@ -70,7 +70,7 @@ public class PlayerMovementManager : MonoBehaviour
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
 		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
 		LongPressBlocMovementGesture.MinimumDurationSeconds = minimumDurationSeconds;
-		LongPressBlocMovementGesture.AllowSimultaneousExecution(_swipe);
+		LongPressBlocMovementGesture.AllowSimultaneousExecution(swipe);
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 		
 		GameObject gPlayer = Instantiate(ghostPlayer, transform.position, Quaternion.identity);

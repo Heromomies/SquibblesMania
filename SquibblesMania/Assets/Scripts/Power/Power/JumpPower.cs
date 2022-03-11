@@ -59,9 +59,13 @@ public class JumpPower : MonoBehaviour
 			}
 		}
 
+		
 		foreach (var colFinished in collidersFinished)
 		{
-			PulsingBloc.PulsingEmissiveColorSquareBloc(firstMat.color, secondMat.color, colFinished.transform, 0.2f);
+			var color = colFinished.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
+			color = secondMat.color;
+			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor",color);
+			
 			colFinished.gameObject.layer = 10;
 		}
 	}
@@ -80,19 +84,12 @@ public class JumpPower : MonoBehaviour
 			{
 				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
 				var posHitInfo = hitInfo.transform.position;
-				
+
 				tCurrentPlayerTurn.position = new Vector3(posHitInfo.x, posHitInfo.y +0.5f, posHitInfo.z);
 
-				hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform.position += Vector3.down;
-				/*var rbPlayer = GameManager.Instance.currentPlayerTurn.GetComponent<Rigidbody>();
-				GameManager.Instance.currentPlayerTurn.isInJump = true;
+				if(hitInfo.collider.CompareTag("Platform"))
+					hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform.position += Vector3.down;
 				
-				rbPlayer.constraints = RigidbodyConstraints.None;
-				rbPlayer.constraints = RigidbodyConstraints.FreezeRotation;
-				
-				Vector3 vo = CalculateVelocity(hitInfo.transform.position, transform.position, speed);
-				GameManager.Instance.currentPlayerTurn.transform.rotation = Quaternion.LookRotation(vo);
-				rbPlayer.velocity = vo;*/
 				Clear();
 			}
 			else
@@ -106,7 +103,8 @@ public class JumpPower : MonoBehaviour
 	{
 		foreach (var colFinished in collidersFinished)
 		{
-			colFinished.GetComponent<Renderer>().materials[2] = firstMat;
+			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
+			
 			colFinished.gameObject.layer = 3;
 		}
 		
@@ -119,31 +117,5 @@ public class JumpPower : MonoBehaviour
 			collidersMin[i] = null;
 		}
 		collidersFinished.Clear();
-	}
-	Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola
-	{
-		//define the distance x and y first
-		Vector3 distance = target - origin;
-		Vector3 distanceXZ = distance;
-		distanceXZ.Normalize();
-		distanceXZ.y = 0;
-
-		//creating a float that represents our distance 
-		float sy = distance.y;
-		float sxz = distance.magnitude;
-
-		//calculating initial x velocity
-		//Vx = x / t
-
-		float vxz = sxz / velocity;
-
-		////calculating initial y velocity
-		//Vy0 = y/t + 1/2 * g * t
-
-		float vy = sy / velocity + 0.8f * Mathf.Abs(Physics.gravity.y) * velocity;
-		Vector3 result = distanceXZ * vxz;
-		result.y = vy;
-
-		return result;
 	}
 }
