@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
             cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
         }
 
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 30;
     }
 
 

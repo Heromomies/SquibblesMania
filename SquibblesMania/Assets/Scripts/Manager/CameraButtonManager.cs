@@ -20,6 +20,11 @@ public class CameraButtonManager : MonoBehaviour
         _cam = Camera.main.transform;
     }
 
+    public void RotateCam(int rotateCount)
+    {
+       
+    }
+
     public void TopViewMode()
     {
         int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
