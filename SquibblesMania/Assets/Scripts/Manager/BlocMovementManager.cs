@@ -143,6 +143,8 @@ public class BlocMovementManager : MonoBehaviour
         ResetBlocPreviewMesh();
         isBlocSelected = false;
         _touchPos = Vector3.zero;
+        blockCurrentlySelected = null;
+        blockParentCurrentlySelected = null;
         GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
         if (textActionPointPopUp)
@@ -254,7 +256,11 @@ public class BlocMovementManager : MonoBehaviour
     private void BlocMovement(Vector3 touchPos)
     {
         var direction = touchPos.normalized;
-        StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
+        if (isBlocSelected)
+        {
+            StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
+        }
+     
     }
 
     IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
@@ -308,7 +314,6 @@ public class BlocMovementManager : MonoBehaviour
                 EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y <= 0, direction);
             }
         }
-
         
         yield return _timeInSecondsBetweenBlocMovement;
         ResetPreviewPathObjects();
