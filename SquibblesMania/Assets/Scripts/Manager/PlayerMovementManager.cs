@@ -17,13 +17,15 @@ public class PlayerMovementManager : MonoBehaviour
 	public GameObject blocMovementManager;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
+	[Range(0.0f, 0.1f)] public float timeLeftBetweenSwipe;	
 	
 	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
 	public GameObject playerCurrentlySelected;
 	public GameObject ghostPlayer;
 	public float raycastDistance;
-
+	
+	private float _timeLeftMax;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public SwipeGestureRecognizer swipe;
 	private Camera _cam;
@@ -33,7 +35,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private readonly List<Vector3> _directionRaycast = new List<Vector3>
 		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
 
-	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.1f);
+	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.3f);
 	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.001f);
 	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.2f);
 
@@ -55,6 +57,8 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void OnEnable()
 	{
+		_timeLeftMax = timeLeftBetweenSwipe;
+		
 		//Set up the new gesture 
 		swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
@@ -83,40 +87,46 @@ public class PlayerMovementManager : MonoBehaviour
 		SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
 		if (swipe.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			timeLeftBetweenSwipe -= Time.deltaTime;
+			if ( timeLeftBetweenSwipe < 0 )
 			{
-				case 1:
-					switch (swipe.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
-					} break;
-				case 3 :
-					switch (swipe.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
-					} break;
-				case 2:
-					switch (swipe.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break; 
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break; 
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
-					} break;
-				case 4:
-					switch (swipe.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
-						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
-						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
-						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
-					} break;
+				switch (GameManager.Instance.actualCamPreset.presetNumber)
+				{
+					case 1:
+						switch (swipe.EndDirection)
+						{
+							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+							case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+						} break;
+					case 3 :
+						switch (swipe.EndDirection)
+						{
+							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
+							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
+							case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break;
+							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
+						} break;
+					case 2:
+						switch (swipe.EndDirection)
+						{
+							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
+							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break; 
+							case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(3)); break; 
+							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
+						} break;
+					case 4:
+						switch (swipe.EndDirection)
+						{
+							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
+							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
+							case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovement(2)); break;
+							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
+						} break;
+				}
+
+				timeLeftBetweenSwipe = _timeLeftMax;
 			}
 		}
 	}
@@ -189,6 +199,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
 		GameManager.Instance.currentPlayerTurn.nextBlockPath = previewPath;
+		timeLeftBetweenSwipe = _timeLeftMax;
 		
 		for (int i = 0; i < sphereList.Count; i++)
 		{
