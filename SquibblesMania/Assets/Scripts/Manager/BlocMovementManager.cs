@@ -145,8 +145,6 @@ public class BlocMovementManager : MonoBehaviour
         _touchPos = Vector3.zero;
         blockCurrentlySelected = null;
         blockParentCurrentlySelected = null;
-        GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
-        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
         if (textActionPointPopUp)
         {
             textActionPointPopUp.SetActive(false);
@@ -386,6 +384,8 @@ public class BlocMovementManager : MonoBehaviour
         //Update text action point at player top pos
         actionPoint = totalCurrentActionPoint > 0 ? totalCurrentActionPoint : -totalCurrentActionPoint;
         textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPoint);
+        GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
+        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
     }
     private void ResetPreviewPathObjects()
     {
