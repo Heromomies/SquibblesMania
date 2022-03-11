@@ -8,7 +8,7 @@ public class DashPower : MonoBehaviour
 	public int dashRange;
 
 	public List<GameObject> buttons;
-	public LayerMask layerMask;
+	public LayerMask layerMaskInteractableAndPlayer;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
 	private void OnEnable()
@@ -65,7 +65,7 @@ public class DashPower : MonoBehaviour
 				}
 
 				if (Physics.Raycast(hit.transform.position, _vectorRaycast[numberDirectionVector], out var hitPlayerTouched, distanceBetweenTwoPlayers,
-					layerMask)) // If the player repulsed touch a block behind him
+					layerMaskInteractableAndPlayer)) // If the player repulsed touch a block behind him
 				{
 					var distanceBetweenBlockAndPlayerTouched = Vector3.Distance(hit.transform.position,
 						hitPlayerTouched.transform.position);
