@@ -6,6 +6,7 @@ using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 public class CameraButtonManager : MonoBehaviour
 {
@@ -19,19 +20,39 @@ public class CameraButtonManager : MonoBehaviour
     private float _timeRotateSpeedInSeconds = 0.5f;
     [SerializeField]
     private Button[] buttonsCamRotate;
+
+    [SerializeField] private List<Image> uiCamSquare;
+    [SerializeField] private int indexUiCamSquareList;
+    
     private void Awake()
     {
         _cameraManager = this;
         _cam = Camera.main.transform;
     }
 
+    private void Start()
+    {
+        indexUiCamSquareList++;
+        SetUpSquareIcon(indexUiCamSquareList);
+    }
+
     public void StartRotateCam(float rotateAmount)
     {
-        StartCoroutine(RotateCamCoroutine(rotateAmount));
-        foreach (var button in buttonsCamRotate)
+        if (rotateAmount < 0.0f)
         {
-            button.enabled = !button.enabled;
+            indexUiCamSquareList++;
+            if (indexUiCamSquareList > uiCamSquare.Count-1) indexUiCamSquareList = 0;
+            SetUpSquareIcon(indexUiCamSquareList);
         }
+        else
+        {
+            indexUiCamSquareList--;
+            if (indexUiCamSquareList < 0) indexUiCamSquareList = uiCamSquare.Count - 1;
+            SetUpSquareIcon(indexUiCamSquareList);
+        }
+        
+        StartCoroutine(RotateCamCoroutine(rotateAmount));
+        EnableCamRotateButtons();
     }
 
     private IEnumerator RotateCamCoroutine(float rotateAmount)
@@ -39,6 +60,7 @@ public class CameraButtonManager : MonoBehaviour
         float timeSinceStarted = 0f;
         if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
         {
+            
             while (true)
             {
                 timeSinceStarted += Time.deltaTime * _timeRotateSpeedInSeconds;
@@ -47,10 +69,7 @@ public class CameraButtonManager : MonoBehaviour
                 if (timeSinceStarted >= 0.45f)
                 {
                     Debug.Log("Object arrived");
-                    foreach (var button in buttonsCamRotate)
-                    {
-                        button.enabled = !button.enabled;
-                    }
+                    EnableCamRotateButtons();                    
                     yield break;
                 }
 
@@ -58,6 +77,38 @@ public class CameraButtonManager : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    private void EnableCamRotateButtons()
+    {
+        foreach (var button in buttonsCamRotate)
+        {
+            button.enabled = !button.enabled;
+        }
+    }
+
+    private void SetUpSquareIcon(int indexSquareIcon)
+    {
+      Transform childIconSelected = uiCamSquare[indexSquareIcon].transform.GetChild(0);
+      childIconSelected.gameObject.SetActive(true);
+      var uiCamSquareColor =  uiCamSquare[indexSquareIcon].color;
+      uiCamSquareColor.a = 1f;
+      uiCamSquare[indexSquareIcon].color = uiCamSquareColor;
+      
+      foreach (var iconImage in uiCamSquare)
+      {
+          if (iconImage != uiCamSquare[indexSquareIcon])
+          {
+              var iconImageColor = iconImage.color;
+              iconImageColor.a = 0.75f;
+              iconImage.color = iconImageColor;
+
+              Transform childIconImage = iconImage.transform.GetChild(0);
+              childIconImage.gameObject.SetActive(false);
+          }
+      }
+      
+      
     }
 
     public void TopViewMode()
