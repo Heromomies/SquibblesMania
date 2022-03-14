@@ -84,8 +84,8 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
 	{
-		SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
-		if (swipe.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
+		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
+		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
 			timeLeftBetweenSwipe -= Time.deltaTime;
 			if ( timeLeftBetweenSwipe < 0 )
@@ -93,7 +93,7 @@ public class PlayerMovementManager : MonoBehaviour
 				switch (GameManager.Instance.actualCamPreset.presetNumber)
 				{
 					case 1:
-						switch (swipe.EndDirection)
+						switch (swipeGestureRecognizer.EndDirection)
 						{
 							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
 							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
@@ -101,7 +101,7 @@ public class PlayerMovementManager : MonoBehaviour
 							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(3)); break;
 						} break;
 					case 3 :
-						switch (swipe.EndDirection)
+						switch (swipeGestureRecognizer.EndDirection)
 						{
 							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
 							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break;
@@ -109,7 +109,7 @@ public class PlayerMovementManager : MonoBehaviour
 							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
 						} break;
 					case 2:
-						switch (swipe.EndDirection)
+						switch (swipeGestureRecognizer.EndDirection)
 						{
 							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(1)); break;
 							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(0)); break; 
@@ -117,7 +117,7 @@ public class PlayerMovementManager : MonoBehaviour
 							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovement(2)); break;
 						} break;
 					case 4:
-						switch (swipe.EndDirection)
+						switch (swipeGestureRecognizer.EndDirection)
 						{
 							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovement(0)); break;
 							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovement(1)); break;
