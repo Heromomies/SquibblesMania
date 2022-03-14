@@ -5,10 +5,12 @@ using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SwapPower : MonoBehaviour
+public class SwapPower : MonoBehaviour, IManagePower
 {
 	public int range;
 	public LayerMask layer;
+
+	public Material firstMat, secondMat;
 
 	private GameObject _playerToSwap;
 	private Vector3 _pos;
@@ -32,18 +34,31 @@ public class SwapPower : MonoBehaviour
 		SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
-		
+
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
-		ShowPower();
+		DisplayPower();
 	}
 
-	private void ShowPower() // Show the sphere and admit the player to chose the other player to swap
+	public void DisplayPower() // Show the sphere and admit the player to chose the other player to swap
 	{
-		 players = Physics.OverlapSphere(transform.position, range, layer);
+		// ReSharper disable once Unity.PreferNonAllocApi
+		players = Physics.OverlapSphere(transform.position, range, layer);
 
 		_playerOne = GameManager.Instance.currentPlayerTurn.gameObject.GetComponent<Collider>();
-		
+
+		for (int i = 0; i < players.Length; i++)
+		{
+			if (players[i].name != _playerOne.name)
+			{
+				Transform child = players[i].transform.GetChild(1);
+
+				var color = child.GetComponentInChildren<Renderer>().material.color;
+				color = secondMat.color;
+				child.GetComponentInChildren<Renderer>().material.color = color;
+			}
+		}
+
 		switch (players.Length)
 		{
 			case 1:
@@ -51,6 +66,10 @@ public class SwapPower : MonoBehaviour
 				PowerManager.Instance.ChangeTurnPlayer();
 				break;
 		}
+	}
+
+	public void CancelPower()
+	{
 	}
 
 	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
@@ -70,7 +89,7 @@ public class SwapPower : MonoBehaviour
 				if (players.ToList().Contains(hitInfo.collider))
 				{
 					_playerTwo = hitInfo.collider;
-					LaunchPower();
+					DoPower();
 				}
 			}
 			else
@@ -79,8 +98,8 @@ public class SwapPower : MonoBehaviour
 			}
 		}
 	}
-	
-	private void LaunchPower()
+
+	public void DoPower()
 	{
 		var transformPlayerOne = _playerOne.transform;
 		_pos = transformPlayerOne.position;
@@ -91,10 +110,22 @@ public class SwapPower : MonoBehaviour
 	{
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
-		
-		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
-		
+
+		ClearPower();
+	}
+	
+	public void ClearPower()
+	{	SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
+
+		for (int i = 0; i < players.Length; i++)
+		{
+			Transform child = players[i].transform.GetChild(1);
+
+			child.GetComponentInChildren<Renderer>().material.color = firstMat.color;
+		}
+
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+		
 	}
 }

@@ -10,7 +10,7 @@ public class PlayerMovementManager : MonoBehaviour
 {
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 
-	[Header("TOUCH PARAMETERS")] public LayerMask touchLayerMask;
+	[Header("TOUCH SETTINGS")] public LayerMask touchLayerMask;
 	public LayerMask blocLayerMask;
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
@@ -19,7 +19,7 @@ public class PlayerMovementManager : MonoBehaviour
 	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
 	[Range(0.0f, 0.1f)] public float timeLeftBetweenSwipe;	
 	
-	[Header("Player PARAMETERS")] public List<Transform> previewPath = new List<Transform>();
+	[Header("PLAYER SETTINGS")] public List<Transform> previewPath = new List<Transform>();
 	public List<GameObject> sphereList = new List<GameObject>();
 	public GameObject playerCurrentlySelected;
 	public GameObject ghostPlayer;

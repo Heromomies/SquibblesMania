@@ -5,7 +5,7 @@ using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class JumpPower : MonoBehaviour
+public class JumpPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")]
 	[Range(0.0f, 4.0f)] public int radiusMin;
@@ -37,6 +37,41 @@ public class JumpPower : MonoBehaviour
 
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
 
+		DisplayPower();
+	}
+
+	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
+	{
+		if (gesture.State == GestureRecognizerState.Began)
+		{
+			PointerEventData p = new PointerEventData(EventSystem.current);
+			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+			
+			EventSystem.current.RaycastAll(p, _raycast);
+			Ray ray = _cam.ScreenPointToRay(p.position);
+
+			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerBlocTouched))
+			{
+				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
+				var posHitInfo = hitInfo.transform.position;
+
+				tCurrentPlayerTurn.position = new Vector3(posHitInfo.x, posHitInfo.y +0.5f, posHitInfo.z);
+
+				if(hitInfo.collider.CompareTag("Platform"))
+					hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform.position += Vector3.down;
+				
+				ClearPower();
+			}
+			else
+			{
+				gesture.Reset();
+			}
+		}
+	}
+	
+
+	public void DisplayPower()
+	{
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = tPosPower;
 
@@ -70,36 +105,17 @@ public class JumpPower : MonoBehaviour
 		}
 	}
 
-	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
+	public void CancelPower()
 	{
-		if (gesture.State == GestureRecognizerState.Began)
-		{
-			PointerEventData p = new PointerEventData(EventSystem.current);
-			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
-			
-			EventSystem.current.RaycastAll(p, _raycast);
-			Ray ray = _cam.ScreenPointToRay(p.position);
-
-			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerBlocTouched))
-			{
-				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
-				var posHitInfo = hitInfo.transform.position;
-
-				tCurrentPlayerTurn.position = new Vector3(posHitInfo.x, posHitInfo.y +0.5f, posHitInfo.z);
-
-				if(hitInfo.collider.CompareTag("Platform"))
-					hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform.position += Vector3.down;
-				
-				Clear();
-			}
-			else
-			{
-				gesture.Reset();
-			}
-		}
+		
 	}
 
-	private void Clear()
+	public void DoPower()
+	{
+		
+	}
+
+	public void ClearPower()
 	{
 		foreach (var colFinished in collidersFinished)
 		{

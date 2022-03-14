@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class DashPower : MonoBehaviour
+public class DashPower : MonoBehaviour, IManagePower
 {
 	public int dashRange;
 
@@ -137,5 +137,24 @@ public class DashPower : MonoBehaviour
 				button.SetActive(false);
 			}
 		}
+	}
+
+	public void DisplayPower()
+	{
+		
+	}
+
+	public void CancelPower()
+	{
+		
+	}
+
+	public void DoPower()
+	{
+	
+	}
+	public void ClearPower()
+	{
+		
 	}
 }
