@@ -88,7 +88,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28dc0e77eac45a34b845e50615bf9bb7, type: 3}
   m_Name: 
@@ -141,6 +141,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras:
+  - {fileID: 7421729194184876933}
   - {fileID: 3226517120416600737}
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -188,14 +189,35 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2010c74954f17124eb05b041c7f579f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  isCamRotate: 0
-  timeRotateSpeedInSeconds: 0.5
+  indexUiCamSquareList: 0
+  actualUiCamPreset:
+  - uiCamSquare:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    buttonsCamRotate:
+    - {fileID: 0}
+    - {fileID: 0}
+  - uiCamSquare:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    buttonsCamRotate:
+    - {fileID: 0}
+    - {fileID: 0}
+  uiCamPresets:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0

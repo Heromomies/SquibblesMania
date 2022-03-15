@@ -127,7 +127,6 @@ public class GameManager : MonoBehaviour
 
         CamConfig(_count);
         NFCManager.Instance.PlayerChangeTurn();
-        //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
     void CamConfig(int countTurn)
@@ -151,7 +150,7 @@ public class GameManager : MonoBehaviour
         //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
-
+        CameraButtonManager.Instance.SetUpUiCamPreset();
 
         if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
         {
@@ -167,8 +166,7 @@ public class GameManager : MonoBehaviour
             cameraTouchScript.orbitXMinDegrees = -camRotateXMaxDegrees;
             cameraTouchScript.OrbitYMaxDegrees = 0;
         }
-
-      // cameraTouchScript.OrbitTarget = currentPlayerTurn.transform;
+        
         _count++;
         if (_count >= camPreSets.Count)
         {

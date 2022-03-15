@@ -15,101 +15,122 @@ public class CameraButtonManager : MonoBehaviour
 
     private static CameraButtonManager _cameraManager;
     public static CameraButtonManager Instance => _cameraManager;
-    [SerializeField] private bool isCamRotate;
-
-    private float _timeRotateSpeedInSeconds = 0.5f;
-    [SerializeField]
-    private Button[] buttonsCamRotate;
-
-    [SerializeField] private List<Image> uiCamSquare;
-    [SerializeField] private int indexUiCamSquareList;
     
+    
+    [SerializeField] private int indexUiCamSquareList;
+    [SerializeField] private int baseIndexUICamSquare = 2;
+    public UICamPresets actualUiCamPreset;
+    public List<UICamPresets> uiCamPresetList;
+
+ 
+    [Serializable]
+    public struct UICamPresets
+    {
+        public List<Image> uiCamSquare;
+        public Button[] buttonsCamRotate;
+    }
+    
+    [SerializeField] private GameObject[] uiCamPresets;
+    private WaitForSeconds _timeInSecondsBetweenCamButtons = new WaitForSeconds(0.3f);
     private void Awake()
     {
         _cameraManager = this;
         _cam = Camera.main.transform;
     }
-
-    private void Start()
-    {
-        indexUiCamSquareList++;
-        SetUpSquareIcon(indexUiCamSquareList);
-    }
+    
 
     public void StartRotateCam(float rotateAmount)
     {
-        if (rotateAmount < 0.0f)
+
+        if (rotateAmount < 0f)
         {
+            if (indexUiCamSquareList >= actualUiCamPreset.uiCamSquare.Count-1) 
+                return;
             indexUiCamSquareList++;
-            if (indexUiCamSquareList > uiCamSquare.Count-1) indexUiCamSquareList = 0;
             SetUpSquareIcon(indexUiCamSquareList);
         }
         else
         {
+            if (indexUiCamSquareList <= 0)
+                return;
             indexUiCamSquareList--;
-            if (indexUiCamSquareList < 0) indexUiCamSquareList = uiCamSquare.Count - 1;
             SetUpSquareIcon(indexUiCamSquareList);
         }
-        
+       
         StartCoroutine(RotateCamCoroutine(rotateAmount));
         EnableCamRotateButtons();
     }
 
-    private IEnumerator RotateCamCoroutine(float rotateAmount)
+    public void SetUpUiCamPreset()
     {
-        float timeSinceStarted = 0f;
-        if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
+        // Set up cam ui buttons
+        
+        foreach (var uiCamPreset in uiCamPresets) uiCamPreset.SetActive(false);
+
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
         {
-            
-            while (true)
-            {
-                timeSinceStarted += Time.deltaTime * _timeRotateSpeedInSeconds;
-                _cam.transform.RotateAround(target.transform.position, Vector3.up, rotateAmount * Time.deltaTime);
-                // If the object has arrived, stop the coroutine
-                if (timeSinceStarted >= 0.45f)
-                {
-                    Debug.Log("Object arrived");
-                    EnableCamRotateButtons();                    
-                    yield break;
-                }
-
-                // Otherwise, continue next frame
-                yield return null;
-            }
+            uiCamPresets[0].SetActive(true);
+            actualUiCamPreset = uiCamPresetList[0];
         }
+        else
+        {
+            uiCamPresets[1].SetActive(true);
+            actualUiCamPreset = uiCamPresetList[1];
+        }
+        indexUiCamSquareList = baseIndexUICamSquare;
+        SetUpSquareIcon(indexUiCamSquareList);
     }
+ 
+    private IEnumerator RotateCamCoroutine(float angle)
+    {
 
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+        {
+            _cam.transform.RotateAround(target.transform.position, Vector3.up, angle);
+            yield return _timeInSecondsBetweenCamButtons;
+            EnableCamRotateButtons();
+        }
+        else 
+        {
+            _cam.transform.RotateAround(target.transform.position, Vector3.up, angle);
+            yield return _timeInSecondsBetweenCamButtons;
+            EnableCamRotateButtons();
+        }
+
+    }
+    
     private void EnableCamRotateButtons()
     {
-        foreach (var button in buttonsCamRotate)
+        //Set buttons interactable or not interactable
+        foreach (var button in actualUiCamPreset.buttonsCamRotate)
         {
-            button.enabled = !button.enabled;
+            button.interactable = !button.interactable;
         }
     }
 
     private void SetUpSquareIcon(int indexSquareIcon)
     {
-      Transform childIconSelected = uiCamSquare[indexSquareIcon].transform.GetChild(0);
-      childIconSelected.gameObject.SetActive(true);
-      var uiCamSquareColor =  uiCamSquare[indexSquareIcon].color;
-      uiCamSquareColor.a = 1f;
-      uiCamSquare[indexSquareIcon].color = uiCamSquareColor;
+        Transform childIconSelected = actualUiCamPreset.uiCamSquare[indexSquareIcon].transform.GetChild(0);
+        childIconSelected.gameObject.SetActive(true);
+        var uiCamSquareColor = actualUiCamPreset.uiCamSquare[indexSquareIcon].color;
+        uiCamSquareColor.a = 1f;
+        actualUiCamPreset.uiCamSquare[indexSquareIcon].color = uiCamSquareColor;
       
-      foreach (var iconImage in uiCamSquare)
-      {
-          if (iconImage != uiCamSquare[indexSquareIcon])
-          {
-              var iconImageColor = iconImage.color;
-              iconImageColor.a = 0.75f;
-              iconImage.color = iconImageColor;
+        foreach (var iconImage in actualUiCamPreset.uiCamSquare)
+        {
+            if (iconImage != actualUiCamPreset.uiCamSquare[indexSquareIcon])
+            {
+                var iconImageColor = iconImage.color;
+                iconImageColor.a = 0.75f;
+                iconImage.color = iconImageColor;
 
-              Transform childIconImage = iconImage.transform.GetChild(0);
-              childIconImage.gameObject.SetActive(false);
-          }
-      }
-      
-      
+                Transform childIconImage = iconImage.transform.GetChild(0);
+                childIconImage.gameObject.SetActive(false);
+            }
+        }
     }
+     
+    
 
     public void TopViewMode()
     {
