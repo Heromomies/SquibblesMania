@@ -8,8 +8,7 @@ public class PowerManager : MonoBehaviour
 {
     public SwapPower swap;
     public DashPower dash;
-    public GrabPower grab;
-    public ShieldPower shield;
+   
 
     #region Singleton
 
@@ -31,21 +30,15 @@ public class PowerManager : MonoBehaviour
         {
             case 0: swap.gameObject.SetActive(activePower); break;
             case 1: dash.gameObject.SetActive(activePower); break;
-            case 2: grab.gameObject.SetActive(activePower); break;
-            case 3: shield.gameObject.SetActive(activePower); break;
+            case 2: //grab.gameObject.SetActive(activePower); break;
+            case 3:// shield.gameObject.SetActive(activePower);
+                   break;
         }
     }
 
     public void CyclePassed()
     {
-        if (shield.numberOfCycleBeforeDeactivateShield < 1)
-        {
-            shield.numberOfCycleBeforeDeactivateShield++;
-        }
-        else
-        {
-            Destroy(shield.shieldGameObject);
-        }
+       
     }
 
     public void ChangeTurnPlayer()

@@ -1,35 +1,112 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using DigitalRubyShared;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class DashPower : MonoBehaviour
+public class DashPower : MonoBehaviour, IManagePower
 {
 	public int dashRange;
 
-	public List<GameObject> buttons;
 	public LayerMask layerMaskInteractableAndPlayer;
-	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+	//public LayerMask layerMaskPlayer;
 
+	public List<Transform> hitTransforms;
+
+	[Range(1, 10)] public int swipeTouchCount = 1;
+	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
+	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
+	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
+	
+	[Tooltip("Controls how the swipe gesture ends. See SwipeGestureRecognizerSwipeMode enum for more details.")]
+	public SwipeGestureRecognizerEndMode swipeMode;
+
+	[Space] public Material firstMat;
+	public Material secondMat;
+	
+	public GameObject playerCurrentlySelected;
+	
+	private RaycastHit _hit;
+	private Camera _cam;
+	public SwipeGestureRecognizer swipe;
+	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 	private void OnEnable()
 	{
-		switch (GameManager.Instance.actualCamPreset.presetNumber)
+		_cam = Camera.main;
+		
+		swipe = new SwipeGestureRecognizer();
+		swipe.StateUpdated += SwipeUpdated;
+		swipe.DirectionThreshold = 0;
+		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
+		swipe.MinimumDistanceUnits = minimumDistanceUnits;
+		swipe.EndMode = swipeMode;
+		swipe.ThresholdSeconds = swipeThresholdSeconds;
+		FingersScript.Instance.AddGesture(swipe);
+		
+		//Set up the new gesture 
+		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
+		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
+		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
+		LongPressBlocMovementGesture.MinimumDurationSeconds = minimumDurationSeconds;
+		LongPressBlocMovementGesture.AllowSimultaneousExecution(swipe);
+		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
+
+		DisplayPower();
+	}
+
+	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
+	{
+		
+	}
+	
+	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
+	{
+		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
+		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended)
 		{
-			case 1:
-				buttons[0].SetActive(true);
-				break;
-			case 2 :
-				buttons[0].SetActive(true);
-				break;
-			case 3:
-				buttons[1].SetActive(true);
-				break;
-			case 4 :
-				buttons[1].SetActive(true);
-				break;
+			Debug.Log(swipeGestureRecognizer.Direction);
+
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: switch (swipeGestureRecognizer.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: ; break;
+						case SwipeGestureRecognizerDirection.Up: ; break;
+						case SwipeGestureRecognizerDirection.Right: ; break;
+						case SwipeGestureRecognizerDirection.Left: ; break;
+					}
+					break;
+				case 3: switch (swipeGestureRecognizer.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((1)); break;
+						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((0)); break;
+						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((3)); break;
+						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((2)); break;
+							break;
+					} break;
+				case 2: switch (swipeGestureRecognizer.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((1)); break;
+						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((0)); break; 
+						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((3)); break; 
+						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((2)); break;
+							break; 
+					} break;
+				case 4: switch (swipeGestureRecognizer.EndDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((0)); break;
+						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((1)); break;
+						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((2)); break;
+						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((3)); break;
+							break;
+					} break;
+			}
 		}
 	}
 
+	//Update method of the long press gesture
 	public void ButtonClickedDash(int numberDirectionVector) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
@@ -130,12 +207,70 @@ public class DashPower : MonoBehaviour
 
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
-		foreach (var button in buttons)
+
+		ClearPower();
+	}
+
+	public void DisplayPower()
+	{
+		var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+		var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
+
+		for (int i = 0; i < _vectorRaycast.Count; i++)
 		{
-			if (button.activeSelf)
+			if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
 			{
-				button.SetActive(false);
+				if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				{
+					ChangeMaterial(hitFirstBloc.transform);
+					hitTransforms.Add(hitFirstBloc.transform);
+				}
+			}
+
+			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
+				dashRange)) // launch the raycast
+			{
+				if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				{
+					ChangeMaterial(hitSecondBloc.transform);
+					hitTransforms.Add(hitSecondBloc.transform);
+				}
+			}
+
+			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i] * 2, _vectorRaycast[i], out var hitThirdBloc,
+				dashRange)) // launch the raycast
+			{
+				if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				{
+					ChangeMaterial(hitThirdBloc.transform);
+					hitTransforms.Add(hitThirdBloc.transform);
+				}
 			}
 		}
+	}
+
+	void ChangeMaterial(Transform objectToChange)
+	{
+		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
+		color = secondMat.color;
+		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
+	}
+
+	public void CancelPower()
+	{
+	}
+
+	public void DoPower()
+	{
+	}
+
+	public void ClearPower()
+	{
+		for (int i = 0; i < hitTransforms.Count; i++)
+		{
+			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
+		}
+
+		hitTransforms.Clear();
 	}
 }
