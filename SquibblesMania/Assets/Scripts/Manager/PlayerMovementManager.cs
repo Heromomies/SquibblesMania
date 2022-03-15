@@ -67,6 +67,7 @@ public class PlayerMovementManager : MonoBehaviour
 		swipe.ThresholdSeconds = swipeThresholdSeconds;
 		swipe.MinimumDistanceUnits = minimumDistanceUnits;
 		swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
+		swipe.AllowSimultaneousExecution(LongPressBlocMovementGesture);
 		FingersScript.Instance.AddGesture(swipe);
 
 		//Set up the new gesture 
@@ -74,7 +75,7 @@ public class PlayerMovementManager : MonoBehaviour
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
 		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
 		LongPressBlocMovementGesture.MinimumDurationSeconds = minimumDurationSeconds;
-		LongPressBlocMovementGesture.AllowSimultaneousExecution(swipe);
+		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 		
 		GameObject gPlayer = Instantiate(ghostPlayer, transform.position, Quaternion.identity);
@@ -87,6 +88,8 @@ public class PlayerMovementManager : MonoBehaviour
 		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
 		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
+			Debug.Log(swipeGestureRecognizer.EndDirection);
+			
 			timeLeftBetweenSwipe -= Time.deltaTime;
 			if ( timeLeftBetweenSwipe < 0 )
 			{

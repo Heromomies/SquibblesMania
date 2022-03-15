@@ -10,7 +10,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	public int dashRange;
 
 	public LayerMask layerMaskInteractableAndPlayer;
-	//public LayerMask layerMaskPlayer;
+	public LayerMask layerMaskPlayer;
 
 	public List<Transform> hitTransforms;
 
@@ -18,9 +18,6 @@ public class DashPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
-	
-	[Tooltip("Controls how the swipe gesture ends. See SwipeGestureRecognizerSwipeMode enum for more details.")]
-	public SwipeGestureRecognizerEndMode swipeMode;
 
 	[Space] public Material firstMat;
 	public Material secondMat;
@@ -31,6 +28,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	private Camera _cam;
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 	private void OnEnable()
 	{
@@ -41,8 +39,9 @@ public class DashPower : MonoBehaviour, IManagePower
 		swipe.DirectionThreshold = 0;
 		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
 		swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		swipe.EndMode = swipeMode;
+		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
 		swipe.ThresholdSeconds = swipeThresholdSeconds;
+		swipe.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(swipe);
 		
 		//Set up the new gesture 
@@ -58,56 +57,70 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
 	{
-		
+		if (gesture.State == GestureRecognizerState.Began)
+		{
+			PointerEventData p = new PointerEventData(EventSystem.current);
+			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+
+			_raycast.Clear();
+			EventSystem.current.RaycastAll(p, _raycast);
+			// Cast a ray from the camera
+			Ray ray = _cam.ScreenPointToRay(p.position);
+
+			if (Physics.Raycast(ray, out _hit, Mathf.Infinity, layerMaskPlayer))
+			{
+				if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
+				{
+					playerCurrentlySelected = _hit.transform.gameObject;
+				}
+			}
+		}
 	}
 	
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
 	{
 		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
-		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended)
+		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended  && playerCurrentlySelected != null)
 		{
-			Debug.Log(swipeGestureRecognizer.Direction);
+			Debug.Log(swipeGestureRecognizer.EndDirection);
 
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1: switch (swipeGestureRecognizer.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: ; break;
-						case SwipeGestureRecognizerDirection.Up: ; break;
-						case SwipeGestureRecognizerDirection.Right: ; break;
-						case SwipeGestureRecognizerDirection.Left: ; break;
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
 					}
 					break;
 				case 3: switch (swipeGestureRecognizer.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((1)); break;
-						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((0)); break;
-						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((3)); break;
-						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((2)); break;
-							break;
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
 					} break;
 				case 2: switch (swipeGestureRecognizer.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((1)); break;
-						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((0)); break; 
-						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((3)); break; 
-						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((2)); break;
-							break; 
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
 					} break;
 				case 4: switch (swipeGestureRecognizer.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((0)); break;
-						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((1)); break;
-						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((2)); break;
-						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((3)); break;
-							break;
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
 					} break;
 			}
 		}
 	}
 
 	//Update method of the long press gesture
-	public void ButtonClickedDash(int numberDirectionVector) // When we clicked on button
+	public void SwipeDashDirection(int numberDirectionVector) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -271,6 +284,16 @@ public class DashPower : MonoBehaviour, IManagePower
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
 		}
 
+		playerCurrentlySelected = null;
 		hitTransforms.Clear();
+	}
+	
+	public void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(LongPressBlocMovementGesture);
+			FingersScript.Instance.RemoveGesture(swipe);
+		}
 	}
 }
