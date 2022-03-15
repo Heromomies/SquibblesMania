@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
+	[Header("POWER SETTINGS")]
 	public int dashRange;
 
 	public LayerMask layerMaskInteractableAndPlayer;
@@ -14,22 +15,26 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public List<Transform> hitTransforms;
 
+	[Header("TOUCH SETTINGS")]
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
 
+	[Header("MATERIAL SETTINGS")]
 	[Space] public Material firstMat;
 	public Material secondMat;
 	
-	public GameObject playerCurrentlySelected;
-	
+	[HideInInspector] public GameObject playerCurrentlySelected;
 	private RaycastHit _hit;
 	private Camera _cam;
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
+
+	#region Swipe Gesture Enabled
+
 	private void OnEnable()
 	{
 		_cam = Camera.main;
@@ -55,6 +60,11 @@ public class DashPower : MonoBehaviour, IManagePower
 		DisplayPower();
 	}
 
+
+	#endregion
+
+	#region Long Press Function
+	
 	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
 	{
 		if (gesture.State == GestureRecognizerState.Began)
@@ -76,7 +86,10 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 		}
 	}
-	
+	#endregion
+
+	#region Swipe To Dash
+
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
 	{
 		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
@@ -95,30 +108,35 @@ public class DashPower : MonoBehaviour, IManagePower
 					}
 					break;
 				case 3: switch (swipeGestureRecognizer.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
-					} break;
+				{
+					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
+				} break;
 				case 2: switch (swipeGestureRecognizer.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
-					} break;
+				{
+					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
+				} break;
 				case 4: switch (swipeGestureRecognizer.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
-					} break;
+				{
+					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
+					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
+					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
+					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
+				} break;
 			}
 		}
 	}
 
+	#endregion
+
+	#region Swipe Dash Direction
+
+	
 	//Update method of the long press gesture
 	public void SwipeDashDirection(int numberDirectionVector) // When we clicked on button
 	{
@@ -224,7 +242,12 @@ public class DashPower : MonoBehaviour, IManagePower
 		ClearPower();
 	}
 
-	public void DisplayPower()
+
+	#endregion
+
+	#region Display Power
+
+	public void DisplayPower() // Show the path 
 	{
 		var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
 		var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
@@ -262,6 +285,11 @@ public class DashPower : MonoBehaviour, IManagePower
 		}
 	}
 
+
+	#endregion
+
+	#region ChangeMaterial
+
 	void ChangeMaterial(Transform objectToChange)
 	{
 		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
@@ -269,6 +297,8 @@ public class DashPower : MonoBehaviour, IManagePower
 		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
 	}
 
+	#endregion
+	
 	public void CancelPower()
 	{
 	}
@@ -277,7 +307,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 	}
 
-	public void ClearPower()
+	public void ClearPower() // Clear the power
 	{
 		for (int i = 0; i < hitTransforms.Count; i++)
 		{

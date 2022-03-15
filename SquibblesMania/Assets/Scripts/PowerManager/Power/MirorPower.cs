@@ -9,24 +9,29 @@ using UnityEngine.EventSystems;
 
 public class MirorPower : MonoBehaviour, IManagePower
 {
+	[Header("POWER SETTINGS")]
 	public LayerMask layerPlayer;
+	public LayerMask layerMaskInteractableAndPlayer;
+	
 	public float rangeDetectionPlayer;
-	public GameObject zombiePlayer; //TODO make it private
-
-	public int dashRange;
-
+	public List<Transform> hitTransforms;
+	[HideInInspector] public GameObject zombiePlayer;
+	public TextMeshProUGUI textWhenNoZombieAreSelected;
+	
+	[Header("TOUCH SETTINGS")]
+	[Range(1, 10)] public int dashRange;
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
-	
-	public LayerMask layerMaskInteractableAndPlayer;
 
-	public List<Transform> hitTransforms;
-	
+	[Header("MATERIAL SETTINGS")]
 	[Space] public Material firstMat;
 	public Material secondMat;
 
-	public TextMeshProUGUI textWhenNoZombieAreSelected;
+	[Space] public Material zombieMat;
+	public Material changeZombieMat;
+	
+	
 	
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
@@ -41,8 +46,10 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 		_cam = Camera.main;
 	}
-	
-	private void OnEnable()
+
+	#region Swipe Gesture
+
+	private void OnEnable() // Add swipe gesture and pan gesture to select a player and move it
 	{
 		swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
@@ -65,7 +72,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 		DisplayPower();
 	}
 
-	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
+	#endregion
+
+	#region PlayerTouchGestureUpdated
+
+	private void PlayerTouchGestureUpdated(GestureRecognizer gesture) // To touch a player and select him
 	{
 		if (gesture.State == GestureRecognizerState.Began)
 		{
@@ -82,6 +93,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
 				{
 					zombiePlayer = hitInfo.collider.gameObject;
+					zombiePlayer.GetComponent<Renderer>().material = changeZombieMat;
 					textWhenNoZombieAreSelected.gameObject.SetActive(false);
 				}
 			}
@@ -92,7 +104,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 		}
 	}
 
-	public void SwipeUpdated(GestureRecognizer gestureRecognizer)
+
+	#endregion
+
+	#region SwipeUpdated
+
+	private void SwipeUpdated(GestureRecognizer gestureRecognizer) // Swipe update, when we select a player, we can swipe after that
 	{
 		SwipeGestureRecognizer swipeGestureRecognizer = gestureRecognizer as SwipeGestureRecognizer;
 		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended  && zombiePlayer != null)
@@ -131,8 +148,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 			}
 		}
 	}
-	
-	private void SwipeMirorDirection(int directionIndex) // When we clicked on button
+
+
+	#endregion
+
+	#region SwipeMirorDirection
+
+		private void SwipeMirorDirection(int directionIndex) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -233,7 +255,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 		StartCoroutine(DisplaceZombiePlayer(directionIndex));
 	}
 
-	IEnumerator DisplaceZombiePlayer(int directionZombieIndex)
+
+	#endregion
+
+	#region DisplaceZombiePlayer
+
+	IEnumerator DisplaceZombiePlayer(int directionZombieIndex) // Same function than before but inversed for the "zombie"
 	{
 		yield return _timeBetweenPlayerZombieMovement;
 
@@ -336,53 +363,65 @@ public class MirorPower : MonoBehaviour, IManagePower
 		ClearPower();
 	}
 
-	public void DisplayPower()
-	{
-		var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-		var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
 
-		for (int i = 0; i < _vectorRaycast.Count; i++)
+		#endregion
+
+	#region DisplayPower
+
+		public void DisplayPower() // Display the zone who the players can swipe
 		{
-			if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
-			{
-				if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-				{
-					ChangeMaterial(hitFirstBloc.transform);
-					hitTransforms.Add(hitFirstBloc.transform);
-				}
-			}
+			var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+			var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
 
-			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-				dashRange)) // launch the raycast
+			for (int i = 0; i < _vectorRaycast.Count; i++)
 			{
-				if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
 				{
-					ChangeMaterial(hitSecondBloc.transform);
-					hitTransforms.Add(hitSecondBloc.transform);
+					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitFirstBloc.transform);
+						hitTransforms.Add(hitFirstBloc.transform);
+					}
 				}
-			}
 
-			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i] * 2, _vectorRaycast[i], out var hitThirdBloc,
-				dashRange)) // launch the raycast
-			{
-				if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
+					dashRange)) // launch the raycast
 				{
-					ChangeMaterial(hitThirdBloc.transform);
-					hitTransforms.Add(hitThirdBloc.transform);
+					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitSecondBloc.transform);
+						hitTransforms.Add(hitSecondBloc.transform);
+					}
+				}
+
+				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i] * 2, _vectorRaycast[i], out var hitThirdBloc,
+					dashRange)) // launch the raycast
+				{
+					if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitThirdBloc.transform);
+						hitTransforms.Add(hitThirdBloc.transform);
+					}
 				}
 			}
-		}
 		
-		textWhenNoZombieAreSelected.gameObject.SetActive(true);
-	}
+			textWhenNoZombieAreSelected.gameObject.SetActive(true);
+		}
 
-	private void ChangeMaterial(Transform objectToChange)
-	{
-		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-		color = secondMat.color;
-		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
-	}
-	
+		#endregion
+
+	#region CHANGE MATERIAL
+
+		private void ChangeMaterial(Transform objectToChange) // Change the material of the object
+		{
+			var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
+			color = secondMat.color;
+			objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
+		}
+
+
+		#endregion	
+		
 	public void CancelPower()
 	{
 	}
@@ -391,13 +430,15 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 	}
 
-	public void ClearPower()
+	public void ClearPower() // Clear the power
 	{
 		for (int i = 0; i < hitTransforms.Count; i++)
 		{
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
 		}
 
+		zombiePlayer.GetComponent<Renderer>().material = zombieMat;
+		
 		zombiePlayer = null;
 		hitTransforms.Clear();
 		
