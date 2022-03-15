@@ -44,21 +44,35 @@ public class CameraButtonManager : MonoBehaviour
 
         if (rotateAmount < 0f)
         {
-            if (indexUiCamSquareList >= actualUiCamPreset.uiCamSquare.Count-1) 
-                return;
-            indexUiCamSquareList++;
-            SetUpSquareIcon(indexUiCamSquareList);
+            if (indexUiCamSquareList >= actualUiCamPreset.uiCamSquare.Count - 1)
+            {
+                indexUiCamSquareList = 0;
+                SetUpSquareIcon(indexUiCamSquareList);
+            }
+            else
+            {
+                indexUiCamSquareList++;
+                SetUpSquareIcon(indexUiCamSquareList);
+            }
+            
         }
         else
         {
             if (indexUiCamSquareList <= 0)
-                return;
-            indexUiCamSquareList--;
-            SetUpSquareIcon(indexUiCamSquareList);
+            {
+                indexUiCamSquareList = actualUiCamPreset.uiCamSquare.Count - 1;
+                SetUpSquareIcon(indexUiCamSquareList);
+            }
+            else
+            {
+                indexUiCamSquareList--;
+                SetUpSquareIcon(indexUiCamSquareList);
+            }
+          
         }
        
         StartCoroutine(RotateCamCoroutine(rotateAmount));
-        EnableCamRotateButtons();
+        EnableCamRotateButtons(rotateAmount);
     }
 
     public void SetUpUiCamPreset()
@@ -83,29 +97,24 @@ public class CameraButtonManager : MonoBehaviour
  
     private IEnumerator RotateCamCoroutine(float angle)
     {
-
-        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
-        {
-            _cam.transform.RotateAround(target.transform.position, Vector3.up, angle);
-            yield return _timeInSecondsBetweenCamButtons;
-            EnableCamRotateButtons();
-        }
-        else 
-        {
-            _cam.transform.RotateAround(target.transform.position, Vector3.up, angle);
-            yield return _timeInSecondsBetweenCamButtons;
-            EnableCamRotateButtons();
-        }
-
+        _cam.transform.RotateAround(target.transform.position, Vector3.up, angle);
+        yield return _timeInSecondsBetweenCamButtons;
+        EnableCamRotateButtons(angle);
     }
     
-    private void EnableCamRotateButtons()
+    private void EnableCamRotateButtons(float rotateIndexAmount)
     {
         //Set buttons interactable or not interactable
-        foreach (var button in actualUiCamPreset.buttonsCamRotate)
+        if (rotateIndexAmount < 0f)
         {
-            button.interactable = !button.interactable;
+            actualUiCamPreset.buttonsCamRotate[1].interactable = !actualUiCamPreset.buttonsCamRotate[1].interactable;
         }
+        else
+        {
+            actualUiCamPreset.buttonsCamRotate[0].interactable = !actualUiCamPreset.buttonsCamRotate[0].interactable;
+        }
+        
+        
     }
 
     private void SetUpSquareIcon(int indexSquareIcon)
