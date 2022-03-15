@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -24,6 +25,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	[Space] public Material firstMat;
 	public Material secondMat;
+
+	public TextMeshProUGUI textWhenNoZombieAreSelected;
 	
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
@@ -38,7 +41,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 		_cam = Camera.main;
 	}
-
+	
 	private void OnEnable()
 	{
 		swipe = new SwipeGestureRecognizer();
@@ -76,8 +79,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 			if (Physics.Raycast(ray, out var hitInfo, rangeDetectionPlayer, layerPlayer))
 			{
-				if(hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
+				if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
+				{
 					zombiePlayer = hitInfo.collider.gameObject;
+					textWhenNoZombieAreSelected.gameObject.SetActive(false);
+				}
 			}
 			else
 			{
@@ -366,6 +372,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 				}
 			}
 		}
+		
+		textWhenNoZombieAreSelected.gameObject.SetActive(true);
 	}
 
 	private void ChangeMaterial(Transform objectToChange)
