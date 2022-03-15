@@ -18,6 +18,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[HideInInspector] public Collider[] collidersMin;
 	[HideInInspector] public Collider[] collidersMax;
 	public List<Collider> collidersFinished = new List<Collider>();
+	[Header("MATERIAL SETTINGS")]
 	[Space]
 	public Material firstMat;
 	public Material secondMat;
@@ -133,5 +134,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 			collidersMin[i] = null;
 		}
 		collidersFinished.Clear();
+		
+		PowerManager.Instance.ActivateDeactivatePower(2, false);
+		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

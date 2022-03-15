@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class PowerManager : MonoBehaviour
 {
-    public SwapPower swap;
-    public DashPower dash;
+    public List<GameObject> powers;
    
 
     #region Singleton
@@ -28,11 +27,10 @@ public class PowerManager : MonoBehaviour
     {
         switch (powerIndex)
         {
-            case 0: swap.gameObject.SetActive(activePower); break;
-            case 1: dash.gameObject.SetActive(activePower); break;
-            case 2: //grab.gameObject.SetActive(activePower); break;
-            case 3:// shield.gameObject.SetActive(activePower);
-                   break;
+            case 0: powers[0].gameObject.SetActive(activePower); break;
+            case 1: powers[1].gameObject.SetActive(activePower); break;
+            case 2: powers[2].gameObject.SetActive(activePower); break;
+            case 3: powers[3].gameObject.SetActive(activePower); break;
         }
     }
 

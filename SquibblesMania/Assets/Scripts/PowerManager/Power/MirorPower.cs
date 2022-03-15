@@ -10,15 +10,17 @@ using UnityEngine.EventSystems;
 public class MirorPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")]
+	[Space]
 	public LayerMask layerPlayer;
 	public LayerMask layerMaskInteractableAndPlayer;
 	
 	public float rangeDetectionPlayer;
 	public List<Transform> hitTransforms;
 	[HideInInspector] public GameObject zombiePlayer;
-	public TextMeshProUGUI textWhenNoZombieAreSelected;
+	public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
 	
 	[Header("TOUCH SETTINGS")]
+	[Space]
 	[Range(1, 10)] public int dashRange;
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
@@ -30,9 +32,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	[Space] public Material zombieMat;
 	public Material changeZombieMat;
-	
-	
-	
+
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -93,8 +93,14 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
 				{
 					zombiePlayer = hitInfo.collider.gameObject;
-					zombiePlayer.GetComponent<Renderer>().material = changeZombieMat;
-					textWhenNoZombieAreSelected.gameObject.SetActive(false);
+					
+					Transform child = zombiePlayer.transform.GetChild(1);
+					child.GetComponentInChildren<Renderer>().material.color = changeZombieMat.color;
+
+					foreach (var actionPlayerPreset in textWhenNoZombieAreSelected)
+					{
+						actionPlayerPreset.gameObject.SetActive(false);
+					}
 				}
 			}
 			else
@@ -393,19 +399,14 @@ public class MirorPower : MonoBehaviour, IManagePower
 						hitTransforms.Add(hitSecondBloc.transform);
 					}
 				}
-
-				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i] * 2, _vectorRaycast[i], out var hitThirdBloc,
-					dashRange)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						ChangeMaterial(hitThirdBloc.transform);
-						hitTransforms.Add(hitThirdBloc.transform);
-					}
-				}
 			}
-		
-			textWhenNoZombieAreSelected.gameObject.SetActive(true);
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
+				case 2: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
+				case 3: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
+				case 4: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
+			}
 		}
 
 		#endregion
@@ -437,12 +438,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
 		}
 
-		zombiePlayer.GetComponent<Renderer>().material = zombieMat;
+		Transform child = zombiePlayer.transform.GetChild(1);
+		child.GetComponentInChildren<Renderer>().material.color = zombieMat.color;
 		
 		zombiePlayer = null;
 		hitTransforms.Clear();
 		
-		PowerManager.Instance.ActivateDeactivatePower(1, false);
+		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	

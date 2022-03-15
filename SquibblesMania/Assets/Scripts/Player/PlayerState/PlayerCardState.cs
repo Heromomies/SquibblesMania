@@ -46,7 +46,15 @@ public class PlayerCardState : PlayerBaseState
 
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
-				NFCManager.Instance.SetActivePlayerActionButton(1,true);
+				NFCManager.Instance.clicked = true;
+				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
+				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
+				{
+					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
+					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
+					case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
+					case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
+				}
 			}
 			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
