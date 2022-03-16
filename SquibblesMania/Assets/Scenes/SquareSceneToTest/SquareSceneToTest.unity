@@ -19500,7 +19500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6694995206142064252, guid: 46804f76dd2228d4ea7daa34d08991f6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6694995206142064254, guid: 46804f76dd2228d4ea7daa34d08991f6, type: 3}
       propertyPath: playerMovementManager
@@ -20013,11 +20013,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: maxHeightBlocMovement
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: minHeightBlocMovement
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: allBlocks.Array.data[0]
@@ -22178,12 +22178,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7861496721806462386, guid: 0adbf9633d654e245a5628bca5de9901, type: 3}
+      propertyPath: offsetText.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7861496721806462386, guid: 0adbf9633d654e245a5628bca5de9901, type: 3}
+      propertyPath: offsetText.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7861496721806462386, guid: 0adbf9633d654e245a5628bca5de9901, type: 3}
       propertyPath: blocMovementManager
       value: 
       objectReference: {fileID: 1144034103}
     - target: {fileID: 7861496721806462386, guid: 0adbf9633d654e245a5628bca5de9901, type: 3}
       propertyPath: timeLeftBetweenSwipe
       value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7861496721806462386, guid: 0adbf9633d654e245a5628bca5de9901, type: 3}
+      propertyPath: blocMoveLayersMask.m_Bits
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0adbf9633d654e245a5628bca5de9901, type: 3}

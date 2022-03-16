@@ -22,7 +22,7 @@ public class PlayerStateManager : Player
 	[Header("PLAYER UTILITIES")] public int playerNumber;
 	public bool isPlayerInActionCardState;
 	public List<Transform> nextBlockPath;
-	public PlayerMovementManager playerMovementManager;
+	public PlayerAndBlocMovementManager playerAndBlocMovementManager;
 
 	public GameObject psStun;
 
@@ -38,7 +38,7 @@ public class PlayerStateManager : Player
 		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
 		groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
 		currentNodePlayerOn.isActive = false;
-		playerMovementManager = PlayerMovementManager.Instance;
+		playerAndBlocMovementManager = PlayerAndBlocMovementManager.Instance;
 	}
 
 

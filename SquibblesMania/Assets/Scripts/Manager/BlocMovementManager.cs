@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 public class BlocMovementManager : MonoBehaviour
 {
-    private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
+    /*private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
     private LongPressGestureRecognizer LongPressBlocMovementGesture { get; set; }
 
     [Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
@@ -395,6 +395,6 @@ public class BlocMovementManager : MonoBehaviour
         var player = GameManager.Instance.currentPlayerTurn;
         player.PlayerActionPointCardState.SetFalsePathObjects();
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
-    }
+    }*/
 }
 
