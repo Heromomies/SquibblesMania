@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,7 +11,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[Header("POWER SETTINGS")]
 	[Range(0.0f, 4.0f)] public int radiusMin;
 	[Range(0.0f, 5.0f)] public int radiusMax;
-	[Range(0.0f, 3.0f)] public float speed;
+	[Range(0.0f, 3.0f)] public float speedBloc;
 	
 	[Space] public LayerMask layer;
 	[Space] public LayerMask layerBlocTouched;
@@ -58,9 +59,15 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				tCurrentPlayerTurn.position = new Vector3(posHitInfo.x, posHitInfo.y +0.5f, posHitInfo.z);
 
-				if(hitInfo.collider.CompareTag("Platform"))
-					hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform.position += Vector3.down;
+				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
 				
+				if (hitInfo.collider.CompareTag("Platform"))
+				{
+					var hitPosition = hitInfoTransform.position;
+					hitInfoTransform.DOMove(new Vector3(hitPosition.x,
+						hitPosition.y - 1, hitPosition.z), speedBloc);
+				}
+
 				ClearPower();
 			}
 			else
@@ -124,7 +131,6 @@ public class JumpPower : MonoBehaviour, IManagePower
 			
 			colFinished.gameObject.layer = 3;
 		}
-		
 		for ( int i = 0; i < collidersMax.Length; i++)
 		{
 			collidersMax[i] = null;
@@ -133,6 +139,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		{
 			collidersMin[i] = null;
 		}
+		
 		collidersFinished.Clear();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);

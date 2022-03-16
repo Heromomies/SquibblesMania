@@ -55,7 +55,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	#endregion
 
-	private void OnEnable()
+	private void Start()
 	{
 		_timeLeftMax = timeLeftBetweenSwipe;
 		
@@ -88,8 +88,6 @@ public class PlayerMovementManager : MonoBehaviour
 		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
 		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
-			Debug.Log(swipeGestureRecognizer.EndDirection);
-			
 			timeLeftBetweenSwipe -= Time.deltaTime;
 			if ( timeLeftBetweenSwipe < 0 )
 			{
@@ -138,7 +136,8 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		if (FingersScript.HasInstance)
 		{
-			//FingersScript.Instance.RemoveGesture(longPress);
+			FingersScript.Instance.RemoveGesture(LongPressBlocMovementGesture);
+			FingersScript.Instance.RemoveGesture(swipe);
 		}
 	}
 
@@ -168,8 +167,6 @@ public class PlayerMovementManager : MonoBehaviour
 						
 						playerCurrentlySelected = ghostPlayer;
 						
-						blocMovementManager.SetActive(false);
-
 						GameManager.Instance.currentPlayerTurn.playerActionPoint--;
 
 						var cBlockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
@@ -180,6 +177,9 @@ public class PlayerMovementManager : MonoBehaviour
 
 							GameManager.Instance.currentPlayerTurn.playerActionPoint++;
 						}
+						
+						blocMovementManager.GetComponent<BlocMovementManager>().ResetBlocPreviewMesh();
+						blocMovementManager.SetActive(false);
 					}
 				}
 			}
@@ -208,7 +208,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			sphereList[i].SetActive(false);
 		}
-		
+
 		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		GameManager.Instance.currentPlayerTurn.StartPathFinding();
 
