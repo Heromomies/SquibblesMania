@@ -272,7 +272,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		
 		hitTransforms.Clear();
 		
-		PowerManager.Instance.ActivateDeactivatePower(0, false);
+		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
