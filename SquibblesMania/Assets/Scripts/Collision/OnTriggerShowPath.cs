@@ -11,7 +11,7 @@ public class OnTriggerShowPath : MonoBehaviour
       {
          GameManager.Instance.currentPlayerTurn.playerActionPoint+=2;
          UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-         PlayerAndBlocMovementManager.Instance.sphereList.Remove(gameObject);
+         PlayerMovementManager.Instance.sphereList.Remove(gameObject);
          gameObject.SetActive(false);
       }
    }

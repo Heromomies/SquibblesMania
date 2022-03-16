@@ -346,7 +346,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
 		groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
 
-		var pMovementManager = player.playerAndBlocMovementManager;
+		var pMovementManager = player.playerMovementManager;
 		
 		pMovementManager.playerCurrentlySelected = null;
 		pMovementManager.previewPath.Clear();

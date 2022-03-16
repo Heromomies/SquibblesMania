@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerAndBlocMovementManager : MonoBehaviour
+public class PlayerMovementManager : MonoBehaviour
 {
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
 
@@ -53,7 +53,7 @@ public class PlayerAndBlocMovementManager : MonoBehaviour
 	[ShowInInspector] private readonly List<Transform> _nextBlocDownMeshPos = new List<Transform>();
 	private static BlocMovementManager _blocMovementManager;
 
-	private bool _canTouchBloc;
+	private bool _canTouchBloc = true;
 	private float _timeLeftMax;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public SwipeGestureRecognizer swipe;
@@ -68,15 +68,15 @@ public class PlayerAndBlocMovementManager : MonoBehaviour
 
 	#region Singleton
 
-	private static PlayerAndBlocMovementManager _playerAndBlocMovementManager;
+	private static PlayerMovementManager playerMovementManager;
 
-	public static PlayerAndBlocMovementManager Instance => _playerAndBlocMovementManager;
+	public static PlayerMovementManager Instance => playerMovementManager;
 
 	// Start is called before the first frame update
 
 	private void Awake()
 	{
-		_playerAndBlocMovementManager = this;
+		playerMovementManager = this;
 		_cam = Camera.main;
 	}
 
@@ -304,6 +304,7 @@ public class PlayerAndBlocMovementManager : MonoBehaviour
 				UiManager.Instance.buttonNextTurn.SetActive(true);
 			}
 		}
+	
 	}
 
 
