@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3226517119791555226}
   - component: {fileID: 3226517119791555217}
   - component: {fileID: 8398261687759252214}
+  - component: {fileID: 918057241538110752}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -196,28 +197,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   indexUiCamSquareList: 0
+  baseIndexUICamSquare: 2
   actualUiCamPreset:
-  - uiCamSquare:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    buttonsCamRotate:
-    - {fileID: 0}
-    - {fileID: 0}
-  - uiCamSquare:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    buttonsCamRotate:
-    - {fileID: 0}
-    - {fileID: 0}
+    uiCamSquare: []
+    buttonsCamRotate: []
+  uiCamPresetList: []
   uiCamPresets:
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &918057241538110752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226517119791555227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af5b90f1abf7a43409c3b43b357bc50d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actualUiViewMode:
+    uiCircleSelection: []
+    uiCamIcon: {fileID: 0}
+    uiCursorSelection: {fileID: 0}
+  uiViewModeList: []
+  currentSelectedCursor: {fileID: 0}
+  scaleAmount: 1.2
+  raycaster: {fileID: 0}
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0
