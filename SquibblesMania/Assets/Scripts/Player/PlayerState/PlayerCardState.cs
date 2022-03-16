@@ -21,11 +21,6 @@ public class PlayerCardState : PlayerBaseState
 			
 		}
 
-		if (player.isPlayerShielded)
-		{
-			player.shieldCount--;
-		}
-		
 		//If the current player is this player
 		if (GameManager.Instance.currentPlayerTurn == player)
 		{
@@ -60,12 +55,7 @@ public class PlayerCardState : PlayerBaseState
 				NFCManager.Instance.clicked = true;
 				NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 				GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
-        
-				if (GameManager.Instance.currentPlayerTurn.isPlayerShielded)
-				{
-					GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
-				}
-
+				
 				UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
 					.PlayerActionPointCardState);
@@ -112,12 +102,6 @@ public class PlayerCardState : PlayerBaseState
 		{
 			NFCManager.Instance.SetActivePlayerActionButton(0,false);
 			NFCManager.Instance.SetActivePlayerActionButton(1,false);
-		}
-
-		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded && GameManager.Instance.currentPlayerTurn.shieldCount == 0)
-		{
-			GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
-			GameManager.Instance.currentPlayerTurn.isPlayerShielded = false;
 		}
 		
 		NFCManager.Instance.hasRemovedCard = true;

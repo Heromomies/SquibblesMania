@@ -17,11 +17,13 @@ public class PopUpTextActionPoint : MonoBehaviour
         cam = Camera.main.transform;
     }
 
-  
+    private void OnEnable()
+    {
+        _actionPointMax = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+    }
 
     public void SetUpText(int value)
     {
-        _actionPointMax = GameManager.Instance.currentPlayerTurn.playerActionPoint;
         _actionPoint = value;
         _text.SetText(_actionPoint + "/" + _actionPointMax);
     }
