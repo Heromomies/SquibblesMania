@@ -36,39 +36,6 @@ public class UiManager : MonoBehaviour
         SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
     }
 
-    public void ButtonPathFindingBlock()
-    {
-        GameManager.Instance.currentPlayerTurn.currentTouchBlock = TouchManager.Instance.Hit.transform;
-        GameManager.Instance.currentPlayerTurn.StartPathFinding();
-        switch (GameManager.Instance.actualCamPreset.presetNumber)
-        {
-            case 1: TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
-            case 2: TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false); break;
-            case 3: TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
-            case 4: TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false); break;
-        }
-    }
-
-    public void ButtonUpDownBlock()
-    {
-        switch (GameManager.Instance.actualCamPreset.presetNumber)
-        {
-            case 1: 
-                TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false);
-                MovementBlockManager.Instance.isMovingBlock = true; break;
-            case 2: 
-                TouchManager.Instance.uiInteraction[0].uiInteractionParentObject.SetActive(false);
-                MovementBlockManager.Instance.isMovingBlock = true; break;
-            case 3:  
-                TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false);
-                MovementBlockManager.Instance.isMovingBlock = true; break;
-            case 4: 
-                TouchManager.Instance.uiInteraction[1].uiInteractionParentObject.SetActive(false);
-                MovementBlockManager.Instance.isMovingBlock = true; break;
-        }
-
-    }
-
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
         var localManager = currentActionPointsOfCurrentPlayerTurn.GetComponent<LocalizationParamsManager>();

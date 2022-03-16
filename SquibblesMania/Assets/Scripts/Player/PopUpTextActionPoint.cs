@@ -9,6 +9,7 @@ public class PopUpTextActionPoint : MonoBehaviour
     private TextMeshPro _text;
     [SerializeField] private Transform cam;
     private int _actionPoint;
+    private int _actionPointMax;
 
     private void Awake()
     {
@@ -20,8 +21,9 @@ public class PopUpTextActionPoint : MonoBehaviour
 
     public void SetUpText(int value)
     {
+        _actionPointMax = GameManager.Instance.currentPlayerTurn.playerActionPoint;
         _actionPoint = value;
-        _text.SetText(_actionPoint + "/" + GameManager.Instance.currentPlayerTurn.playerActionPoint);
+        _text.SetText(_actionPoint + "/" + _actionPointMax);
     }
 
     void LateUpdate()
