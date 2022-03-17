@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3226517119791555220}
   - component: {fileID: 3226517119791555221}
-  - component: {fileID: 3226517119791555216}
   - component: {fileID: 3226517119791555223}
   - component: {fileID: 3226517119791555226}
   - component: {fileID: 3226517119791555217}
@@ -82,49 +81,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &3226517119791555216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28dc0e77eac45a34b845e50615bf9bb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OrbitTarget: {fileID: 0}
-  Orbiter: {fileID: 3226517119791555220}
-  LookAtTarget: 0
-  ClampBounds: {fileID: 0}
-  MinimumDistance: 6
-  MaximumDistance: 15
-  ZoomSpeed: 8
-  ZoomLookAtSpeed: 1
-  ZoomThresholdUnits: 0.15
-  OrbitXSpeed: -10
-  orbitXMaxDegrees: 0
-  orbitXMinDegrees: 20
-  XAxisMovementType: 0
-  OrbitXPanSpeed: 1
-  OrbitXPanLimit: 0
-  OrbitYSpeed: 10
-  OrbitYMaxDegrees: 0
-  YAxisMovementType: 0
-  OrbitYPanSpeed: 1
-  OrbitYPanLimit: 0
-  AllowOrbitWhileZooming: 1
-  AllowMovementOnBothAxisSimultaneously: 1
-  OrbitInertia: 0.5
-  OrbitMaximumSize: {x: 0, y: 0, z: 0}
-  RequireOrbitGesturesToStartOnTarget: 0
-  xDegrees: 0
-  panVelocity: {x: 0, y: 0}
-  cameraSize: 0
-  cams:
-  - {fileID: 3226517120416600737}
-  - {fileID: 7421729194184876933}
 --- !u!114 &3226517119791555223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,9 +178,9 @@ MonoBehaviour:
     uiCamIcon: {fileID: 0}
     uiCursorSelection: {fileID: 0}
   uiViewModeList: []
-  currentSelectedCursor: {fileID: 0}
+  isCursorSelected: 0
   scaleAmount: 1.2
-  raycaster: {fileID: 0}
+  graphicRaycaster: {fileID: 0}
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0
