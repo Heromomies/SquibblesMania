@@ -60,6 +60,7 @@ namespace DigitalRubyShared
             swipe.PlatformSpecificView = Image;
             swipe.ThresholdSeconds = SwipeThresholdSeconds;
             FingersScript.Instance.AddGesture(swipe);
+            
             TapGestureRecognizer tap = new TapGestureRecognizer();
             tap.StateUpdated += Tap_Updated;
             FingersScript.Instance.AddGesture(tap);

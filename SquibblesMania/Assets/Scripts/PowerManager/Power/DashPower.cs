@@ -7,107 +7,94 @@ using UnityEngine.EventSystems;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
+	[Header("POWER SETTINGS")]	
 	public int dashRange;
 
 	public LayerMask layerMaskInteractableAndPlayer;
-	//public LayerMask layerMaskPlayer;
 
 	public List<Transform> hitTransforms;
 
+	[Header("TOUCH SETTINGS")]
 	[Range(1, 10)] public int swipeTouchCount = 1;
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
-	[Range(0.0f, 1.0f)] public float minimumDurationSeconds;
-	
-	[Tooltip("Controls how the swipe gesture ends. See SwipeGestureRecognizerSwipeMode enum for more details.")]
-	public SwipeGestureRecognizerEndMode swipeMode;
 
+	[Header("MATERIAL SETTINGS")]
 	[Space] public Material firstMat;
 	public Material secondMat;
 	
-	public GameObject playerCurrentlySelected;
-	
-	private RaycastHit _hit;
-	private Camera _cam;
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
-	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
+
+	#region Swipe Gesture Enabled
+
 	private void OnEnable()
 	{
-		_cam = Camera.main;
-		
 		swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
 		swipe.DirectionThreshold = 0;
 		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
 		swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		swipe.EndMode = swipeMode;
+		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
 		swipe.ThresholdSeconds = swipeThresholdSeconds;
+		swipe.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(swipe);
-		
-		//Set up the new gesture 
-		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
-		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
-		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
-		LongPressBlocMovementGesture.MinimumDurationSeconds = minimumDurationSeconds;
-		LongPressBlocMovementGesture.AllowSimultaneousExecution(swipe);
-		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
 
 		DisplayPower();
 	}
 
-	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
-	{
-		
-	}
-	
+
+	#endregion
+
+	#region Swipe To Dash
+
 	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
 	{
 		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
 		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended)
 		{
-			Debug.Log(swipeGestureRecognizer.Direction);
-
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1: switch (swipeGestureRecognizer.EndDirection)
 					{
-						case SwipeGestureRecognizerDirection.Down: ; break;
-						case SwipeGestureRecognizerDirection.Up: ; break;
-						case SwipeGestureRecognizerDirection.Right: ; break;
-						case SwipeGestureRecognizerDirection.Left: ; break;
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
 					}
 					break;
 				case 3: switch (swipeGestureRecognizer.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((1)); break;
-						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((0)); break;
-						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((3)); break;
-						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((2)); break;
-							break;
-					} break;
+				{
+					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
+				} break;
 				case 2: switch (swipeGestureRecognizer.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((1)); break;
-						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((0)); break; 
-						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((3)); break; 
-						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((2)); break;
-							break; 
-					} break;
+				{
+					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
+				} break;
 				case 4: switch (swipeGestureRecognizer.EndDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down: //StartCoroutine((0)); break;
-						case SwipeGestureRecognizerDirection.Up: //StartCoroutine((1)); break;
-						case SwipeGestureRecognizerDirection.Right: //StartCoroutine((2)); break;
-						case SwipeGestureRecognizerDirection.Left: //StartCoroutine((3)); break;
-							break;
-					} break;
+				{
+					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
+					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
+					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
+					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
+				} break;
 			}
 		}
 	}
 
+	#endregion
+
+	#region Swipe Dash Direction
+
+	
 	//Update method of the long press gesture
-	public void ButtonClickedDash(int numberDirectionVector) // When we clicked on button
+	public void SwipeDashDirection(int numberDirectionVector) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -211,7 +198,12 @@ public class DashPower : MonoBehaviour, IManagePower
 		ClearPower();
 	}
 
-	public void DisplayPower()
+
+	#endregion
+
+	#region Display Power
+
+	public void DisplayPower() // Show the path 
 	{
 		var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
 		var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
@@ -249,6 +241,11 @@ public class DashPower : MonoBehaviour, IManagePower
 		}
 	}
 
+
+	#endregion
+
+	#region ChangeMaterial
+
 	void ChangeMaterial(Transform objectToChange)
 	{
 		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
@@ -256,6 +253,8 @@ public class DashPower : MonoBehaviour, IManagePower
 		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
 	}
 
+	#endregion
+	
 	public void CancelPower()
 	{
 	}
@@ -264,13 +263,24 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 	}
 
-	public void ClearPower()
+	public void ClearPower() // Clear the power
 	{
 		for (int i = 0; i < hitTransforms.Count; i++)
 		{
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
 		}
-
+		
 		hitTransforms.Clear();
+		
+		PowerManager.Instance.ActivateDeactivatePower(1, false);
+		PowerManager.Instance.ChangeTurnPlayer();
+	}
+	
+	public void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(swipe);
+		}
 	}
 }

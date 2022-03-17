@@ -348,7 +348,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 		var pMovementManager = player.playerMovementManager;
 		
-		pMovementManager.blocMovementManager.SetActive(true);
 		pMovementManager.playerCurrentlySelected = null;
 		pMovementManager.previewPath.Clear();
 		pMovementManager.sphereList.Clear();
@@ -362,7 +361,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 		player.finalPathFinding.Clear();
 		player.walking = false;
-		BlocMovementManager.Instance.hasStopMovingBloc = false;
 
 		if (EndZoneManager.Instance != null)
 		{

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using DG.Tweening;
 using DigitalRubyShared;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BlocMovementManager : MonoBehaviour
 {
-    private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
+    /*private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
     private LongPressGestureRecognizer LongPressBlocMovementGesture { get; set; }
 
     [Header("TOUCH PARAMETERS")] private Vector3 _touchPos;
@@ -34,8 +35,8 @@ public class BlocMovementManager : MonoBehaviour
     [SerializeField] private Vector3 offsetText;
     
    
-    private readonly List<Transform> _nextBlocUpMeshPos = new List<Transform>();
-    private readonly List<Transform> _nextBlocDownMeshPos = new List<Transform>();
+    [ShowInInspector] private readonly List<Transform> _nextBlocUpMeshPos = new List<Transform>();
+    [ShowInInspector] private readonly List<Transform> _nextBlocDownMeshPos = new List<Transform>();
     private static BlocMovementManager _blocMovementManager;
 
     public static BlocMovementManager Instance => _blocMovementManager;
@@ -51,8 +52,10 @@ public class BlocMovementManager : MonoBehaviour
         _cam = Camera.main;
     }
 
-    private void OnEnable()
+    private void Start()
     {
+        Debug.Log("I'm in start");
+        
         //Set up the new gesture 
         LongPressBlocMovementGesture = new LongPressGestureRecognizer();
         LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
@@ -90,7 +93,6 @@ public class BlocMovementManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out _hit, Mathf.Infinity, blocMoveLayersMask))
                 {
-                    
                     Node.ColorBloc colorBloc = _hit.collider.gameObject.GetComponent<Node>().colorBloc;
                     
                     if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform) && !_hit.collider.CompareTag("Player"))
@@ -190,8 +192,9 @@ public class BlocMovementManager : MonoBehaviour
 
     #region BlocPreviewMesh
 
-    private void ResetBlocPreviewMesh()
+    public void ResetBlocPreviewMesh()
     {
+        Debug.Log("Reset preview mesh");
         if (_nextBlocDownMeshPos.Count > 0 || _nextBlocUpMeshPos.Count > 0)
         {
             foreach (var nextBlocDownMesh in _nextBlocDownMeshPos)
@@ -392,6 +395,6 @@ public class BlocMovementManager : MonoBehaviour
         var player = GameManager.Instance.currentPlayerTurn;
         player.PlayerActionPointCardState.SetFalsePathObjects();
         player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
-    }
+    }*/
 }
 
