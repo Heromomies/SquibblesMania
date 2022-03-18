@@ -10,7 +10,8 @@ public class BezierAlgorithm : MonoBehaviour
 	
 	public List<Vector3> m_curvePoints;
 
-
+	public Vector3 point;
+	public Vector3 previous;
 	public GameObject goToMove;
 	private void Start()
 	{
@@ -20,8 +21,6 @@ public class BezierAlgorithm : MonoBehaviour
 		}
 
 		Curve(m_curvePoints, 0.5f);
-		
-		goToMove.transform.position = Vector3.Lerp(m_curvePoints[0], m_curvePoints[m_curvePoints.Count-1], 5f);
 	}
 
 	// Casteljau's algorithm based on the implementation in: "3D Math Primer for Graphics and Game Development"
@@ -70,11 +69,13 @@ public class BezierAlgorithm : MonoBehaviour
 		}
 
 		const float delta = 0.01f;
-		Vector3 previous = m_curvePoints[0];
+		previous = m_curvePoints[0];
 
+		goToMove.transform.position = Vector3.Lerp(previous, point, 5f);
+		
 		for (float t = delta; t <= 1.0f; t += delta)
 		{
-			Vector3 point = Curve(m_curvePoints, t);
+			point = Curve(m_curvePoints, t);
 			
 			Gizmos.color = Color.magenta;
 			Gizmos.DrawLine(previous, point);
