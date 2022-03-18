@@ -70,14 +70,13 @@ public class UiManager : MonoBehaviour
             CameraButtonManager.Instance.enabled = true;
             cameraTouchMovement.enabled = false;
             CameraButtonManager.Instance.TopViewMode();
-            GameManager.Instance.ResetCamVars();
+          
         }
         else
         {
             CameraButtonManager.Instance.enabled = false;
             cameraTouchMovement.enabled = true;
             CameraButtonManager.Instance.BaseViewMode();
-            GameManager.Instance.ResetCamVars();
         }
     }
     

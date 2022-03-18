@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3226517119791555220}
   - component: {fileID: 3226517119791555221}
-  - component: {fileID: 3226517119791555216}
   - component: {fileID: 3226517119791555223}
   - component: {fileID: 3226517119791555226}
   - component: {fileID: 3226517119791555217}
   - component: {fileID: 8398261687759252214}
+  - component: {fileID: 918057241538110752}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -81,49 +81,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &3226517119791555216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28dc0e77eac45a34b845e50615bf9bb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OrbitTarget: {fileID: 0}
-  Orbiter: {fileID: 3226517119791555220}
-  LookAtTarget: 0
-  ClampBounds: {fileID: 0}
-  MinimumDistance: 6
-  MaximumDistance: 15
-  ZoomSpeed: 8
-  ZoomLookAtSpeed: 1
-  ZoomThresholdUnits: 0.15
-  OrbitXSpeed: -10
-  orbitXMaxDegrees: 0
-  orbitXMinDegrees: 20
-  XAxisMovementType: 0
-  OrbitXPanSpeed: 1
-  OrbitXPanLimit: 0
-  OrbitYSpeed: 10
-  OrbitYMaxDegrees: 0
-  YAxisMovementType: 0
-  OrbitYPanSpeed: 1
-  OrbitYPanLimit: 0
-  AllowOrbitWhileZooming: 1
-  AllowMovementOnBothAxisSimultaneously: 1
-  OrbitInertia: 0.5
-  OrbitMaximumSize: {x: 0, y: 0, z: 0}
-  RequireOrbitGesturesToStartOnTarget: 0
-  xDegrees: 0
-  panVelocity: {x: 0, y: 0}
-  cameraSize: 0
-  cams:
-  - {fileID: 3226517120416600737}
-  - {fileID: 7421729194184876933}
 --- !u!114 &3226517119791555223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,9 +153,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   indexUiCamSquareList: 0
+  baseIndexUICamSquare: 2
   actualUiCamPreset:
+    uiCamSquare: []
+    buttonsCamRotate: []
+  uiCamPresetList:
   - uiCamSquare:
-    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
@@ -207,7 +167,6 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
   - uiCamSquare:
-    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
@@ -218,6 +177,45 @@ MonoBehaviour:
   uiCamPresets:
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &918057241538110752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226517119791555227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af5b90f1abf7a43409c3b43b357bc50d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swipeTouchCount: 1
+  swipeThresholdSeconds: 0
+  minimumDistanceUnits: 0.5
+  actualUiViewMode:
+    uiCircleSelection:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    uiCamIcon: {fileID: 0}
+    uiCursorSelection: {fileID: 0}
+  uiViewModeList:
+  - uiCircleSelection:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    uiCamIcon: {fileID: 0}
+    uiCursorSelection: {fileID: 0}
+  - uiCircleSelection:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    uiCamIcon: {fileID: 0}
+    uiCursorSelection: {fileID: 0}
+  isCursorSelected: 0
+  scaleCursorAmount: 1.2
+  uiCircleRectTransforms: []
+  graphicRaycaster: {fileID: 0}
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0
