@@ -34,7 +34,7 @@ public class BezierAlgorithm : MonoBehaviour
 
 	
 	// Casteljau's algorithm based on the implementation in: "3D Math Primer for Graphics and Game Development"
-	public static Vector3 Curve(List<Vector3> points, float t)
+	public static Vector3 Curve(List<Vector3> points, float time)
 	{
 		Vector3[] allPoints = points.ToArray();
 		int n = allPoints.Length;
@@ -57,7 +57,7 @@ public class BezierAlgorithm : MonoBehaviour
 			// Perform the next round of interpolation, reducing the degree of the curve by one
 			for (int i = 0; i < n; ++i)
 			{
-				allPoints[i] = allPoints[i] * (1.0f - t) + allPoints[i + 1] * t;
+				allPoints[i] = allPoints[i] * (1.0f - time) + allPoints[i + 1] * time;
 			}
 		}
 
