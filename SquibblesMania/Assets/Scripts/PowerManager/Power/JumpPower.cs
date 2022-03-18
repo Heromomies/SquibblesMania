@@ -12,6 +12,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 4.0f)] public int radiusMin;
 	[Range(0.0f, 5.0f)] public int radiusMax;
 	[Range(0.0f, 3.0f)] public float speedBloc;
+	[Range(0.0f, 10.0f)] public float ySpawn;
 	
 	[Space] public LayerMask layer;
 	[Space] public LayerMask layerBlocTouched;
@@ -57,15 +58,24 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
 				var posHitInfo = hitInfo.transform.position;
 
-				tCurrentPlayerTurn.position = new Vector3(posHitInfo.x, posHitInfo.y +0.5f, posHitInfo.z);
+				var playerPos = tCurrentPlayerTurn.position;
 
+				var xSpawn = (posHitInfo.x + playerPos.x) /2;
+				var zSpawn = (posHitInfo.z + playerPos.z) /2;
+
+				var listPoint = new List<Vector3>();
+
+				listPoint.Add(playerPos);
+				listPoint.Add(new Vector3(xSpawn, ySpawn, zSpawn));
+				listPoint.Add(posHitInfo);
+
+				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, 0.02f);
+				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
 				
 				if (hitInfo.collider.CompareTag("Platform"))
 				{
-					var hitPosition = hitInfoTransform.position;
-					hitInfoTransform.DOMove(new Vector3(hitPosition.x,
-						hitPosition.y - 1, hitPosition.z), speedBloc);
+					StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
 				}
 
 				ClearPower();
@@ -76,7 +86,15 @@ public class JumpPower : MonoBehaviour, IManagePower
 			}
 		}
 	}
-	
+
+	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
+	{
+		yield return new WaitForSeconds(1.5f);
+		
+		var hitPosition = hitInfoTransform.position;
+		hitInfoTransform.DOMove(new Vector3(hitPosition.x,
+			hitPosition.y - 1, hitPosition.z), speedBloc);
+	}
 
 	public void DisplayPower()
 	{
