@@ -21,20 +21,15 @@ public class GameManager : MonoBehaviour
   
     public int turnCount;
     [Header("CAMERA PARAMETERS")] private Camera _cam;
-
+    private CameraViewModeGesture _cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
     [Header("CAMERA ROTATIONS")]
-    [SerializeField]
-    private float camRotateXMaxDegrees = 50f;
-    [SerializeField]
-    private float camRotateXMinDegrees = 20f;
     private int _count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-
-    [SerializeField] private float cameraOrthoBaseSize = 11f;
+    
     [Serializable]
     public struct CamPreSets
     {
@@ -60,6 +55,7 @@ public class GameManager : MonoBehaviour
         _gameManager = this;
         _cam = Camera.main;
         Application.targetFrameRate = 30;
+        
     }
 
 
@@ -71,7 +67,7 @@ public class GameManager : MonoBehaviour
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
         }
-
+        _cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
         SpawnPlayers();
         StartGame();
     }
@@ -145,7 +141,7 @@ public class GameManager : MonoBehaviour
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
         CameraButtonManager.Instance.SetUpUiCamPreset();
-        
+        _cameraViewModeGesture.SetUpCameraBaseViewMode();
         _count++;
         if (_count >= camPreSets.Count)
         {
