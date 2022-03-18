@@ -1,28 +1,38 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Sirenix.Utilities;
 using UnityEngine;
 
 public class BezierAlgorithm : MonoBehaviour
 {
-	public List<Transform> points;
-	
-	public List<Vector3> m_curvePoints;
+	private GameObject _go;
+	private List<Vector3> _points;
+	private float _f;
+	private bool _canMove;
 
-	public Vector3 point;
-	public Vector3 previous;
-	public GameObject goToMove;
-	private void Start()
+	private float _timeLeft;
+	private static BezierAlgorithm _instance = null;
+     
+	// Game Instance Singleton
+	public static BezierAlgorithm Instance
 	{
-		for (int i = 0; i < points.Count; i++)
-		{
-			m_curvePoints.Add(points[i].position);
+		get
+		{ 
+			return _instance; 
 		}
-
-		Curve(m_curvePoints, 0.5f);
+	}
+     
+	private void Awake()
+	{
+		// if the singleton hasn't been initialized yet
+		if (_instance != null && _instance != this) 
+		{
+			Destroy(this.gameObject);
+		}
+ 
+		_instance = this;
 	}
 
+	
 	// Casteljau's algorithm based on the implementation in: "3D Math Primer for Graphics and Game Development"
 	public static Vector3 Curve(List<Vector3> points, float t)
 	{
@@ -54,33 +64,57 @@ public class BezierAlgorithm : MonoBehaviour
 		return allPoints[0];
 	}
 
+	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f)
+	{
+		_go = objectToMove;
+		_points = pointsList;
+		_f = f;
+
+		_canMove = true;
+	}
+
+	private void Update()
+	{
+		if (_canMove)
+		{
+			_timeLeft += _f;
+			if (_timeLeft < 1)
+			{
+				_go.transform.position = Curve(_points, _timeLeft);
+			}
+			else
+			{
+				_canMove = false;
+			}
+		}
+	}
+
 	// Example code to visualize the trajectory
 	// The "m_curvePoints" variable is a List<Vector3> that holds the curve's control points.
-	//
-	private void OnDrawGizmos()
+	
+	/*private void OnDrawGizmos()
 	{
-		if (m_curvePoints == null)
+		if (curvePoints == null)
 		{
 			return;
 		}
-		else if (m_curvePoints.Count == 0)
+		else if (curvePoints.Count == 0)
 		{
 			return;
 		}
 
 		const float delta = 0.01f;
-		previous = m_curvePoints[0];
+		var previous = curvePoints[0];
 
-		goToMove.transform.position = Vector3.Lerp(previous, point, 5f);
-		
 		for (float t = delta; t <= 1.0f; t += delta)
 		{
-			point = Curve(m_curvePoints, t);
+			var point = Curve(curvePoints, t);
 			
 			Gizmos.color = Color.magenta;
 			Gizmos.DrawLine(previous, point);
 
 			previous = point;
 		}
-	}
+	}*/
+	
 }
