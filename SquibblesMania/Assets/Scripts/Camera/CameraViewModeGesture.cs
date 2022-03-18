@@ -42,7 +42,7 @@ public class CameraViewModeGesture : MonoBehaviour
    
     private Transform _currentCircleTransform;
     private List<RaycastResult> _raycast = new List<RaycastResult>();
-    [SerializeField] private List<RectTransform> uiCircleRectTransforms;
+
     private RaycastHit _hit;
     [SerializeField] private GraphicRaycaster graphicRaycaster;
 
@@ -95,7 +95,7 @@ public class CameraViewModeGesture : MonoBehaviour
             
             if (!_currentCircleTransform)
             {
-                _currentCircleTransform = uiCircleRectTransforms[1].transform;
+                _currentCircleTransform = actualUiViewMode.uiCircleSelection[1].transform;
             }
 
             if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
@@ -103,25 +103,30 @@ public class CameraViewModeGesture : MonoBehaviour
                 switch (swipeGestureRecognizer.EndDirection)
                 {
                     case SwipeGestureRecognizerDirection.Down:
-                      
-                        if (_currentCircleTransform == uiCircleRectTransforms[0].transform)
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[2].transform)
+                            break;
+                        
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[1].transform, new Vector2(-56f, 0), cursorEulerAngles, camIconEulerAngles, 60f, -30f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[1].transform, new Vector2(-56f, 0), cursorEulerAngles, camIconEulerAngles, 60f, -30f));
                         }
                         else
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[2].transform, new Vector2(-40, 0), cursorEulerAngles, camIconEulerAngles, 20f, -10f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[2].transform, new Vector2(-40, 0), cursorEulerAngles, camIconEulerAngles, 20f, -10f));
                         }
                         break;
                     case SwipeGestureRecognizerDirection.Up:
-                        if (_currentCircleTransform == uiCircleRectTransforms[1].transform)
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
+                            break;
+                        
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[1].transform)
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[0].transform,
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[0].transform,
                                 new Vector2(0, 40), cursorEulerAngles, camIconEulerAngles, -60f, -90f, -90f));
                         }
                         else
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[1].transform,
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[1].transform,
                                 new Vector2(-56f, 0), cursorEulerAngles, camIconEulerAngles, -20f, -30f));
                         }
                         break;
@@ -132,25 +137,29 @@ public class CameraViewModeGesture : MonoBehaviour
                 switch (swipeGestureRecognizer.EndDirection)
                 {
                     case SwipeGestureRecognizerDirection.Down:
-                        
-                        if (_currentCircleTransform == uiCircleRectTransforms[1].transform)
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[2].transform)
+                            break;
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[1].transform)
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[0].transform, new Vector2(0, -40), cursorEulerAngles, camIconEulerAngles, -60f, 90f, 90f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[0].transform, new Vector2(0, -40), cursorEulerAngles, camIconEulerAngles, -60f, 90f, 90f));
                         }
                         else
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[1].transform, new Vector2(56f, 0), cursorEulerAngles, camIconEulerAngles, 20f, 210f, 180f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[1].transform, new Vector2(56f, 0), cursorEulerAngles, camIconEulerAngles, 20f, 210f, 180f));
                         }
                         break;
                         
                     case SwipeGestureRecognizerDirection.Up:
-                        if (_currentCircleTransform == uiCircleRectTransforms[0].transform)
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
+                            break;
+                        
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[1].transform, new Vector2(56f, 0), cursorEulerAngles, camIconEulerAngles, 60f, -210f, 180f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[1].transform, new Vector2(56f, 0), cursorEulerAngles, camIconEulerAngles, 60f, -210f, 180f));
                         }
                         else
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(uiCircleRectTransforms[2].transform, new Vector2(40, 0), cursorEulerAngles, camIconEulerAngles, -20f, -190f, 180f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[2].transform, new Vector2(40, 0), cursorEulerAngles, camIconEulerAngles, -20f, -190f, 180f));
                         }
                         break;
                        
@@ -187,10 +196,7 @@ public class CameraViewModeGesture : MonoBehaviour
             if (isCursorSelected)
             {
                 actualUiViewMode.uiCursorSelection.transform.localScale = Vector3.one * scaleCursorAmount;
-                foreach (var circle in actualUiViewMode.uiCircleSelection)
-                {
-                    uiCircleRectTransforms.Add(circle.GetComponent<RectTransform>());
-                }
+              
             }
 
             _raycast.Clear();
@@ -242,7 +248,7 @@ public class CameraViewModeGesture : MonoBehaviour
         { 
             actualUiViewMode.uiCursorSelection.localScale = Vector3.one;
         }
-        uiCircleRectTransforms.Clear();
+        //actualUiViewMode.uiCircleSelection.Clear();
     }
 
     public void SetUpCameraBaseViewMode()
