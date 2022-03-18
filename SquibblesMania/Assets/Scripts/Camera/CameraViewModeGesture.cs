@@ -137,7 +137,7 @@ public class CameraViewModeGesture : MonoBehaviour
                 switch (swipeGestureRecognizer.EndDirection)
                 {
                     case SwipeGestureRecognizerDirection.Down:
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[2].transform)
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
                             break;
                         if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[1].transform)
                         {
@@ -150,12 +150,12 @@ public class CameraViewModeGesture : MonoBehaviour
                         break;
                         
                     case SwipeGestureRecognizerDirection.Up:
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
-                            break;
                         
+                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[2].transform)
+                            break;
                         if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
                         {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[1].transform, new Vector2(56f, 0), cursorEulerAngles, camIconEulerAngles, 60f, -210f, 180f));
+                            StartCoroutine(StartMovementViewModeStateCoroutine(actualUiViewMode.uiCircleSelection[1].transform, new Vector2(56f, 0), cursorEulerAngles, camIconEulerAngles, 60f, 210f, 180f));
                         }
                         else
                         {
