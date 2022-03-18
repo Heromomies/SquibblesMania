@@ -19,6 +19,7 @@ public class CameraViewModeGesture : MonoBehaviour
 
     [Range(0.0f, 10.0f), SerializeField] private float swipeThresholdSeconds;
     [Range(0.0f, 1.0f), SerializeField] private float minimumDistanceUnits = 0.2f;
+    [Range(0.0f, 1.0f), SerializeField] private float minimumDurationSeconds;
 
     public UIViewMode actualUiViewMode;
     public List<UIViewMode> uiViewModeList;
@@ -53,7 +54,7 @@ public class CameraViewModeGesture : MonoBehaviour
 
     private void OnEnable()
     {
-        //Set up the new gesture 
+        //Set up the new swipe gesture 
         _swipeViewModeGesture = new SwipeGestureRecognizer();
         _swipeViewModeGesture.StateUpdated += SwipeViewModeGestureOnStateUpdated;
         _swipeViewModeGesture.DirectionThreshold = 0;
@@ -66,12 +67,12 @@ public class CameraViewModeGesture : MonoBehaviour
         FingersScript.Instance.AddGesture(_swipeViewModeGesture);
 
 
-        //Set up the new gesture 
+        //Set up the new long press gesture 
         _longPressViewModeGesture = new LongPressGestureRecognizer();
         _longPressViewModeGesture.PlatformSpecificView = actualUiViewMode.uiCursorSelection;
         _longPressViewModeGesture.StateUpdated += LongPressViewModeGestureOnStateUpdated;
         _longPressViewModeGesture.ThresholdUnits = 0.0f;
-        _longPressViewModeGesture.MinimumDurationSeconds = 0.2f;
+        _longPressViewModeGesture.MinimumDurationSeconds = minimumDurationSeconds;
         FingersScript.Instance.AddGesture(_longPressViewModeGesture);
     }
 
