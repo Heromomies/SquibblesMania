@@ -7,10 +7,13 @@ using UnityEngine.EventSystems;
 
 public class SwapPower : MonoBehaviour, IManagePower
 {
+	[Header("POWER SETTINGS")]
 	public int range;
 	public LayerMask layer;
-
-	public Material firstMat, secondMat;
+	[Space] 
+	[Header("MATERIALS")] 
+	public Material firstMat; 
+	public Material secondMat;
 
 	private GameObject _playerToSwap;
 	private Vector3 _pos;
