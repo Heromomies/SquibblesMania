@@ -12,9 +12,7 @@ public class EventManager : MonoBehaviour
 	public List<GameObject> cleanList;
 	
 	public int dangerousness;
-	
-	public Slider sliderDangerousness;
-	
+
 	public LevelOfDanger levelOfDanger;
 	
 	public enum LevelOfDanger
@@ -48,7 +46,6 @@ public class EventManager : MonoBehaviour
 			LaunchEvent();
 			levelOfDanger = LevelOfDanger.LevelOne;
 			dangerousness = 0;
-			sliderDangerousness.value = dangerousness;
 			GameManager.Instance.cycleCount = 0;
 		}
 		else
@@ -65,7 +62,6 @@ public class EventManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-			sliderDangerousness.value = dangerousness;
 		}
 	}
 

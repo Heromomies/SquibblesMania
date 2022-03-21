@@ -21,11 +21,6 @@ public class PlayerCardState : PlayerBaseState
 			
 		}
 
-		if (player.isPlayerShielded)
-		{
-			player.shieldCount--;
-		}
-		
 		//If the current player is this player
 		if (GameManager.Instance.currentPlayerTurn == player)
 		{
@@ -46,11 +41,24 @@ public class PlayerCardState : PlayerBaseState
 
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
-				NFCManager.Instance.SetActivePlayerActionButton(1,true);
+				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
+				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
+				{
+					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
+					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
+					case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
+					case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
+				}
 			}
 			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
-				NFCManager.Instance.SetActivePlayerActionButton(0,true);
+				NFCManager.Instance.clicked = true;
+				NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
+				GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
+				
+				UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
+					.PlayerActionPointCardState);
 			}
 
 			foreach (var n in _number)
@@ -95,12 +103,6 @@ public class PlayerCardState : PlayerBaseState
 			NFCManager.Instance.SetActivePlayerActionButton(0,false);
 			NFCManager.Instance.SetActivePlayerActionButton(1,false);
 		}
-
-		if (GameManager.Instance.currentPlayerTurn.isPlayerShielded && GameManager.Instance.currentPlayerTurn.shieldCount == 0)
-		{
-			GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
-			GameManager.Instance.currentPlayerTurn.isPlayerShielded = false;
-		}
 		
 		NFCManager.Instance.hasRemovedCard = true;
 	}
@@ -112,6 +114,7 @@ public class PlayerCardState : PlayerBaseState
 		if (player.stunCount <= 0)
 		{
 			player.isPlayerStun = false;
+			player.psStun.SetActive(false);
 		}
 
 		switch (player.playerNumber)

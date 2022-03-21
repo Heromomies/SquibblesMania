@@ -60,6 +60,7 @@ namespace DigitalRubyShared
             swipe.PlatformSpecificView = Image;
             swipe.ThresholdSeconds = SwipeThresholdSeconds;
             FingersScript.Instance.AddGesture(swipe);
+            
             TapGestureRecognizer tap = new TapGestureRecognizer();
             tap.StateUpdated += Tap_Updated;
             FingersScript.Instance.AddGesture(tap);
@@ -81,7 +82,7 @@ namespace DigitalRubyShared
 
         private void Swipe_Updated(DigitalRubyShared.GestureRecognizer gesture)
         {
-            Debug.LogFormat("Swipe state: {0}", gesture.State);
+           //Debug.LogFormat("Swipe state: {0}", gesture.State);
 
             SwipeGestureRecognizer swipe = gesture as SwipeGestureRecognizer;
             if (swipe.State == GestureRecognizerState.Ended)

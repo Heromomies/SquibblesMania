@@ -15,23 +15,21 @@ public class GameManager : MonoBehaviour
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
     public Transform[] playersSpawnPoints;
-    public int numberPlayers;
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
   
     public int turnCount;
-    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
-
+    [Header("CAMERA PARAMETERS")] private Camera _cam;
+    private CameraViewModeGesture _cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
-    public float camRotateClamp = 30f;
+    [Header("CAMERA ROTATIONS")]
     private int _count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-
-    [SerializeField] private float cameraOrthoBaseSize = 11f;
+    
     [Serializable]
     public struct CamPreSets
     {
@@ -39,7 +37,6 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public GameObject playerUiButtons;
-        public GameObject panelButtonEvent;
         public GameObject buttonNextTurn;
         public TextMeshProUGUI actionPointText;
     }
@@ -56,12 +53,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _gameManager = this;
-        if (cameraTouchScript != null)
-        {
-            cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
-        }
-
-        Application.targetFrameRate = 60;
+        _cam = Camera.main;
+        Application.targetFrameRate = 30;
+        
     }
 
 
@@ -71,10 +65,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < allBlocks.Count; i++)
         {
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
-            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
-                allBlocks[i].transform.position.z);
+            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
         }
-
+        _cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
         SpawnPlayers();
         StartGame();
     }
@@ -84,8 +77,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
-            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
-                               new Vector3(0, 0.5f, 0);
+            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
 
             PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
@@ -125,7 +117,6 @@ public class GameManager : MonoBehaviour
 
         CamConfig(_count);
         NFCManager.Instance.PlayerChangeTurn();
-        //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
     void CamConfig(int countTurn)
@@ -136,9 +127,8 @@ public class GameManager : MonoBehaviour
             actualCamPreset.buttonNextTurn.SetActive(false);
         }
 
-        TouchManager.Instance.RemoveFingerScriptPassThroughObject();
 
-        Transform cameraTransform = cameraTouchScript.transform;
+        Transform cameraTransform = _cam.transform;
         Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
         
         //Smooth Transition
@@ -150,36 +140,13 @@ public class GameManager : MonoBehaviour
         //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
-        TouchManager.Instance.AddFingerScriptPassTroughObject();
-            
-        
-        if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
-        {
-            ResetCamVars();
-            cameraTouchScript.OrbitYMaxDegrees = 0;
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp;
-        }
-        else
-        {
-            ResetCamVars();
-            cameraTouchScript.OrbitXMaxDegrees = camRotateClamp + 5f;
-            cameraTouchScript.OrbitYMaxDegrees = 0;
-        }
-
-
+        CameraButtonManager.Instance.SetUpUiCamPreset();
+        _cameraViewModeGesture.SetUpCameraBaseViewMode();
         _count++;
         if (_count >= camPreSets.Count)
         {
             _count = 0;
         }
-    }
-    public void ResetCamVars()
-    {
-        cameraTouchScript.panVelocity = Vector2.zero;
-        cameraTouchScript.xDegrees = 0f;
-        cameraTouchScript.cameraSize = cameraOrthoBaseSize;
-        Camera.main.orthographicSize = cameraOrthoBaseSize;
-        cameraTouchScript.camUI.orthographicSize = cameraOrthoBaseSize;
     }
 
     private void IncreaseDemiCycle()
@@ -215,10 +182,6 @@ public class GameManager : MonoBehaviour
                 conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
 
-            var t = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint];
-
-           // Instantiate(crown, new Vector3(t.position.x, t.position.y + heightCrownSpawn, t.position.z), Quaternion.identity, t);
-            
             isConditionVictory = false;
             _isEndZoneShowed = true;
         }
@@ -230,5 +193,10 @@ public class GameManager : MonoBehaviour
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopAllCoroutines();
     }
 }

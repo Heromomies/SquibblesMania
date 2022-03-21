@@ -22,8 +22,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] [Header("CAM SWITCH PARAMETERS")]
     private bool isSwitchChanged;
-
-   
+    
 
     private void Awake()
     {
@@ -37,28 +36,12 @@ public class UiManager : MonoBehaviour
         SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
     }
 
-    public void ButtonPathFindingBlock()
-    {
-        GameManager.Instance.currentPlayerTurn.currentTouchBlock = TouchManager.Instance.Hit.transform;
-        GameManager.Instance.currentPlayerTurn.StartPathFinding();
-        TouchManager.Instance.uiInteractionParentObject.SetActive(false);
-    }
-
-    public void ButtonUpDownBlock()
-    {
-        TouchManager.Instance.uiInteractionParentObject.SetActive(false);
-        MovementBlockManager.Instance.buttonMoveBlockParentObject.SetActive(true);
-        MovementBlockManager.Instance.isMovingBlock = true;
-    }
-
     public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
         var localManager = currentActionPointsOfCurrentPlayerTurn.GetComponent<LocalizationParamsManager>();
         localManager.SetParameterValue("ACTIONPOINT", actionPointText.ToString());
     }
 
-
-    
 
     public void ButtonNextTurn()
     {
@@ -87,14 +70,13 @@ public class UiManager : MonoBehaviour
             CameraButtonManager.Instance.enabled = true;
             cameraTouchMovement.enabled = false;
             CameraButtonManager.Instance.TopViewMode();
-            GameManager.Instance.ResetCamVars();
+          
         }
         else
         {
             CameraButtonManager.Instance.enabled = false;
             cameraTouchMovement.enabled = true;
             CameraButtonManager.Instance.BaseViewMode();
-            GameManager.Instance.ResetCamVars();
         }
     }
     

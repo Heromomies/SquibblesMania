@@ -66,11 +66,10 @@ namespace DigitalRubyShared
         public float OrbitXSpeed = -30.0f;
 
         /// <summary>The maximum degrees to orbit on the x axis from the starting x rotation. 0 for no limit. Set OrbitXSpeed to 0 to disable x orbit.</summary>
-        [Tooltip(
-            "The maximum degrees to orbit on the x axis from the starting x rotation. 0 for no limit. Set OrbitXSpeed to 0 to disable x orbit.")]
-        [Range(0.0f, 360.0f)]
-        public float OrbitXMaxDegrees = 0.0f;
-
+        [Tooltip("The maximum degrees to orbit on the x axis from the starting x rotation. 0 for no limit. Set OrbitXSpeed to 0 to disable x orbit.")]
+        
+        public float orbitXMaxDegrees = 0.0f;
+        public float orbitXMinDegrees = 20f;
         /// <summary>Whether the orbit on the x axis is a pan (move sideways) instead of an orbit.</summary>
         [Tooltip("Whether the orbit on the x axis is a pan (move sideways) instead of an orbit.")]
         public PanOrbitMovementType XAxisMovementType = PanOrbitMovementType.Orbit;
@@ -184,7 +183,7 @@ namespace DigitalRubyShared
         public event System.Action OrbitTargetTapped;
 
         public float cameraSize;
-        public Camera camUI;
+        public Camera[] cams;
 
         public void OnEnable()
         {
@@ -253,7 +252,7 @@ namespace DigitalRubyShared
 
             Vector3 startPos = Orbiter.transform.position;
             UpdateOrbit(panVelocity.x, panVelocity.y);
-            UpdateZoom();
+           // UpdateZoom();
             ClampDistance(startPos);
             panVelocity *= OrbitInertia;
             zoomSpeed *= OrbitInertia;
@@ -356,7 +355,7 @@ namespace DigitalRubyShared
             cameraSize -= (zoomSpeed * Time.deltaTime);
             cameraSize = Mathf.Clamp(cameraSize, MinimumDistance, MaximumDistance);
             Camera.main.orthographicSize = cameraSize;
-            camUI.orthographicSize = cameraSize;
+           
         }
 
         private void PerformPan(Vector3 pan, float limit)
@@ -387,21 +386,24 @@ namespace DigitalRubyShared
                 else
                 {
                     float addAngle = yVelocity * OrbitXSpeed * Time.deltaTime;
-                    
-                    if (OrbitXMaxDegrees > 0.0f)
+                    if (orbitXMaxDegrees > 0.0f)
                     {
+                        
                         float newDegrees = xDegrees + addAngle;
-                       
-                        if (newDegrees > OrbitXMaxDegrees)
+                  
+                        if (newDegrees > orbitXMaxDegrees)
                         {
-                            addAngle = OrbitXMaxDegrees - xDegrees;
+                            
+                            addAngle = orbitXMaxDegrees - xDegrees;
                         }
-                        else if (newDegrees < -OrbitXMaxDegrees)
+                        
+                        else if (newDegrees < orbitXMinDegrees)
                         {
-                            addAngle = -OrbitXMaxDegrees - xDegrees;
+                         
+                            addAngle = orbitXMinDegrees - xDegrees;
                         }
-                    }
 
+                    }
                     
                     xDegrees += addAngle;
                     Orbiter.RotateAround(OrbitTarget.transform.position, Orbiter.transform.right, addAngle);
@@ -491,14 +493,12 @@ namespace DigitalRubyShared
 
                 return;
             }
-            else
+
+            float xVelocity = gesture.DeltaX;
+            float yVelocity = gesture.DeltaY;
+            if (PanGestureHasEnoughMovementOnOneAxis(ref xVelocity, ref yVelocity))
             {
-                float xVelocity = gesture.DeltaX;
-                float yVelocity = gesture.DeltaY;
-                if (PanGestureHasEnoughMovementOnOneAxis(ref xVelocity, ref yVelocity))
-                {
-                    UpdateOrbit(xVelocity, yVelocity);
-                }
+                UpdateOrbit(xVelocity, yVelocity);
             }
         }
 

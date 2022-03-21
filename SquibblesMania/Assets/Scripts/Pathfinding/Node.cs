@@ -20,7 +20,8 @@ public class Node : MonoBehaviour
         Red = 0,
         Yellow = 1,
         Blue = 2,
-        Green = 3
+        Green = 3,
+        None = 4
     }
 
     public ColorBloc colorBloc;
@@ -47,7 +48,7 @@ public class Node : MonoBehaviour
     {
         radius = 1f;
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, radius);
-
+        possiblePath.Clear();
         int count = 0;
         foreach (var collider in colliders)
         {
