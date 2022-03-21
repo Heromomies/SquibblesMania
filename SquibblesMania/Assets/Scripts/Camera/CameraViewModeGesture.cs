@@ -29,7 +29,7 @@ public class CameraViewModeGesture : MonoBehaviour
     [SerializeField] private float camIconAngleZCameraBaseView;
     [SerializeField] private float camIconAngleZCameraLowerView;
     [Space(10f)]
-    [SerializeField] private float angleToAdWhenGoUp;
+    [SerializeField] private float angleToAddWhenGoUp;
     [SerializeField] private float angleToAddWhenGoDown;
   
     [Serializable]
@@ -53,6 +53,8 @@ public class CameraViewModeGesture : MonoBehaviour
     private RaycastHit _hit;
     [SerializeField] private GraphicRaycaster canvasGraphicRaycaster;
 
+
+    [SerializeField] private float timeRotateSpeedInSeconds = 1f;
     private void Awake()
     {
         _cam = Camera.main;
@@ -117,7 +119,7 @@ public class CameraViewModeGesture : MonoBehaviour
                         {
                             StartCoroutine(StartMovementViewModeStateCoroutine(
                                 actualUiViewMode.uiCircleSelection[1].transform, new Vector2(-cursorOffsetPos.x, 0),
-                                cursorEulerAngles, camIconEulerAngles, angleToAdWhenGoUp, camIconAngleZCameraBaseView));
+                                cursorEulerAngles, camIconEulerAngles, angleToAddWhenGoUp, camIconAngleZCameraBaseView));
                         }
                         else
                         {
@@ -135,7 +137,7 @@ public class CameraViewModeGesture : MonoBehaviour
                         {
                             StartCoroutine(StartMovementViewModeStateCoroutine(
                                 actualUiViewMode.uiCircleSelection[0].transform,
-                                new Vector2(0, cursorOffsetPos.y), cursorEulerAngles, camIconEulerAngles, -angleToAdWhenGoUp, camIconAngleZCameraTopView, -cursorAngleZ));
+                                new Vector2(0, cursorOffsetPos.y), cursorEulerAngles, camIconEulerAngles, -angleToAddWhenGoUp, camIconAngleZCameraTopView, -cursorAngleZ));
                         }
                         else
                         {
@@ -158,7 +160,7 @@ public class CameraViewModeGesture : MonoBehaviour
                         {
                             StartCoroutine(StartMovementViewModeStateCoroutine(
                                 actualUiViewMode.uiCircleSelection[0].transform, new Vector2(0, -cursorOffsetPos.y), cursorEulerAngles,
-                                camIconEulerAngles, -angleToAdWhenGoUp, camIconAngleZCameraTopView + 180f, cursorAngleZ));
+                                camIconEulerAngles, -angleToAddWhenGoUp, camIconAngleZCameraTopView + 180f, cursorAngleZ));
                         }
                         else
                         {
@@ -177,7 +179,7 @@ public class CameraViewModeGesture : MonoBehaviour
                         {
                             StartCoroutine(StartMovementViewModeStateCoroutine(
                                 actualUiViewMode.uiCircleSelection[1].transform, new Vector2(cursorOffsetPos.x, 0), cursorEulerAngles,
-                                camIconEulerAngles, angleToAdWhenGoUp, camIconAngleZCameraBaseView + 180f,cursorAngleZ+90));
+                                camIconEulerAngles, angleToAddWhenGoUp, camIconAngleZCameraBaseView + 180f,cursorAngleZ+90));
                         }
                         else
                         {
@@ -230,9 +232,7 @@ public class CameraViewModeGesture : MonoBehaviour
         }
     }
 
-    private IEnumerator StartMovementViewModeStateCoroutine(Transform uiCircleRectTransform, Vector2 offset,
-        Vector3 cursorEulerAngles, Vector3 camIconEulerAngles, float angleToAddCamRotate, float camIconAngleZ = 0f,
-        float cursorAngleZ = 0f)
+    private IEnumerator StartMovementViewModeStateCoroutine(Transform uiCircleRectTransform, Vector2 offset, Vector3 cursorEulerAngles, Vector3 camIconEulerAngles, float angleToAddCamRotate, float camIconAngleZ = 0f, float cursorAngleZ = 0f)
     {
         if (_currentCircleTransform)
         {
@@ -247,20 +247,43 @@ public class CameraViewModeGesture : MonoBehaviour
         camIconEulerAngles.z = camIconAngleZ;
         actualUiViewMode.uiCamIcon.eulerAngles = camIconEulerAngles;
         isCursorSelected = false;
-        StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleToAddCamRotate);
+        StartCoroutine(StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleToAddCamRotate));
         yield return _timeInSecondsForSwitchViewMode;
         isCursorSelected = true;
     }
 
-    private void StartRotateCam(int presetCamNumber, float angleRotation)
+    private IEnumerator StartRotateCam(int presetCamNumber, float angleRotation)
     {
+        var timeSinceStarted = 0f;
+        var startEulerAnglesX = transform.eulerAngles.x;
+        var camTransform = _cam.transform;
+        
         if (presetCamNumber <= 2)
         {
-            _cam.transform.RotateAround(_mapTarget.position, _cam.transform.right, -angleRotation);
+            while (timeSinceStarted <= timeRotateSpeedInSeconds)
+            {
+                timeSinceStarted += Time.deltaTime;
+                _cam.transform.RotateAround(_mapTarget.transform.position, _cam.transform.right, -angleRotation * Time.deltaTime / timeRotateSpeedInSeconds);
+                yield return null;
+            }
+            // We forced the value to applied to the y value of cam euler angles
+            var camEulerAngles = _cam.transform.eulerAngles;
+            camEulerAngles.x = startEulerAnglesX + -angleRotation;
+            camTransform.eulerAngles = camEulerAngles;
+            
         }
         else
         {
-            _cam.transform.RotateAround(_mapTarget.position, _cam.transform.right, angleRotation);
+            while (timeSinceStarted <= timeRotateSpeedInSeconds)
+            {
+                timeSinceStarted += Time.deltaTime;
+                _cam.transform.RotateAround(_mapTarget.transform.position, _cam.transform.right, angleRotation * Time.deltaTime / timeRotateSpeedInSeconds);
+                yield return null;
+            }
+            // We forced the value to applied to the y value of cam euler angles
+            var camEulerAngles = _cam.transform.eulerAngles;
+            camEulerAngles.x = startEulerAnglesX - angleRotation;
+            camTransform.eulerAngles = camEulerAngles;
         }
     }
     /// <summary>

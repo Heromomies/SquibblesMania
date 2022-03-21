@@ -21,7 +21,8 @@ public class CameraButtonManager : MonoBehaviour
     [SerializeField] private int baseIndexUICamSquare = 2;
     public UICamPresets actualUiCamPreset;
     public List<UICamPresets> uiCamPresetList;
-
+    [SerializeField]
+    private float timeRotateSpeedInSeconds = 0.5f;
  
     [Serializable]
     public struct UICamPresets
@@ -31,7 +32,6 @@ public class CameraButtonManager : MonoBehaviour
     }
     
     [SerializeField] private GameObject[] uiCamPresets;
-    private WaitForSeconds _timeInSecondsBetweenCamButtons = new WaitForSeconds(0.3f);
     private void Awake()
     {
         _cameraManager = this;
@@ -97,8 +97,20 @@ public class CameraButtonManager : MonoBehaviour
  
     private IEnumerator RotateCamCoroutine(float angle)
     {
-        _cam.transform.RotateAround(target.transform.position, Vector3.up, angle);
-        yield return _timeInSecondsBetweenCamButtons;
+        var timeSinceStarted = 0f;
+        var startEulerAnglesY = transform.eulerAngles.y;
+        
+        while (timeSinceStarted <= timeRotateSpeedInSeconds)
+        {
+            timeSinceStarted += Time.deltaTime;
+            _cam.transform.RotateAround(target.transform.position, Vector3.up, angle * Time.deltaTime / timeRotateSpeedInSeconds);
+            yield return null;
+        }
+        
+        // We forced the value to applied to the y value of cam euler angles
+        var camEulerAngles = _cam.transform.eulerAngles;
+        camEulerAngles.y = startEulerAnglesY + angle;
+        _cam.eulerAngles = camEulerAngles;
         EnableCamRotateButtons(angle);
     }
     
@@ -113,7 +125,6 @@ public class CameraButtonManager : MonoBehaviour
         {
             actualUiCamPreset.buttonsCamRotate[0].interactable = !actualUiCamPreset.buttonsCamRotate[0].interactable;
         }
-        
         
     }
 
