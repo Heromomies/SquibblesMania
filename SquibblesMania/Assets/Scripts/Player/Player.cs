@@ -15,10 +15,7 @@ public class Player : MonoBehaviour
     
     public int stunCount;
     public bool isPlayerStun;
-    
-    public bool isPlayerShielded;
-    public int shieldCount;
-    
+
     public enum PlayerTeam
     {
         TeamOne,

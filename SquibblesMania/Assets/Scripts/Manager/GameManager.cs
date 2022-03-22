@@ -20,21 +20,16 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager currentPlayerTurn;
   
     public int turnCount;
-    [Header("CAMERA PARAMETERS")] public FingersPanOrbitComponentScript cameraTouchScript;
-
+    [Header("CAMERA PARAMETERS")] private Camera _cam;
+    private CameraViewModeGesture _cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
     [Header("CAMERA ROTATIONS")]
-    [SerializeField]
-    private float camRotateXMaxDegrees = 50f;
-    [SerializeField]
-    private float camRotateXMinDegrees = 20f;
     private int _count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-
-    [SerializeField] private float cameraOrthoBaseSize = 11f;
+    
     [Serializable]
     public struct CamPreSets
     {
@@ -58,12 +53,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _gameManager = this;
-        if (cameraTouchScript != null)
-        {
-            cameraTouchScript = Camera.main.GetComponent<FingersPanOrbitComponentScript>();
-        }
-
+        _cam = Camera.main;
         Application.targetFrameRate = 30;
+        
     }
 
 
@@ -73,10 +65,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < allBlocks.Count; i++)
         {
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
-            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation,
-                allBlocks[i].transform.position.z);
+            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
         }
-
+        _cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
         SpawnPlayers();
         StartGame();
     }
@@ -86,8 +77,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
-            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() +
-                               new Vector3(0, 0.5f, 0);
+            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
 
             PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
             player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
@@ -127,7 +117,6 @@ public class GameManager : MonoBehaviour
 
         CamConfig(_count);
         NFCManager.Instance.PlayerChangeTurn();
-        //playerPlaying.text = "Player turn : " + players[numberPlayerToStart].name;
     }
 
     void CamConfig(int countTurn)
@@ -139,7 +128,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        Transform cameraTransform = cameraTouchScript.transform;
+        Transform cameraTransform = _cam.transform;
         Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
         
         //Smooth Transition
@@ -151,41 +140,13 @@ public class GameManager : MonoBehaviour
         //UI SWITCH
         UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
         actualCamPreset.playerUiButtons.SetActive(true);
-
-
-        if (actualCamPreset.presetNumber == 1 || actualCamPreset.presetNumber == 2)
-        {
-            ResetCamVars();
-            cameraTouchScript.OrbitYMaxDegrees = 0;
-            cameraTouchScript.orbitXMaxDegrees = camRotateXMaxDegrees;
-            cameraTouchScript.orbitXMinDegrees = -camRotateXMinDegrees;
-        }
-        else
-        {
-            ResetCamVars();
-            cameraTouchScript.orbitXMaxDegrees = camRotateXMinDegrees;
-            cameraTouchScript.orbitXMinDegrees = -camRotateXMaxDegrees;
-            cameraTouchScript.OrbitYMaxDegrees = 0;
-        }
-
-      // cameraTouchScript.OrbitTarget = currentPlayerTurn.transform;
+        CameraButtonManager.Instance.SetUpUiCamPreset();
+        _cameraViewModeGesture.SetUpCameraBaseViewMode();
         _count++;
         if (_count >= camPreSets.Count)
         {
             _count = 0;
         }
-    }
-    public void ResetCamVars()
-    {
-        cameraTouchScript.panVelocity = Vector2.zero;
-        cameraTouchScript.xDegrees = 0f;
-        cameraTouchScript.cameraSize = cameraOrthoBaseSize;
-        Camera.main.orthographicSize = cameraOrthoBaseSize;
-        foreach (var camera in cameraTouchScript.cams)
-        {
-            camera.orthographicSize = cameraOrthoBaseSize;
-        }
-        
     }
 
     private void IncreaseDemiCycle()
