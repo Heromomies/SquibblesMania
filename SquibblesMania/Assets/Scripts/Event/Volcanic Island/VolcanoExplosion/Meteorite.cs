@@ -78,6 +78,6 @@ public class Meteorite : MonoBehaviour
 	IEnumerator SetActiveFalseBullet(float seconds)
 	{
 		yield return new WaitForSeconds(seconds);
-		gameObject.transform.position = Vector3.positiveInfinity;
+		gameObject.transform.position = new Vector3(1500,-1500, 1500);
 	}
 }
