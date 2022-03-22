@@ -134,39 +134,6 @@ public class NFCManager : MonoBehaviour
 		NFCController.StopPolling();
 	}
 
-	/*    public void ChoseToLaunchPower() // If the player chose to launch a power 
-    {
-        clicked = true;
-        GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
-        switch (charCards[1]) // Check the letter of the card for the color and launch the appropriate power
-        {
-            case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
-            case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
-            case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
-            case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
-        }
-
-        SetActivePlayerActionButton(1,false);
-    }
-*/
 	
-	/* public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
-	 {
-	     clicked = true;
-	     numberOfTheCard = charCards[0] - '0';
-	     GameManager.Instance.currentPlayerTurn.playerActionPoint = numberOfTheCard;
-	     
-	     if (GameManager.Instance.currentPlayerTurn.isPlayerShielded)
-	     {
-	         GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
-	     }
- 
-	     UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-	     GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
-	         .PlayerActionPointCardState);
- 
-	     SetActivePlayerActionButton(0,false);
-	 }
- */
 	
 }
