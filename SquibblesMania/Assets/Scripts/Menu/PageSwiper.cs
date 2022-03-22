@@ -9,7 +9,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public float percentThreshold = 0.2f;
     public float easing = 0.5f;
     public int totalPages;
-    private int currentPage = 1;
+    public int currentPage = 1;
     // Start is called before the first frame update
     void Start()
     {
