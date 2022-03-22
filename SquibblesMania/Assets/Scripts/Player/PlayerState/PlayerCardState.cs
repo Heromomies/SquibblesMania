@@ -33,14 +33,14 @@ public class PlayerCardState : PlayerBaseState
 	}
 	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
 	{
-		AudioManager.Instance.Play("Card");
-
 		if (GameManager.Instance.currentPlayerTurn.CurrentState == GameManager.Instance.currentPlayerTurn.PlayerCardState && !NFCManager.Instance.clicked)
 		{
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
+				AudioManager.Instance.Play("CardTrue");
+
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 				{
@@ -50,8 +50,10 @@ public class PlayerCardState : PlayerBaseState
 					case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
 				}
 			}
-			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
+			else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
+				AudioManager.Instance.Play("CardTrue");
+
 				NFCManager.Instance.clicked = true;
 				NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 				GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
@@ -59,6 +61,10 @@ public class PlayerCardState : PlayerBaseState
 				//UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
 					.PlayerActionPointCardState);
+			}
+			else
+			{
+				AudioManager.Instance.Play("CardFalse");
 			}
 
 			foreach (var n in _number)
@@ -68,7 +74,6 @@ public class PlayerCardState : PlayerBaseState
 					Camera.main.DOShakePosition(1, 0.3f);
 				}
 			}
-			
 			
 			UiManager.Instance.buttonNextTurn.SetActive(false);
 			NFCManager.Instance.hasRemovedCard = false; 
@@ -85,7 +90,6 @@ public class PlayerCardState : PlayerBaseState
 		
 		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
-		
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
