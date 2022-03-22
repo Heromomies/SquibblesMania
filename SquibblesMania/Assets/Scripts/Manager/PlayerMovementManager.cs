@@ -344,6 +344,7 @@ public class PlayerMovementManager : MonoBehaviour
 						{
 							if (!hasStopMovingBloc)
 							{
+								AudioManager.Instance.Play("CubeIsSelected");
 								StartMovingBloc(currentPlayerTurn);
 							}
 						}
@@ -612,6 +613,8 @@ public class PlayerMovementManager : MonoBehaviour
 
 		if (yPos > 0.0f)
 		{
+			AudioManager.Instance.Play("CubeIsMoving");
+			
 			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 			{
 				//TODO Feedback can't move bloc
@@ -626,6 +629,8 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 		else if (yPos < 0.0f)
 		{
+			AudioManager.Instance.Play("CubeIsMoving");
+			
 			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 			{
 				//TODO Feedback can't move bloc
