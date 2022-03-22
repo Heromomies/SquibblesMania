@@ -492,8 +492,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void SetUpBlocPreviewMesh(Transform blocParent)
 	{
 		ResetBlocPreviewMesh();
-		if (blocParent.transform != null)
-		{
+		
 			foreach (Transform bloc in blocParent.transform)
 			{
 				var blocPosition = bloc.position;
@@ -520,7 +519,7 @@ public class PlayerMovementManager : MonoBehaviour
 				_nextBlocUpMeshPos.Add(blocPreviewUpMesh.transform);
 				_nextBlocDownMeshPos.Add(blocPreviewDownMesh.transform);
 			}
-		}
+		
 	}
 
 	#endregion
