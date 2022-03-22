@@ -30,7 +30,7 @@ public class CameraViewModeGesture : MonoBehaviour
         public Transform parentUiCamViewMode;
     }
 
-    private WaitForSeconds _timeInSecondsForSwitchViewMode = new WaitForSeconds(0.3f);
+    private WaitForSeconds _timeInSecondsForSwitchViewMode = new WaitForSeconds(1.1f);
 
     [SerializeField] private float timeRotateSpeedInSeconds = 1f;
     [SerializeField] private Image currentUiCircleSelection;
@@ -45,15 +45,17 @@ public class CameraViewModeGesture : MonoBehaviour
 
     public void ChangeViewMode(int indexUiCircleSelection)
     {
-        if (indexUiCircleSelection != this._indexUiCircleSelection)
+        if (indexUiCircleSelection != _indexUiCircleSelection)
         {
             foreach (var image in actualUiViewMode.uiCircleSelection)
             {
                 var imageColor = image.color;
                 imageColor.a = 0f;
                 image.color = imageColor;
+                image.gameObject.SetActive(false);
             }
 
+            actualUiViewMode.uiCircleSelection[indexUiCircleSelection].gameObject.SetActive(true);
             var uiCircleColor = actualUiViewMode.uiCircleSelection[indexUiCircleSelection].color;
             uiCircleColor.a = 1f;
             
@@ -115,9 +117,13 @@ public class CameraViewModeGesture : MonoBehaviour
         }
         
         StartCoroutine(StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleRotation));
-        this._indexUiCircleSelection = indexUiCircleSelection;
+        _indexUiCircleSelection = indexUiCircleSelection;
         currentUiCircleSelection = actualUiViewMode.uiCircleSelection[indexUiCircleSelection];
         yield return _timeInSecondsForSwitchViewMode;
+        foreach (var image in actualUiViewMode.uiCircleSelection)
+        {
+            image.gameObject.SetActive(true);
+        }
     }
 
     private IEnumerator StartRotateCam(int presetCamNumber, float angleRotation)
