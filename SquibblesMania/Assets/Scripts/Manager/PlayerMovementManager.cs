@@ -65,12 +65,9 @@ public class PlayerMovementManager : MonoBehaviour
 	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.3f);
 	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.001f);
 	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.2f);
-
-	[SerializeField] private float myAngle;
-	[SerializeField] private Vector2 focus, startFocus;
-
-	[SerializeField] private bool up, right, down, left;
-	[SerializeField] private float offset;
+	
+	private Vector2 _focus, startFocus;
+	public float offset;
 
 	#region Singleton
 
@@ -139,75 +136,48 @@ public class PlayerMovementManager : MonoBehaviour
 
 	#endregion
 
-	SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
+	/// <summary>
+	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
+	/// </summary>
+	#region SwipeAdaptation
+
+	public SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
 	{
-		focus = new Vector2(swipeDirection.FocusX, swipeDirection.FocusY);
+		_focus = new Vector2(swipeDirection.FocusX, swipeDirection.FocusY);
 		startFocus = new Vector2(swipeDirection.StartFocusX, swipeDirection.StartFocusY);
 
-		var dir = focus - startFocus;
+		var dir = _focus - startFocus;
 
 		float angle = Vector3.SignedAngle(dir, Vector3.up, Vector3.forward);
 		angle = angle < 0 ? angle + 360 : angle;
-
-		up = right = down = left = false;
-
+		
 		var offsetCamera = _cam.transform.eulerAngles.y - offset;
 		angle = Mathf.Repeat(angle + offsetCamera, 360);
-		
-		myAngle = angle;
-		
+
 		if (270 < angle || angle < 0)
 		{
-			up = true;
 			return SwipeGestureRecognizerDirection.Up;
 		}
 		else if (0 < angle && angle < 90)
 		{
-			right = true;
 			return SwipeGestureRecognizerDirection.Right;
 		}
 		else if (90 < angle && angle < 180)
 		{
-			down = true;
 			return SwipeGestureRecognizerDirection.Down;
 		}
 		else if (180 < angle && angle < 270)
 		{
-			left = true;
 			return SwipeGestureRecognizerDirection.Left;
 		}
 		else
 		{
-			Debug.Log("Any");
 			return SwipeGestureRecognizerDirection.Any;
 		}
-		/*if ( -90 < myAngle && 0 > myAngle)
-		{
-			up = true;
-			return SwipeGestureRecognizerDirection.Up;
-		}
-		else if( 0 < myAngle && 90 > myAngle)
-		{
-			right = true;
-			return SwipeGestureRecognizerDirection.Right;
-		}
-		else if( 90 < myAngle && 180 > myAngle)
-		{
-			down = true;
-			return SwipeGestureRecognizerDirection.Down;
-		}
-		else if( -180 < myAngle && -90 > myAngle)
-		{
-			left = true;
-			return SwipeGestureRecognizerDirection.Left;
-		}
-		else
-		{
-			Debug.Log("Any");
-			return SwipeGestureRecognizerDirection.Any;
-		}*/
 	}
 
+		#endregion
+		
 	/// <summary>
 	/// Function for the swipe gesture
 	/// </summary>
@@ -225,78 +195,34 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				switch (GameManager.Instance.actualCamPreset.presetNumber)
 				{
-					case 1:
-						switch (endDirection)
+					case 1 :switch (endDirection)
 						{
-							case SwipeGestureRecognizerDirection.Down:
-								StartCoroutine(StartPlayerMovementCoroutine(0));
-								break;
-							case SwipeGestureRecognizerDirection.Up:
-								StartCoroutine(StartPlayerMovementCoroutine(1));
-								break;
-							case SwipeGestureRecognizerDirection.Right:
-								StartCoroutine(StartPlayerMovementCoroutine(2));
-								break;
-							case SwipeGestureRecognizerDirection.Left:
-								StartCoroutine(StartPlayerMovementCoroutine(3));
-								break;
-						}
-
-						break;
-					case 3:
-						switch (endDirection)
-						{
-							case SwipeGestureRecognizerDirection.Down:
-								StartCoroutine(StartPlayerMovementCoroutine(1));
-								break;
-							case SwipeGestureRecognizerDirection.Up:
-								StartCoroutine(StartPlayerMovementCoroutine(0));
-								break;
-							case SwipeGestureRecognizerDirection.Right:
-								StartCoroutine(StartPlayerMovementCoroutine(3));
-								break;
-							case SwipeGestureRecognizerDirection.Left:
-								StartCoroutine(StartPlayerMovementCoroutine(2));
-								break;
-						}
-
-						break;
-					case 2:
-						switch (endDirection)
-						{
-							case SwipeGestureRecognizerDirection.Down:
-								StartCoroutine(StartPlayerMovementCoroutine(0));
-								break;
-							case SwipeGestureRecognizerDirection.Up:
-								StartCoroutine(StartPlayerMovementCoroutine(1));
-								break;
-							case SwipeGestureRecognizerDirection.Right:
-								StartCoroutine(StartPlayerMovementCoroutine(2));
-								break;
-							case SwipeGestureRecognizerDirection.Left:
-								StartCoroutine(StartPlayerMovementCoroutine(3));
-								break;
-						}
-
-						break;
-					case 4:
-						switch (endDirection)
-						{
-							case SwipeGestureRecognizerDirection.Down:
-								StartCoroutine(StartPlayerMovementCoroutine(0));
-								break;
-							case SwipeGestureRecognizerDirection.Up:
-								StartCoroutine(StartPlayerMovementCoroutine(1));
-								break;
-							case SwipeGestureRecognizerDirection.Right:
-								StartCoroutine(StartPlayerMovementCoroutine(2));
-								break;
-							case SwipeGestureRecognizerDirection.Left:
-								StartCoroutine(StartPlayerMovementCoroutine(3));
-								break;
-						}
-
-						break;
+							case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovementCoroutine(0)); break;
+							case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovementCoroutine(1)); break;
+							case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovementCoroutine(2)); break;
+							case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovementCoroutine(3)); break;
+						} break;
+					case 2 :switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovementCoroutine(0)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovementCoroutine(1)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovementCoroutine(2)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovementCoroutine(3)); break;
+					} break;
+					case 3 :switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovementCoroutine(1)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovementCoroutine(0)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovementCoroutine(3)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovementCoroutine(2)); break;
+					} break;
+					case 4 :switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down: StartCoroutine(StartPlayerMovementCoroutine(1)); break;
+						case SwipeGestureRecognizerDirection.Up: StartCoroutine(StartPlayerMovementCoroutine(0)); break;
+						case SwipeGestureRecognizerDirection.Right: StartCoroutine(StartPlayerMovementCoroutine(3)); break;
+						case SwipeGestureRecognizerDirection.Left: StartCoroutine(StartPlayerMovementCoroutine(2)); break;
+					} break;
 				}
 
 				timeLeftBetweenSwipe = _timeLeftMax;
@@ -846,7 +772,7 @@ public class PlayerMovementManager : MonoBehaviour
 		yield return _timeBetweenDeactivateSphere;
 
 		ghostPlayer.GetComponent<CheckUnderGhost>().GhostMoved();
-
+		
 		yield return _timeBetweenDeactivateSphere;
 
 		var cBlockGhostOn = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;

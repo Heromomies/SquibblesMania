@@ -7,24 +7,29 @@ using UnityEngine.EventSystems;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
-	[Header("POWER SETTINGS")]	
-	public int dashRange;
+	[Header("POWER SETTINGS")] public int dashRange;
 
-	public LayerMask layerMaskInteractableAndPlayer;
+	public LayerMask layerPlayerInteractable;
+	public LayerMask layerInteractable;
 
 	public List<Transform> hitTransforms;
 
-	[Header("TOUCH SETTINGS")]
-	[Range(1, 10)] public int swipeTouchCount = 1;
+	[Header("TOUCH SETTINGS")] [Range(1, 10)]
+	public int swipeTouchCount = 1;
+
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 
-	[Header("MATERIAL SETTINGS")]
-	[Space] public Material firstMat;
+	[Header("MATERIAL SETTINGS")] [Space] public Material firstMat;
 	public Material secondMat;
-	
+
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
+
+	private Vector2 _focus, _startFocus;
+	private float _offset;
+	private Camera _cam;
+	private int _distanceDisplayPower = 1;
 
 	#region Swipe Gesture Enabled
 
@@ -40,9 +45,53 @@ public class DashPower : MonoBehaviour, IManagePower
 		swipe.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(swipe);
 
+		_cam = Camera.main;
+		_offset = PlayerMovementManager.Instance.offset;
+
 		DisplayPower();
 	}
 
+	#endregion
+
+	/// <summary>
+	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
+	/// </summary>
+	#region SwipeAdaptation
+
+	public SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
+	{
+		_focus = new Vector2(swipeDirection.FocusX, swipeDirection.FocusY);
+		_startFocus = new Vector2(swipeDirection.StartFocusX, swipeDirection.StartFocusY);
+
+		var dir = _focus - _startFocus;
+
+		float angle = Vector3.SignedAngle(dir, Vector3.up, Vector3.forward);
+		angle = angle < 0 ? angle + 360 : angle;
+
+		var offsetCamera = _cam.transform.eulerAngles.y - _offset;
+		angle = Mathf.Repeat(angle + offsetCamera, 360);
+
+		if (270 < angle || angle < 0)
+		{
+			return SwipeGestureRecognizerDirection.Up;
+		}
+		else if (0 < angle && angle < 90)
+		{
+			return SwipeGestureRecognizerDirection.Right;
+		}
+		else if (90 < angle && angle < 180)
+		{
+			return SwipeGestureRecognizerDirection.Down;
+		}
+		else if (180 < angle && angle < 270)
+		{
+			return SwipeGestureRecognizerDirection.Left;
+		}
+		else
+		{
+			return SwipeGestureRecognizerDirection.Any;
+		}
+	}
 
 	#endregion
 
@@ -53,37 +102,34 @@ public class DashPower : MonoBehaviour, IManagePower
 		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
 		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended)
 		{
+			var endDirection = Swipe(swipeGestureRecognizer);
+
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1: switch (swipeGestureRecognizer.EndDirection)
-					{
+				case 1 : switch (endDirection) {
 						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
 						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
 						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
-					}
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break; }
 					break;
-				case 3: switch (swipeGestureRecognizer.EndDirection)
-				{
-					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
-					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
-					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
-					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
-				} break;
-				case 2: switch (swipeGestureRecognizer.EndDirection)
-				{
-					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
-					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
-					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
-					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break;
-				} break;
-				case 4: switch (swipeGestureRecognizer.EndDirection)
-				{
-					case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
-					case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
-					case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
-					case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break;
-				} break;
+				case 2 : switch (endDirection) {
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break; }
+					break;
+				case 3 : switch (endDirection) {
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break; }
+					break;
+				case 4 : switch (endDirection) {
+						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
+						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break; }
+					break;
 			}
 		}
 	}
@@ -92,7 +138,6 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	#region Swipe Dash Direction
 
-	
 	//Update method of the long press gesture
 	public void SwipeDashDirection(int numberDirectionVector) // When we clicked on button
 	{
@@ -129,7 +174,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				}
 
 				if (Physics.Raycast(hit.transform.position, _vectorRaycast[numberDirectionVector], out var hitPlayerTouched, distanceBetweenTwoPlayers,
-					layerMaskInteractableAndPlayer)) // If the player repulsed touch a block behind him
+					layerPlayerInteractable)) // If the player repulsed touch a block behind him
 				{
 					var distanceBetweenBlockAndPlayerTouched = Vector3.Distance(hit.transform.position,
 						hitPlayerTouched.transform.position);
@@ -198,7 +243,6 @@ public class DashPower : MonoBehaviour, IManagePower
 		ClearPower();
 	}
 
-
 	#endregion
 
 	#region Display Power
@@ -210,7 +254,8 @@ public class DashPower : MonoBehaviour, IManagePower
 
 		for (int i = 0; i < _vectorRaycast.Count; i++)
 		{
-			if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
+			if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
+				_distanceDisplayPower, layerInteractable)) // launch the raycast
 			{
 				if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 				{
@@ -220,7 +265,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 
 			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-				dashRange)) // launch the raycast
+				_distanceDisplayPower, layerInteractable)) // launch the raycast
 			{
 				if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 				{
@@ -229,8 +274,8 @@ public class DashPower : MonoBehaviour, IManagePower
 				}
 			}
 
-			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i] * 2, _vectorRaycast[i], out var hitThirdBloc,
-				dashRange)) // launch the raycast
+			if (Physics.Raycast(currentBlockUnderPlayer.position + (_vectorRaycast[i] * 2), _vectorRaycast[i], out var hitThirdBloc,
+				_distanceDisplayPower, layerInteractable)) // launch the raycast
 			{
 				if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 				{
@@ -240,7 +285,6 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 		}
 	}
-
 
 	#endregion
 
@@ -254,7 +298,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	}
 
 	#endregion
-	
+
 	public void CancelPower()
 	{
 	}
@@ -269,13 +313,13 @@ public class DashPower : MonoBehaviour, IManagePower
 		{
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
 		}
-		
+
 		hitTransforms.Clear();
-		
+
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
-	
+
 	public void OnDisable()
 	{
 		if (FingersScript.HasInstance)
