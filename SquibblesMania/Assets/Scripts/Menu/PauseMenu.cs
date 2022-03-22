@@ -12,12 +12,14 @@ public class PauseMenu : MonoBehaviour
 	{
 		if (!panelPause.activeSelf)
 		{
+			AudioManager.Instance.Stop("MainSound");
 			panelPause.SetActive(true);
 		}
 		else 
 		{
+			AudioManager.Instance.Play("MainSound");
 			panelPause.SetActive(false);
 		}
-		
+		AudioManager.Instance.Play("Button");
 	}
 }

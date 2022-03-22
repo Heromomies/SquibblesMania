@@ -33,10 +33,10 @@ public class PlayerCardState : PlayerBaseState
 	}
 	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
 	{
-		
+		AudioManager.Instance.Play("Card");
+
 		if (GameManager.Instance.currentPlayerTurn.CurrentState == GameManager.Instance.currentPlayerTurn.PlayerCardState && !NFCManager.Instance.clicked)
 		{
-			
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))

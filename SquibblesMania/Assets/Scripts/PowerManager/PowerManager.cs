@@ -6,54 +6,48 @@ using UnityEngine.UI;
 
 public class PowerManager : MonoBehaviour
 {
-    public List<GameObject> powers;
-   
+	public List<GameObject> powers;
 
-    #region Singleton
 
-    private static PowerManager powerManager;
+	#region Singleton
 
-    public static PowerManager Instance => powerManager;
-    // Start is called before the first frame update
+	private static PowerManager powerManager;
 
-    private void Awake()
-    {
-        powerManager = this;
-    }
+	public static PowerManager Instance => powerManager;
+	// Start is called before the first frame update
 
-    #endregion
+	private void Awake()
+	{
+		powerManager = this;
+	}
 
-    public void ActivateDeactivatePower(int powerIndex, bool activePower)
-    {
-        switch (powerIndex)
-        {
-            case 0: powers[0].gameObject.SetActive(activePower); break;
-            case 1: powers[1].gameObject.SetActive(activePower); break;
-            case 2: powers[2].gameObject.SetActive(activePower); break;
-            case 3: powers[3].gameObject.SetActive(activePower); break;
-        }
-    }
+	#endregion
 
-    public void CyclePassed()
-    {
-       
-    }
+	public void ActivateDeactivatePower(int powerIndex, bool activePower)
+	{
+		switch (powerIndex)
+		{
+			case 0:
+				powers[0].gameObject.SetActive(activePower);
+				break;
+			case 1:
+				powers[1].gameObject.SetActive(activePower);
+				break;
+			case 2:
+				powers[2].gameObject.SetActive(activePower);
+				break;
+			case 3:
+				powers[3].gameObject.SetActive(activePower);
+				break;
+		}
+	}
 
-    public void ChangeTurnPlayer()
-    {
-        if (NFCManager.Instance.hasRemovedCard)
-        {
-            UiManager.Instance.buttonNextTurn.SetActive(true);
-        }
-        else
-        {
-            switch (GameManager.Instance.actualCamPreset.presetNumber)
-            {
-                case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
-                case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true); break;
-                case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
-                case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true); break;
-            }
-        }
-    }
+	public void CyclePassed()
+	{
+	}
+
+	public void ChangeTurnPlayer()
+	{
+		UiManager.Instance.buttonNextTurn.SetActive(true);
+	}
 }
