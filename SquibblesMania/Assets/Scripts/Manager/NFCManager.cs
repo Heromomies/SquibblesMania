@@ -24,8 +24,6 @@ public class NFCManager : MonoBehaviour
 	[Serializable]
 	public struct ActionPlayerPreset
 	{
-		public GameObject playerActionButton;
-		public GameObject playerPowerButton;
 		public TextMeshProUGUI textTakeOffCard;
 	}
 
@@ -170,44 +168,5 @@ public class NFCManager : MonoBehaviour
 	     SetActivePlayerActionButton(0,false);
 	 }
  */
-
-	public void SetActivePlayerActionButton(int index, bool setActive) // Can activate / deactivate button from everywhere in the script
-	{
-		if (index == 0)
-		{
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					actionPlayerPreset[0].playerActionButton.SetActive(setActive);
-					break;
-				case 2:
-					actionPlayerPreset[0].playerActionButton.SetActive(setActive);
-					break;
-				case 3:
-					actionPlayerPreset[1].playerActionButton.SetActive(setActive);
-					break;
-				case 4:
-					actionPlayerPreset[1].playerActionButton.SetActive(setActive);
-					break;
-			}
-		}
-		else if (index == 1)
-		{
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					actionPlayerPreset[0].playerPowerButton.SetActive(setActive);
-					break;
-				case 2:
-					actionPlayerPreset[0].playerPowerButton.SetActive(setActive);
-					break;
-				case 3:
-					actionPlayerPreset[1].playerPowerButton.SetActive(setActive);
-					break;
-				case 4:
-					actionPlayerPreset[1].playerPowerButton.SetActive(setActive);
-					break;
-			}
-		}
-	}
+	
 }
