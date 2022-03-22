@@ -29,18 +29,16 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
-    public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer, TextMeshProUGUI currentActionPoint)
+    public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer)
     {
         buttonNextTurn = buttonNextTurnPlayer;
-        currentActionPointsOfCurrentPlayerTurn = currentActionPoint;
-        SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
     }
 
-    public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
+    /*public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
     {
         var localManager = currentActionPointsOfCurrentPlayerTurn.GetComponent<LocalizationParamsManager>();
         localManager.SetParameterValue("ACTIONPOINT", actionPointText.ToString());
-    }
+    }*/
 
 
     public void ButtonNextTurn()

@@ -472,7 +472,7 @@ public class PlayerMovementManager : MonoBehaviour
 		actionPointPlayer = totalCurrentActionPoint > 0 ? totalCurrentActionPoint : -totalCurrentActionPoint;
 		_textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPointPlayer);
 		GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
-		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+		//UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
 		{
@@ -814,7 +814,7 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 		}
 
-		UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+		//UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 	}
 
 	#endregion

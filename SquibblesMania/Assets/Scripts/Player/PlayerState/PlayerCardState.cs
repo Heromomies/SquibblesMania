@@ -56,7 +56,7 @@ public class PlayerCardState : PlayerBaseState
 				NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 				GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
 				
-				UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+				//UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
 					.PlayerActionPointCardState);
 			}
@@ -85,8 +85,7 @@ public class PlayerCardState : PlayerBaseState
 		
 		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
 		{
-			NFCManager.Instance.SetActivePlayerActionButton(0,false);
-			NFCManager.Instance.SetActivePlayerActionButton(1,false);
+		
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
@@ -97,12 +96,6 @@ public class PlayerCardState : PlayerBaseState
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 			NFCController.StopPolling();
 		} 
-		
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !NFCManager.Instance.clicked)
-		{
-			NFCManager.Instance.SetActivePlayerActionButton(0,false);
-			NFCManager.Instance.SetActivePlayerActionButton(1,false);
-		}
 		
 		NFCManager.Instance.hasRemovedCard = true;
 	}

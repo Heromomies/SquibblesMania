@@ -36,9 +36,7 @@ public class GameManager : MonoBehaviour
         public int presetNumber;
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
-        public GameObject playerUiButtons;
         public GameObject buttonNextTurn;
-        public TextMeshProUGUI actionPointText;
     }
 
 
@@ -123,7 +121,6 @@ public class GameManager : MonoBehaviour
     {
         if (actualCamPreset.presetNumber > 0)
         {
-            actualCamPreset.playerUiButtons.SetActive(false);
             actualCamPreset.buttonNextTurn.SetActive(false);
         }
 
@@ -138,8 +135,7 @@ public class GameManager : MonoBehaviour
         actualCamPreset = camPreSets[countTurn];
         
         //UI SWITCH
-        UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
-        actualCamPreset.playerUiButtons.SetActive(true);
+        UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
         CameraButtonManager.Instance.SetUpUiCamPreset();
         _cameraViewModeGesture.SetUpCameraBaseViewMode();
         _count++;
