@@ -4,6 +4,7 @@ using DG.Tweening;
 using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.Mathf;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
@@ -69,7 +70,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		angle = angle < 0 ? angle + 360 : angle;
 
 		var offsetCamera = _cam.transform.eulerAngles.y - _offset;
-		angle = Mathf.Repeat(angle + offsetCamera, 360);
+		angle = Repeat(angle + offsetCamera, 360);
 
 		if (270 < angle || angle < 0)
 		{
@@ -254,35 +255,85 @@ public class DashPower : MonoBehaviour, IManagePower
 
 		for (int i = 0; i < _vectorRaycast.Count; i++)
 		{
-			if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
-				_distanceDisplayPower, layerInteractable)) // launch the raycast
+			var dist = 0;
+			
+			if (Physics.Raycast(GameManager.Instance.currentPlayerTurn.transform.position, _vectorRaycast[i], out var hitBloc,
+				dashRange, layerInteractable))
 			{
-				if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				var distBetweenPlayerAndBloc = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hitBloc.transform.position);
+
+				dist = (int) distBetweenPlayerAndBloc;
+			}
+			if (dist == 1)
+			{
+				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
+					_distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
-					ChangeMaterial(hitFirstBloc.transform);
-					hitTransforms.Add(hitFirstBloc.transform);
+					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitFirstBloc.transform);
+						hitTransforms.Add(hitFirstBloc.transform);
+					}
 				}
 			}
 
-			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-				_distanceDisplayPower, layerInteractable)) // launch the raycast
+			else if (dist == 2 || dist == 3)
 			{
-				if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
+					_distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
-					ChangeMaterial(hitSecondBloc.transform);
-					hitTransforms.Add(hitSecondBloc.transform);
+					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitFirstBloc.transform);
+						hitTransforms.Add(hitFirstBloc.transform);
+					}
+				}
+
+				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
+					_distanceDisplayPower, layerInteractable)) // launch the raycast
+				{
+					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitSecondBloc.transform);
+						hitTransforms.Add(hitSecondBloc.transform);
+					}
 				}
 			}
 
-			if (Physics.Raycast(currentBlockUnderPlayer.position + (_vectorRaycast[i] * 2), _vectorRaycast[i], out var hitThirdBloc,
-				_distanceDisplayPower, layerInteractable)) // launch the raycast
+			// ReSharper disable once UselessComparisonToIntegralConstant
+			else if (dist == 0 || dist > 3)
 			{
-				if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
+					_distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
-					ChangeMaterial(hitThirdBloc.transform);
-					hitTransforms.Add(hitThirdBloc.transform);
+					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitFirstBloc.transform);
+						hitTransforms.Add(hitFirstBloc.transform);
+					}
+				}
+
+				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
+					_distanceDisplayPower, layerInteractable)) // launch the raycast
+				{
+					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitSecondBloc.transform);
+						hitTransforms.Add(hitSecondBloc.transform);
+					}
+				}
+
+				if (Physics.Raycast(currentBlockUnderPlayer.position + (_vectorRaycast[i] * 2), _vectorRaycast[i], out var hitThirdBloc,
+					_distanceDisplayPower, layerInteractable)) // launch the raycast
+				{
+					if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitThirdBloc.transform);
+						hitTransforms.Add(hitThirdBloc.transform);
+					}
 				}
 			}
+			
 		}
 	}
 

@@ -11,6 +11,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] [Space] public LayerMask layerPlayer;
 	public LayerMask layerMaskInteractableAndPlayer;
+	public LayerMask layerInteractable;
 
 	public float rangeDetectionPlayer;
 	public List<Transform> hitTransforms;
@@ -420,22 +421,45 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		for (int i = 0; i < _vectorRaycast.Count; i++)
 		{
-			if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
+			var dist = 0;
+			
+			if (Physics.Raycast(GameManager.Instance.currentPlayerTurn.transform.position, _vectorRaycast[i], out var hitBloc,
+				dashRange, layerInteractable))
 			{
-				if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-				{
-					ChangeMaterial(hitFirstBloc.transform);
-					hitTransforms.Add(hitFirstBloc.transform);
-				}
+				var distBetweenPlayerAndBloc = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hitBloc.transform.position);
+
+				dist = (int) distBetweenPlayerAndBloc;
 			}
 
-			if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-				dashRange)) // launch the raycast
+			if (dist == 1 || dist == 2)
 			{
-				if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
 				{
-					ChangeMaterial(hitSecondBloc.transform);
-					hitTransforms.Add(hitSecondBloc.transform);
+					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitFirstBloc.transform);
+						hitTransforms.Add(hitFirstBloc.transform);
+					}
+				}
+			}
+			else if(dist == 0 || dist > 2)
+			{
+				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
+				{
+					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitFirstBloc.transform);
+						hitTransforms.Add(hitFirstBloc.transform);
+					}
+				}
+				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
+					dashRange)) // launch the raycast
+				{
+					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+					{
+						ChangeMaterial(hitSecondBloc.transform);
+						hitTransforms.Add(hitSecondBloc.transform);
+					}
 				}
 			}
 		}
