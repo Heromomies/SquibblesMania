@@ -190,17 +190,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af5b90f1abf7a43409c3b43b357bc50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swipeTouchCount: 1
-  swipeThresholdSeconds: 0
-  minimumDistanceUnits: 0.3
-  minimumDurationSeconds: 0.1
   actualUiViewMode:
     uiCircleSelection:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     uiCamIcon: {fileID: 0}
-    uiCursorSelection: {fileID: 0}
     parentUiCamViewMode: {fileID: 0}
   uiViewModeList:
   - uiCircleSelection:
@@ -208,26 +203,21 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     uiCamIcon: {fileID: 0}
-    uiCursorSelection: {fileID: 0}
     parentUiCamViewMode: {fileID: 0}
   - uiCircleSelection:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     uiCamIcon: {fileID: 0}
-    uiCursorSelection: {fileID: 0}
     parentUiCamViewMode: {fileID: 0}
   camIconAngleZCameraTopView: -90
-  camIconAngleZCameraBaseView: -30
-  camIconAngleZCameraLowerView: -10
-  angleToAddWhenGoUp: 60
-  angleToAddWhenGoDown: 20
-  isCursorSelected: 0
-  scaleCursorAmount: 1.2
-  cursorAngleZ: 90
-  cursorOffsetPos: {x: 56, y: 40}
-  canvasGraphicRaycaster: {fileID: 0}
+  camIconAngleZCameraBaseView: -60
+  camIconAngleZCameraLowerView: -30
+  maxAngle: 60
+  minAngle: 30
   timeRotateSpeedInSeconds: 1
+  currentUiCircleSelection: {fileID: 0}
+  indexUiCircleSelection: 0
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0
