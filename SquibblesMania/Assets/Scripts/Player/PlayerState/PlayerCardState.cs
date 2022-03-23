@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PlayerCardState : PlayerBaseState
 {
@@ -42,10 +44,14 @@ public class PlayerCardState : PlayerBaseState
 			GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
 			switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 			{
-				case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
-				case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
-				case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
-				case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
+				case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true);
+					ChangeColorLight(LIGHT_COLOR.COLOR_BLUE); break;
+				case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true);
+					ChangeColorLight(LIGHT_COLOR.COLOR_RED); break;
+				case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); 
+					ChangeColorLight(LIGHT_COLOR.COLOR_GREEN); break;
+				case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); 
+					ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW); break;
 			}
 		}
 		else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
@@ -56,7 +62,13 @@ public class PlayerCardState : PlayerBaseState
 			NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 			GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
 
-			//UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+			switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
+			{
+				case 'B': ChangeColorLight(LIGHT_COLOR.COLOR_BLUE); break;
+				case 'R': ChangeColorLight(LIGHT_COLOR.COLOR_RED); break;
+				case 'G': ChangeColorLight(LIGHT_COLOR.COLOR_GREEN); break;
+				case 'Y': ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW); break;
+			}
 			
 			GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
 		}
@@ -67,10 +79,21 @@ public class PlayerCardState : PlayerBaseState
 			{
 				AudioManager.Instance.Play("CardFalse");
 				Camera.main.DOShakePosition(1, 0.3f);
+				ChangeColorLight(LIGHT_COLOR.COLOR_BLACK);
 			}
 		}
 	}
 
+	void ChangeColorLight(LIGHT_COLOR lightColor)
+	{
+		switch (NFCManager.Instance.indexPlayer) {
+			case 0 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerOne, lightColor, false); break;
+			case 1 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerTwo, lightColor, false); break;
+			case 2 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerThree, lightColor, false); break;
+			case 3 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerFour, lightColor, false); break;
+		}
+	}
+	
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && NFCManager.Instance.newCardDetected && !NFCManager.Instance.displacementActivated)
@@ -91,18 +114,7 @@ public class PlayerCardState : PlayerBaseState
 			NFCManager.Instance.newCardDetected = false;
 		}
 		
-		/*if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
-		{
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-				case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-				case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
-				case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
-			}
-			
-			//NFCController.StopPolling();
-		}*/
+		ChangeColorLight(LIGHT_COLOR.COLOR_WHITE);
 	}
 
 	void PlayerIsStun(PlayerStateManager player)
