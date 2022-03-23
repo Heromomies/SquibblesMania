@@ -103,6 +103,8 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
 		obj.GetComponent<Rigidbody>().velocity = vo;
 		
+		AudioManager.Instance.Play("FireballStart");
+		
 		cubeTouched.Remove(cubeTouched[0]);
 	}
 

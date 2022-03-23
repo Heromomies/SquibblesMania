@@ -43,6 +43,8 @@ public class Meteorite : MonoBehaviour
 			transform.parent = other.transform;
 			_turn = GameManager.Instance.turnCount;
 
+			AudioManager.Instance.Play("FireballEnd");
+			
 			transform.rotation = new Quaternion(0,0,0,0);
 			_stopRotating = true;
 

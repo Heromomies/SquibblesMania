@@ -14,6 +14,9 @@ public class Ressources : Item
         {
             var player = other.gameObject.GetComponent<PlayerStateManager>();
            
+            AudioManager.Instance.Play("CratePickup");
+            AudioManager.Instance.Play("CrateFirework");
+
             TeamInventoryManager.Instance.AddResourcesToInventory(1, player.playerTeam);
             var particle = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
             Destroy(particle, 2f);
