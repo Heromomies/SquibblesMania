@@ -77,7 +77,18 @@ public class PlayerCardState : PlayerBaseState
 		{
 			PlayerMovementManager.Instance.ResetDisplacement();
 			NFCManager.Instance.newCardDetected = false;
-			Debug.Log("Reset Displacement");
+		}
+		
+		if (NFCManager.Instance.newCardDetected && !NFCManager.Instance.powerActivated)
+		{
+			foreach (var power in PowerManager.Instance.powers)
+			{
+				if(power.activeSelf)
+					power.GetComponent<IManagePower>().ClearPower();
+			}
+			
+			GameManager.Instance.DecreaseVariable();
+			NFCManager.Instance.newCardDetected = false;
 		}
 		
 		/*if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)

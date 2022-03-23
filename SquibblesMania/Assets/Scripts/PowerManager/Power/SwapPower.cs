@@ -114,6 +114,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
 
+		NFCManager.Instance.powerActivated = true;
+		
 		ClearPower();
 	}
 	

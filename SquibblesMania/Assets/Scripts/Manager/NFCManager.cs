@@ -134,7 +134,4 @@ public class NFCManager : MonoBehaviour
 	{
 		NFCController.StopPolling();
 	}
-
-	
-	
 }
