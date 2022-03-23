@@ -29,11 +29,7 @@ public class UiManager : MonoBehaviour
         buttonNextTurn = buttonNextTurnPlayer;
     }
 
-    /*public void SetUpCurrentActionPointOfCurrentPlayer(int actionPointText)
-    {
-        var localManager = currentActionPointsOfCurrentPlayerTurn.GetComponent<LocalizationParamsManager>();
-        localManager.SetParameterValue("ACTIONPOINT", actionPointText.ToString());
-    }*/
+
 
 
     public void ButtonNextTurn()
@@ -48,11 +44,12 @@ public class UiManager : MonoBehaviour
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
-    public void LoadScene()
+    public void LoadScene(string sceneName)
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
+    
     
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {

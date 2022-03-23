@@ -12,8 +12,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	[Space]
 	 public List<GameObject> cubeOnMap;
 	 public List<GameObject> cubeTouched;
-	
-	[Header("BULLET AND SPAWN")]
+	 [Header("BULLET AND SPAWN")]
 	public Transform volcanoTransform;
 	public Transform bulletParent;
 	
@@ -68,7 +67,21 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
 	{
+		//Remove end zone block frome the cubeOnMap List
+		if (EndZoneManager.Instance != null)
+		{
+			List<Transform> endZoneBlockChild = EndZoneManager.Instance.blocksChild;
+
+			foreach (var blockChild in endZoneBlockChild)
+			{
+				if (cubeOnMap.Contains(blockChild.gameObject))
+				{
+					cubeOnMap.Remove(blockChild.gameObject);
+				}
+			}
+		}
 		
+	
 		cubeTouched.Add(cubeOnMap[placeOfCube]);
 		_turn = GameManager.Instance.turnCount;
 	}
