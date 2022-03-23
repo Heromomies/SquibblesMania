@@ -47,6 +47,7 @@ public class CameraViewModeGesture : MonoBehaviour
     {
         if (indexUiCircleSelection != _indexUiCircleSelection)
         {
+            AudioManager.Instance.Play("Button");
             foreach (var image in actualUiViewMode.uiCircleSelection)
             {
                 var imageColor = image.color;
