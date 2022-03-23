@@ -118,7 +118,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 	}
 	
 	public void ClearPower()
-	{	SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
+	{	
+		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
 		for (int i = 0; i < players.Length; i++)
 		{
@@ -129,6 +130,5 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
-		
 	}
 }

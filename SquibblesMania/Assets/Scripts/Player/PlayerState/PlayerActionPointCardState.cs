@@ -377,7 +377,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 		{
 			SetFalsePathObjects();
 			currentNodePlayerOn.isActive = false;
-			if (NFCManager.Instance.hasRemovedCard)
+			/*if (NFCManager.Instance.hasRemovedCard)
 			{
 				NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
 				NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
@@ -393,8 +393,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 				{
 					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
 				}
-				
-			}
+			}*/
 		}
 	}
 }

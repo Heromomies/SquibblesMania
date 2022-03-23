@@ -45,8 +45,9 @@ public class NFCManager : MonoBehaviour
 
 	[HideInInspector] public int numberOfTheCard;
 	public char[] charCards;
-	[HideInInspector] public bool hasRemovedCard;
-	[HideInInspector] public bool clicked;
+	public bool newCardDetected;
+	public bool powerActivated;
+	public bool displacementActivated;
 	[HideInInspector] public int changeColor;
 
 	#endregion
@@ -73,7 +74,7 @@ public class NFCManager : MonoBehaviour
 	{
 		StopAllCoroutines();
 		NFCController.StopPolling();
-		clicked = false;
+
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0:

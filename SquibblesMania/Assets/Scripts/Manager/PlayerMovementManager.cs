@@ -431,15 +431,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 
 		_lastDirectionBloc = Vector3.zero;
-
-		if (currentPlayerTurn.playerActionPoint <= 0)
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-		}
-		else
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-		}
 	}
 
 	#endregion
@@ -806,6 +797,8 @@ public class PlayerMovementManager : MonoBehaviour
 
 						StartCoroutine(WaitBeforeCheckUnderPlayerCoroutine());
 					}
+					
+					NFCManager.Instance.displacementActivated = true;
 				}
 				else if (previewPath.Count - 1 == positionList + 1)
 				{
@@ -879,10 +872,10 @@ public class PlayerMovementManager : MonoBehaviour
 
 	#region ResetPreviewPlatformCoroutine
 
-	IEnumerator ResetPreviewPlatformCoroutine()
+	public IEnumerator ResetPreviewPlatformCoroutine()
 	{
 		yield return _timeBetweenReloadPath;
-
+		
 		if (!GameManager.Instance.currentPlayerTurn.walking)
 		{
 			var player = GameManager.Instance.currentPlayerTurn;
@@ -892,4 +885,24 @@ public class PlayerMovementManager : MonoBehaviour
 	}
 
 	#endregion
+
+	
+	/// <summary>
+	/// Reset Displacement when the player take off his card before he moves
+	/// </summary>
+	#region ResetDisplacement
+
+	public void ResetDisplacement()
+	{
+		var player = GameManager.Instance.currentPlayerTurn;
+		player.PlayerActionPointCardState.SetFalsePathObjects();
+		player.playerActionPoint = 0;
+		player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+
+		GameManager.Instance.DecreaseVariable();
+	}
+
+	#endregion
+	
+	
 }
