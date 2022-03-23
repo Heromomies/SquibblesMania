@@ -58,8 +58,7 @@ public class TeamInventoryManager : MonoBehaviour
 
 			if (bloc.GetComponent<Node>().isActive && !_isFull)
 			{
-				Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z),
-					Quaternion.identity, bloc);
+				Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
 			}
 			else
 			{
@@ -73,7 +72,6 @@ public class TeamInventoryManager : MonoBehaviour
 [Serializable]
 public class Inventory
 {
-	// public bool isAllObjetAcquired;
 	public Transform spawnObject;
 	public int objectAcquired;
 	[HideInInspector] public List<GameObject> boatObject;
