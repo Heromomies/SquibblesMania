@@ -64,7 +64,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.3f);
 	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.001f);
-	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.2f);
+	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.1f);
 
 	private Vector2 _focus, startFocus;
 	public float offset;

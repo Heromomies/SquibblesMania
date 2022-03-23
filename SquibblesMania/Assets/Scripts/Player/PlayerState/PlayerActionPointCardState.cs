@@ -23,8 +23,8 @@ public class PlayerActionPointCardState : PlayerBaseState
 	{
 		player.isPlayerInActionCardState = true;
 		player.nextBlockPath.Clear();
-		player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
 		previewPath.Clear();
+		player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
 		PreviewPath(player.playerActionPoint, player);
 	}
 
@@ -59,14 +59,16 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 			//We add in our list of past blocks, the block which the player is currently on
 			pastBlocks.Add(player.currentBlockPlayerOn);
+			if (possiblePath.Count > 0)
+			{
+				ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
+			}
 
-			ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
 		}
 		
 	}
 
-	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
-		List<Transform> finalPreviewPath, int indexBlockNearby, int actionPoint, PlayerStateManager playerStateManager)
+	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, int indexBlockNearby, int actionPoint, PlayerStateManager playerStateManager)
 	{
 		playerStateManager.nextBlockPath = finalPreviewPath;
 		indexBlockNearby++;
@@ -342,6 +344,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 	private void Clear(PlayerStateManager player)
 	{
 		Node currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
+		currentNodePlayerOn.isActive = false;
 		//We add the player to the list of block group which the player is currently on 
 		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
 		groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
@@ -376,7 +379,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 		else
 		{
 			SetFalsePathObjects();
-			currentNodePlayerOn.isActive = false;
 			if (NFCManager.Instance.hasRemovedCard)
 			{
 				NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
