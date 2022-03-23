@@ -38,9 +38,12 @@ public class UiManager : MonoBehaviour
 
     public void ButtonNextTurn()
     {
+        AudioManager.Instance.Play("ButtonNextTurn");
+        
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
+        NFCManager.Instance.powerActivated = false;
         GameManager.Instance.currentPlayerTurn.canSwitch = true;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }

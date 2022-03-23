@@ -64,6 +64,8 @@ public class Meteorite : MonoBehaviour
 		}
 		else if (other.gameObject.CompareTag("Player"))
 		{
+			AudioManager.Instance.Play("Stun");
+			
 			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
 			var otherPos = other.transform.position;
 			GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",
