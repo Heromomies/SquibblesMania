@@ -15,7 +15,8 @@ public class Player : MonoBehaviour
     
     public int stunCount;
     public bool isPlayerStun;
-
+    public bool canSwitch = true;
+    
     public enum PlayerTeam
     {
         TeamOne,

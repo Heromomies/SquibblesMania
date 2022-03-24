@@ -41,7 +41,7 @@ public class CameraButtonManager : MonoBehaviour
 
     public void StartRotateCam(float rotateAmount)
     {
-
+        AudioManager.Instance.Play("Button");
         if (rotateAmount < 0f)
         {
             if (indexUiCamSquareList >= actualUiCamPreset.uiCamSquare.Count - 1)

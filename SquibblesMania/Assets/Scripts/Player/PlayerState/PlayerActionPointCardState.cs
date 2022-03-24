@@ -6,6 +6,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal.Internal;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
@@ -23,8 +24,8 @@ public class PlayerActionPointCardState : PlayerBaseState
 	{
 		player.isPlayerInActionCardState = true;
 		player.nextBlockPath.Clear();
-		player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
 		previewPath.Clear();
+		player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
 		PreviewPath(player.playerActionPoint, player);
 	}
 
@@ -56,17 +57,15 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 			finalPreviewPath.Add(player.currentBlockPlayerOn);
 
-
 			//We add in our list of past blocks, the block which the player is currently on
 			pastBlocks.Add(player.currentBlockPlayerOn);
 
 			ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
 		}
-		
 	}
 
-	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath,
-		List<Transform> finalPreviewPath, int indexBlockNearby, int actionPoint, PlayerStateManager playerStateManager)
+	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, int indexBlockNearby,
+		int actionPoint, PlayerStateManager playerStateManager)
 	{
 		playerStateManager.nextBlockPath = finalPreviewPath;
 		indexBlockNearby++;
@@ -297,12 +296,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 				return;
 			}
 		}
-		
+
 		if (!player.walking)
 		{
 			player.walking = true;
-			player.finalPathFinding = player.nextBlockPath; 
-			
+			player.finalPathFinding = player.nextBlockPath;
+
 			player.StartCoroutine(FollowPath(player));
 		}
 	}
@@ -310,7 +309,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 	//Movement of player
 	private IEnumerator FollowPath(PlayerStateManager player)
 	{
-		for (int i = player.finalPathFinding.Count -1; i > 0; i--)
+		for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
 		{
 			Vector3 walkPoint = player.finalPathFinding[1].GetComponent<Node>().GetWalkPoint();
 
@@ -325,7 +324,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 			yield return _timeBetweenPlayerMovement;
 		}
-		
+
 		Clear(player);
 	}
 
@@ -342,17 +341,18 @@ public class PlayerActionPointCardState : PlayerBaseState
 	private void Clear(PlayerStateManager player)
 	{
 		Node currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
+		currentNodePlayerOn.isActive = false;
 		//We add the player to the list of block group which the player is currently on 
 		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
 		groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
 
 		var pMovementManager = player.playerMovementManager;
-		
+
 		pMovementManager.playerCurrentlySelected = null;
 		pMovementManager.previewPath.Clear();
 		pMovementManager.sphereList.Clear();
 		pMovementManager.ghostPlayer.SetActive(false);
-		
+
 		//Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
 		foreach (Transform t in player.finalPathFinding)
 		{
@@ -368,33 +368,10 @@ public class PlayerActionPointCardState : PlayerBaseState
 			EndZoneManager.Instance.PlayersIsOnEndZone();
 		}
 
-		if (player.playerActionPoint > 0)
-		{
-			SetFalsePathObjects();
-			PreviewPath(player.playerActionPoint, player);
-		}
-		else
+		if (player.playerActionPoint <= 0)
 		{
 			SetFalsePathObjects();
 			currentNodePlayerOn.isActive = false;
-			if (NFCManager.Instance.hasRemovedCard)
-			{
-				NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
-				NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
-				UiManager.Instance.buttonNextTurn.SetActive(true);
-			}
-			else
-			{
-				if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
-				{
-					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
-				}
-				else if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamTwo)
-				{
-					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
-				}
-				
-			}
 		}
 	}
 }

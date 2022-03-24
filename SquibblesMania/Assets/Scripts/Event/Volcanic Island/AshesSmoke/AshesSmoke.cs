@@ -48,6 +48,8 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 		var rand = Random.Range(0, childrenBlocs.Count
 		                           - conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered);
 
+		AudioManager.Instance.Play("VolcanoSmoking");
+		
 		for (int i = 0; i < conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered; i++)
 		{
 			if (childrenBlocs[i + rand].CompareTag("BlackBlock"))
