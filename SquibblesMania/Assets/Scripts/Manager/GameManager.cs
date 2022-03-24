@@ -197,7 +197,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
-        Debug.Log("Player Win");
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
         Time.timeScale = 0f;
         UiManager.Instance.WinSetUp(playerTeam);
