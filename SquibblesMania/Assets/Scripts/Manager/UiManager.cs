@@ -18,7 +18,9 @@ public class UiManager : MonoBehaviour
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
     public static UiManager Instance => _uiManager;
-    
+
+    [Header("CARD UI VFX")] public Transform[] parentSpawnCardUiVFX;
+    public Camera uiCam;
     private void Awake()
     {
         _uiManager = this;

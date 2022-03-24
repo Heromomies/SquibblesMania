@@ -10,6 +10,9 @@ public class PlayerCardState : PlayerBaseState
 {
 	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
 
+	private CardEffect _cardEffect = new CardEffect();
+
+	private GameObject _currentCardEffect;
 	//The state when player put card on Square one
 	public override void EnterState(PlayerStateManager player)
 	{
@@ -86,11 +89,20 @@ public class PlayerCardState : PlayerBaseState
 
 	void ChangeColorLight(LIGHT_COLOR lightColor)
 	{
+		
 		switch (NFCManager.Instance.indexPlayer) {
-			case 0 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerOne, lightColor, false); break;
-			case 1 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerTwo, lightColor, false); break;
-			case 2 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerThree, lightColor, false); break;
-			case 3 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerFour, lightColor, false); break;
+			case 0 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerOne, lightColor, false);
+				if (!_currentCardEffect)
+					_currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[0], lightColor); break;
+			case 1 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerTwo, lightColor, false); 
+				if (!_currentCardEffect) 
+					_currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[1], lightColor); break;
+			case 2 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerThree, lightColor, false); 
+				if (!_currentCardEffect) 
+					_currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[2], lightColor);break;
+			case 3 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerFour, lightColor, false); 
+				if (!_currentCardEffect) 
+					_currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[3], lightColor);break;
 		}
 	}
 	
@@ -117,8 +129,13 @@ public class PlayerCardState : PlayerBaseState
 			GameManager.Instance.DecreaseVariable();
 			NFCManager.Instance.newCardDetected = false;
 		}
-		
+	
 		ChangeColorLight(LIGHT_COLOR.COLOR_WHITE);
+		if (_currentCardEffect != null)
+		{
+			_currentCardEffect.SetActive(false);
+			_currentCardEffect = null;
+		}
 	}
 
 	void PlayerIsStun(PlayerStateManager player)
