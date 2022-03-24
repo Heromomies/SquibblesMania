@@ -8,27 +8,27 @@ public  class CardEffect
 {
     public GameObject SetActiveCardEffect(Transform parent, LIGHT_COLOR lightColor)
     {
-        GameObject gameObjectToReturn = null;
+        GameObject cardEffectGameObject = null;
         
         switch (lightColor)
         {
             case LIGHT_COLOR.COLOR_RED:
-                gameObjectToReturn = PoolManager.Instance.SpawnObjectFromPool("HeartCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
+                cardEffectGameObject = PoolManager.Instance.SpawnObjectFromPool("HeartCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
                 break;
             case LIGHT_COLOR.COLOR_BLUE:
-                gameObjectToReturn = PoolManager.Instance.SpawnObjectFromPool("PikeCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
+                cardEffectGameObject = PoolManager.Instance.SpawnObjectFromPool("PikeCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
                 break;
             case LIGHT_COLOR.COLOR_GREEN:
-                gameObjectToReturn = PoolManager.Instance.SpawnObjectFromPool("CloverCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
+                cardEffectGameObject = PoolManager.Instance.SpawnObjectFromPool("CloverCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
                 break;
             case LIGHT_COLOR.COLOR_YELLOW:
-                gameObjectToReturn = PoolManager.Instance.SpawnObjectFromPool("TileCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
+                cardEffectGameObject = PoolManager.Instance.SpawnObjectFromPool("TileCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
                 break;
         }
 
-        SetUpParticleForCanvas(gameObjectToReturn, parent);
+        SetUpParticleForCanvas(cardEffectGameObject, parent);
         
-        ParticleSystem cardEffect = gameObjectToReturn.GetComponent<ParticleSystem>();
+        ParticleSystem cardEffect = cardEffectGameObject.GetComponent<ParticleSystem>();
         
         ParticleSystem.MainModule cardEffectMain = cardEffect.main;
         ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = cardEffect.velocityOverLifetime;
@@ -41,8 +41,13 @@ public  class CardEffect
             cardEffectMain.startRotationXMultiplier = rotX;
             velocityOverLifetime.z = -velocityOverLifetime.z.constant;
         }
+        else
+        {
+            cardEffectMain.startRotationXMultiplier = 0;
+            velocityOverLifetime.z = velocityOverLifetime.z.constant;
+        }
         
-        return gameObjectToReturn;
+        return cardEffectGameObject;
     }
 
     void SetUpParticleForCanvas(GameObject particle, Transform parent)

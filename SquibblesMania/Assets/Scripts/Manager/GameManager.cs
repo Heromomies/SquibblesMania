@@ -163,7 +163,12 @@ public class GameManager : MonoBehaviour
         }
 
         turnCount++;
-
+        if (currentPlayerTurn.currentCardEffect)
+        {
+            currentPlayerTurn.currentCardEffect.SetActive(false);
+            currentPlayerTurn.currentCardEffect = null;
+        }
+       
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
 
