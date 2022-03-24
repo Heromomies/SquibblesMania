@@ -9,7 +9,8 @@ using Wizama.Hardware.Light;
 public class PlayerCardState : PlayerBaseState
 {
 	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
-
+	private int _maxNumberOfTheCard;
+	
 	//The state when player put card on Square one
 	public override void EnterState(PlayerStateManager player)
 	{
@@ -59,6 +60,8 @@ public class PlayerCardState : PlayerBaseState
 			AudioManager.Instance.Play("CardTrue");
 			NFCManager.Instance.newCardDetected = true;
 
+			_maxNumberOfTheCard = NFCManager.Instance.charCards[0] - '0';
+
 			NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 			GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
 
@@ -96,26 +99,32 @@ public class PlayerCardState : PlayerBaseState
 	
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0 && NFCManager.Instance.newCardDetected && !NFCManager.Instance.displacementActivated)
+		if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 		{
-			PlayerMovementManager.Instance.ResetDisplacement();
-			NFCManager.Instance.newCardDetected = false;
-		}
-		else
-		{
-			Debug.Log("I'm here");
+			if (GameManager.Instance.currentPlayerTurn.playerActionPoint == _maxNumberOfTheCard && NFCManager.Instance.newCardDetected && !NFCManager.Instance.displacementActivated)
+			{
+				PlayerMovementManager.Instance.ResetDisplacement();
+				NFCManager.Instance.newCardDetected = false;
+			}
+			else
+			{
+				NFCController.StopPolling();
+			}
 		}
 		
-		if (NFCManager.Instance.newCardDetected && !NFCManager.Instance.powerActivated)
+		if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 		{
-			foreach (var power in PowerManager.Instance.powers)
+			if (NFCManager.Instance.newCardDetected && !NFCManager.Instance.powerActivated)
 			{
-				if(power.activeSelf)
-					power.GetComponent<IManagePower>().ClearPower();
-			}
+				foreach (var power in PowerManager.Instance.powers)
+				{
+					if(power.activeSelf)
+						power.GetComponent<IManagePower>().ClearPower();
+				}
 			
-			GameManager.Instance.DecreaseVariable();
-			NFCManager.Instance.newCardDetected = false;
+				GameManager.Instance.DecreaseVariable();
+				NFCManager.Instance.newCardDetected = false;
+			}
 		}
 		
 		ChangeColorLight(LIGHT_COLOR.COLOR_WHITE);

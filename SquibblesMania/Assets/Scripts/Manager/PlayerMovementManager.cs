@@ -736,7 +736,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			sphereList[i].SetActive(false);
 		}
-
+		
 		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		GameManager.Instance.currentPlayerTurn.StartPathFinding();
 
@@ -872,16 +872,13 @@ public class PlayerMovementManager : MonoBehaviour
 
 	#region ResetPreviewPlatformCoroutine
 
-	public IEnumerator ResetPreviewPlatformCoroutine()
+	private IEnumerator ResetPreviewPlatformCoroutine()
 	{
 		yield return _timeBetweenReloadPath;
 		
-		if (!GameManager.Instance.currentPlayerTurn.walking)
-		{
-			var player = GameManager.Instance.currentPlayerTurn;
-			player.PlayerActionPointCardState.SetFalsePathObjects();
-			player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
-		}
+		var player = GameManager.Instance.currentPlayerTurn;
+		player.PlayerActionPointCardState.SetFalsePathObjects(); 
+		player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
 	}
 
 	#endregion

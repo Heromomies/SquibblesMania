@@ -55,15 +55,11 @@ public class PlayerActionPointCardState : PlayerBaseState
 			}
 
 			finalPreviewPath.Add(player.currentBlockPlayerOn);
-
-
+			
 			//We add in our list of past blocks, the block which the player is currently on
 			pastBlocks.Add(player.currentBlockPlayerOn);
-			if (possiblePath.Count > 0)
-			{
-				ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
-			}
 
+			ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
 		}
 		
 	}
@@ -373,30 +369,15 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 		if (player.playerActionPoint > 0)
 		{
-			SetFalsePathObjects();
-			PreviewPath(player.playerActionPoint, player);
+			Debug.Log("Action Point : "+player.playerActionPoint);
+			
+			//SetFalsePathObjects();
+			//PreviewPath(player.playerActionPoint, player);
 		}
 		else
 		{
 			SetFalsePathObjects();
 			currentNodePlayerOn.isActive = false;
-			/*if (NFCManager.Instance.hasRemovedCard)
-			{
-				NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
-				NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
-				UiManager.Instance.buttonNextTurn.SetActive(true);
-			}
-			else
-			{
-				if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
-				{
-					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(true);
-				}
-				else if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamTwo)
-				{
-					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(true);
-				}
-			}*/
 		}
 	}
 }
