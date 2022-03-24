@@ -6,6 +6,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal.Internal;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
@@ -55,16 +56,16 @@ public class PlayerActionPointCardState : PlayerBaseState
 			}
 
 			finalPreviewPath.Add(player.currentBlockPlayerOn);
-			
+
 			//We add in our list of past blocks, the block which the player is currently on
 			pastBlocks.Add(player.currentBlockPlayerOn);
 
 			ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
 		}
-		
 	}
 
-	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, int indexBlockNearby, int actionPoint, PlayerStateManager playerStateManager)
+	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, int indexBlockNearby,
+		int actionPoint, PlayerStateManager playerStateManager)
 	{
 		playerStateManager.nextBlockPath = finalPreviewPath;
 		indexBlockNearby++;
@@ -295,12 +296,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 				return;
 			}
 		}
-		
+
 		if (!player.walking)
 		{
 			player.walking = true;
-			player.finalPathFinding = player.nextBlockPath; 
-			
+			player.finalPathFinding = player.nextBlockPath;
+
 			player.StartCoroutine(FollowPath(player));
 		}
 	}
@@ -308,7 +309,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 	//Movement of player
 	private IEnumerator FollowPath(PlayerStateManager player)
 	{
-		for (int i = player.finalPathFinding.Count -1; i > 0; i--)
+		for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
 		{
 			Vector3 walkPoint = player.finalPathFinding[1].GetComponent<Node>().GetWalkPoint();
 
@@ -323,7 +324,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 			yield return _timeBetweenPlayerMovement;
 		}
-		
+
 		Clear(player);
 	}
 
@@ -346,12 +347,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 		groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
 
 		var pMovementManager = player.playerMovementManager;
-		
+
 		pMovementManager.playerCurrentlySelected = null;
 		pMovementManager.previewPath.Clear();
 		pMovementManager.sphereList.Clear();
 		pMovementManager.ghostPlayer.SetActive(false);
-		
+
 		//Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
 		foreach (Transform t in player.finalPathFinding)
 		{
@@ -367,14 +368,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 			EndZoneManager.Instance.PlayersIsOnEndZone();
 		}
 
-		if (player.playerActionPoint > 0)
-		{
-			Debug.Log("Action Point : "+player.playerActionPoint);
-			
-			//SetFalsePathObjects();
-			//PreviewPath(player.playerActionPoint, player);
-		}
-		else
+		if (player.playerActionPoint <= 0)
 		{
 			SetFalsePathObjects();
 			currentNodePlayerOn.isActive = false;
