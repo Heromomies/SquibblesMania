@@ -386,7 +386,7 @@ public class PlayerMovementManager : MonoBehaviour
 		_isBlocSelected = false;
 		_touchPos = Vector3.zero;
 		_blockCurrentlySelected = null;
-		
+		_blockParentCurrentlySelected = null;
 		if (_textActionPointPopUp)
 		{
 			_textActionPointPopUp.SetActive(false);
