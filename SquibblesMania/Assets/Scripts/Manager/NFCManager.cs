@@ -35,8 +35,11 @@ public class NFCManager : MonoBehaviour
 	public LIGHT_INDEX[] lightIndexesPlayerTwo;
 	public LIGHT_INDEX[] lightIndexesPlayerThree;
 	public LIGHT_INDEX[] lightIndexesPlayerFour;
-	public List<LIGHT_COLOR> lightColor;
-
+	[Space]
+	public LIGHT_COLOR lightColor;
+	[Space]
+	public List<LIGHT_COLOR> lightColorEnd;
+	
 	public List<LIGHT_INDEX> fullIndex;
 
 	#endregion
@@ -44,10 +47,12 @@ public class NFCManager : MonoBehaviour
 	#region PRIVATE VAR
 
 	[HideInInspector] public int numberOfTheCard;
-	public char[] charCards;
-	[HideInInspector] public bool hasRemovedCard;
-	[HideInInspector] public bool clicked;
+	[HideInInspector] public char[] charCards;
+	[HideInInspector] public bool newCardDetected;
+	[HideInInspector] public bool powerActivated;
+	[HideInInspector] public bool displacementActivated;
 	[HideInInspector] public int changeColor;
+	[HideInInspector] public int indexPlayer;
 
 	#endregion
 
@@ -73,38 +78,42 @@ public class NFCManager : MonoBehaviour
 	{
 		StopAllCoroutines();
 		NFCController.StopPolling();
-		clicked = false;
+
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0:
 				NFCController.StartPollingAsync(antennaPlayerOne);
-				LightController.Colorize(lightIndexesPlayerOne, lightColor[0], false);
+				LightController.Colorize(lightIndexesPlayerOne, lightColor, false);
+				indexPlayer = 0;
 				break;
 			case 1:
 				NFCController.StartPollingAsync(antennaPlayerTwo);
-				LightController.Colorize(lightIndexesPlayerTwo, lightColor[1], false);
+				LightController.Colorize(lightIndexesPlayerTwo, lightColor, false);
+				indexPlayer = 1;
 				break;
 			case 2:
 				NFCController.StartPollingAsync(antennaPlayerThree);
-				LightController.Colorize(lightIndexesPlayerThree, lightColor[0], false);
+				LightController.Colorize(lightIndexesPlayerThree, lightColor, false);
+				indexPlayer = 2;
 				break;
 			case 3:
 				NFCController.StartPollingAsync(antennaPlayerFour);
-				LightController.Colorize(lightIndexesPlayerFour, lightColor[1], false);
+				LightController.Colorize(lightIndexesPlayerFour, lightColor, false);
+				indexPlayer = 3;
 				break;
 		}
 	}
 
 	private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex) // Color One range with different colors
 	{
-		for (int i = 0; i < lightColor.Capacity; i++)
+		for (int i = 0; i < lightColorEnd.Capacity; i++)
 		{
-			if (i == lightColor.Capacity - 1)
+			if (i == lightColorEnd.Capacity - 1)
 			{
 				i = 0;
 			}
 
-			LightController.Colorize(lightIndex, lightColor[i], false);
+			LightController.Colorize(lightIndex, lightColorEnd[i], false);
 			yield return _timeBetweenTwoLight;
 		}
 	}
@@ -119,12 +128,12 @@ public class NFCManager : MonoBehaviour
 				i = 0;
 			}
 
-			if (changeColor == lightColor.Count)
+			if (changeColor == lightColorEnd.Count)
 			{
 				changeColor = 0;
 			}
 
-			LightController.ColorizeOne(fullIndex[i], lightColor[changeColor], false);
+			LightController.ColorizeOne(fullIndex[i], lightColorEnd[changeColor], false);
 			yield return _timeAntennaOneByOne;
 		}
 	}
@@ -133,7 +142,4 @@ public class NFCManager : MonoBehaviour
 	{
 		NFCController.StopPolling();
 	}
-
-	
-	
 }

@@ -238,9 +238,8 @@ public class DashPower : MonoBehaviour, IManagePower
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 		}
 
-		PowerManager.Instance.ActivateDeactivatePower(1, false);
-		PowerManager.Instance.ChangeTurnPlayer();
-
+		NFCManager.Instance.powerActivated = true;
+		
 		ClearPower();
 	}
 

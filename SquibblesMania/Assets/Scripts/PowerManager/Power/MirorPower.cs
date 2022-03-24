@@ -407,6 +407,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * dashRange, 0.05f);
 		}
 
+		NFCManager.Instance.powerActivated = true;
+		
 		ClearPower();
 	}
 

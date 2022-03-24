@@ -75,6 +75,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 				
 				if (hitInfo.collider.CompareTag("Platform"))
 				{
+					NFCManager.Instance.powerActivated = true;
+					
 					StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
 				}
 

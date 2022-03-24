@@ -1,5 +1,205 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &446858193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 446858194}
+  - component: {fileID: 446858195}
+  m_Layer: 0
+  m_Name: GAME_Crate_Firework
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &446858194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446858193}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &446858195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446858193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: CrateFirework
+  clip: {fileID: 8300000, guid: 1afd25694f1f9074cadaabbde520713a, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+--- !u!1 &1026829964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1026829965}
+  - component: {fileID: 1026829966}
+  m_Layer: 0
+  m_Name: UI_Next_Turn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1026829965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026829964}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1026829966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026829964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: ButtonNextTurn
+  clip: {fileID: 8300000, guid: 905097b62a3fccf46a1be190a02ff354, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+--- !u!1 &1429732176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1429732177}
+  - component: {fileID: 1429732178}
+  m_Layer: 0
+  m_Name: GAME_Crate_Pickup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1429732177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429732176}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1429732178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429732176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: CratePickup
+  clip: {fileID: 8300000, guid: c831804d3007c8b49931a6a8edd9780b, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+--- !u!1 &2000760930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2000760931}
+  - component: {fileID: 2000760932}
+  m_Layer: 0
+  m_Name: GAME_Stun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2000760931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000760930}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2000760932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000760930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: Stun
+  clip: {fileID: 8300000, guid: 8cb7028fd5e046047b001ebbe67c9e6f, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
 --- !u!1 &3006303674451224331
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundName: CardFalse
-  clip: {fileID: 8300000, guid: 5445d8e72ebc7c24d9b8a87f2f1c442a, type: 3}
+  clip: {fileID: 8300000, guid: 934b3ea92cf8cc745bbb1016fc59b797, type: 3}
   volume: 1
   pitch: 1
   source: {fileID: 0}
@@ -489,6 +689,10 @@ Transform:
   - {fileID: 3006303675967439594}
   - {fileID: 3006303674941194695}
   - {fileID: 3006303675667628575}
+  - {fileID: 1026829965}
+  - {fileID: 1429732177}
+  - {fileID: 446858194}
+  - {fileID: 2000760931}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

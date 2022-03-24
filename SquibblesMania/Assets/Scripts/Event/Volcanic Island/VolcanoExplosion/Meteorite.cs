@@ -43,6 +43,8 @@ public class Meteorite : MonoBehaviour
 			transform.parent = other.transform;
 			_turn = GameManager.Instance.turnCount;
 
+			AudioManager.Instance.Play("FireballEnd");
+			
 			transform.rotation = new Quaternion(0,0,0,0);
 			_stopRotating = true;
 
@@ -64,6 +66,8 @@ public class Meteorite : MonoBehaviour
 		}
 		else if (other.gameObject.CompareTag("Player"))
 		{
+			AudioManager.Instance.Play("Stun");
+			
 			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
 			var otherPos = other.transform.position;
 			GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",

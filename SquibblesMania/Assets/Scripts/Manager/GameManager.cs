@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
    
     public List<CamPreSets> camPreSets;
     [Header("CAMERA ROTATIONS")]
-    private int _count;
+    public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
     
@@ -41,8 +41,6 @@ public class GameManager : MonoBehaviour
 
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
-    public GameObject crown;
-    public float heightCrownSpawn;
     public ConditionVictory conditionVictory;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
@@ -113,35 +111,40 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
 
-        CamConfig(_count);
+        CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
 
     void CamConfig(int countTurn)
     {
-        if (actualCamPreset.presetNumber > 0)
+        if (currentPlayerTurn.canSwitch)
         {
-            actualCamPreset.buttonNextTurn.SetActive(false);
-        }
+            if (actualCamPreset.presetNumber > 0)
+            {
+                actualCamPreset.buttonNextTurn.SetActive(false);
+            }
 
+            Transform cameraTransform = _cam.transform;
+            Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
+        
+            //Smooth Transition
+            cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
+            cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
+        
+            actualCamPreset = camPreSets[countTurn];
+        
+            //UI SWITCH
+            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
+            CameraButtonManager.Instance.SetUpUiCamPreset();
+            _cameraViewModeGesture.SetUpCameraBaseViewMode();
+        
+            count++;
+            if (count >= camPreSets.Count)
+            {
+                count = 0;
+            }
 
-        Transform cameraTransform = _cam.transform;
-        Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-        
-        //Smooth Transition
-        cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
-        cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
-        
-        actualCamPreset = camPreSets[countTurn];
-        
-        //UI SWITCH
-        UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
-        CameraButtonManager.Instance.SetUpUiCamPreset();
-        _cameraViewModeGesture.SetUpCameraBaseViewMode();
-        _count++;
-        if (_count >= camPreSets.Count)
-        {
-            _count = 0;
+            currentPlayerTurn.canSwitch = false;
         }
     }
 
@@ -165,10 +168,20 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
 
         NFCManager.Instance.PlayerChangeTurn();
-        CamConfig(_count);
-      
+        CamConfig(count);
     }
 
+    public void DecreaseVariable()
+    {
+        turnCount--;
+
+        if(turnCount <= 0)
+            turnCount=0;
+        
+        currentPlayerTurn = players[count -1];
+        currentPlayerTurn.StartState();
+    }    
+    
     public void ShowEndZone()
     {
         if (isConditionVictory && !_isEndZoneShowed)
