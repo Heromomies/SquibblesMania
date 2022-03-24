@@ -702,12 +702,20 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			sphereList[i].SetActive(false);
 		}
+
+		_textActionPointPopUp.SetActive(false);
 		
 		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		GameManager.Instance.currentPlayerTurn.StartPathFinding();
 	}
 
 	#endregion
+	
+	/// <summary>
+	/// Update to check position to the ghost compared to the player
+	/// </summary>
+	
+	#region UpdateToCheckPositionToTheGhost
 
 	private void Update()
 	{
@@ -719,6 +727,8 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 	}
 
+	#endregion
+	
 	/// <summary>
 	/// Coroutine to displace the player in the direction of the swipe
 	/// </summary>
