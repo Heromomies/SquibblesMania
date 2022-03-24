@@ -101,6 +101,10 @@ public class PlayerCardState : PlayerBaseState
 			PlayerMovementManager.Instance.ResetDisplacement();
 			NFCManager.Instance.newCardDetected = false;
 		}
+		else
+		{
+			Debug.Log("I'm here");
+		}
 		
 		if (NFCManager.Instance.newCardDetected && !NFCManager.Instance.powerActivated)
 		{
