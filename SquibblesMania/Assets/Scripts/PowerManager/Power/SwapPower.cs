@@ -62,13 +62,13 @@ public class SwapPower : MonoBehaviour, IManagePower
 			}
 		}
 
-		switch (players.Length)
+		/*switch (players.Length)
 		{
 			case 1:
 				PowerManager.Instance.ActivateDeactivatePower(0, false);
 				PowerManager.Instance.ChangeTurnPlayer();
 				break;
-		}
+		}*/
 	}
 
 	public void CancelPower()
