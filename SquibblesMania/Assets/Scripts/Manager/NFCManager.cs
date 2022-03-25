@@ -48,8 +48,8 @@ public class NFCManager : MonoBehaviour
 
 	[HideInInspector] public int numberOfTheCard;
 	public char[] charCards;
-	[HideInInspector] public bool newCardDetected;
-	[HideInInspector] public bool powerActivated;
+	public bool newCardDetected; 
+	public bool powerActivated;
 	[HideInInspector] public bool displacementActivated;
 	[HideInInspector] public int changeColor;
 	[HideInInspector] public int indexPlayer;
