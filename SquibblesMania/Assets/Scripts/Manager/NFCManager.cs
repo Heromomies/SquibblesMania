@@ -78,7 +78,7 @@ public class NFCManager : MonoBehaviour
 	{
 		StopAllCoroutines();
 		NFCController.StopPolling();
-
+		
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
 			case 0:

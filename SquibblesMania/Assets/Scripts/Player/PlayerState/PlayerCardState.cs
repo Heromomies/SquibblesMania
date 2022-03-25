@@ -11,12 +11,16 @@ public class PlayerCardState : PlayerBaseState
 	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
 	private int _maxNumberOfTheCard;
 	
+
+	private CardEffect _cardEffect = new CardEffect();
+
+	private PlayerStateManager _currentPlayer;
 	//The state when player put card on Square one
 	public override void EnterState(PlayerStateManager player)
 	{
 		//Turn of player x
 		//Message player turn x "Put a card on the corresponding surface"
-
+		_currentPlayer = player;
 		if (player.isPlayerStun)
 		{
 			player.stunCount--;
@@ -46,13 +50,13 @@ public class PlayerCardState : PlayerBaseState
 			switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 			{
 				case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true);
-					ChangeColorLight(LIGHT_COLOR.COLOR_BLUE); break;
+					ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer); break;
 				case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true);
-					ChangeColorLight(LIGHT_COLOR.COLOR_RED); break;
+					ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer); break;
 				case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); 
-					ChangeColorLight(LIGHT_COLOR.COLOR_GREEN); break;
+					ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer); break;
 				case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); 
-					ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW); break;
+					ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer); break;
 			}
 		}
 		else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
@@ -67,10 +71,10 @@ public class PlayerCardState : PlayerBaseState
 
 			switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 			{
-				case 'B': ChangeColorLight(LIGHT_COLOR.COLOR_BLUE); break;
-				case 'R': ChangeColorLight(LIGHT_COLOR.COLOR_RED); break;
-				case 'G': ChangeColorLight(LIGHT_COLOR.COLOR_GREEN); break;
-				case 'Y': ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW); break;
+				case 'B': ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer); break;
+				case 'R': ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer); break;
+				case 'G': ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer); break;
+				case 'Y': ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer); break;
 			}
 			
 			GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
@@ -82,18 +86,27 @@ public class PlayerCardState : PlayerBaseState
 			{
 				AudioManager.Instance.Play("CardFalse");
 				Camera.main.DOShakePosition(1, 0.3f);
-				ChangeColorLight(LIGHT_COLOR.COLOR_BLACK);
+				ChangeColorLight(LIGHT_COLOR.COLOR_BLACK, _currentPlayer);
 			}
 		}
 	}
 
-	void ChangeColorLight(LIGHT_COLOR lightColor)
-	{
+	void ChangeColorLight(LIGHT_COLOR lightColor, PlayerStateManager currentPlayer)
+	{	
+		
 		switch (NFCManager.Instance.indexPlayer) {
-			case 0 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerOne, lightColor, false); break;
-			case 1 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerTwo, lightColor, false); break;
-			case 2 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerThree, lightColor, false); break;
-			case 3 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerFour, lightColor, false); break;
+			case 0 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerOne, lightColor, false);
+				if (!currentPlayer.currentCardEffect)
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[0], lightColor); break;
+			case 1 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerTwo, lightColor, false); 
+				if (!currentPlayer.currentCardEffect) 
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[1], lightColor); break;
+			case 2 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerThree, lightColor, false); 
+				if (!currentPlayer.currentCardEffect) 
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[2], lightColor);break;
+			case 3 : LightController.Colorize(NFCManager.Instance.lightIndexesPlayerFour, lightColor, false); 
+				if (!currentPlayer.currentCardEffect) 
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[3], lightColor);break;
 		}
 	}
 	
@@ -126,8 +139,13 @@ public class PlayerCardState : PlayerBaseState
 				NFCManager.Instance.newCardDetected = false;
 			}
 		}
-		
-		ChangeColorLight(LIGHT_COLOR.COLOR_WHITE);
+	
+		ChangeColorLight(LIGHT_COLOR.COLOR_WHITE, _currentPlayer);
+		if (_currentPlayer.currentCardEffect != null)
+		{
+			_currentPlayer.currentCardEffect.SetActive(false);
+			_currentPlayer.currentCardEffect = null;
+		}
 	}
 
 	void PlayerIsStun(PlayerStateManager player)

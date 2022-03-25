@@ -63,6 +63,7 @@ public class PoolManager : MonoBehaviour
         if (objectToSpawn != null)
         {
             objectToSpawn.SetActive(true);
+           
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
             objectToSpawn.transform.parent = parent;
