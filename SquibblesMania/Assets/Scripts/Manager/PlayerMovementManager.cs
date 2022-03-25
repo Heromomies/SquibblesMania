@@ -366,7 +366,11 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			_blocParentCurrentlySelectedPos = _blockParentCurrentlySelected.transform.position;
 			SpawnTextActionPointPopUp(currentPlayer);
-			SetUpBlocPreviewMesh(_blockParentCurrentlySelected);
+			if (_blockParentCurrentlySelected != null)
+			{
+				SetUpBlocPreviewMesh(_blockParentCurrentlySelected);
+			}
+			
 			hasStopMovingBloc = true;
 		}
 	}
@@ -641,7 +645,7 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 
 
-		if (!hasStopMovingBloc)
+		if (!hasStopMovingBloc && _blockParentCurrentlySelected != null)
 		{
 			SetUpBlocPreviewMesh(_blockParentCurrentlySelected);
 		}
