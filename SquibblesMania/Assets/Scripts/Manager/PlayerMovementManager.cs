@@ -534,6 +534,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void BlocMovement(Vector3 touchPos)
 	{
 		var direction = touchPos.normalized;
+
 		if (_isBlocSelected)
 		{
 			StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
@@ -728,6 +729,10 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			StartCoroutine(ResetPreviewPlatformCoroutine());
 			hasMoved = false;
+		}
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && NFCManager.Instance.displacementActivated)
+		{
+			UiManager.Instance.buttonNextTurn.SetActive(true);
 		}
 	}
 

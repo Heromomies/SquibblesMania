@@ -11,7 +11,7 @@ public class PlayerCardState : PlayerBaseState
 	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
 	private int _maxNumberOfTheCard;
 	private char _charCardsStockage;
-	private int _cardNumber;
+	private char _cardNumber;
 	
 	private CardEffect _cardEffect = new CardEffect();
 
@@ -95,9 +95,6 @@ public class PlayerCardState : PlayerBaseState
 						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
 						break;
 				}
-
-				_cardNumber = nfcTag.Data[0] - '0';
-				_charCardsStockage = nfcTag.Data[1];
 				
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
 			}
@@ -111,6 +108,9 @@ public class PlayerCardState : PlayerBaseState
 					ChangeColorLight(LIGHT_COLOR.COLOR_BLACK, _currentPlayer);
 				}
 			}
+			
+			_cardNumber = nfcTag.Data[0];
+			_charCardsStockage = nfcTag.Data[1];
 		}
 	}
 
@@ -143,7 +143,7 @@ public class PlayerCardState : PlayerBaseState
 
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
-		if (nfcTag.Data[0] - '0' == _cardNumber && nfcTag.Data[1] == _charCardsStockage)
+		if (nfcTag.Data[0] == _cardNumber && nfcTag.Data[1] == _charCardsStockage)
 		{
 			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
