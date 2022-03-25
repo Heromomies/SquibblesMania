@@ -33,23 +33,26 @@ public  class CardEffect
         {
             SetUpParticleForCanvas(cardEffectGameObject, parent);
         
-            ParticleSystem cardEffect = cardEffectGameObject.GetComponent<ParticleSystem>();
+            var cardEffect = cardEffectGameObject.GetComponent<ParticleSystem>();
         
             ParticleSystem.MainModule cardEffectMain = cardEffect.main;
-            ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = cardEffect.velocityOverLifetime;
+            ParticleSystem.VelocityOverLifetimeModule cardEffectVelocityOverLifetime = cardEffect.velocityOverLifetime;
+            var velocityOverLifetime = cardEffectVelocityOverLifetime.zMultiplier;
 
             //Convert degree angle into radiant angle
-            float rotX = Mathf.Deg2Rad * 180f; 
+            var rotX = Mathf.Deg2Rad * 180f; 
         
             if (GameManager.Instance.actualCamPreset.presetNumber >= 3)
             {
                 cardEffectMain.startRotationXMultiplier = rotX;
-                velocityOverLifetime.z = -velocityOverLifetime.z.constant;
+                velocityOverLifetime = -Mathf.Abs(velocityOverLifetime);
+                cardEffectVelocityOverLifetime.zMultiplier = velocityOverLifetime;
             }
             else
             {
                 cardEffectMain.startRotationXMultiplier = 0;
-                velocityOverLifetime.z = velocityOverLifetime.z.constant;
+                velocityOverLifetime = Mathf.Abs(velocityOverLifetime);
+                cardEffectVelocityOverLifetime.zMultiplier = velocityOverLifetime;
             }
         }
             
@@ -58,7 +61,7 @@ public  class CardEffect
 
     void SetUpParticleForCanvas(GameObject particle, Transform parent)
     {
-        Vector3 screenPos = UiManager.Instance.uiCam.ScreenToViewportPoint(parent.transform.position);
+        var screenPos = UiManager.Instance.uiCam.ScreenToViewportPoint(parent.transform.position);
         particle.transform.localPosition = screenPos;
         particle.transform.localRotation = Quaternion.Euler(-90f, 0f,0f);
         particle.transform.localScale = Vector3.one;
