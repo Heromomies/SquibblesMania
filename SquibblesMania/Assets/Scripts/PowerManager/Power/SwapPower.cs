@@ -91,6 +91,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 			{
 				if (players.ToList().Contains(hitInfo.collider))
 				{
+					NFCManager.Instance.powerActivated = true;
+					
 					_playerTwo = hitInfo.collider;
 					DoPower();
 				}
@@ -114,8 +116,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
 
-		NFCManager.Instance.powerActivated = true;
-		
 		ClearPower();
 	}
 	

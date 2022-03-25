@@ -55,6 +55,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerBlocTouched))
 			{
+				NFCManager.Instance.powerActivated = true;
+				
 				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
 				var posHitInfo = hitInfo.transform.position;
 
@@ -75,8 +77,6 @@ public class JumpPower : MonoBehaviour, IManagePower
 				
 				if (hitInfo.collider.CompareTag("Platform"))
 				{
-					NFCManager.Instance.powerActivated = true;
-					
 					StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
 				}
 

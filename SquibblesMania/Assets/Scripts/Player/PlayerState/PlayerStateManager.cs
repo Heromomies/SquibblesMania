@@ -97,33 +97,23 @@ public class PlayerStateManager : Player
 		}
 		else
 		{
-			if (!isInJump)
+			_timeLeft -= Time.deltaTime;
+			if (_timeLeft < 0)
 			{
-				_timeLeft -= Time.deltaTime;
-				if (_timeLeft < 0)
-				{
-					StartCoroutine(WaitUntilRespawn());
-					_timeLeft = 1.5f;
-				}
+				var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
+				var obj = blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
+				var children = obj.GetComponentsInChildren<Node>();
+
+				var randomNumber = Random.Range(0, children.Length);
+
+				GameManager.Instance.currentPlayerTurn.transform.position =
+						children[randomNumber].transform.position + new Vector3(0, 1, 0);
+				_timeLeft = 1.5f;
 			}
+			
 		}
 	}
-
-	private IEnumerator WaitUntilRespawn()
-	{
-		yield return new WaitForSeconds(1f);
-
-		var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
-		var obj = blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
-		var children = obj.GetComponentsInChildren<Node>();
-
-		var randomNumber = Random.Range(0, children.Length);
-
-		GameManager.Instance.currentPlayerTurn.transform.position =
-			children[randomNumber].transform.position + new Vector3(0, 1, 0);
-		StopAllCoroutines();
-	}
-
+	
 	public void StunPlayer(PlayerStateManager player, int stunTurnCount)
 	{
 		player.isPlayerStun = true;
