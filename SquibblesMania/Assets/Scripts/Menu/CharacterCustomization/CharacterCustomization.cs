@@ -13,15 +13,19 @@ public class CharacterCustomization : MonoBehaviour
     private Dictionary<string, string> colors =
         new Dictionary<string, string>()
         {
-            {"Red", "#E74C3C" },
-            {"Yellow", "#FFFF00" },
-            {"Green", "#008000" },
+            {"Black", "#1A1A1A" },
             {"Blue", "#4C3CE7" },
-            {"Violet", "#7A3CE7" },
+            {"Green", "#008000" },
             {"Orange", "#E78A3C" },
             {"Pink", "#FD6C9E" },
-            {"Black", "#1A1A1A" }
+            {"Red", "#E74C3C" },
+            {"Violet", "#7A3CE7" },
+            {"White", "#FFFFFF" },
+            {"Yellow", "#FFFF00" }, 
         };
+
+     public List<Material> colorstest = new List<Material>();
+    public List<string> hex = new List<string>();
 
     public int colorID;
     public int hatID;
@@ -31,8 +35,25 @@ public class CharacterCustomization : MonoBehaviour
 
     void Start()
     {
+
+        for (int i = 0; i < colorstest.Count; i++)
+        {
+            hex.Add(ColorUtility.ToHtmlStringRGB(colorstest[i].color));
+        }
+
+
         SetItem("colors");
         SetItem("hats");
+
+       
+        
+
+    }
+
+    private void Update()
+    {
+
+        
     }
 
 
@@ -101,11 +122,19 @@ public class CharacterCustomization : MonoBehaviour
                
                 break;
             case "colors":
-                if(ColorUtility.TryParseHtmlString(colors.Values.ElementAt(colorID), out Color color)){
+                if (ColorUtility.TryParseHtmlString(hex[colorID], out Color color))
+                {
                     bodycolor.GetComponent<Image>().color = color;
                     hat.GetComponent<Image>().color = color;
+                    Debug.Log("lepain");
+
                 }
-                break;
+                
+
+
+                    break;
+
+                
         }
     }
 
