@@ -24,29 +24,35 @@ public  class CardEffect
             case LIGHT_COLOR.COLOR_YELLOW:
                 cardEffectGameObject = PoolManager.Instance.SpawnObjectFromPool("TileCardVFX", new Vector3(0,0,0), Quaternion.identity, parent);
                 break;
+            case LIGHT_COLOR.COLOR_BLACK:
+                return null;
         }
 
-        SetUpParticleForCanvas(cardEffectGameObject, parent);
+        if (lightColor == LIGHT_COLOR.COLOR_RED || lightColor == LIGHT_COLOR.COLOR_BLUE || lightColor == LIGHT_COLOR.COLOR_YELLOW ||
+            lightColor == LIGHT_COLOR.COLOR_GREEN)
+        {
+            SetUpParticleForCanvas(cardEffectGameObject, parent);
         
-        ParticleSystem cardEffect = cardEffectGameObject.GetComponent<ParticleSystem>();
+            ParticleSystem cardEffect = cardEffectGameObject.GetComponent<ParticleSystem>();
         
-        ParticleSystem.MainModule cardEffectMain = cardEffect.main;
-        ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = cardEffect.velocityOverLifetime;
+            ParticleSystem.MainModule cardEffectMain = cardEffect.main;
+            ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime = cardEffect.velocityOverLifetime;
 
-        //Convert degree angle into radiant angle
-        float rotX = Mathf.Deg2Rad * 180f; 
+            //Convert degree angle into radiant angle
+            float rotX = Mathf.Deg2Rad * 180f; 
         
-        if (GameManager.Instance.actualCamPreset.presetNumber >= 3)
-        {
-            cardEffectMain.startRotationXMultiplier = rotX;
-            velocityOverLifetime.z = -velocityOverLifetime.z.constant;
+            if (GameManager.Instance.actualCamPreset.presetNumber >= 3)
+            {
+                cardEffectMain.startRotationXMultiplier = rotX;
+                velocityOverLifetime.z = -velocityOverLifetime.z.constant;
+            }
+            else
+            {
+                cardEffectMain.startRotationXMultiplier = 0;
+                velocityOverLifetime.z = velocityOverLifetime.z.constant;
+            }
         }
-        else
-        {
-            cardEffectMain.startRotationXMultiplier = 0;
-            velocityOverLifetime.z = velocityOverLifetime.z.constant;
-        }
-        
+            
         return cardEffectGameObject;
     }
 
