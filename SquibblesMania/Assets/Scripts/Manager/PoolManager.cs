@@ -66,7 +66,7 @@ public class PoolManager : MonoBehaviour
            
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-            objectToSpawn.transform.parent = parent;
+            objectToSpawn.transform.SetParent(parent);
             
             //Add back to the queue so we can use the object later
             poolDictionnary[tag].Enqueue(objectToSpawn);
