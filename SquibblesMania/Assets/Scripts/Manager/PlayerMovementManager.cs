@@ -29,7 +29,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private Vector3 _touchPos;
 	private Camera _cam;
 	private RaycastHit _hit;
-	[HideInInspector] public bool hasStopMovingBloc;
+	public bool hasStopMovingBloc;
 
 	[SerializeField] private Transform _blockParentCurrentlySelected;
 
@@ -42,7 +42,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private bool _isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
-	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.4f);
+	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.2f);
 
 	[HideInInspector] public int totalCurrentActionPoint;
 	private GameObject _textActionPointPopUp;
@@ -332,8 +332,8 @@ public class PlayerMovementManager : MonoBehaviour
 			else if (gesture.State == GestureRecognizerState.Ended)
 			{
 				//End of the drag
+				
 				EndMovingBloc(GameManager.Instance.currentPlayerTurn);
-
 				_canTouchBloc = true;
 			}
 		}
@@ -385,6 +385,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void EndMovingBloc(PlayerStateManager currentPlayerTurn)
 	{
+		
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
@@ -606,7 +607,7 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 
 		yield return _timeInSecondsBetweenBlocMovement;
-		ResetPreviewPathObjects();
+		//ResetPreviewPathObjects();
 		_touchPos = Vector3.zero;
 		_isBlocSelected = true;
 		hasStopMovingBloc = false;
@@ -684,6 +685,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void ResetPreviewPathObjects()
 	{
+		Debug.Log("Set false path objects");
 		var player = GameManager.Instance.currentPlayerTurn;
 		player.PlayerActionPointCardState.SetFalsePathObjects();
 		player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
