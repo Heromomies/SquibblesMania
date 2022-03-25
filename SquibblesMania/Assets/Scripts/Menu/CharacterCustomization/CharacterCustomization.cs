@@ -10,21 +10,8 @@ public class CharacterCustomization : MonoBehaviour
     [SerializeField] private Image bodycolor;
     [SerializeField] private Image hat;
 
-    private Dictionary<string, string> colors =
-        new Dictionary<string, string>()
-        {
-            {"Black", "#1A1A1A" },
-            {"Blue", "#4C3CE7" },
-            {"Green", "#008000" },
-            {"Orange", "#E78A3C" },
-            {"Pink", "#FD6C9E" },
-            {"Red", "#E74C3C" },
-            {"Violet", "#7A3CE7" },
-            {"White", "#FFFFFF" },
-            {"Yellow", "#FFFF00" }, 
-        };
 
-     public List<Material> colorstest = new List<Material>();
+    public List<Material> colors = new List<Material>();
     public List<string> hex = new List<string>();
 
     public int colorID;
@@ -36,18 +23,15 @@ public class CharacterCustomization : MonoBehaviour
     void Start()
     {
 
-        for (int i = 0; i < colorstest.Count; i++)
+        for (int i = 0; i < colors.Count; i++)
         {
-            hex.Add(ColorUtility.ToHtmlStringRGB(colorstest[i].color));
+            hex.Add(ColorUtility.ToHtmlStringRGB(colors[i].color));
         }
-
 
         SetItem("colors");
         SetItem("hats");
 
-       
         
-
     }
 
     private void Update()
@@ -118,22 +102,21 @@ public class CharacterCustomization : MonoBehaviour
         switch(type)
         {
             case "hats":
-                hat.GetComponent<SpriteRenderer>().sprite = hats[hatID];
+               // hat.GetComponent<SpriteRenderer>().sprite = hats[hatID];
                
                 break;
             case "colors":
-                if (ColorUtility.TryParseHtmlString(hex[colorID], out Color color))
+                if (ColorUtility.TryParseHtmlString("#" + hex[colorID], out Color color))
                 {
                     bodycolor.GetComponent<Image>().color = color;
                     hat.GetComponent<Image>().color = color;
-                    Debug.Log("lepain");
+                    
 
                 }
+
+                break;
+
                 
-
-
-                    break;
-
                 
         }
     }
