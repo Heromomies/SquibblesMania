@@ -102,14 +102,14 @@ public class CharacterCustomization : MonoBehaviour
         switch(type)
         {
             case "hats":
-               // hat.GetComponent<SpriteRenderer>().sprite = hats[hatID];
+              hat.GetComponent<Image>().sprite = hats[hatID];
                
                 break;
             case "colors":
                 if (ColorUtility.TryParseHtmlString("#" + hex[colorID], out Color color))
                 {
                     bodycolor.GetComponent<Image>().color = color;
-                    hat.GetComponent<Image>().color = color;
+                    //hat.GetComponent<Image>().color = color;
                     
 
                 }
