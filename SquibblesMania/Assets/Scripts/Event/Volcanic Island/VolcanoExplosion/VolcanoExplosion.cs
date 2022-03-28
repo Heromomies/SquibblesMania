@@ -101,7 +101,10 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
 		
 		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
+		obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		obj.GetComponent<Rigidbody>().velocity = vo;
+
+		obj.GetComponent<Meteorite>().stopRotating = false;
 		
 		AudioManager.Instance.Play("FireballStart");
 		

@@ -10,8 +10,9 @@ public class Meteorite : MonoBehaviour
 	private Rigidbody _rb;
 	private int _turn;
 	
-	private bool _stopRotating;
+	public bool stopRotating;
 	private GameObject _particleFireToDelete;
+	
 	private void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
@@ -26,7 +27,7 @@ public class Meteorite : MonoBehaviour
 			gameObject.SetActive(false);
 		}
 
-		if (!_stopRotating)
+		if (!stopRotating)
 		{
 			var rotate = Random.Range(0.5f, 3f);
 			transform.Rotate(new Vector3(rotate,rotate,rotate) * (speedTurnAround * Time.deltaTime), Space.World);
@@ -46,7 +47,7 @@ public class Meteorite : MonoBehaviour
 			AudioManager.Instance.Play("FireballEnd");
 			
 			transform.rotation = new Quaternion(0,0,0,0);
-			_stopRotating = true;
+			stopRotating = true;
 
 			var transformPlayer = transform.position;
 			
@@ -83,5 +84,6 @@ public class Meteorite : MonoBehaviour
 	{
 		yield return new WaitForSeconds(seconds);
 		gameObject.transform.position = new Vector3(1500,-1500, 1500);
+		gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 	}
 }

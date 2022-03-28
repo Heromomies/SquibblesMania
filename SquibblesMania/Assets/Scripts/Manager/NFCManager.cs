@@ -47,9 +47,9 @@ public class NFCManager : MonoBehaviour
 	#region PRIVATE VAR
 
 	[HideInInspector] public int numberOfTheCard;
-	public char[] charCards;
-	public bool newCardDetected; 
-	public bool powerActivated;
+	[HideInInspector] public char[] charCards;
+	[HideInInspector] public bool newCardDetected; 
+	[HideInInspector] public bool powerActivated;
 	[HideInInspector] public bool displacementActivated;
 	[HideInInspector] public int changeColor;
 	[HideInInspector] public int indexPlayer;

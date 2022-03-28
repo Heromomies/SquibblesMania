@@ -21,9 +21,6 @@ public class DashPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 
-	[Header("MATERIAL SETTINGS")] [Space] public Material firstMat;
-	public Material secondMat;
-
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
@@ -36,7 +33,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	private void OnEnable()
 	{
-		swipe = new SwipeGestureRecognizer();
+		/*swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
 		swipe.DirectionThreshold = 0;
 		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
@@ -44,7 +41,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
 		swipe.ThresholdSeconds = swipeThresholdSeconds;
 		swipe.AllowSimultaneousExecutionWithAllGestures();
-		FingersScript.Instance.AddGesture(swipe);
+		FingersScript.Instance.AddGesture(swipe);*/
 
 		_cam = Camera.main;
 		_offset = PlayerMovementManager.Instance.offset;
@@ -270,7 +267,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						ChangeMaterial(hitFirstBloc.transform);
+						SpawnObjectOnPathDash(hitFirstBloc.transform);
 						hitTransforms.Add(hitFirstBloc.transform);
 					}
 				}
@@ -283,7 +280,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						ChangeMaterial(hitFirstBloc.transform);
+						SpawnObjectOnPathDash(hitFirstBloc.transform);
 						hitTransforms.Add(hitFirstBloc.transform);
 					}
 				}
@@ -293,7 +290,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						ChangeMaterial(hitSecondBloc.transform);
+						SpawnObjectOnPathDash(hitSecondBloc.transform);
 						hitTransforms.Add(hitSecondBloc.transform);
 					}
 				}
@@ -307,7 +304,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						ChangeMaterial(hitFirstBloc.transform);
+						SpawnObjectOnPathDash(hitFirstBloc.transform);
 						hitTransforms.Add(hitFirstBloc.transform);
 					}
 				}
@@ -317,7 +314,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						ChangeMaterial(hitSecondBloc.transform);
+						SpawnObjectOnPathDash(hitSecondBloc.transform);
 						hitTransforms.Add(hitSecondBloc.transform);
 					}
 				}
@@ -327,7 +324,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						ChangeMaterial(hitThirdBloc.transform);
+						SpawnObjectOnPathDash(hitThirdBloc.transform);
 						hitTransforms.Add(hitThirdBloc.transform);
 					}
 				}
@@ -340,11 +337,13 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	#region ChangeMaterial
 
-	void ChangeMaterial(Transform objectToChange)
+	void SpawnObjectOnPathDash(Transform objectToChange)
 	{
-		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-		color = secondMat.color;
-		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
+		var objPos = objectToChange.position;
+
+		PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
+			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.identity, null);
+		
 	}
 
 	#endregion
@@ -359,11 +358,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public void ClearPower() // Clear the power
 	{
-		for (int i = 0; i < hitTransforms.Count; i++)
-		{
-			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
-		}
-
+		
 		hitTransforms.Clear();
 
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
