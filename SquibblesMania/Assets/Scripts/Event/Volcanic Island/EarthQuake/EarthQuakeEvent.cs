@@ -42,6 +42,8 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	{
 		colliders = Physics.OverlapSphere(gameObject.transform.position, radius, layer); // Detect bloc around the object
 		
+		AudioManager.Instance.Play("VolcanoShaking");
+		
 		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
 		{
 			int randomNumber = Random.Range(0, colliders.Length);
@@ -58,7 +60,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			
 				col = new Vector3(col.x, 1, col.z);
 				colliders[randomNumber].transform.DOMove(col, 5f);
-				_cam.DOShakePosition(5f, 0.1f, 100);
+				//_cam.DOShakePosition(5f, 0.1f, 100);
 			}
 		}
 		

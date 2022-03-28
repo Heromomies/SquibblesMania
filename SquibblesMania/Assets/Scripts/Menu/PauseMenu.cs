@@ -18,6 +18,6 @@ public class PauseMenu : MonoBehaviour
 		{
 			panelPause.SetActive(false);
 		}
-		
+		AudioManager.Instance.Play("Button");
 	}
 }

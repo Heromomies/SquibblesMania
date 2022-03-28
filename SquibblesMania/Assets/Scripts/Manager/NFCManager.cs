@@ -8,189 +8,138 @@ using Wizama.Hardware.Light;
 
 public class NFCManager : MonoBehaviour
 {
-    #region ANTENNA SETTINGS
+	#region ANTENNA SETTINGS
 
-    [Header("ANTENNA SETTINGS")] public NFC_DEVICE_ID[] antennaPlayerOne;
-    [Space] public NFC_DEVICE_ID[] antennaPlayerTwo;
-    [Space] public NFC_DEVICE_ID[] antennaPlayerThree;
-    [Space] public NFC_DEVICE_ID[] antennaPlayerFour;
+	[Header("ANTENNA SETTINGS")] public NFC_DEVICE_ID[] antennaPlayerOne;
+	[Space] public NFC_DEVICE_ID[] antennaPlayerTwo;
+	[Space] public NFC_DEVICE_ID[] antennaPlayerThree;
+	[Space] public NFC_DEVICE_ID[] antennaPlayerFour;
 
-    #endregion
+	#endregion
 
-    #region UI SETTINGS
+	#region UI SETTINGS
 
-    [Space] [Header("UI SETTINGS")] public ActionPlayerPreset[] actionPlayerPreset;
-    [Serializable]
-    public struct ActionPlayerPreset
-    {
-        public GameObject playerActionButton;
-        public GameObject playerPowerButton;
-        public TextMeshProUGUI textTakeOffCard;
-    }
+	[Space] [Header("UI SETTINGS")] public ActionPlayerPreset[] actionPlayerPreset;
 
-    #endregion
+	[Serializable]
+	public struct ActionPlayerPreset
+	{
+		public TextMeshProUGUI textTakeOffCard;
+	}
 
-    #region LIGHT SETTINGS
+	#endregion
 
-    [Space] [Header("LIGHT SETTINGS")] public LIGHT_INDEX[] lightIndexesPlayerOne;
-    public LIGHT_INDEX[] lightIndexesPlayerTwo;
-    public LIGHT_INDEX[] lightIndexesPlayerThree;
-    public LIGHT_INDEX[] lightIndexesPlayerFour;
-    public List<LIGHT_COLOR> lightColor;
+	#region LIGHT SETTINGS
 
-    public List<LIGHT_INDEX> fullIndex;
+	[Space] [Header("LIGHT SETTINGS")] public LIGHT_INDEX[] lightIndexesPlayerOne;
+	public LIGHT_INDEX[] lightIndexesPlayerTwo;
+	public LIGHT_INDEX[] lightIndexesPlayerThree;
+	public LIGHT_INDEX[] lightIndexesPlayerFour;
+	[Space]
+	public LIGHT_COLOR lightColor;
+	[Space]
+	public List<LIGHT_COLOR> lightColorEnd;
+	
+	public List<LIGHT_INDEX> fullIndex;
 
-    #endregion
+	#endregion
 
-    #region PRIVATE VAR
-    
-    [HideInInspector] public int numberOfTheCard;
-    public char[] charCards;
-    [HideInInspector] public bool hasRemovedCard;
-    [HideInInspector] public bool clicked;
-    [HideInInspector] public int changeColor;
+	#region PRIVATE VAR
 
-    #endregion
+	[HideInInspector] public int numberOfTheCard;
+	[HideInInspector] public char[] charCards;
+	[HideInInspector] public bool newCardDetected; 
+	[HideInInspector] public bool powerActivated;
+	[HideInInspector] public bool displacementActivated;
+	[HideInInspector] public int changeColor;
+	[HideInInspector] public int indexPlayer;
 
-    #region Singleton
+	#endregion
 
-    private static NFCManager nfcManager;
+	#region Singleton
 
-    public static NFCManager Instance => nfcManager;
+	private static NFCManager nfcManager;
 
-    private WaitForSeconds _timeBetweenTwoLight = new WaitForSeconds(0.5f);
+	public static NFCManager Instance => nfcManager;
 
-    private WaitForSeconds _timeAntennaOneByOne = new WaitForSeconds(0.2f);
-    // Start is called before the first frame update
+	private WaitForSeconds _timeBetweenTwoLight = new WaitForSeconds(0.5f);
 
-    private void Awake()
-    {
-        nfcManager = this;
-    }
+	private WaitForSeconds _timeAntennaOneByOne = new WaitForSeconds(0.2f);
+	// Start is called before the first frame update
 
-    #endregion
+	private void Awake()
+	{
+		nfcManager = this;
+	}
 
-    public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
-    {
-        StopAllCoroutines();
-        NFCController.StopPolling();
-        clicked = false;
-        switch (GameManager.Instance.currentPlayerTurn.playerNumber)
-        {
-            case 0:
-                NFCController.StartPollingAsync(antennaPlayerOne);
-                LightController.Colorize(lightIndexesPlayerOne, lightColor[0], false);
-                break;
-            case 1:
-                NFCController.StartPollingAsync(antennaPlayerTwo);
-                LightController.Colorize(lightIndexesPlayerTwo, lightColor[1], false);
-                break;
-            case 2:
-                NFCController.StartPollingAsync(antennaPlayerThree);
-                LightController.Colorize(lightIndexesPlayerThree, lightColor[0], false);
-                break;
-            case 3:
-                NFCController.StartPollingAsync(antennaPlayerFour);
-                LightController.Colorize(lightIndexesPlayerFour, lightColor[1], false);
-                break;
-        }
-    }
+	#endregion
 
-    private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex) // Color One range with different colors
-    {
-        for (int i = 0; i < lightColor.Capacity; i++)
-        {
-            if (i == lightColor.Capacity - 1)
-            {
-                i = 0;
-            }
+	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
+	{
+		StopAllCoroutines();
+		NFCController.StopPolling();
+		
+		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+		{
+			case 0:
+				NFCController.StartPollingAsync(antennaPlayerOne);
+				LightController.Colorize(lightIndexesPlayerOne, lightColor, false);
+				indexPlayer = 0;
+				break;
+			case 1:
+				NFCController.StartPollingAsync(antennaPlayerTwo);
+				LightController.Colorize(lightIndexesPlayerTwo, lightColor, false);
+				indexPlayer = 1;
+				break;
+			case 2:
+				NFCController.StartPollingAsync(antennaPlayerThree);
+				LightController.Colorize(lightIndexesPlayerThree, lightColor, false);
+				indexPlayer = 2;
+				break;
+			case 3:
+				NFCController.StartPollingAsync(antennaPlayerFour);
+				LightController.Colorize(lightIndexesPlayerFour, lightColor, false);
+				indexPlayer = 3;
+				break;
+		}
+	}
 
-            LightController.Colorize(lightIndex, lightColor[i], false);
-            yield return _timeBetweenTwoLight;
-        }
-    }
+	private IEnumerator ColorOneRange(LIGHT_INDEX[] lightIndex) // Color One range with different colors
+	{
+		for (int i = 0; i < lightColorEnd.Capacity; i++)
+		{
+			if (i == lightColorEnd.Capacity - 1)
+			{
+				i = 0;
+			}
 
-    public IEnumerator ColorOneByOneAllTheAntennas() // Color One by One all the antennas 
-    {
-        for (int i = 0; i < fullIndex.Count; i++)
-        {
-            changeColor++;
-            if (i == fullIndex.Count - 1)
-            {
-                i = 0;
-            }
+			LightController.Colorize(lightIndex, lightColorEnd[i], false);
+			yield return _timeBetweenTwoLight;
+		}
+	}
 
-            if (changeColor == lightColor.Count)
-            {
-                changeColor = 0;
-            }
+	public IEnumerator ColorOneByOneAllTheAntennas() // Color One by One all the antennas 
+	{
+		for (int i = 0; i < fullIndex.Count; i++)
+		{
+			changeColor++;
+			if (i == fullIndex.Count - 1)
+			{
+				i = 0;
+			}
 
-            LightController.ColorizeOne(fullIndex[i], lightColor[changeColor], false);
-            yield return _timeAntennaOneByOne;
-        }
-    }
+			if (changeColor == lightColorEnd.Count)
+			{
+				changeColor = 0;
+			}
 
-    private void OnDisable() // Stop polling on disable, can't detect card
-    {
-        NFCController.StopPolling();
-    }
+			LightController.ColorizeOne(fullIndex[i], lightColorEnd[changeColor], false);
+			yield return _timeAntennaOneByOne;
+		}
+	}
 
-    public void ChoseToLaunchPower() // If the player chose to launch a power 
-    {
-        clicked = true;
-        GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
-        switch (charCards[1]) // Check the letter of the card for the color and launch the appropriate power
-        {
-            case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
-            case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
-            case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
-            case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
-        }
-
-        SetActivePlayerActionButton(1,false);
-    }
-
-    public void ChoseToMove() // If the player chose to move, his displacements are equals to the value of the card
-    {
-        clicked = true;
-        numberOfTheCard = charCards[0] - '0';
-        GameManager.Instance.currentPlayerTurn.playerActionPoint = numberOfTheCard;
-        
-        if (GameManager.Instance.currentPlayerTurn.isPlayerShielded)
-        {
-            GameManager.Instance.currentPlayerTurn.playerActionPoint += 2;
-        }
-
-        UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-        
-        GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState = true;
-        GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
-            .PlayerActionPointCardState);
-
-        SetActivePlayerActionButton(0,false);
-    }
-
-    public void SetActivePlayerActionButton(int index, bool setActive) // Can activate / deactivate button from everywhere in the script
-    {
-        if (index == 0)
-        {
-            switch (GameManager.Instance.actualCamPreset.presetNumber)
-            { 
-                case 1: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
-                case 2: actionPlayerPreset[0].playerActionButton.SetActive(setActive); break;
-                case 3: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;
-                case 4: actionPlayerPreset[1].playerActionButton.SetActive(setActive); break;
-            }
-        } else if (index == 1)
-        {
-            switch (GameManager.Instance.actualCamPreset.presetNumber)
-            { 
-                case 1: actionPlayerPreset[0].playerPowerButton.SetActive(setActive); break;
-                case 2: actionPlayerPreset[0].playerPowerButton.SetActive(setActive); break;
-                case 3: actionPlayerPreset[1].playerPowerButton.SetActive(setActive); break;
-                case 4: actionPlayerPreset[1].playerPowerButton.SetActive(setActive); break;
-            }
-        }
-       
-    }
+	private void OnDisable() // Stop polling on disable, can't detect card
+	{
+		NFCController.StopPolling();
+	}
 }

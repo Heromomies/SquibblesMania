@@ -19,7 +19,6 @@ public class AudioManager : MonoBehaviour
     private string _volumeParameter = "MasterVolume";
     void Awake()
     {
-        mixer.SetFloat(_volumeParameter,PlayerPrefs.GetFloat("Volume"));
         if (Instance == null)
         {
             Instance = this;
@@ -35,12 +34,10 @@ public class AudioManager : MonoBehaviour
     { 
         value  = slider.value;
         mixer.SetFloat(_volumeParameter, value);
-        PlayerPrefs.SetFloat("Volume",value);
     }
     private void Start()
     {
-        PlayerPrefs.GetFloat("Volume", slider.value);
-       //DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         foreach (Sound s in sounds)
         {
             s.source = s.gameObject.AddComponent<AudioSource>();
@@ -48,7 +45,6 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
-            s.source.maxDistance = s.maxDist;
             s.source.spatialBlend = 1;
         }
 

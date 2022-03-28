@@ -13,7 +13,9 @@ public class EndZoneManager : MonoBehaviour
 
     public static EndZoneManager Instance => _endZoneManager;
 
-
+    [SerializeField] private float pulsingLengthTimeInSeconds = 0.3f;
+    [SerializeField] private Vector3 indicatorOffsetPos;
+    [SerializeField] private GameObject endZoneIndicator;
     private void Awake()
     {
         _endZoneManager = this;
@@ -29,12 +31,19 @@ public class EndZoneManager : MonoBehaviour
 
         //Remove this object from the list
         blocksChild.RemoveAt(blocksChild.Count - 1);
+        SpawnEndZoneIndicator();
     }
 
     public void PlayersIsOnEndZone()
     {
         GroupBlockDetection parent = blocksChild[0].parent.GetComponent<GroupBlockDetection>();
         playerInEndZone = parent.playersOnGroupBlock;
+    }
+
+    private void SpawnEndZoneIndicator()
+    {
+        Vector3 indicatorSpawnPos = Vector3.Lerp(blocksChild[0].position, blocksChild[blocksChild.Count - 1].position, 0.5f) + indicatorOffsetPos;
+        Instantiate(endZoneIndicator, indicatorSpawnPos, Quaternion.identity, gameObject.transform.parent);
     }
 
     public void CheckPlayersTeam() // Check the players team
@@ -68,7 +77,7 @@ public class EndZoneManager : MonoBehaviour
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
                         if (inventoryTeamTwo.boatObject.Count == 3)
                         {
-                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
+                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
                         }
                     }
                 }
@@ -79,6 +88,6 @@ public class EndZoneManager : MonoBehaviour
     // Update is called once per frame
     void Update() // Pulsing bloc
     {
-        PulsingBloc.PulsingEmissiveColorSquareBlocList(baseColor, colorTo, blocksChild, 0.4f);
+        PulsingBloc.PulsingEmissiveColorSquareBlocList(baseColor, colorTo, blocksChild, pulsingLengthTimeInSeconds);
     }
 }

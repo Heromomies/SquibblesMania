@@ -29,7 +29,7 @@ namespace DigitalRubyShared
         /// </summary>
         [Tooltip("Reduce swipe away velocity by this amount")]
         [Range(0.1f, 1.0f)]
-        public float SwipeVelocityDampening = 0.5f;
+        public float SwipeVelocityDampening = 0.1f;
 
         private LongPressGestureRecognizer longPress;
         private Transform draggingCard;

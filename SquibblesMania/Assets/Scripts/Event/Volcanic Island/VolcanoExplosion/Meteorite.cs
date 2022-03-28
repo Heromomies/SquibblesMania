@@ -10,8 +10,9 @@ public class Meteorite : MonoBehaviour
 	private Rigidbody _rb;
 	private int _turn;
 	
-	private bool _stopRotating;
+	public bool stopRotating;
 	private GameObject _particleFireToDelete;
+	
 	private void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
@@ -26,7 +27,7 @@ public class Meteorite : MonoBehaviour
 			gameObject.SetActive(false);
 		}
 
-		if (!_stopRotating)
+		if (!stopRotating)
 		{
 			var rotate = Random.Range(0.5f, 3f);
 			transform.Rotate(new Vector3(rotate,rotate,rotate) * (speedTurnAround * Time.deltaTime), Space.World);
@@ -43,8 +44,10 @@ public class Meteorite : MonoBehaviour
 			transform.parent = other.transform;
 			_turn = GameManager.Instance.turnCount;
 
+			AudioManager.Instance.Play("FireballEnd");
+			
 			transform.rotation = new Quaternion(0,0,0,0);
-			_stopRotating = true;
+			stopRotating = true;
 
 			var transformPlayer = transform.position;
 			
@@ -64,7 +67,15 @@ public class Meteorite : MonoBehaviour
 		}
 		else if (other.gameObject.CompareTag("Player"))
 		{
-			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
+			AudioManager.Instance.Play("Stun");
+			
+			//other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
+			var otherPos = other.transform.position;
+			GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",
+				new Vector3(otherPos.x, otherPos.y + 0.75f, otherPos.z), Quaternion.identity, null);
+
+			other.gameObject.GetComponent<PlayerStateManager>().psStun = stunVFX;
+			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
 	}
@@ -72,6 +83,7 @@ public class Meteorite : MonoBehaviour
 	IEnumerator SetActiveFalseBullet(float seconds)
 	{
 		yield return new WaitForSeconds(seconds);
-		gameObject.transform.position = Vector3.positiveInfinity;
+		gameObject.transform.position = new Vector3(1500,-1500, 1500);
+		gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 	}
 }

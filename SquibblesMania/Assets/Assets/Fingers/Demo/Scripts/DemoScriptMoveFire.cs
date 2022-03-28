@@ -85,7 +85,7 @@ namespace DigitalRubyShared
             fireGesture.ClearTrackedTouchesOnEndOrFail = true;
 
             moveGesture = new PanGestureRecognizer();
-            moveGesture.StateUpdated += PanGestureUpdated;
+            moveGesture.StateUpdated +=   PanGestureUpdated;
             moveGesture.AllowSimultaneousExecution(fireGesture);
             FingersScript.Instance.AddGesture(fireGesture);
             FingersScript.Instance.AddGesture(moveGesture);
