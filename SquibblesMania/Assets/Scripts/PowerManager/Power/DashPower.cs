@@ -4,7 +4,6 @@ using DG.Tweening;
 using DigitalRubyShared;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEngine.Mathf;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
@@ -12,6 +11,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public LayerMask layerPlayerInteractable;
 	public LayerMask layerInteractable;
+	public LayerMask layerShowPath;
 
 	public List<Transform> hitTransforms;
 
@@ -23,12 +23,14 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
-
+	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
+	
 	private Vector2 _focus, _startFocus;
 	private float _offset;
 	private Camera _cam;
 	private int _distanceDisplayPower = 1;
-
+	public PanGestureRecognizer SwapTouchGesture { get; private set; }
+	
 	#region Swipe Gesture Enabled
 
 	private void OnEnable()
@@ -43,6 +45,14 @@ public class DashPower : MonoBehaviour, IManagePower
 		swipe.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(swipe);*/
 
+		SwapTouchGesture = new PanGestureRecognizer();
+		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
+		//Add new gesture
+		SwapTouchGesture.StateUpdated += PlayerTouchGestureUpdated;
+		SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
+
+		FingersScript.Instance.AddGesture(SwapTouchGesture);
+		
 		_cam = Camera.main;
 		_offset = PlayerMovementManager.Instance.offset;
 
@@ -51,6 +61,49 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	#endregion
 
+	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
+	{
+		if (gesture.State == GestureRecognizerState.Began)
+		{
+			PointerEventData p = new PointerEventData(EventSystem.current);
+			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+
+			raycast.Clear();
+			EventSystem.current.RaycastAll(p, raycast);
+
+			Ray ray = _cam.ScreenPointToRay(p.position);
+
+			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerShowPath))
+			{
+				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
+				var hitInfoPos = hitInfo.collider.transform.position;
+				
+				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
+				{
+					SwipeDashDirection(2); // Right
+				}
+				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
+				{
+					SwipeDashDirection(3); // Left
+				}
+				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
+				{
+					SwipeDashDirection(0); // Down
+				}
+				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
+				{
+					SwipeDashDirection(1); // Up
+				}
+			}
+			else
+			{
+				gesture.Reset();
+			}
+		}
+	}
+
+	
+	
 	/// <summary>
 	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
 	/// </summary>
@@ -67,7 +120,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		angle = angle < 0 ? angle + 360 : angle;
 
 		var offsetCamera = _cam.transform.eulerAngles.y - _offset;
-		angle = Repeat(angle + offsetCamera, 360);
+		angle = Mathf.Repeat(angle + offsetCamera, 360);
 
 		if (270 < angle || angle < 0)
 		{
@@ -341,7 +394,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 		var objPos = objectToChange.position;
 
-		PoolManager.Instance.SpawnObjectFromPool("PlaneShowPath", 
+		PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath", 
 			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.identity, null);
 		
 	}
@@ -358,7 +411,6 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public void ClearPower() // Clear the power
 	{
-		
 		hitTransforms.Clear();
 
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
