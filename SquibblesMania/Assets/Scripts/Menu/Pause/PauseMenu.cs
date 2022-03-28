@@ -20,4 +20,9 @@ public class PauseMenu : MonoBehaviour
 		}
 		AudioManager.Instance.Play("Button");
 	}
+
+    public void Return()
+    {
+        panelPause.transform.rotation *= Quaternion.Euler(0, 0, 180);
+    }
 }
