@@ -182,8 +182,17 @@ public class GameManager : MonoBehaviour
 
         if(turnCount <= 0)
             turnCount=0;
+
+        if (count != 0)
+        {
+            currentPlayerTurn = players[count -1];
+        }
+        else if (count == 0)
+        {
+            currentPlayerTurn = players[3];
+        }
         
-        currentPlayerTurn = players[count -1];
+        
         currentPlayerTurn.StartState();
     }    
     
