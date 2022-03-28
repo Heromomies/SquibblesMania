@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 
-public class CameraButtonManager : MonoBehaviour
+public class CameraButtonManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private Transform _cam;
     public Transform target;
@@ -23,7 +24,8 @@ public class CameraButtonManager : MonoBehaviour
     public List<UICamPresets> uiCamPresetList;
     [SerializeField]
     private float timeRotateSpeedInSeconds = 0.5f;
- 
+
+    [SerializeField] private float radius = 10;
     [Serializable]
     public struct UICamPresets
     {
@@ -32,12 +34,30 @@ public class CameraButtonManager : MonoBehaviour
     }
     
     [SerializeField] private GameObject[] uiCamPresets;
+    [SerializeField] private bool isCamRotateButtonPressed;
+    [SerializeField] private float targetAngle;
     private void Awake()
     {
         _cameraManager = this;
         _cam = Camera.main.transform;
     }
-    
+
+    public void TogglePressed(bool value)
+    {
+        isCamRotateButtonPressed = value;
+    }
+
+    private void Update()
+    {
+        /*if (isCamRotateButtonPressed)
+        {
+            Vector3 orbit = -Vector3.forward * radius;
+            var camEulerAngles = transform.eulerAngles;
+            orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + targetAngle , camEulerAngles.z) * orbit;
+            transform.position = target.transform.position + orbit;
+            transform.LookAt(target.position);
+        }*/
+    }
 
     public void StartRotateCam(float rotateAmount)
     {
@@ -70,7 +90,8 @@ public class CameraButtonManager : MonoBehaviour
             }
           
         }
-       
+
+        targetAngle = rotateAmount;
         StartCoroutine(RotateCamCoroutine(rotateAmount));
         EnableCamRotateButtons(rotateAmount);
     }
@@ -97,20 +118,22 @@ public class CameraButtonManager : MonoBehaviour
  
     private IEnumerator RotateCamCoroutine(float angle)
     {
-        var timeSinceStarted = 0f;
-        var startEulerAnglesY = transform.eulerAngles.y;
+        Vector3 worldUp = Vector3.up;
+        Vector3 orbit = -Vector3.forward * radius;
         
-        while (timeSinceStarted <= timeRotateSpeedInSeconds)
+        var camEulerAngles = transform.eulerAngles;
+        orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + angle, camEulerAngles.z) * orbit;
+        transform.position = target.transform.position + orbit;
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
         {
-            timeSinceStarted += Time.deltaTime;
-            _cam.transform.RotateAround(target.transform.position, Vector3.up, angle * Time.deltaTime / timeRotateSpeedInSeconds);
-            yield return null;
+            transform.LookAt(target.position, worldUp);
         }
-        
-        // We forced the value to applied to the y value of cam euler angles
-        var camEulerAngles = _cam.transform.eulerAngles;
-        camEulerAngles.y = startEulerAnglesY + angle;
-        _cam.eulerAngles = camEulerAngles;
+        else
+        {
+            transform.LookAt(target.position, -worldUp);
+        }
+      
+        yield return null;
         EnableCamRotateButtons(angle);
     }
     
@@ -164,5 +187,15 @@ public class CameraButtonManager : MonoBehaviour
         int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
         if (presetNumber == 1 || presetNumber == 2) _cam.RotateAround(target.transform.position, _cam.right, -45f);
         else if (presetNumber == 3 || presetNumber == 4) _cam.RotateAround(target.transform.position, _cam.right, 45f);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        isCamRotateButtonPressed = true;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isCamRotateButtonPressed = false;
     }
 }
