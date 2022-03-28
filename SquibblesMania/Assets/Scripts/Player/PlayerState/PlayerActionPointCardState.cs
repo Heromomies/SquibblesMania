@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal.Internal;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
-	public List<Transform> previewPath = new List<Transform>();
+	//public List<Transform> previewPath = new List<Transform>();
 	private int _actionPointText;
 	public Color blocBaseEmissiveColor;
 	public List<GameObject> pathObjects = new List<GameObject>();
@@ -19,12 +19,15 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
 
+	private List<Transform> previewSelectedPath = new List<Transform>();
+
+	private List<Transform> previewSphereList = new List<Transform>();
 	//The state when player use is card action point
 	public override void EnterState(PlayerStateManager player)
 	{
 		player.isPlayerInActionCardState = true;
-		player.nextBlockPath.Clear();
-		previewPath.Clear();
+		player.previewPath.Clear();
+		//previewPath.Clear();
 		player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
 		PreviewPath(player.playerActionPoint, player);
 	}
@@ -36,7 +39,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 		List<Transform> possiblePath = new List<Transform>();
 		List<Transform> pastBlocks = new List<Transform>();
 		List<Transform> finalPreviewPath = new List<Transform>();
-
+		
 		int indexBlockNearby = 0;
 
 		if (actionPoint > 0)
@@ -67,12 +70,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, int indexBlockNearby,
 		int actionPoint, PlayerStateManager playerStateManager)
 	{
-		playerStateManager.nextBlockPath = finalPreviewPath;
+		playerStateManager.previewPath = finalPreviewPath;
 		indexBlockNearby++;
 		//If our current block is == to the player selected block then out of the loop
 		if (indexBlockNearby == actionPoint)
 		{
-			PreviewPathSpawnGameObjects(finalPreviewPath);
+			PreviewPathSpawnGameObjects(finalPreviewPath, playerStateManager);
 			return;
 		}
 
@@ -95,14 +98,15 @@ public class PlayerActionPointCardState : PlayerBaseState
 			nextBlocksPath.Remove(currentCheckedBlocks[0]);
 		}
 
-
+	
+		
 		for (int i = 0; i < currentCheckedBlocks.Count; i++)
 		{
 			//We add in our list of path who are already visited, our currently checked blocks
 			previousBlocksPath.Add(currentCheckedBlocks[i]);
 		}
-
 		CheckPossiblePaths(currentCheckedBlocks, previousBlocksPath, finalPreviewPath, nextBlocksPath, playerStateManager);
+	
 
 		if (nextBlocksPath.Any())
 		{
@@ -110,13 +114,13 @@ public class PlayerActionPointCardState : PlayerBaseState
 		}
 		else
 		{
-			PreviewPathSpawnGameObjects(finalPreviewPath);
+			PreviewPathSpawnGameObjects(finalPreviewPath, playerStateManager);
 		}
 	}
 
 	#endregion
 
-	public void PreviewPathSpawnGameObjects(List<Transform> finalPreviewPath)
+	private void PreviewPathSpawnGameObjects(List<Transform> finalPreviewPath, PlayerStateManager player)
 	{
 		for (int i = 0; i < finalPreviewPath.Count; i++)
 		{
@@ -126,11 +130,10 @@ public class PlayerActionPointCardState : PlayerBaseState
 			pathObjects.Add(goPathObject);
 		}
 
-		previewPath = finalPreviewPath;
+		player.previewPath = finalPreviewPath;
 	}
 
-	void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
-		List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
+	void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
 	{
 		//Foreach currents checked block in our list
 		foreach (Transform checkedBlock in currentCheckedBlocks)
@@ -202,6 +205,36 @@ public class PlayerActionPointCardState : PlayerBaseState
 		}
 	}
 
+	public void PathToGo(PlayerStateManager player)
+	{
+		FindPreviewPath(player);
+	}
+
+	private void FindPreviewPath(PlayerStateManager playerStateManager)
+	{
+		List<Transform> pastBlocks = new List<Transform>();
+		List<Transform> nextBlocks = new List<Transform>();
+
+		//Foreach preview path compared to the block wich player is currently on
+		for (int i = 0; i < playerStateManager.previewPath.Count; i++)
+		{
+			foreach (GamePath path in playerStateManager.previewPath[i].GetComponent<Node>().possiblePath)
+			{
+				Vector3 pathParentPos = path.nextPath.transform.parent.position;
+				bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
+				//If we have a path who is activated then we add it to the list of nextBlockPath
+				if (path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, playerStateManager.transform.position))
+				{
+					nextBlocks.Add(path.nextPath);
+
+					//In our path element we assign our previous block to the block wich player is currently on
+					path.nextPath.GetComponent<Node>().previousBlock = playerStateManager.currentBlockPlayerOn;
+				}
+			}
+		}
+		
+	}
+
 	public void FindPath(PlayerStateManager player)
 	{
 		List<Transform> pastBlocks = new List<Transform>();
@@ -222,8 +255,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 				path.nextPath.GetComponent<Node>().previousBlock = player.currentBlockPlayerOn;
 			}
 		}
-
-
+		
 		//We add in our list of past blocks, the block which the player is currently on
 		pastBlocks.Add(player.currentBlockPlayerOn);
 		//We explore our pathfinding
@@ -236,12 +268,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 	{
 		//The block wich the player is currently on
 		Transform currentBlock = nextBlocksPath[0];
-
-
+		
 		nextBlocksPath.Remove(currentBlock);
 		//If our current block is = to the player selected block then out of the loop
 		if (currentBlock == player.currentTouchBlock)
 		{
+
 			//Player arrive to the destination
 			return;
 		}
@@ -286,6 +318,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 		//While the player selected block is != to the block wich player supposed to be 
 		while (block != player.currentBlockPlayerOn)
 		{
+			//We add this block to our list final pathfinding
+			player.finalPathFinding.Add(block);
+			
 			//If in our selected block, the precedent block is not nul then the block become the past block
 			if (block.GetComponent<Node>().previousBlock != null)
 			{
@@ -296,33 +331,55 @@ public class PlayerActionPointCardState : PlayerBaseState
 				return;
 			}
 		}
-
+		player.finalPathFinding.Insert(0, player.currentTouchBlock);
 		if (!player.walking)
 		{
 			player.walking = true;
-			player.finalPathFinding = player.nextBlockPath;
-
 			player.StartCoroutine(FollowPath(player));
+		}
+	}
+
+	private void ShowPreviewPath(PlayerStateManager player)
+	{
+		//The block currently selectionned by the player
+	
+		//previewSelectedPath = player.nextBlockPath;
+		Debug.Log(previewSelectedPath.Count);
+		for (int i = player.blocPreviewPath.Count -1; i > 0; i--)
+		{
+			Debug.Log(previewSelectedPath[1]);
+			Vector3 spawnBulletPoint = player.blocPreviewPath[1].GetComponent<Node>().GetWalkPoint();
+			GameObject sphere = PoolManager.Instance.SpawnObjectFromPool("SphereShowPath", new Vector3(spawnBulletPoint.x, spawnBulletPoint.y + 1.2f, spawnBulletPoint.z), Quaternion.identity,
+				null);
+			previewSphereList.Add(sphere.transform);
+			previewSelectedPath.Remove(previewSelectedPath[1]);
 		}
 	}
 
 	//Movement of player
 	private IEnumerator FollowPath(PlayerStateManager player)
 	{
+		int movementPlayer = 0;
+		_actionPointText = player.playerActionPoint;
 		for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
 		{
-			Vector3 walkPoint = player.finalPathFinding[1].GetComponent<Node>().GetWalkPoint();
+			Vector3 walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
+			if (movementPlayer <= player.playerActionPoint)
+			{
+				Vector3 movePos = walkPoint + new Vector3(0, 1, 0);
+				Vector3 direction = (movePos - player.transform.position).normalized;
 
-			Vector3 movePos = walkPoint + new Vector3(0, 1, 0);
-			Vector3 direction = (movePos - player.transform.position).normalized;
+				float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
-			float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-
-			player.transform.DOMove(movePos, player.timeMoveSpeed);
-			player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
-			player.finalPathFinding.Remove(player.finalPathFinding[1]);
-
-			yield return _timeBetweenPlayerMovement;
+				player.transform.DOMove(movePos, player.timeMoveSpeed);
+				player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
+				player.finalPathFinding.Remove(player.finalPathFinding[i]);
+				_actionPointText--;
+				
+				//PlayerMovementManager.Instance.UpdateActionPointTextPopUp(_actionPointText);
+				movementPlayer++;
+				yield return _timeBetweenPlayerMovement;
+			}
 		}
 
 		Clear(player);
@@ -361,16 +418,19 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 		player.finalPathFinding.Clear();
 		player.walking = false;
-
+		
 		if (EndZoneManager.Instance != null)
 		{
 			EndZoneManager.Instance.CheckPlayersTeam();
 			EndZoneManager.Instance.PlayersIsOnEndZone();
+		}  
+		SetFalsePathObjects();
+		if (player.playerActionPoint > 0)
+		{
+			EnterState(player);
 		}
-
 		if (player.playerActionPoint <= 0)
 		{
-			SetFalsePathObjects();
 			currentNodePlayerOn.isActive = false;
 		}
 	}
