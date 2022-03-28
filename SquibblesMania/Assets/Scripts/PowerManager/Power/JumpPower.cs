@@ -58,13 +58,15 @@ public class JumpPower : MonoBehaviour, IManagePower
 				NFCManager.Instance.powerActivated = true;
 				
 				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
+
 				var posHitInfo = hitInfo.transform.position;
-
+				posHitInfo.y += 1;
+				
 				var playerPos = tCurrentPlayerTurn.position;
-
+				
 				var xSpawn = (posHitInfo.x + playerPos.x) /2;
 				var zSpawn = (posHitInfo.z + playerPos.z) /2;
-
+				
 				var listPoint = new List<Vector3>();
 
 				listPoint.Add(playerPos);
@@ -95,7 +97,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		
 		var hitPosition = hitInfoTransform.position;
 		hitInfoTransform.DOMove(new Vector3(hitPosition.x,
-			hitPosition.y - 1, hitPosition.z), speedBloc);
+			hitPosition.y -1, hitPosition.z), speedBloc);
 	}
 
 	public void DisplayPower()

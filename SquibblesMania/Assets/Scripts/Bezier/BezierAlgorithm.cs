@@ -85,6 +85,10 @@ public class BezierAlgorithm : MonoBehaviour
 			else
 			{
 				_canMove = false;
+				_go = null;
+				_points.Clear();
+				_f = 0f;
+				_timeLeft = 0f;
 			}
 		}
 	}
@@ -92,29 +96,29 @@ public class BezierAlgorithm : MonoBehaviour
 	// Example code to visualize the trajectory
 	// The "m_curvePoints" variable is a List<Vector3> that holds the curve's control points.
 	
-	/*private void OnDrawGizmos()
+	private void OnDrawGizmos()
 	{
-		if (curvePoints == null)
+		if (_points == null)
 		{
 			return;
 		}
-		else if (curvePoints.Count == 0)
+		else if (_points.Count == 0)
 		{
 			return;
 		}
 
 		const float delta = 0.01f;
-		var previous = curvePoints[0];
+		var previous = _points[0];
 
 		for (float t = delta; t <= 1.0f; t += delta)
 		{
-			var point = Curve(curvePoints, t);
+			var point = Curve(_points, t);
 			
 			Gizmos.color = Color.magenta;
 			Gizmos.DrawLine(previous, point);
 
 			previous = point;
 		}
-	}*/
+	}
 	
 }

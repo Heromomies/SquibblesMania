@@ -63,7 +63,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private readonly List<Vector3> _directionRaycast = new List<Vector3>
 		{new Vector3(0, -0.5f, -1), new Vector3(0, -0.5f, 1), new Vector3(1, -0.5f, 0), new Vector3(-1, -0.5f, 0)};
 
-	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.2f);
+	private readonly WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.01f);
 	private readonly WaitForSeconds _timeBetweenDeactivateSphere = new WaitForSeconds(0.001f);
 	private readonly WaitForSeconds _timeBetweenReloadPath = new WaitForSeconds(0.1f);
 
@@ -98,7 +98,7 @@ public class PlayerMovementManager : MonoBehaviour
 		_timeLeftMax = timeLeftBetweenSwipe;
 
 		//Set up the new gesture 
-		swipe = new SwipeGestureRecognizer();
+		/*swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
 		swipe.DirectionThreshold = 0;
 		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
@@ -106,7 +106,7 @@ public class PlayerMovementManager : MonoBehaviour
 		swipe.MinimumDistanceUnits = minimumDistanceUnits;
 		swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
 		swipe.AllowSimultaneousExecution(LongPressBlocMovementGesture);
-		FingersScript.Instance.AddGesture(swipe);
+		FingersScript.Instance.AddGesture(swipe);*/
 
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
@@ -268,7 +268,14 @@ public class PlayerMovementManager : MonoBehaviour
 
 				if (Physics.Raycast(ray, out _hit, Mathf.Infinity, touchLayerMask))
 				{
-					if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
+					if (_hit.collider.CompareTag("Path"))
+					{
+						var hitPos = _hit.transform.position;
+						
+						GameManager.Instance.currentPlayerTurn.transform.position = new Vector3(hitPos.x, hitPos.y +1, hitPos.z);
+					}
+					
+					/*if (_hit.collider.name == GameManager.Instance.currentPlayerTurn.name)
 					{
 						_canTouchBloc = false;
 						ResetBlocPreviewMesh();
@@ -292,7 +299,7 @@ public class PlayerMovementManager : MonoBehaviour
 						}
 
 						SpawnTextActionPointPopUp(_hit.transform);
-					}
+					}*/
 				}
 
 				if (Physics.Raycast(ray, out _hit, Mathf.Infinity, blocLayerMask) && _canTouchBloc)
