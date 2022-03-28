@@ -14,6 +14,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	public LayerMask layerShowPath;
 
 	public List<Transform> hitTransforms;
+	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 
 	[Header("TOUCH SETTINGS")] [Range(1, 10)]
 	public int swipeTouchCount = 1;
@@ -80,19 +81,19 @@ public class DashPower : MonoBehaviour, IManagePower
 				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
-					SwipeDashDirection(2); // Right
+					DashDirection(2); // Right
 				}
 				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
-					SwipeDashDirection(3); // Left
+					DashDirection(3); // Left
 				}
 				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
-					SwipeDashDirection(0); // Down
+					DashDirection(0); // Down
 				}
 				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
-					SwipeDashDirection(1); // Up
+					DashDirection(1); // Up
 				}
 			}
 			else
@@ -158,28 +159,28 @@ public class DashPower : MonoBehaviour, IManagePower
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
 				case 1 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break; }
+						case SwipeGestureRecognizerDirection.Down: DashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Up: DashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Right: DashDirection(2); break;
+						case SwipeGestureRecognizerDirection.Left: DashDirection(3); break; }
 					break;
 				case 2 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(2); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(3); break; }
+						case SwipeGestureRecognizerDirection.Down: DashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Up: DashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Right: DashDirection(2); break;
+						case SwipeGestureRecognizerDirection.Left: DashDirection(3); break; }
 					break;
 				case 3 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break; }
+						case SwipeGestureRecognizerDirection.Down: DashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Up: DashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Right: DashDirection(3); break;
+						case SwipeGestureRecognizerDirection.Left: DashDirection(2); break; }
 					break;
 				case 4 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: SwipeDashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Up: SwipeDashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Right: SwipeDashDirection(3); break;
-						case SwipeGestureRecognizerDirection.Left: SwipeDashDirection(2); break; }
+						case SwipeGestureRecognizerDirection.Down: DashDirection(1); break;
+						case SwipeGestureRecognizerDirection.Up: DashDirection(0); break;
+						case SwipeGestureRecognizerDirection.Right: DashDirection(3); break;
+						case SwipeGestureRecognizerDirection.Left: DashDirection(2); break; }
 					break;
 			}
 		}
@@ -190,7 +191,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	#region Swipe Dash Direction
 
 	//Update method of the long press gesture
-	public void SwipeDashDirection(int numberDirectionVector) // When we clicked on button
+	public void DashDirection(int numberDirectionVector) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -305,13 +306,32 @@ public class DashPower : MonoBehaviour, IManagePower
 		for (int i = 0; i < _vectorRaycast.Count; i++)
 		{
 			var dist = 0;
+			var rot = 0f;
 			
+			if (_vectorRaycast[i] == Vector3.right)
+			{
+				rot = 90f;
+			}
+			else if (_vectorRaycast[i] == Vector3.back)
+			{
+				rot = 180f;
+			}
+			else if (_vectorRaycast[i] == Vector3.forward)
+			{
+				rot = 0f;
+			}
+			else if (_vectorRaycast[i] == Vector3.left)
+			{
+				rot = 270f;
+			}
+
 			if (Physics.Raycast(GameManager.Instance.currentPlayerTurn.transform.position, _vectorRaycast[i], out var hitBloc,
 				dashRange, layerInteractable))
 			{
 				var distBetweenPlayerAndBloc = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hitBloc.transform.position);
 
 				dist = (int) distBetweenPlayerAndBloc;
+				dist -= 1;
 			}
 			if (dist == 1)
 			{
@@ -320,7 +340,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						SpawnObjectOnPathDash(hitFirstBloc.transform);
+						SpawnObjectOnFinalPathDash(hitFirstBloc.transform);
 						hitTransforms.Add(hitFirstBloc.transform);
 					}
 				}
@@ -333,7 +353,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						SpawnObjectOnPathDash(hitFirstBloc.transform);
+						SpawnShaderOnPathDash(hitFirstBloc.transform, rot);
 						hitTransforms.Add(hitFirstBloc.transform);
 					}
 				}
@@ -343,7 +363,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						SpawnObjectOnPathDash(hitSecondBloc.transform);
+						SpawnObjectOnFinalPathDash(hitSecondBloc.transform);
 						hitTransforms.Add(hitSecondBloc.transform);
 					}
 				}
@@ -357,7 +377,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						SpawnObjectOnPathDash(hitFirstBloc.transform);
+						SpawnShaderOnPathDash(hitFirstBloc.transform, rot);
 						hitTransforms.Add(hitFirstBloc.transform);
 					}
 				}
@@ -367,7 +387,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						SpawnObjectOnPathDash(hitSecondBloc.transform);
+						SpawnShaderOnPathDash(hitSecondBloc.transform, rot);
 						hitTransforms.Add(hitSecondBloc.transform);
 					}
 				}
@@ -377,30 +397,47 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
 					{
-						SpawnObjectOnPathDash(hitThirdBloc.transform);
+						SpawnObjectOnFinalPathDash(hitThirdBloc.transform);
 						hitTransforms.Add(hitThirdBloc.transform);
 					}
 				}
 			}
-			
 		}
 	}
 
 	#endregion
+	
+	#region SpawnObjectOnDash
 
-	#region ChangeMaterial
-
-	void SpawnObjectOnPathDash(Transform objectToChange)
+	void SpawnObjectOnFinalPathDash(Transform objectToChange)
 	{
 		var objPos = objectToChange.position;
 
-		PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath", 
+
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath", 
 			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.identity, null);
 		
+		listObjectToSetActiveFalse.Add(obj);
 	}
 
 	#endregion
 
+	#region SpawnObjectOnDash
+
+	void SpawnShaderOnPathDash(Transform objectToChange, float position)
+	{
+		var objPos = objectToChange.position;
+		var objRot = objectToChange.localPosition;
+
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower", 
+			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
+		
+		listObjectToSetActiveFalse.Add(obj);
+	}
+
+	#endregion
+	
+	
 	public void CancelPower()
 	{
 	}
@@ -413,6 +450,13 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 		hitTransforms.Clear();
 
+		foreach (var g in listObjectToSetActiveFalse)
+		{
+			g.SetActive(false);
+		}
+		
+		listObjectToSetActiveFalse.Clear();
+		
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
