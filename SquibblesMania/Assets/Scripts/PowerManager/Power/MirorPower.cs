@@ -18,7 +18,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 	public float rangeDetectionPlayer;
 	public List<Transform> hitTransforms;
 	[HideInInspector] public GameObject zombiePlayer;
+	[Space (25)]
 	public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
+	[Space (25)]
+	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space (25)]
 	public List<GameObject> listObjectToSetActiveFalse;
 
 	[Header("TOUCH SETTINGS")] [Space] [Range(1, 10)]
@@ -584,6 +588,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 				case 4: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
 			}
 		}
+		else
+		{
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+			}
+		}
 	}
 
 	#endregion
@@ -650,6 +664,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 			child.GetComponentInChildren<Renderer>().material.color = zombieMat.color;
 		}
 		
+		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+
 		zombiePlayer = null;
 		hitTransforms.Clear();
 		foreach (var g in listObjectToSetActiveFalse)

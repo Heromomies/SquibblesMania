@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DigitalRubyShared;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,7 +11,9 @@ public class SwapPower : MonoBehaviour, IManagePower
 	[Header("POWER SETTINGS")]
 	public int range;
 	public LayerMask layer;
-	[Space] 
+	[Space (10)] 
+	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space (10)] 
 	[Header("MATERIALS")] 
 	public Material firstMat; 
 	public Material secondMat;
@@ -62,13 +65,18 @@ public class SwapPower : MonoBehaviour, IManagePower
 			}
 		}
 
-		/*switch (players.Length)
+		switch (players.Length)
 		{
 			case 1:
-				PowerManager.Instance.ActivateDeactivatePower(0, false);
-				PowerManager.Instance.ChangeTurnPlayer();
+				switch (GameManager.Instance.actualCamPreset.presetNumber)
+				{
+					case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+					case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+					case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+					case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				}
 				break;
-		}*/
+		}
 	}
 
 	public void CancelPower()
@@ -123,6 +131,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{	
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
+		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+		
 		for (int i = 0; i < players.Length; i++)
 		{
 			Transform child = players[i].transform.GetChild(1);
