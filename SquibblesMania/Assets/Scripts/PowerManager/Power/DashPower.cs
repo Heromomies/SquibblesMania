@@ -8,12 +8,14 @@ using UnityEngine.EventSystems;
 public class DashPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] public int dashRange;
-
 	public LayerMask layerPlayerInteractable;
-	public LayerMask layerInteractable;
 	public LayerMask layerShowPath;
 
 	public List<Transform> hitTransforms;
+	
+	
+	public Transform baseSpawnRaycastTransform;
+	
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 
 	[Header("TOUCH SETTINGS")] [Range(1, 10)]
@@ -30,7 +32,19 @@ public class DashPower : MonoBehaviour, IManagePower
 	private float _offset;
 	private Camera _cam;
 	private int _distanceDisplayPower = 1;
+	private int _distanceDisplayDash = 1;
+	
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
+	
+	[Header("DISPLAY POWER TRANSFORM")]
+	public Conditions[] displayPower;
+
+	[Serializable]
+	public struct Conditions
+	{
+		public List<Transform> raycastTransform;
+	}
+	
 	
 	#region Swipe Gesture Enabled
 
@@ -300,7 +314,33 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Show the path 
 	{
-		var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+		baseSpawnRaycastTransform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+
+		for (int i = 0; i < displayPower.Length; i++)
+		{
+			for (int j = 0; j < displayPower[i].raycastTransform.Count; j++)
+			{
+				if (Physics.Raycast(displayPower[i].raycastTransform[i].position, Vector3.down, out var hit,
+					_distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				{
+					var rayPos = displayPower[i].raycastTransform[i].position;
+					var distV1 = Vector3.Distance(displayPower[i].raycastTransform[i].position, hit.transform.position);
+					var distV2 = Vector3.Distance(displayPower[i].raycastTransform[i + 1].position, 
+						new Vector3(displayPower[i].raycastTransform[i + 1].position.x, displayPower[i].raycastTransform[i + 1].position.y - _distanceDisplayDash, displayPower[i].raycastTransform[i + 1].position.z));
+					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[i + 2].position, 
+						new Vector3(displayPower[i].raycastTransform[i + 2].position.x, displayPower[i].raycastTransform[i + 2].position.y - _distanceDisplayDash, displayPower[i].raycastTransform[i + 2].position.z));
+
+				
+					Debug.Log("V1 : "+distV1 + "name V1: " + displayPower[i].raycastTransform[i]);
+					//Debug.Log("V2 : "+distV2 + "name V2: " + raycastTransform[i + 1]);
+					//Debug.Log("V3 : "+distV3 + "name V3: " + raycastTransform[i + 2]);
+				}
+			}
+		}
+
+		#region OldCode
+
+		/*var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
 		var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
 
 		for (int i = 0; i < _vectorRaycast.Count; i++)
@@ -402,11 +442,26 @@ public class DashPower : MonoBehaviour, IManagePower
 					}
 				}
 			}
-		}
+		}*/
+
+		#endregion
 	}
 
 	#endregion
-	
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = Color.red;
+		for (int i = 0; i < displayPower.Length; i++)
+		{
+			for (int j = 0; j < displayPower[i].raycastTransform.Count; j++)
+			{
+				Gizmos.DrawLine(displayPower[i].raycastTransform[i].position,
+					new Vector3(displayPower[i].raycastTransform[i].position.x, displayPower[i].raycastTransform[i].position.y - _distanceDisplayDash, displayPower[i].raycastTransform[i].position.z));
+			}
+		}
+	}
+
 	#region SpawnObjectOnDash
 
 	void SpawnObjectOnFinalPathDash(Transform objectToChange)
