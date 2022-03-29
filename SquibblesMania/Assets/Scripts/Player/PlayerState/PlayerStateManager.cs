@@ -21,7 +21,7 @@ public class PlayerStateManager : Player
 
 	[Header("PLAYER UTILITIES")] public int playerNumber;
 	public bool isPlayerInActionCardState;
-	public List<Transform> previewPath;
+	public List<Transform> nextBlockPath;
 	public List<Transform> blocPreviewPath;
 	public PlayerMovementManager playerMovementManager;
 	

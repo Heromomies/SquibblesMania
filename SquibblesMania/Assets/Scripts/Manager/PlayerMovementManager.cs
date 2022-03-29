@@ -135,12 +135,17 @@ public class PlayerMovementManager : MonoBehaviour
 			
 			if (gesture.State == GestureRecognizerState.Began)
 			{
-			
 				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask))
 				{
-					//TODO PREVIEW DU CHEMIN
-					currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
-					currentPlayer.StartPathFinding();
+					var hitBlocParentPos = _hit.transform.parent.position;
+
+					if (currentPlayer.nextBlockPath.Contains(_hit.transform) && currentPlayer.PlayerActionPointCardState.PathParentPosComparedToPlayerPos(hitBlocParentPos, currentPlayer.transform.position))
+					{
+						//TODO PREVIEW DU CHEMIN
+						currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
+						currentPlayer.StartPathFinding();
+					}
+					
 				}
 				else
 				{
@@ -350,7 +355,7 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					Node.ColorBloc colorBloc = _hit.collider.gameObject.GetComponent<Node>().colorBloc;
 
-					if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.previewPath.Contains(_hit.transform) &&
+					if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform) &&
 					    !_hit.collider.CompareTag("Player"))
 					{
 						//If current player have more than 0 action point then he can move bloc
@@ -753,7 +758,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
 		_canTouchBloc = true;
-		GameManager.Instance.currentPlayerTurn.previewPath = previewPath;
+		GameManager.Instance.currentPlayerTurn.nextBlockPath = previewPath;
 		timeLeftBetweenSwipe = _timeLeftMax;
 
 		for (int i = 0; i < sphereList.Count; i++)

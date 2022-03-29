@@ -14,7 +14,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 	private int _actionPointText;
 	public Color blocBaseEmissiveColor;
 	public List<GameObject> pathObjects = new List<GameObject>();
-
+	public List<Transform> previewPath;
 	private bool isPreviewPathDone;
 
 	private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
@@ -26,7 +26,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 	public override void EnterState(PlayerStateManager player)
 	{
 		player.isPlayerInActionCardState = true;
-		player.previewPath.Clear();
+		player.nextBlockPath.Clear();
 		//previewPath.Clear();
 		player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
 		PreviewPath(player.playerActionPoint, player);
@@ -70,7 +70,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 	private void ExplorePreviewPath(List<Transform> nextBlocksPath, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, int indexBlockNearby,
 		int actionPoint, PlayerStateManager playerStateManager)
 	{
-		playerStateManager.previewPath = finalPreviewPath;
+		playerStateManager.nextBlockPath = finalPreviewPath;
 		indexBlockNearby++;
 		//If our current block is == to the player selected block then out of the loop
 		if (indexBlockNearby == actionPoint)
@@ -130,7 +130,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 			pathObjects.Add(goPathObject);
 		}
 
-		player.previewPath = finalPreviewPath;
+		previewPath = finalPreviewPath;
 	}
 
 	void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath, List<Transform> finalPreviewPath, List<Transform> nextBlocksPath, PlayerStateManager player)
@@ -165,7 +165,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 		return checkedBlocPos.y - nextBlocPoS.y < 0.1f && checkedBlocPos.y - nextBlocPoS.y > -0.1f;
 	}
 
-	bool PathParentPosComparedToPlayerPos(Vector3 pathParentPos, Vector3 playerPos)
+	public	bool PathParentPosComparedToPlayerPos(Vector3 pathParentPos, Vector3 playerPos)
 	{
 		return pathParentPos.y + 2.5f - playerPos.y > -0.1f && pathParentPos.y + 2.5f - playerPos.y < 0.1f;
 	}
@@ -207,33 +207,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 	public void PathToGo(PlayerStateManager player)
 	{
-		FindPreviewPath(player);
+//		FindPreviewPath(player);
 	}
-
-	private void FindPreviewPath(PlayerStateManager playerStateManager)
-	{
-		List<Transform> pastBlocks = new List<Transform>();
-		List<Transform> nextBlocks = new List<Transform>();
-
-		//Foreach preview path compared to the block wich player is currently on
-		for (int i = 0; i < playerStateManager.previewPath.Count; i++)
-		{
-			foreach (GamePath path in playerStateManager.previewPath[i].GetComponent<Node>().possiblePath)
-			{
-				Vector3 pathParentPos = path.nextPath.transform.parent.position;
-				bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
-				//If we have a path who is activated then we add it to the list of nextBlockPath
-				if (path.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, playerStateManager.transform.position))
-				{
-					nextBlocks.Add(path.nextPath);
-
-					//In our path element we assign our previous block to the block wich player is currently on
-					path.nextPath.GetComponent<Node>().previousBlock = playerStateManager.currentBlockPlayerOn;
-				}
-			}
-		}
-		
-	}
+	
 
 	public void FindPath(PlayerStateManager player)
 	{
@@ -361,10 +337,11 @@ public class PlayerActionPointCardState : PlayerBaseState
 	{
 		int movementPlayer = 0;
 		_actionPointText = player.playerActionPoint;
+		
 		for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
 		{
 			Vector3 walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
-			if (movementPlayer <= player.playerActionPoint)
+			if (movementPlayer < player.playerActionPoint)
 			{
 				Vector3 movePos = walkPoint + new Vector3(0, 1, 0);
 				Vector3 direction = (movePos - player.transform.position).normalized;
@@ -382,6 +359,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 			}
 		}
 
+		player.playerActionPoint = _actionPointText;
 		Clear(player);
 	}
 
