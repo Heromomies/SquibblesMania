@@ -21,9 +21,10 @@ public class PlayerStateManager : Player
 
 	[Header("PLAYER UTILITIES")] public int playerNumber;
 	public bool isPlayerInActionCardState;
-	public List<Transform> nextBlockPath;
+	public List<Transform> previewPath;
+	public List<Transform> blocPreviewPath;
 	public PlayerMovementManager playerMovementManager;
-
+	
 	public GameObject psStun;
 
 	[HideInInspector] public bool isInJump;
@@ -69,6 +70,13 @@ public class PlayerStateManager : Player
 		}
 	}
 
+	public void StartPreviewPathFinding()
+	{
+		if (CurrentState == PlayerActionPointCardState)
+		{
+			PlayerActionPointCardState.PathToGo(this);
+		}
+	}
 
 	public void SwitchState(PlayerBaseState state)
 	{

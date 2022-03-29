@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 public class PlayerMovementManager : MonoBehaviour
 {
 	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
-
+	public TapGestureRecognizer TapGestureRecognizer { get; private set; }
 	[Header("TOUCH SETTINGS")] public LayerMask touchLayerMask;
 	public LayerMask blocLayerMask;
 	[Range(1, 10)] public int swipeTouchCount = 1;
@@ -42,7 +42,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private bool _isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
-	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.2f);
+	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.4f);
 
 	[HideInInspector] public int totalCurrentActionPoint;
 	private GameObject _textActionPointPopUp;
@@ -96,7 +96,12 @@ public class PlayerMovementManager : MonoBehaviour
 	private void Start()
 	{
 		_timeLeftMax = timeLeftBetweenSwipe;
-
+		TapGestureRecognizer = new TapGestureRecognizer();
+		TapGestureRecognizer.StateUpdated += TapGestureRecognizerOnStateUpdated;
+		TapGestureRecognizer.ThresholdSeconds = 0.1f;
+		TapGestureRecognizer.SendBeginState = true;
+		FingersScript.Instance.AddGesture(TapGestureRecognizer);
+		TapGestureRecognizer.AllowSimultaneousExecutionWithAllGestures();
 		//Set up the new gesture 
 		swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
@@ -121,6 +126,44 @@ public class PlayerMovementManager : MonoBehaviour
 		ghostPlayer.SetActive(false);
 	}
 
+	private void TapGestureRecognizerOnStateUpdated(GestureRecognizer gesture)
+	{
+		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+	
+		if (currentPlayer.isPlayerInActionCardState && currentPlayer.playerActionPoint > 0)
+		{
+			
+			if (gesture.State == GestureRecognizerState.Began)
+			{
+			
+				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask))
+				{
+					//TODO PREVIEW DU CHEMIN
+					currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
+					currentPlayer.StartPathFinding();
+				}
+				else
+				{
+					//TODO RESET DU PREVIEW 
+				}
+			}
+
+		
+
+		}
+	}
+
+	private Ray TouchRay(GestureRecognizer gesture)
+	{
+		PointerEventData p = new PointerEventData(EventSystem.current);
+		p.position = new Vector2(gesture.FocusX, gesture.FocusY);
+		_raycast.Clear();
+		EventSystem.current.RaycastAll(p, _raycast);
+		// Cast a ray from the camera
+		return _cam.ScreenPointToRay(p.position);
+	}
+	
+
 	#endregion
 
 	/// <summary>
@@ -135,6 +178,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			FingersScript.Instance.RemoveGesture(LongPressBlocMovementGesture);
 			FingersScript.Instance.RemoveGesture(swipe);
+			FingersScript.Instance.RemoveGesture(TapGestureRecognizer);
 		}
 	}
 
@@ -299,7 +343,7 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					Node.ColorBloc colorBloc = _hit.collider.gameObject.GetComponent<Node>().colorBloc;
 
-					if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform) &&
+					if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.previewPath.Contains(_hit.transform) &&
 					    !_hit.collider.CompareTag("Player"))
 					{
 						//If current player have more than 0 action point then he can move bloc
@@ -317,7 +361,7 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 			else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 			{
-				ClearListAfterRelease();
+				//ClearListAfterRelease();
 			}
 			else if (gesture.State == GestureRecognizerState.Executing)
 			{
@@ -339,7 +383,7 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
 		{
-			ClearListAfterRelease();
+			//ClearListAfterRelease();
 
 			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
 			{
@@ -386,7 +430,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void EndMovingBloc(PlayerStateManager currentPlayerTurn)
 	{
 		
-		ResetPreviewPathObjects();
+		//ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
 		_touchPos = Vector3.zero;
@@ -702,7 +746,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void ClearListAfterRelease() // Clear the list after the player released the Squeeples
 	{
 		_canTouchBloc = true;
-		GameManager.Instance.currentPlayerTurn.nextBlockPath = previewPath;
+		GameManager.Instance.currentPlayerTurn.previewPath = previewPath;
 		timeLeftBetweenSwipe = _timeLeftMax;
 
 		for (int i = 0; i < sphereList.Count; i++)
@@ -726,12 +770,12 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (Math.Abs(GameManager.Instance.currentPlayerTurn.transform.position.x - ghostPlayer.transform.position.x) < 0.05f && 
+	/*	if (Math.Abs(GameManager.Instance.currentPlayerTurn.transform.position.x - ghostPlayer.transform.position.x) < 0.05f && 
 		    Math.Abs(GameManager.Instance.currentPlayerTurn.transform.position.z - ghostPlayer.transform.position.z) < 0.05f && hasMoved)
 		{
 			StartCoroutine(ResetPreviewPlatformCoroutine());
 			hasMoved = false;
-		}
+		}*/
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && NFCManager.Instance.displacementActivated)
 		{
 			UiManager.Instance.buttonNextTurn.SetActive(true);
@@ -780,7 +824,6 @@ public class PlayerMovementManager : MonoBehaviour
 					{
 						UpdateActionPointTextPopUp(totalCurrentActionPoint--);
 						ghostPlayer.transform.position += _directionPlayer[value];
-
 						StartCoroutine(WaitBeforeCheckUnderPlayerCoroutine());
 					}
 					
@@ -790,7 +833,6 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					UpdateActionPointTextPopUp(totalCurrentActionPoint--);
 					ghostPlayer.transform.position += _directionPlayer[value];
-
 					StartCoroutine(WaitBeforeCheckUnderPlayerCoroutine());
 				}
 			}
