@@ -12,11 +12,14 @@ public class MirorPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] [Space] public LayerMask layerPlayer;
 	public LayerMask layerMaskInteractableAndPlayer;
+	public LayerMask layerInteractable;
+	public LayerMask layerShowPath;
 
 	public float rangeDetectionPlayer;
 	public List<Transform> hitTransforms;
 	[HideInInspector] public GameObject zombiePlayer;
 	public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
+	public List<GameObject> listObjectToSetActiveFalse;
 
 	[Header("TOUCH SETTINGS")] [Space] [Range(1, 10)]
 	public int dashRange;
@@ -53,7 +56,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	private void OnEnable() // Add swipe gesture and pan gesture to select a player and move it
 	{
-		swipe = new SwipeGestureRecognizer();
+		/*swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
 		swipe.DirectionThreshold = 0;
 		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
@@ -61,7 +64,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
 		swipe.ThresholdSeconds = swipeThresholdSeconds;
 		swipe.AllowSimultaneousExecutionWithAllGestures();
-		FingersScript.Instance.AddGesture(swipe);
+		FingersScript.Instance.AddGesture(swipe);*/
 
 		SwapTouchGesture = new PanGestureRecognizer();
 		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
@@ -106,22 +109,65 @@ public class MirorPower : MonoBehaviour, IManagePower
 					
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
-						if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
+						var dist = 0f;
+						var rot = 0f;
+			
+						if (_vectorRaycast[i] == Vector3.right)
 						{
-							if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-							{
-								ChangeBlocMaterial(hitFirstBloc.transform, secondMat);
-								hitTransforms.Add(hitFirstBloc.transform);
-							}
+							rot = 90f;
+						}
+						else if (_vectorRaycast[i] == Vector3.back)
+						{
+							rot = 180f;
+						}
+						else if (_vectorRaycast[i] == Vector3.forward)
+						{
+							rot = 0f;
+						}
+						else if (_vectorRaycast[i] == Vector3.left)
+						{
+							rot = 270f;
+						}
+						if (Physics.Raycast(GameManager.Instance.currentPlayerTurn.transform.position, _vectorRaycast[i], out var hitBloc,
+							dashRange, layerInteractable))
+						{
+							var distBetweenPlayerAndBloc = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hitBloc.transform.position);
+
+							dist = (int) distBetweenPlayerAndBloc;
+							dist -= 1;
 						}
 
-						if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-							dashRange)) // launch the raycast
+						if (dist == 1)
 						{
-							if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+							if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitThirdBloc,
+								dashRange)) // launch the raycast
 							{
-								ChangeBlocMaterial(hitSecondBloc.transform, secondMat);
-								hitTransforms.Add(hitSecondBloc.transform);
+								if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+								{
+									SpawnObjectOnFinalPathDash(hitThirdBloc.transform);
+									hitTransforms.Add(hitThirdBloc.transform);
+								}
+							}
+						}
+						else if (dist == 0 || dist > 1)
+						{
+							if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
+							{
+								if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+								{
+									SpawnShaderOnPathDash(hitFirstBloc.transform, rot);
+									hitTransforms.Add(hitFirstBloc.transform);
+								}
+							}
+
+							if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
+								dashRange)) // launch the raycast
+							{
+								if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+								{
+									SpawnObjectOnFinalPathDash(hitSecondBloc.transform);
+									hitTransforms.Add(hitSecondBloc.transform);
+								}
 							}
 						}
 					}
@@ -135,6 +181,29 @@ public class MirorPower : MonoBehaviour, IManagePower
 			else
 			{
 				gesture.Reset();
+			}
+
+			if (Physics.Raycast(ray, out var hitShowPath, Mathf.Infinity, layerShowPath))
+			{
+				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
+				var hitInfoPos = hitShowPath.collider.transform.position;
+				
+				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
+				{
+					MirrorDirection(2); // Right
+				}
+				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
+				{
+					MirrorDirection(3); // Left
+				}
+				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
+				{
+					MirrorDirection(0); // Down
+				}
+				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
+				{
+					MirrorDirection(1); // Up
+				}
 			}
 		}
 	}
@@ -199,16 +268,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 					}
 
@@ -217,16 +286,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 					}
 
@@ -235,16 +304,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 					}
 
@@ -253,16 +322,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 					}
 
@@ -275,7 +344,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#region SwipeMirorDirection
 
-	private void SwipeMirrorDirection(int directionIndex) // When we clicked on button
+	private void MirrorDirection(int directionIndex) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -519,13 +588,17 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	#region CHANGE BLOC MATERIAL
+	#region SpawnObjectOnDash
 
-	private void ChangeBlocMaterial(Transform objectToChange, Material mat) // Change the material of the object
+	void SpawnObjectOnFinalPathDash(Transform objectToChange)
 	{
-		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-		color = mat.color;
-		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
+		var objPos = objectToChange.position;
+
+
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath", 
+			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.identity, null);
+		
+		listObjectToSetActiveFalse.Add(obj);
 	}
 
 	#endregion
@@ -540,6 +613,22 @@ public class MirorPower : MonoBehaviour, IManagePower
 	}
 
 	#endregion
+	
+	#region SpawnObjectOnDash
+
+	void SpawnShaderOnPathDash(Transform objectToChange, float position)
+	{
+		var objPos = objectToChange.position;
+		var objRot = objectToChange.localPosition;
+
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower", 
+			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
+		
+		listObjectToSetActiveFalse.Add(obj);
+	}
+
+	#endregion
+	
 	public void CancelPower()
 	{
 	}
@@ -563,6 +652,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 		
 		zombiePlayer = null;
 		hitTransforms.Clear();
+		foreach (var g in listObjectToSetActiveFalse)
+		{
+			g.SetActive(false);
+		}
+		listObjectToSetActiveFalse.Clear();
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
