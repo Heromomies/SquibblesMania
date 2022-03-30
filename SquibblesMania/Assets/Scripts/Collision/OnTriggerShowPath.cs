@@ -9,7 +9,7 @@ public class OnTriggerShowPath : MonoBehaviour
    {
       if (other.CompareTag("Ghost"))
       {
-         PlayerMovementManager.Instance.UpdateActionPointTextPopUp(PlayerMovementManager.Instance.totalCurrentActionPoint+=2);
+         //PlayerMovementManager.Instance.UpdateActionPointTextPopUp(PlayerMovementManager.Instance.totalCurrentActionPoint+=2);
          //UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
          PlayerMovementManager.Instance.sphereList.Remove(gameObject);
          gameObject.SetActive(false);

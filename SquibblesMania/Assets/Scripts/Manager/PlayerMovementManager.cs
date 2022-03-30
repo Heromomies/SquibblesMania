@@ -44,11 +44,6 @@ public class PlayerMovementManager : MonoBehaviour
 	private float _timeInSecondsForBlocMove = 0.4f;
 	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.4f);
 
-	[HideInInspector] public int totalCurrentActionPoint;
-	private GameObject _textActionPointPopUp;
-
-	[Header("POP UP TEXT PARAMETERS")] [SerializeField]
-	private Vector3 offsetText;
 
 	private readonly List<Transform> _nextBlocUpMeshPos = new List<Transform>();
 	private readonly List<Transform> _nextBlocDownMeshPos = new List<Transform>();
@@ -102,16 +97,6 @@ public class PlayerMovementManager : MonoBehaviour
 		TapGestureRecognizer.SendBeginState = true;
 		FingersScript.Instance.AddGesture(TapGestureRecognizer);
 		TapGestureRecognizer.AllowSimultaneousExecutionWithAllGestures();
-		//Set up the new gesture 
-		/*swipe = new SwipeGestureRecognizer();
-		swipe.StateUpdated += SwipeUpdated;
-		swipe.DirectionThreshold = 0;
-		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
-		swipe.ThresholdSeconds = swipeThresholdSeconds;
-		swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		swipe.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
-		swipe.AllowSimultaneousExecution(LongPressBlocMovementGesture);
-		FingersScript.Instance.AddGesture(swipe);*/
 
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
@@ -145,7 +130,6 @@ public class PlayerMovementManager : MonoBehaviour
 						currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
 						currentPlayer.StartPathFinding();
 					}
-					
 				}
 				else
 				{
@@ -421,7 +405,7 @@ public class PlayerMovementManager : MonoBehaviour
 		if (_blockParentCurrentlySelected.GetComponent<GroupBlockDetection>() != null)
 		{
 			_blocParentCurrentlySelectedPos = _blockParentCurrentlySelected.transform.position;
-			SpawnTextActionPointPopUp(currentPlayer);
+			UiManager.Instance.SpawnTextActionPointPopUp(currentPlayer);
 			if (_blockParentCurrentlySelected != null)
 			{
 				SetUpBlocPreviewMesh(_blockParentCurrentlySelected);
@@ -448,9 +432,9 @@ public class PlayerMovementManager : MonoBehaviour
 		_touchPos = Vector3.zero;
 		_blockCurrentlySelected = null;
 		_blockParentCurrentlySelected = null;
-		if (_textActionPointPopUp)
+		if (UiManager.Instance.textActionPointPopUp)
 		{
-			_textActionPointPopUp.SetActive(false);
+			UiManager.Instance.textActionPointPopUp.SetActive(false);
 		}
 
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
@@ -462,23 +446,7 @@ public class PlayerMovementManager : MonoBehaviour
 	}
 
 	#endregion
-
-	/// <summary>
-	/// Spawn Text Action Point to indicate to the player his action's point
-	/// </summary>
-
-	#region SpawnTextActionPoint
-
-	private void SpawnTextActionPointPopUp(Transform currentPlayer)
-	{
-		totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
-		_textActionPointPopUp =
-			PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
-		_textActionPointPopUp.SetActive(true);
-		_textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-	}
-
-	#endregion
+	
 
 	/// <summary>
 	/// Update Action Point Text 
@@ -486,12 +454,12 @@ public class PlayerMovementManager : MonoBehaviour
 
 	#region UpdateActionPointTextPopUp
 
-	public void UpdateActionPointTextPopUp(int actionPointPlayer)
+	private void UpdateActionPointTextPopUp(int actionPointPlayer)
 	{
 		//Update text action point at player top pos
-		actionPointPlayer = totalCurrentActionPoint > 0 ? totalCurrentActionPoint : -totalCurrentActionPoint;
-		_textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPointPlayer);
-		GameManager.Instance.currentPlayerTurn.playerActionPoint = totalCurrentActionPoint;
+		actionPointPlayer = UiManager.Instance.totalCurrentActionPoint > 0 ? UiManager.Instance.totalCurrentActionPoint : -UiManager.Instance.totalCurrentActionPoint;
+		UiManager.Instance.textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPointPlayer);
+		GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
 
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && _blockParentCurrentlySelected != null)
 		{
@@ -633,7 +601,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			AudioManager.Instance.Play("CubeIsMoving");
 			
-			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
+			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 			{
 				//TODO Feedback can't move bloc
 				Debug.Log("Im blocked up");
@@ -649,7 +617,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			AudioManager.Instance.Play("CubeIsMoving");
 			
-			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
+			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 			{
 				//TODO Feedback can't move bloc
 				Debug.Log("Im blocked down");
@@ -695,10 +663,10 @@ public class PlayerMovementManager : MonoBehaviour
 		switch (isPlayerUseActionPoint)
 		{
 			case true:
-				UpdateActionPointTextPopUp(totalCurrentActionPoint--);
+				UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--);
 				break;
 			case false:
-				UpdateActionPointTextPopUp(totalCurrentActionPoint++);
+				UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint++);
 				break;
 		}
 
@@ -766,7 +734,7 @@ public class PlayerMovementManager : MonoBehaviour
 			sphereList[i].SetActive(false);
 		}
 
-		_textActionPointPopUp.SetActive(false);
+		UiManager.Instance.textActionPointPopUp.SetActive(false);
 		
 		GameManager.Instance.currentPlayerTurn.currentTouchBlock = ghostPlayer.GetComponent<CheckUnderGhost>().currentBlockGhostOn;
 		GameManager.Instance.currentPlayerTurn.StartPathFinding();
@@ -834,7 +802,7 @@ public class PlayerMovementManager : MonoBehaviour
 				{
 					if (!previewPath.Contains(hit.transform) || previewPath.Count - 1 == positionList + 1)
 					{
-						UpdateActionPointTextPopUp(totalCurrentActionPoint--);
+						UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--);
 						ghostPlayer.transform.position += _directionPlayer[value];
 						StartCoroutine(WaitBeforeCheckUnderPlayerCoroutine());
 					}
@@ -843,7 +811,7 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 				else if (previewPath.Count - 1 == positionList + 1)
 				{
-					UpdateActionPointTextPopUp(totalCurrentActionPoint--);
+					UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--);
 					ghostPlayer.transform.position += _directionPlayer[value];
 					StartCoroutine(WaitBeforeCheckUnderPlayerCoroutine());
 				}

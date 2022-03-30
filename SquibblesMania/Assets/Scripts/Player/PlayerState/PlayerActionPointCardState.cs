@@ -337,6 +337,8 @@ public class PlayerActionPointCardState : PlayerBaseState
 	{
 		int movementPlayer = 0;
 		_actionPointText = player.playerActionPoint;
+
+		UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
 		
 		for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
 		{
@@ -352,8 +354,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 				player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
 				player.finalPathFinding.Remove(player.finalPathFinding[i]);
 				_actionPointText--;
-				
-				//PlayerMovementManager.Instance.UpdateActionPointTextPopUp(_actionPointText);
+				UpdateActionPointTextPopUp(_actionPointText);
 				movementPlayer++;
 				yield return _timeBetweenPlayerMovement;
 			}
@@ -361,6 +362,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 
 		player.playerActionPoint = _actionPointText;
 		Clear(player);
+	}
+
+	private void UpdateActionPointTextPopUp(int actionPoint)
+	{
+		UiManager.Instance.textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPoint);
+		GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
 	}
 
 	public void SetFalsePathObjects()
