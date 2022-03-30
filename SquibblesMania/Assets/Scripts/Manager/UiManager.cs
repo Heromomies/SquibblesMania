@@ -24,7 +24,7 @@ public class UiManager : MonoBehaviour
     
     [Header("POP UP TEXT PARAMETERS")]
     public GameObject textActionPointPopUp;
-    [HideInInspector] public int totalCurrentActionPoint;
+    public int totalCurrentActionPoint;
     [SerializeField] private Vector3 offsetText;
 
     public Camera uiCam;
