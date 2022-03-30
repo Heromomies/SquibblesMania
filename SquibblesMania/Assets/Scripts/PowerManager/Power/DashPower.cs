@@ -12,10 +12,10 @@ public class DashPower : MonoBehaviour, IManagePower
 	public LayerMask layerShowPath;
 
 	public List<Transform> hitTransforms;
-	
-	
+
+
 	public Transform baseSpawnRaycastTransform;
-	
+
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 
 	[Header("TOUCH SETTINGS")] [Range(1, 10)]
@@ -27,25 +27,25 @@ public class DashPower : MonoBehaviour, IManagePower
 	public SwipeGestureRecognizer swipe;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
-	
+
 	private Vector2 _focus, _startFocus;
 	private float _offset;
 	private Camera _cam;
-	private int _distanceDisplayPower = 1;
-	private int _distanceDisplayDash = 1;
+	private int _distanceDisplayPower = 10;
+	private int _distanceDisplayDash = 3;
+	private float _distV1, _distV2, _distV3;
 	
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
-	
-	[Header("DISPLAY POWER TRANSFORM")]
-	public Conditions[] displayPower;
+
+	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
 	[Serializable]
 	public struct Conditions
 	{
 		public List<Transform> raycastTransform;
 	}
-	
-	
+
+
 	#region Swipe Gesture Enabled
 
 	private void OnEnable()
@@ -67,7 +67,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
-		
+
 		_cam = Camera.main;
 		_offset = PlayerMovementManager.Instance.offset;
 
@@ -92,19 +92,22 @@ public class DashPower : MonoBehaviour, IManagePower
 			{
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitInfo.collider.transform.position;
-				
+
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					DashDirection(2); // Right
 				}
+
 				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					DashDirection(3); // Left
 				}
+
 				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
 					DashDirection(0); // Down
 				}
+
 				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
 					DashDirection(1); // Up
@@ -117,11 +120,11 @@ public class DashPower : MonoBehaviour, IManagePower
 		}
 	}
 
-	
-	
+
 	/// <summary>
 	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
 	/// </summary>
+
 	#region SwipeAdaptation
 
 	public SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
@@ -172,29 +175,77 @@ public class DashPower : MonoBehaviour, IManagePower
 
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: DashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Up: DashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Right: DashDirection(2); break;
-						case SwipeGestureRecognizerDirection.Left: DashDirection(3); break; }
+				case 1:
+					switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down:
+							DashDirection(0);
+							break;
+						case SwipeGestureRecognizerDirection.Up:
+							DashDirection(1);
+							break;
+						case SwipeGestureRecognizerDirection.Right:
+							DashDirection(2);
+							break;
+						case SwipeGestureRecognizerDirection.Left:
+							DashDirection(3);
+							break;
+					}
+
 					break;
-				case 2 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: DashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Up: DashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Right: DashDirection(2); break;
-						case SwipeGestureRecognizerDirection.Left: DashDirection(3); break; }
+				case 2:
+					switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down:
+							DashDirection(0);
+							break;
+						case SwipeGestureRecognizerDirection.Up:
+							DashDirection(1);
+							break;
+						case SwipeGestureRecognizerDirection.Right:
+							DashDirection(2);
+							break;
+						case SwipeGestureRecognizerDirection.Left:
+							DashDirection(3);
+							break;
+					}
+
 					break;
-				case 3 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: DashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Up: DashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Right: DashDirection(3); break;
-						case SwipeGestureRecognizerDirection.Left: DashDirection(2); break; }
+				case 3:
+					switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down:
+							DashDirection(1);
+							break;
+						case SwipeGestureRecognizerDirection.Up:
+							DashDirection(0);
+							break;
+						case SwipeGestureRecognizerDirection.Right:
+							DashDirection(3);
+							break;
+						case SwipeGestureRecognizerDirection.Left:
+							DashDirection(2);
+							break;
+					}
+
 					break;
-				case 4 : switch (endDirection) {
-						case SwipeGestureRecognizerDirection.Down: DashDirection(1); break;
-						case SwipeGestureRecognizerDirection.Up: DashDirection(0); break;
-						case SwipeGestureRecognizerDirection.Right: DashDirection(3); break;
-						case SwipeGestureRecognizerDirection.Left: DashDirection(2); break; }
+				case 4:
+					switch (endDirection)
+					{
+						case SwipeGestureRecognizerDirection.Down:
+							DashDirection(1);
+							break;
+						case SwipeGestureRecognizerDirection.Up:
+							DashDirection(0);
+							break;
+						case SwipeGestureRecognizerDirection.Right:
+							DashDirection(3);
+							break;
+						case SwipeGestureRecognizerDirection.Left:
+							DashDirection(2);
+							break;
+					}
+
 					break;
 			}
 		}
@@ -304,7 +355,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		}
 
 		NFCManager.Instance.powerActivated = true;
-		
+
 		ClearPower();
 	}
 
@@ -314,26 +365,102 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Show the path 
 	{
-		baseSpawnRaycastTransform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
+		baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 
 		for (int i = 0; i < displayPower.Length; i++)
 		{
-			for (int j = 0; j < displayPower[i].raycastTransform.Count; j++)
+			var rot = 0f;
+			
+			if (_vectorRaycast[i] == Vector3.right)
 			{
-				if (Physics.Raycast(displayPower[i].raycastTransform[i].position, Vector3.down, out var hit,
-					_distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
-				{
-					var rayPos = displayPower[i].raycastTransform[i].position;
-					var distV1 = Vector3.Distance(displayPower[i].raycastTransform[i].position, hit.transform.position);
-					var distV2 = Vector3.Distance(displayPower[i].raycastTransform[i + 1].position, 
-						new Vector3(displayPower[i].raycastTransform[i + 1].position.x, displayPower[i].raycastTransform[i + 1].position.y - _distanceDisplayDash, displayPower[i].raycastTransform[i + 1].position.z));
-					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[i + 2].position, 
-						new Vector3(displayPower[i].raycastTransform[i + 2].position.x, displayPower[i].raycastTransform[i + 2].position.y - _distanceDisplayDash, displayPower[i].raycastTransform[i + 2].position.z));
-
+				rot = 180f;
+			}
+			else if (_vectorRaycast[i] == Vector3.back)
+			{
+				rot = 0f;
+			}
+			else if (_vectorRaycast[i] == Vector3.forward)
+			{
+				rot = 90f;
+			}
+			else if (_vectorRaycast[i] == Vector3.left)
+			{
+				rot = 270f;
+			}
+			
+			if (Physics.Raycast(displayPower[i].raycastTransform[2].position, Vector3.down, out var hitOne, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+			{
+				var distV1 = Vector3.Distance(displayPower[i].raycastTransform[2].position, hitOne.transform.position);
+				_distV1 = distV1;
 				
-					Debug.Log("V1 : "+distV1 + "name V1: " + displayPower[i].raycastTransform[i]);
-					//Debug.Log("V2 : "+distV2 + "name V2: " + raycastTransform[i + 1]);
-					//Debug.Log("V3 : "+distV3 + "name V3: " + raycastTransform[i + 2]);
+				if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				{
+					var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
+					_distV2 = distV2;
+				}
+				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				{
+					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
+					_distV3 = distV3;
+				}
+				
+				if (_distV3 >= _distV2 && _distV2 <= _distV1)
+				{
+					SpawnObjectOnFinalPathDash(hitOne.transform);
+					SpawnShaderOnPathDash(hitTwo.transform, rot);
+					SpawnShaderOnPathDash(hitThird.transform, rot);
+				}
+				else if (_distV2 <= _distV3)
+				{
+					SpawnObjectOnFinalPathDash(hitTwo.transform);
+					SpawnShaderOnPathDash(hitThird.transform, rot);
+				}
+				else if (_distV2 <= _distV3)
+				{
+					SpawnObjectOnFinalPathDash(hitThird.transform);	
+				}
+				else
+				{	
+					Debug.Log("dist V3 :  " + _distV3);
+					Debug.Log("dist V2 :  " + _distV2);
+					Debug.Log("dist V1 :  " + _distV1);
+				}
+			}
+			else if(hitOne.collider == null)
+			{
+				if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				{
+					var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
+					_distV2 = distV2;
+				}
+				else if(hitTwo.collider == null)
+				{
+					if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitFourth, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+					{
+						var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitFourth.transform.position);
+						_distV3 = distV3;
+						
+						if (_distV2 <= _distV3)
+						{
+							SpawnObjectOnFinalPathDash(hitFourth.transform);
+						}
+					}
+					else if(hitFourth.collider == null)
+					{
+						_distV3 = _distanceDisplayDash;
+					}
+				}
+				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				{
+					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
+					_distV3 = distV3;
+				}
+				
+				if (_distV2 <= _distV3)
+				{
+					SpawnObjectOnFinalPathDash(hitTwo.transform);
+					SpawnShaderOnPathDash(hitThird.transform, rot);
 				}
 			}
 		}
@@ -454,11 +581,15 @@ public class DashPower : MonoBehaviour, IManagePower
 		Gizmos.color = Color.red;
 		for (int i = 0; i < displayPower.Length; i++)
 		{
-			for (int j = 0; j < displayPower[i].raycastTransform.Count; j++)
-			{
-				Gizmos.DrawLine(displayPower[i].raycastTransform[i].position,
-					new Vector3(displayPower[i].raycastTransform[i].position.x, displayPower[i].raycastTransform[i].position.y - _distanceDisplayDash, displayPower[i].raycastTransform[i].position.z));
-			}
+			Gizmos.DrawLine(displayPower[i].raycastTransform[0].position,
+				new Vector3(displayPower[i].raycastTransform[0].position.x, displayPower[i].raycastTransform[0].position.y - _distanceDisplayDash,
+					displayPower[i].raycastTransform[0].position.z));
+			Gizmos.DrawLine(displayPower[i].raycastTransform[1].position,
+				new Vector3(displayPower[i].raycastTransform[1].position.x, displayPower[i].raycastTransform[1].position.y - _distanceDisplayDash,
+					displayPower[i].raycastTransform[1].position.z));
+			Gizmos.DrawLine(displayPower[i].raycastTransform[2].position,
+				new Vector3(displayPower[i].raycastTransform[2].position.x, displayPower[i].raycastTransform[2].position.y - _distanceDisplayDash,
+					displayPower[i].raycastTransform[2].position.z));
 		}
 	}
 
@@ -467,11 +598,10 @@ public class DashPower : MonoBehaviour, IManagePower
 	void SpawnObjectOnFinalPathDash(Transform objectToChange)
 	{
 		var objPos = objectToChange.position;
-
-
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath", 
-			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.identity, null);
 		
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
+			new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, null);
+
 		listObjectToSetActiveFalse.Add(obj);
 	}
 
@@ -484,15 +614,15 @@ public class DashPower : MonoBehaviour, IManagePower
 		var objPos = objectToChange.position;
 		var objRot = objectToChange.localPosition;
 
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower", 
-			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
-		
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower",
+			new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
+
 		listObjectToSetActiveFalse.Add(obj);
 	}
 
 	#endregion
-	
-	
+
+
 	public void CancelPower()
 	{
 	}
@@ -509,9 +639,9 @@ public class DashPower : MonoBehaviour, IManagePower
 		{
 			g.SetActive(false);
 		}
-		
+
 		listObjectToSetActiveFalse.Clear();
-		
+
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
