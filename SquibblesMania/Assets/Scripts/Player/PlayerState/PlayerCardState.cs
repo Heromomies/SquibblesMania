@@ -44,11 +44,11 @@ public class PlayerCardState : PlayerBaseState
 		if (!NFCManager.Instance.newCardDetected)
 		{
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
-
+			NFCManager.Instance.newCardDetected = true;
+			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
 				AudioManager.Instance.Play("CardTrue");
-				NFCManager.Instance.newCardDetected = true;
 
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
@@ -73,7 +73,6 @@ public class PlayerCardState : PlayerBaseState
 			else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
 				AudioManager.Instance.Play("CardTrue");
-				NFCManager.Instance.newCardDetected = true;
 
 				_maxNumberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 
@@ -151,7 +150,6 @@ public class PlayerCardState : PlayerBaseState
 				    !NFCManager.Instance.displacementActivated)
 				{
 					PlayerMovementManager.Instance.ResetDisplacement();
-					NFCManager.Instance.newCardDetected = false;
 				}
 				else
 				{
@@ -170,10 +168,12 @@ public class PlayerCardState : PlayerBaseState
 					}
 
 					GameManager.Instance.DecreaseVariable();
-					NFCManager.Instance.newCardDetected = false;
 				}
 			}
+			
 			ChangeColorLight(LIGHT_COLOR.COLOR_WHITE, _currentPlayer);
+			NFCManager.Instance.newCardDetected = false;
+			
 			if (_currentPlayer.currentCardEffect != null)
 			{
 				_currentPlayer.currentCardEffect.SetActive(false);

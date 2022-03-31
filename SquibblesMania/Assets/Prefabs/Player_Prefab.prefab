@@ -32,6 +32,7 @@ Transform:
   m_Children:
   - {fileID: 7504823125939659489}
   - {fileID: 2619451776773079414}
+  - {fileID: 8603251990999686441}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,9 +54,12 @@ MonoBehaviour:
   playerPref: {fileID: 783327321466276206}
   playerTeam: 0
   indicatorPlayer: {fileID: 7164572189746100315}
+  hat: {fileID: 6279770902521424498}
+  meshRenderer: {fileID: 8397423561281912332}
   stunCount: 0
   isPlayerStun: 0
   canSwitch: 1
+  currentCardEffect: {fileID: 0}
   currentBlockPlayerOn: {fileID: 0}
   currentTouchBlock: {fileID: 0}
   finalPathFinding: []
@@ -128,6 +132,36 @@ Transform:
   m_Father: {fileID: 783327321466276194}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6279770902521424498
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8603251990999686441}
+  m_Layer: 6
+  m_Name: Hat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8603251990999686441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6279770902521424498}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 783327321466276194}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
 --- !u!1 &7164572189746100315
 GameObject:
   m_ObjectHideFlags: 0

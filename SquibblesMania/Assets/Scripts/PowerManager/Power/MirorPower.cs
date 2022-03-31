@@ -12,11 +12,18 @@ public class MirorPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] [Space] public LayerMask layerPlayer;
 	public LayerMask layerMaskInteractableAndPlayer;
+	public LayerMask layerInteractable;
+	public LayerMask layerShowPath;
 
 	public float rangeDetectionPlayer;
 	public List<Transform> hitTransforms;
 	[HideInInspector] public GameObject zombiePlayer;
-	public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
+	[Space(25)] public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
+	[Space(25)] public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space(25)] public List<GameObject> listObjectToSetActiveFalse;
+
+	public Transform baseSpawnRaycastTransform;
+	public Transform raycastPlayer;
 
 	[Header("TOUCH SETTINGS")] [Space] [Range(1, 10)]
 	public int dashRange;
@@ -32,7 +39,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Space] public Material zombieMat;
 	public Material changeZombieMat;
 
-	public Collider[] players;
+	[HideInInspector] public Collider[] players;
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -43,6 +50,18 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private Camera _cam;
 	private Vector2 _focus, _startFocus;
 	private float _offset;
+	private int _distanceDisplayPower = 10;
+	private int _distanceDisplayDash = 3;
+	private float _distV2, _distV3, _distV4;
+	private GameObject _particleToDeactivate;
+	
+	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
+
+	[Serializable]
+	public struct Conditions
+	{
+		public List<Transform> raycastTransform;
+	}
 
 	private void Awake()
 	{
@@ -53,7 +72,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	private void OnEnable() // Add swipe gesture and pan gesture to select a player and move it
 	{
-		swipe = new SwipeGestureRecognizer();
+		/*swipe = new SwipeGestureRecognizer();
 		swipe.StateUpdated += SwipeUpdated;
 		swipe.DirectionThreshold = 0;
 		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
@@ -61,7 +80,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
 		swipe.ThresholdSeconds = swipeThresholdSeconds;
 		swipe.AllowSimultaneousExecutionWithAllGestures();
-		FingersScript.Instance.AddGesture(swipe);
+		FingersScript.Instance.AddGesture(swipe);*/
 
 		SwapTouchGesture = new PanGestureRecognizer();
 		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
@@ -101,31 +120,88 @@ public class MirorPower : MonoBehaviour, IManagePower
 					Transform child = zombiePlayer.transform.GetChild(1);
 					child.GetComponentInChildren<Renderer>().material.color = changeZombieMat.color;
 
-					var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-					var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
+					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
+					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
+					raycastPlayer.position = baseSpawnRaycastTransform.position;
 					
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
-						if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
+						var rot = 0f;
+
+						if (_vectorRaycast[i] == Vector3.right)
 						{
-							if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
+							rot = 180f;
+						}
+						else if (_vectorRaycast[i] == Vector3.back)
+						{
+							rot = 0f;
+						}
+						else if (_vectorRaycast[i] == Vector3.forward)
+						{
+							rot = 90f;
+						}
+						else if (_vectorRaycast[i] == Vector3.left)
+						{
+							rot = 270f;
+						}
+
+						if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
+						{
+							var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
+							_distV2 = distV2;
+						}
+						else if (hitTwo.collider == null)
+						{
+							if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitFourth, _distanceDisplayPower,
+								layerInteractable)) // launch the raycast
 							{
-								ChangeBlocMaterial(hitFirstBloc.transform, secondMat);
-								hitTransforms.Add(hitFirstBloc.transform);
+								var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitFourth.transform.position);
+								_distV3 = distV3;
+
+								if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayer, _distanceDisplayPower,
+									layerInteractable)) // launch the raycast
+								{
+									var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayer.transform.position);
+									_distV4 = distV4;
+								}
+
+								if (_distV4 <= _distV3)
+								{
+									SpawnObjectOnFinalPathDash(hitFourth.transform);
+								}
+							}
+							else if (hitFourth.collider == null)
+							{
+								_distV3 = _distanceDisplayDash;
 							}
 						}
 
-						if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-							dashRange)) // launch the raycast
+						if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
 						{
-							if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-							{
-								ChangeBlocMaterial(hitSecondBloc.transform, secondMat);
-								hitTransforms.Add(hitSecondBloc.transform);
-							}
+							var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
+							_distV3 = distV3;
+						}
+
+						if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
+						{
+							var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
+							_distV4 = distV4;
+						}
+
+						if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
+						{
+							SpawnObjectOnFinalPathDash(hitTwo.transform);
+							SpawnShaderOnPathDash(hitThird.transform, rot);
+						}
+						else if (_distV4 <= _distV3)
+						{
+							SpawnObjectOnFinalPathDash(hitThird.transform);
 						}
 					}
-					
+
 					foreach (var actionPlayerPreset in textWhenNoZombieAreSelected)
 					{
 						actionPlayerPreset.gameObject.SetActive(false);
@@ -135,6 +211,34 @@ public class MirorPower : MonoBehaviour, IManagePower
 			else
 			{
 				gesture.Reset();
+			}
+
+			if (Physics.Raycast(ray, out var hitShowPath, Mathf.Infinity, layerShowPath))
+			{
+				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
+				var hitInfoPos = hitShowPath.collider.transform.position;
+
+				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
+				{
+					MirrorDirection(2); // Right
+				}
+
+				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
+				{
+					MirrorDirection(3); // Left
+				}
+
+				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
+				{
+					MirrorDirection(0); // Down
+				}
+
+				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
+				{
+					MirrorDirection(1); // Up
+				}
+
+				ActiveParticle();
 			}
 		}
 	}
@@ -199,16 +303,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 					}
 
@@ -217,16 +321,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 					}
 
@@ -235,16 +339,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 					}
 
@@ -253,16 +357,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					switch (endDirection)
 					{
 						case SwipeGestureRecognizerDirection.Down:
-							SwipeMirrorDirection(1);
+							MirrorDirection(1);
 							break;
 						case SwipeGestureRecognizerDirection.Up:
-							SwipeMirrorDirection(0);
+							MirrorDirection(0);
 							break;
 						case SwipeGestureRecognizerDirection.Right:
-							SwipeMirrorDirection(3);
+							MirrorDirection(3);
 							break;
 						case SwipeGestureRecognizerDirection.Left:
-							SwipeMirrorDirection(2);
+							MirrorDirection(2);
 							break;
 					}
 
@@ -275,7 +379,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#region SwipeMirorDirection
 
-	private void SwipeMirrorDirection(int directionIndex) // When we clicked on button
+	private void MirrorDirection(int directionIndex) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -479,7 +583,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			zombiePlayer.transform.DOMove(
 				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * dashRange, 0.05f);
 		}
-		
+
 		ClearPower();
 	}
 
@@ -509,23 +613,70 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
-				case 2: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
-				case 3: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
-				case 4: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
+				case 1:
+					textWhenNoZombieAreSelected[0].gameObject.SetActive(true);
+					break;
+				case 2:
+					textWhenNoZombieAreSelected[0].gameObject.SetActive(true);
+					break;
+				case 3:
+					textWhenNoZombieAreSelected[1].gameObject.SetActive(true);
+					break;
+				case 4:
+					textWhenNoZombieAreSelected[1].gameObject.SetActive(true);
+					break;
+			}
+		}
+		else
+		{
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1:
+					textWhenThereAreNoZombieAround[0].gameObject.SetActive(true);
+					break;
+				case 2:
+					textWhenThereAreNoZombieAround[0].gameObject.SetActive(true);
+					break;
+				case 3:
+					textWhenThereAreNoZombieAround[1].gameObject.SetActive(true);
+					break;
+				case 4:
+					textWhenThereAreNoZombieAround[1].gameObject.SetActive(true);
+					break;
 			}
 		}
 	}
 
 	#endregion
 
-	#region CHANGE BLOC MATERIAL
+	#region SpawnObjectOnDash
 
-	private void ChangeBlocMaterial(Transform objectToChange, Material mat) // Change the material of the object
+	void SpawnObjectOnFinalPathDash(Transform objectToChange)
 	{
-		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-		color = mat.color;
-		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
+		if (objectToChange != null)
+		{
+			var objPos = objectToChange.position;
+		
+			GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
+				new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, null);
+
+			listObjectToSetActiveFalse.Add(obj);
+		}
+	}
+
+	#endregion
+
+	#region SpawnShaderOnDash
+
+	void SpawnShaderOnPathDash(Transform objectToChange, float position)
+	{
+		var objPos = objectToChange.position;
+		var objRot = objectToChange.localPosition;
+
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower",
+			new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
+
+		listObjectToSetActiveFalse.Add(obj);
 	}
 
 	#endregion
@@ -540,16 +691,19 @@ public class MirorPower : MonoBehaviour, IManagePower
 	}
 
 	#endregion
-	public void CancelPower()
-	{
-	}
 
-	public void DoPower()
+	private void ActiveParticle()
 	{
+		var playerTransform = GameManager.Instance.currentPlayerTurn.transform;
+		_particleToDeactivate = PoolManager.Instance.SpawnObjectFromPool("ParticleMirror", playerTransform.position, playerTransform.rotation, playerTransform);
 	}
-
-	public void ClearPower() // Clear the power
+	
+	IEnumerator CoroutineDeactivateParticle()
 	{
+		yield return new WaitForSeconds(0.1f);
+		
+		_particleToDeactivate.SetActive(false);
+		
 		for (int i = 0; i < hitTransforms.Count; i++)
 		{
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
@@ -560,12 +714,36 @@ public class MirorPower : MonoBehaviour, IManagePower
 			Transform child = p.transform.GetChild(1);
 			child.GetComponentInChildren<Renderer>().material.color = zombieMat.color;
 		}
-		
+
+		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+
 		zombiePlayer = null;
 		hitTransforms.Clear();
+		foreach (var g in listObjectToSetActiveFalse)
+		{
+			g.SetActive(false);
+		}
+
+		listObjectToSetActiveFalse.Clear();
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+	}
+	
+	public void CancelPower()
+	{
+	}
+
+	public void DoPower()
+	{
+	}
+
+	public void ClearPower() // Clear the power
+	{
+		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
 	public void OnDisable()
