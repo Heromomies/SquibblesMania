@@ -13,8 +13,8 @@ public class PlayerActionPointCardState : PlayerBaseState
    
     private int _actionPointText;
     public Color blocBaseEmissiveColor;
-    public List<GameObject> pathObjects = new List<GameObject>();
-    public List<Transform> previewPath = new List<Transform>();
+    private List<GameObject> pathObjects = new List<GameObject>();
+    private List<Transform> previewPath = new List<Transform>();
    
 
     private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
@@ -26,14 +26,14 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         player.isPlayerInActionCardState = true;
         player.nextBlockPath.Clear();
-        //previewPath.Clear();
+        previewPath.Clear();
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         PreviewPath(player.playerActionPoint, player);
     }
 
     #region PREVIEW
 
-    public void PreviewPath(int actionPoint, PlayerStateManager player)
+    private void PreviewPath(int actionPoint, PlayerStateManager player)
     {
         List<Transform> possiblePath = new List<Transform>();
         List<Transform> pastBlocks = new List<Transform>();
@@ -193,18 +193,10 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {
-            case 0:
-                GameManager.Instance.ChangePlayerTurn(1);
-                break;
-            case 1:
-                GameManager.Instance.ChangePlayerTurn(2);
-                break;
-            case 2:
-                GameManager.Instance.ChangePlayerTurn(3);
-                break;
-            case 3:
-                GameManager.Instance.ChangePlayerTurn(0);
-                break;
+            case 0: GameManager.Instance.ChangePlayerTurn(1); break;
+            case 1: GameManager.Instance.ChangePlayerTurn(2); break;
+            case 2: GameManager.Instance.ChangePlayerTurn(3); break;
+            case 3: GameManager.Instance.ChangePlayerTurn(0); break;
         }
     }
 
@@ -400,8 +392,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         var pMovementManager = player.playerMovementManager;
 
         pMovementManager.playerCurrentlySelected = null;
-        pMovementManager.previewPath.Clear();
-        pMovementManager.sphereList.Clear();
         pMovementManager.ghostPlayer.SetActive(false);
 
         //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
@@ -420,6 +410,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         SetFalsePathObjects();
+        player.currentBlockPlayerOn = player.currentTouchBlock;
         if (player.playerActionPoint > 0)
         {
             EnterState(player);
