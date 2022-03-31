@@ -428,9 +428,6 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					SpawnObjectOnFinalPathDash(hitThird.transform);	
 				}
-
-				Debug.Log("DIST V3 : "+_distV3);
-				Debug.Log("DIST V4 : "+_distV4);
 			}
 			else if(hitOne.collider == null)
 			{
@@ -452,8 +449,8 @@ public class DashPower : MonoBehaviour, IManagePower
 							_distV4 = distV4;
 						}
 
-						if (_distV4 <= _distV2 && _distV2 <= _distV3)
-						{ 
+						if (_distV4 <= _distV3)
+						{
 							SpawnObjectOnFinalPathDash(hitFourth.transform);
 						}
 					}
@@ -462,6 +459,7 @@ public class DashPower : MonoBehaviour, IManagePower
 						_distV3 = _distanceDisplayDash;
 					}
 				}
+				
 				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
 				{
 					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
@@ -472,10 +470,15 @@ public class DashPower : MonoBehaviour, IManagePower
 					var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
 					_distV4 = distV4;
 				}
-				if (_distV4 <= _distV3 && _distV2 <= _distV3)
+				
+				if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
 				{
 					SpawnObjectOnFinalPathDash(hitTwo.transform);
 					SpawnShaderOnPathDash(hitThird.transform, rot);
+				}
+				else if (_distV4 <= _distV3)
+				{ 
+					SpawnObjectOnFinalPathDash(hitThird.transform);
 				}
 			}
 		}
@@ -612,17 +615,20 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	void SpawnObjectOnFinalPathDash(Transform objectToChange)
 	{
-		var objPos = objectToChange.position;
+		if (objectToChange != null)
+		{
+			var objPos = objectToChange.position;
 		
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
-			new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, null);
+			GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
+				new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, null);
 
-		listObjectToSetActiveFalse.Add(obj);
+			listObjectToSetActiveFalse.Add(obj);
+		}
 	}
 
 	#endregion
 
-	#region SpawnObjectOnDash
+	#region SpawnShaderOnDash
 
 	void SpawnShaderOnPathDash(Transform objectToChange, float position)
 	{

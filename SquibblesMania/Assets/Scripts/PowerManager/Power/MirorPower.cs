@@ -18,12 +18,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 	public float rangeDetectionPlayer;
 	public List<Transform> hitTransforms;
 	[HideInInspector] public GameObject zombiePlayer;
-	[Space (25)]
-	public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
-	[Space (25)]
-	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
-	[Space (25)]
-	public List<GameObject> listObjectToSetActiveFalse;
+	[Space(25)] public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
+	[Space(25)] public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space(25)] public List<GameObject> listObjectToSetActiveFalse;
+
+	public Transform baseSpawnRaycastTransform;
+	public Transform raycastPlayer;
 
 	[Header("TOUCH SETTINGS")] [Space] [Range(1, 10)]
 	public int dashRange;
@@ -39,7 +39,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Space] public Material zombieMat;
 	public Material changeZombieMat;
 
-	public Collider[] players;
+	[HideInInspector] public Collider[] players;
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -50,6 +50,17 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private Camera _cam;
 	private Vector2 _focus, _startFocus;
 	private float _offset;
+	private int _distanceDisplayPower = 10;
+	private int _distanceDisplayDash = 3;
+	private float _distV2, _distV3, _distV4;
+
+	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
+
+	[Serializable]
+	public struct Conditions
+	{
+		public List<Transform> raycastTransform;
+	}
 
 	private void Awake()
 	{
@@ -108,74 +119,88 @@ public class MirorPower : MonoBehaviour, IManagePower
 					Transform child = zombiePlayer.transform.GetChild(1);
 					child.GetComponentInChildren<Renderer>().material.color = changeZombieMat.color;
 
-					var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-					var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
+					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
+					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
+					raycastPlayer.position = baseSpawnRaycastTransform.position;
 					
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
-						var dist = 0f;
 						var rot = 0f;
-			
+
 						if (_vectorRaycast[i] == Vector3.right)
-						{
-							rot = 90f;
-						}
-						else if (_vectorRaycast[i] == Vector3.back)
 						{
 							rot = 180f;
 						}
-						else if (_vectorRaycast[i] == Vector3.forward)
+						else if (_vectorRaycast[i] == Vector3.back)
 						{
 							rot = 0f;
+						}
+						else if (_vectorRaycast[i] == Vector3.forward)
+						{
+							rot = 90f;
 						}
 						else if (_vectorRaycast[i] == Vector3.left)
 						{
 							rot = 270f;
 						}
-						if (Physics.Raycast(GameManager.Instance.currentPlayerTurn.transform.position, _vectorRaycast[i], out var hitBloc,
-							dashRange, layerInteractable))
-						{
-							var distBetweenPlayerAndBloc = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hitBloc.transform.position);
 
-							dist = (int) distBetweenPlayerAndBloc;
-							dist -= 1;
+						if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
+						{
+							var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
+							_distV2 = distV2;
+						}
+						else if (hitTwo.collider == null)
+						{
+							if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitFourth, _distanceDisplayPower,
+								layerInteractable)) // launch the raycast
+							{
+								var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitFourth.transform.position);
+								_distV3 = distV3;
+
+								if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayer, _distanceDisplayPower,
+									layerInteractable)) // launch the raycast
+								{
+									var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayer.transform.position);
+									_distV4 = distV4;
+								}
+
+								if (_distV4 <= _distV3)
+								{
+									SpawnObjectOnFinalPathDash(hitFourth.transform);
+								}
+							}
+							else if (hitFourth.collider == null)
+							{
+								_distV3 = _distanceDisplayDash;
+							}
 						}
 
-						if (dist == 1)
+						if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
 						{
-							if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitThirdBloc,
-								dashRange)) // launch the raycast
-							{
-								if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-								{
-									SpawnObjectOnFinalPathDash(hitThirdBloc.transform);
-									hitTransforms.Add(hitThirdBloc.transform);
-								}
-							}
+							var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
+							_distV3 = distV3;
 						}
-						else if (dist == 0 || dist > 1)
-						{
-							if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc, dashRange)) // launch the raycast
-							{
-								if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-								{
-									SpawnShaderOnPathDash(hitFirstBloc.transform, rot);
-									hitTransforms.Add(hitFirstBloc.transform);
-								}
-							}
 
-							if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-								dashRange)) // launch the raycast
-							{
-								if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-								{
-									SpawnObjectOnFinalPathDash(hitSecondBloc.transform);
-									hitTransforms.Add(hitSecondBloc.transform);
-								}
-							}
+						if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
+						{
+							var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
+							_distV4 = distV4;
+						}
+
+						if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
+						{
+							SpawnObjectOnFinalPathDash(hitTwo.transform);
+							SpawnShaderOnPathDash(hitThird.transform, rot);
+						}
+						else if (_distV4 <= _distV3)
+						{
+							SpawnObjectOnFinalPathDash(hitThird.transform);
 						}
 					}
-					
+
 					foreach (var actionPlayerPreset in textWhenNoZombieAreSelected)
 					{
 						actionPlayerPreset.gameObject.SetActive(false);
@@ -191,19 +216,22 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitShowPath.collider.transform.position;
-				
+
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					MirrorDirection(2); // Right
 				}
+
 				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					MirrorDirection(3); // Left
 				}
+
 				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
 					MirrorDirection(0); // Down
 				}
+
 				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
 					MirrorDirection(1); // Up
@@ -552,7 +580,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			zombiePlayer.transform.DOMove(
 				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * dashRange, 0.05f);
 		}
-		
+
 		ClearPower();
 	}
 
@@ -582,20 +610,36 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
-				case 2: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
-				case 3: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
-				case 4: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
+				case 1:
+					textWhenNoZombieAreSelected[0].gameObject.SetActive(true);
+					break;
+				case 2:
+					textWhenNoZombieAreSelected[0].gameObject.SetActive(true);
+					break;
+				case 3:
+					textWhenNoZombieAreSelected[1].gameObject.SetActive(true);
+					break;
+				case 4:
+					textWhenNoZombieAreSelected[1].gameObject.SetActive(true);
+					break;
 			}
 		}
 		else
 		{
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
-				case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
-				case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
-				case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				case 1:
+					textWhenThereAreNoZombieAround[0].gameObject.SetActive(true);
+					break;
+				case 2:
+					textWhenThereAreNoZombieAround[0].gameObject.SetActive(true);
+					break;
+				case 3:
+					textWhenThereAreNoZombieAround[1].gameObject.SetActive(true);
+					break;
+				case 4:
+					textWhenThereAreNoZombieAround[1].gameObject.SetActive(true);
+					break;
 			}
 		}
 	}
@@ -606,12 +650,29 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	void SpawnObjectOnFinalPathDash(Transform objectToChange)
 	{
-		var objPos = objectToChange.position;
-
-
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath", 
-			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.identity, null);
+		if (objectToChange != null)
+		{
+			var objPos = objectToChange.position;
 		
+			GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
+				new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, null);
+
+			listObjectToSetActiveFalse.Add(obj);
+		}
+	}
+
+	#endregion
+
+	#region SpawnShaderOnDash
+
+	void SpawnShaderOnPathDash(Transform objectToChange, float position)
+	{
+		var objPos = objectToChange.position;
+		var objRot = objectToChange.localPosition;
+
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower",
+			new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
+
 		listObjectToSetActiveFalse.Add(obj);
 	}
 
@@ -627,22 +688,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	}
 
 	#endregion
-	
-	#region SpawnObjectOnDash
 
-	void SpawnShaderOnPathDash(Transform objectToChange, float position)
-	{
-		var objPos = objectToChange.position;
-		var objRot = objectToChange.localPosition;
-
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower", 
-			new Vector3(objPos.x, objPos.y + 1.01f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
-		
-		listObjectToSetActiveFalse.Add(obj);
-	}
-
-	#endregion
-	
 	public void CancelPower()
 	{
 	}
@@ -663,7 +709,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			Transform child = p.transform.GetChild(1);
 			child.GetComponentInChildren<Renderer>().material.color = zombieMat.color;
 		}
-		
+
 		foreach (var g in textWhenThereAreNoZombieAround)
 		{
 			g.gameObject.SetActive(false);
@@ -675,6 +721,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			g.SetActive(false);
 		}
+
 		listObjectToSetActiveFalse.Clear();
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);

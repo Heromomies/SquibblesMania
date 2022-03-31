@@ -2706,7 +2706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventToTest:
   - {fileID: 1198056434}
-  powerToTest: {fileID: 1466380974}
+  powerToTest: {fileID: 371488780}
 --- !u!1 &331189454
 GameObject:
   m_ObjectHideFlags: 0
@@ -8117,13 +8117,25 @@ PrefabInstance:
       value: Miror Power
       objectReference: {fileID: 0}
     - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: raycastPlayer
+      value: 
+      objectReference: {fileID: 1418217524}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: layerShowPath.m_Bits
       value: 16384
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.size
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: layerInteractable.m_Bits
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: baseSpawnRaycastTransform
+      value: 
+      objectReference: {fileID: 1916625882}
     - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: textWhenNoZombieAreSelected
       value: 
@@ -8164,6 +8176,54 @@ PrefabInstance:
       propertyPath: textWhenThereAreNoZombieAround.Array.data[1]
       value: 
       objectReference: {fileID: 3588334655326171245}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[0].raycastTransform.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[1].raycastTransform.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[2].raycastTransform.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[3].raycastTransform.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[0].raycastTransform.Array.data[0]
+      value: 
+      objectReference: {fileID: 2106724185}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[0].raycastTransform.Array.data[1]
+      value: 
+      objectReference: {fileID: 921449805}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[1].raycastTransform.Array.data[0]
+      value: 
+      objectReference: {fileID: 1624781529}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[1].raycastTransform.Array.data[1]
+      value: 
+      objectReference: {fileID: 763219840}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[2].raycastTransform.Array.data[0]
+      value: 
+      objectReference: {fileID: 2117446631}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[2].raycastTransform.Array.data[1]
+      value: 
+      objectReference: {fileID: 1594401910}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[3].raycastTransform.Array.data[0]
+      value: 
+      objectReference: {fileID: 1748616459}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: displayPower.Array.data[3].raycastTransform.Array.data[1]
+      value: 
+      objectReference: {fileID: 53774593}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
 --- !u!4 &696536283 stripped
@@ -20847,7 +20907,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 357621848}
+      objectReference: {fileID: 799515162}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
