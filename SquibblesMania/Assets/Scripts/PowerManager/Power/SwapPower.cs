@@ -19,6 +19,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public Material secondMat;
 
 	private GameObject _playerToSwap;
+	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
@@ -116,6 +117,10 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		var transformPlayerOne = _playerOne.transform;
 		_pos = transformPlayerOne.position;
+
+		_particleToDeactivatePlayerOne = PoolManager.Instance.SpawnObjectFromPool("ParticleSwap", _pos, Quaternion.identity, null);
+		_particleToDeactivatePlayerTwo = PoolManager.Instance.SpawnObjectFromPool("ParticleSwap", _playerTwo.transform.position, Quaternion.identity, null);
+		
 		SwapPosition(transformPlayerOne, _playerTwo.transform);
 	}
 
@@ -130,7 +135,10 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public void ClearPower()
 	{	
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
-
+		
+		_particleToDeactivatePlayerOne.SetActive(false);
+		_particleToDeactivatePlayerTwo.SetActive(false);
+		
 		foreach (var g in textWhenThereAreNoZombieAround)
 		{
 			g.gameObject.SetActive(false);

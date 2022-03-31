@@ -2706,7 +2706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventToTest:
   - {fileID: 1198056434}
-  powerToTest: {fileID: 371488780}
+  powerToTest: {fileID: 1387475368}
 --- !u!1 &331189454
 GameObject:
   m_ObjectHideFlags: 0
@@ -8687,6 +8687,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.size
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[15].prefab
+      value: 
+      objectReference: {fileID: 5591944810435695776, guid: 92a13023571899e4eac8e8262ef5a017, type: 3}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[16].prefab
+      value: 
+      objectReference: {fileID: 6261319558862604632, guid: 854566a97e8b21f4aa128d9587593127, type: 3}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[17].prefab
+      value: 
+      objectReference: {fileID: 9098174421107338900, guid: d6b838f5dc279a04a91b4032228e22cb, type: 3}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[15].poolTag
+      value: ParticleSwap
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[16].poolTag
+      value: ParticleJumpImpulse
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[17].poolTag
+      value: ParticleJumpImpact
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[15].poolSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[16].poolSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867745515249658030, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
+      propertyPath: pools.Array.data[17].poolSize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d06c3dc7f99698a4e88b1f01de2c20ac, type: 3}
 --- !u!4 &772867661 stripped
@@ -10372,6 +10412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60711dbd084743d4aa1a0c4b3e49783d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleImpact: {fileID: 0}
 --- !u!4 &940860390
 Transform:
   m_ObjectHideFlags: 0

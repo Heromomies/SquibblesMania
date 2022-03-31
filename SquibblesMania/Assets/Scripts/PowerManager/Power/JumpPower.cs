@@ -24,7 +24,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[Space]
 	public Material firstMat;
 	public Material secondMat;
-	
+
+	private GameObject _particleImpact, _particleImpulse;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
@@ -73,6 +74,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 				listPoint.Add(new Vector3(xSpawn, ySpawn, zSpawn));
 				listPoint.Add(posHitInfo);
 
+				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
+				
 				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, 0.02f);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
@@ -94,12 +97,25 @@ public class JumpPower : MonoBehaviour, IManagePower
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
 		yield return new WaitForSeconds(1.5f);
+
+		_particleImpact = BezierAlgorithm.Instance.particleImpact;
 		
 		var hitPosition = hitInfoTransform.position;
 		hitInfoTransform.DOMove(new Vector3(hitPosition.x,
 			hitPosition.y -1, hitPosition.z), speedBloc);
+		
+		
 	}
 
+	IEnumerator CoroutineClearParticles()
+	{
+		yield return new WaitForSeconds(3f);
+		
+		_particleImpact.SetActive(false);
+		_particleImpulse.SetActive(false);
+	}
+	
+	
 	public void DisplayPower()
 	{
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
@@ -147,6 +163,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 	public void ClearPower()
 	{
+		StartCoroutine(CoroutineClearParticles());
+		
 		foreach (var colFinished in collidersFinished)
 		{
 			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
