@@ -53,7 +53,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
 	private float _distV2, _distV3, _distV4;
-
+	private GameObject _particleToDeactivate;
+	
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
 	[Serializable]
@@ -236,6 +237,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 				{
 					MirrorDirection(1); // Up
 				}
+
+				ActiveParticle();
 			}
 		}
 	}
@@ -689,16 +692,18 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	public void CancelPower()
+	private void ActiveParticle()
 	{
+		var playerTransform = GameManager.Instance.currentPlayerTurn.transform;
+		_particleToDeactivate = PoolManager.Instance.SpawnObjectFromPool("ParticleMirror", playerTransform.position, playerTransform.rotation, playerTransform);
 	}
-
-	public void DoPower()
+	
+	IEnumerator CoroutineDeactivateParticle()
 	{
-	}
-
-	public void ClearPower() // Clear the power
-	{
+		yield return new WaitForSeconds(0.1f);
+		
+		_particleToDeactivate.SetActive(false);
+		
 		for (int i = 0; i < hitTransforms.Count; i++)
 		{
 			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
@@ -726,6 +731,19 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+	}
+	
+	public void CancelPower()
+	{
+	}
+
+	public void DoPower()
+	{
+	}
+
+	public void ClearPower() // Clear the power
+	{
+		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
 	public void OnDisable()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
@@ -35,7 +36,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
 	private float _distV1, _distV2, _distV3, _distV4;
-	
+	private GameObject _particleToDeactivate;
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -254,7 +255,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	#region Swipe Dash Direction
+	#region Dash Direction
 
 	//Update method of the long press gesture
 	public void DashDirection(int numberDirectionVector) // When we clicked on button
@@ -273,6 +274,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
 						position + _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
+					ActiveParticle();
 				}
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
@@ -322,11 +324,13 @@ public class DashPower : MonoBehaviour, IManagePower
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									position + _vectorRaycast[numberDirectionVector] *
 									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
+								ActiveParticle();
 								break;
 							case 3:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									position + _vectorRaycast[numberDirectionVector] *
 									(distanceBetweenTwoPlayers - 1), 0.05f);
+								ActiveParticle();
 								break;
 						}
 
@@ -341,18 +345,24 @@ public class DashPower : MonoBehaviour, IManagePower
 						position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
 					hit.collider.transform.DOMove(hit.collider.transform.position
 					                              + _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, 1f);
+					
+					ActiveParticle();
 				}
 			}
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
 					position + _vectorRaycast[numberDirectionVector] * dashRange, 0.1f);
+				
+				ActiveParticle();
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
 				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
+
+			ActiveParticle();
 		}
 
 		NFCManager.Instance.powerActivated = true;
@@ -361,7 +371,13 @@ public class DashPower : MonoBehaviour, IManagePower
 	}
 
 	#endregion
-
+	
+	private void ActiveParticle()
+	{
+		var playerTransform = GameManager.Instance.currentPlayerTurn.transform;
+		_particleToDeactivate = PoolManager.Instance.SpawnObjectFromPool("ParticleDash", playerTransform.position, playerTransform.rotation, playerTransform);
+	}
+	
 	#region Display Power
 
 	public void DisplayPower() // Show the path 
@@ -594,23 +610,6 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = Color.red;
-		for (int i = 0; i < displayPower.Length; i++)
-		{
-			Gizmos.DrawLine(displayPower[i].raycastTransform[0].position,
-				new Vector3(displayPower[i].raycastTransform[0].position.x, displayPower[i].raycastTransform[0].position.y - _distanceDisplayDash,
-					displayPower[i].raycastTransform[0].position.z));
-			Gizmos.DrawLine(displayPower[i].raycastTransform[1].position,
-				new Vector3(displayPower[i].raycastTransform[1].position.x, displayPower[i].raycastTransform[1].position.y - _distanceDisplayDash,
-					displayPower[i].raycastTransform[1].position.z));
-			Gizmos.DrawLine(displayPower[i].raycastTransform[2].position,
-				new Vector3(displayPower[i].raycastTransform[2].position.x, displayPower[i].raycastTransform[2].position.y - _distanceDisplayDash,
-					displayPower[i].raycastTransform[2].position.z));
-		}
-	}
-
 	#region SpawnObjectOnDash
 
 	void SpawnObjectOnFinalPathDash(Transform objectToChange)
@@ -652,19 +651,26 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 	}
 
-	public void ClearPower() // Clear the power
+	IEnumerator CoroutineDeactivateParticle()
 	{
+		yield return new WaitForSeconds(0.1f);
+		
+		_particleToDeactivate.SetActive(false);
 		hitTransforms.Clear();
 
 		foreach (var g in listObjectToSetActiveFalse)
 		{
 			g.SetActive(false);
 		}
-
 		listObjectToSetActiveFalse.Clear();
 
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+	}
+	
+	public void ClearPower() // Clear the power
+	{
+		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
 	public void OnDisable()
