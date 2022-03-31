@@ -21,8 +21,8 @@ public class PlayerStateManager : Player
 
 	[Header("PLAYER UTILITIES")] public int playerNumber;
 	public bool isPlayerInActionCardState;
-	public List<Transform> previewPath;
-	public List<Transform> blocPreviewPath;
+	public List<Transform> nextBlockPath;
+	
 	public PlayerMovementManager playerMovementManager;
 	
 	public GameObject psStun;
@@ -61,7 +61,7 @@ public class PlayerStateManager : Player
 	}
 
 
-	public void StartPathFinding()
+	public void StartPreviewPathFinding()
 	{
 		//If the current state of the player is when he use his action point
 		if (CurrentState == PlayerActionPointCardState)
@@ -70,11 +70,20 @@ public class PlayerStateManager : Player
 		}
 	}
 
-	public void StartPreviewPathFinding()
+	public void StartPlayerMovement()
+	{
+		if (!walking)
+		{
+			walking = true;
+			StartCoroutine(PlayerActionPointCardState.FollowPath(this));
+		}
+	}
+
+	public void ResetPreviewPathFinding()
 	{
 		if (CurrentState == PlayerActionPointCardState)
 		{
-			PlayerActionPointCardState.PathToGo(this);
+			PlayerActionPointCardState.ResetPreviewPath(this);
 		}
 	}
 

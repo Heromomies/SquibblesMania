@@ -19,7 +19,14 @@ public class UiManager : MonoBehaviour
     public TextMeshProUGUI winText;
     public static UiManager Instance => _uiManager;
 
-    [Header("CARD UI VFX")] public Transform[] parentSpawnCardUiVFX;
+    [Header("CARD UI VFX")]
+    public Transform[] parentSpawnCardUiVFX;
+    
+    [Header("POP UP TEXT PARAMETERS")]
+    public GameObject textActionPointPopUp;
+    public int totalCurrentActionPoint;
+    [SerializeField] private Vector3 offsetText;
+
     public Camera uiCam;
     private void Awake()
     {
@@ -30,9 +37,6 @@ public class UiManager : MonoBehaviour
     {
         buttonNextTurn = buttonNextTurnPlayer;
     }
-
-
-
 
     public void ButtonNextTurn()
     {
@@ -77,5 +81,27 @@ public class UiManager : MonoBehaviour
             CameraButtonManager.Instance.BaseViewMode();
         }
     }
+    /// <summary>
+    /// Spawn Text Action Point to indicate to the player his action's point
+    /// </summary>
+
+    #region SpawnTextActionPoint
+
+    public void SpawnTextActionPointPopUp(Transform currentPlayer)
+    {
+        totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+        if (!textActionPointPopUp)
+        {
+            textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
+        }
+        else
+        {
+            textActionPointPopUp.SetActive(true);
+        }
+        
+        textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+    }
+
+    #endregion
     
 }
