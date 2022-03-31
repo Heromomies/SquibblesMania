@@ -334,7 +334,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
 
-        
+        NFCManager.Instance.displacementActivated = true;
         var movementPlayer = 0;
         _actionPointText = player.playerActionPoint;
 
