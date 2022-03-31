@@ -32,10 +32,29 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             {
                 newLocation += new Vector3(-Screen.width, 0, 0);
                 currentPage++;
-            }else if(percentage < 0 && currentPage > 1)
+            }else if (percentage > 0 && currentPage == totalPages)
+            {
+                int returnToFirst;
+                returnToFirst = totalPages - 1;
+                newLocation -= new Vector3(returnToFirst * -Screen.width, 0, 0);
+                currentPage = 1;
+                StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+                panelLocation = newLocation;
+            }
+            
+            
+            if(percentage < 0 && currentPage > 1)
             {
                 newLocation += new Vector3(Screen.width, 0, 0);
                 currentPage--;
+            }else if (percentage < 0 && currentPage == 1)
+            {
+                int returnToLast;
+                returnToLast = totalPages - 1;
+                newLocation += new Vector3(returnToLast * -Screen.width, 0, 0);
+                currentPage = totalPages;
+                StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+                panelLocation = newLocation;
             }
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
@@ -67,6 +86,15 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
+        else{
+            int returnToFirst;
+            returnToFirst = totalPages - 1;
+            Vector3 newLocation = panelLocation;
+            newLocation -= new Vector3(returnToFirst * -Screen.width, 0, 0);
+            currentPage = 1;
+            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+        }
     }
 
     public void PreviousPanel()
@@ -76,6 +104,16 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             Vector3 newLocation = panelLocation;
             newLocation += new Vector3(Screen.width, 0, 0);
             currentPage--;
+            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+        }
+        else
+        {
+            int returnToLast;
+            returnToLast = totalPages - 1;
+            Vector3 newLocation = panelLocation;
+            newLocation += new Vector3(returnToLast * -Screen.width, 0, 0);
+            currentPage = totalPages;
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
