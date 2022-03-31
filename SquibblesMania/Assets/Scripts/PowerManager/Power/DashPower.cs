@@ -9,12 +9,13 @@ public class DashPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] public int dashRange;
 	public LayerMask layerPlayerInteractable;
+	public LayerMask layerInteractable;
 	public LayerMask layerShowPath;
 
 	public List<Transform> hitTransforms;
-
-
+	
 	public Transform baseSpawnRaycastTransform;
+	public Transform raycastPlayer;
 
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 
@@ -33,7 +34,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	private Camera _cam;
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
-	private float _distV1, _distV2, _distV3;
+	private float _distV1, _distV2, _distV3, _distV4;
 	
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
@@ -367,6 +368,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 		baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
+		raycastPlayer.position = baseSpawnRaycastTransform.position;
 
 		for (int i = 0; i < displayPower.Length; i++)
 		{
@@ -405,27 +407,30 @@ public class DashPower : MonoBehaviour, IManagePower
 					_distV3 = distV3;
 				}
 				
-				if (_distV3 >= _distV2 && _distV2 <= _distV1)
+				if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayer, _distanceDisplayPower, layerInteractable)) // launch the raycast
+				{
+					var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayer.transform.position);
+					_distV4 = distV4;
+				}
+				
+				if (_distV4 <= _distV3 && _distV4 <= _distV2 && _distV4 <= _distV1)
 				{
 					SpawnObjectOnFinalPathDash(hitOne.transform);
 					SpawnShaderOnPathDash(hitTwo.transform, rot);
 					SpawnShaderOnPathDash(hitThird.transform, rot);
 				}
-				else if (_distV2 <= _distV3)
+				else if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV2 >= _distV1)
 				{
 					SpawnObjectOnFinalPathDash(hitTwo.transform);
 					SpawnShaderOnPathDash(hitThird.transform, rot);
 				}
-				else if (_distV2 <= _distV3)
+				else if (_distV4 <= _distV3 && _distV2 <= _distV3)
 				{
 					SpawnObjectOnFinalPathDash(hitThird.transform);	
 				}
-				else
-				{	
-					Debug.Log("dist V3 :  " + _distV3);
-					Debug.Log("dist V2 :  " + _distV2);
-					Debug.Log("dist V1 :  " + _distV1);
-				}
+
+				Debug.Log("DIST V3 : "+_distV3);
+				Debug.Log("DIST V4 : "+_distV4);
 			}
 			else if(hitOne.collider == null)
 			{
@@ -441,8 +446,14 @@ public class DashPower : MonoBehaviour, IManagePower
 						var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitFourth.transform.position);
 						_distV3 = distV3;
 						
-						if (_distV2 <= _distV3)
+						if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayer, _distanceDisplayPower, layerInteractable)) // launch the raycast
 						{
+							var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayer.transform.position);
+							_distV4 = distV4;
+						}
+
+						if (_distV4 <= _distV2 && _distV2 <= _distV3)
+						{ 
 							SpawnObjectOnFinalPathDash(hitFourth.transform);
 						}
 					}
@@ -456,8 +467,12 @@ public class DashPower : MonoBehaviour, IManagePower
 					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
 					_distV3 = distV3;
 				}
-				
-				if (_distV2 <= _distV3)
+				if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower, layerInteractable)) // launch the raycast
+				{
+					var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
+					_distV4 = distV4;
+				}
+				if (_distV4 <= _distV3 && _distV2 <= _distV3)
 				{
 					SpawnObjectOnFinalPathDash(hitTwo.transform);
 					SpawnShaderOnPathDash(hitThird.transform, rot);

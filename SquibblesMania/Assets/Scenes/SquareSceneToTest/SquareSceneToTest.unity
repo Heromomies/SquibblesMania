@@ -13794,6 +13794,36 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3871494653219229933, guid: 65c0252bac9edec41b1182cc7bbda784, type: 3}
   m_PrefabInstance: {fileID: 1415378995}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1418217523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1418217524}
+  m_Layer: 0
+  m_Name: RaycastPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1418217524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418217523}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1916625882}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1429732178 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1429732178, guid: 8af888d51ca66c841958414759bd8d3d, type: 3}
@@ -17821,6 +17851,7 @@ Transform:
   - {fileID: 1748616459}
   - {fileID: 53774593}
   - {fileID: 304228321}
+  - {fileID: 1418217524}
   m_Father: {fileID: 430926133}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20816,7 +20847,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 859165954}
+      objectReference: {fileID: 357621848}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
@@ -22809,6 +22840,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dash Power
       objectReference: {fileID: 0}
+    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
+      propertyPath: raycastPlayer
+      value: 
+      objectReference: {fileID: 1418217524}
     - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
       propertyPath: layerShowPath.m_Bits
       value: 16384
