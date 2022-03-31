@@ -15,9 +15,6 @@ public class PlayerMovementManager : MonoBehaviour
 	public LayerMask blocLayerMask;
 	[Range(0.0f, 1.0f)] public float longPressureDurationSeconds;
 	
-
-	[HideInInspector] public List<Transform> previewPath = new List<Transform>();
-	[HideInInspector] public List<GameObject> sphereList = new List<GameObject>();
 	[HideInInspector] public GameObject playerCurrentlySelected;
 
 	[Header("PLAYER SETTINGS")] public GameObject ghostPlayer;
@@ -118,19 +115,20 @@ public class PlayerMovementManager : MonoBehaviour
 			
 			if (gesture.State == GestureRecognizerState.Began)
 			{
-				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, ghostLayerMask) && isPlayerPreviewPath)
+				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, ghostLayerMask))
 				{
 					isPlayerPreviewPath = false;
 					currentPlayer.StartPlayerMovement();
+					return;
 				}
 				
-				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask))
+				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask) && !isPlayerPreviewPath)
 				{
 					var hitBlocParentPos = _hit.transform.parent.position;
 
 					if (currentPlayer.nextBlockPath.Contains(_hit.transform) && currentPlayer.PlayerActionPointCardState.PathParentPosComparedToPlayerPos(hitBlocParentPos, currentPlayer.transform.position) && HitBlockEqualToCurrentBlockPlayerOn(_hit, currentPlayer))
 					{
-						currentPlayer.ResetPreviewPathFinding();
+						
 						currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
 						isPlayerPreviewPath = true;
 						currentPlayer.StartPreviewPathFinding();
@@ -142,7 +140,7 @@ public class PlayerMovementManager : MonoBehaviour
 					}
 				}
 			
-				else if (TouchFailed(gesture))
+				else if (TouchFailed(gesture) || TouchBlocNotInPreviewPath(gesture, currentPlayer))
 				{
 					isPlayerPreviewPath = false;
 					currentPlayer.ResetPreviewPathFinding();
@@ -152,6 +150,11 @@ public class PlayerMovementManager : MonoBehaviour
 
 
 		}
+	}
+
+	private bool TouchBlocNotInPreviewPath(GestureRecognizer gesture, PlayerStateManager currentPlayer)
+	{
+		return Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask) && (!currentPlayer.nextBlockPath.Contains(_hit.transform));
 	}
 	private bool TouchFailed(GestureRecognizer gesture)
 	{
@@ -578,7 +581,7 @@ public class PlayerMovementManager : MonoBehaviour
 		var player = GameManager.Instance.currentPlayerTurn;
 		player.PlayerActionPointCardState.SetFalsePathObjects();
 		player.playerActionPoint = 0;
-		player.PlayerActionPointCardState.PreviewPath(player.playerActionPoint, player);
+		player.PlayerActionPointCardState.EnterState(player);
 
 		GameManager.Instance.DecreaseVariable();
 	}
