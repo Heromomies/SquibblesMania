@@ -217,25 +217,34 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitShowPath.collider.transform.position;
-
+				Quaternion quat = Quaternion.Euler(0,0,0);
+				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					MirrorDirection(2); // Right
+					quat = Quaternion.Euler(0,90f,0);
+					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					MirrorDirection(3); // Left
+					quat = Quaternion.Euler(0,-90f,0);
+					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
 					MirrorDirection(0); // Down
+					quat = Quaternion.Euler(0,180f,0);
+					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
 					MirrorDirection(1); // Up
+					quat = Quaternion.Euler(0,0f,0);
+					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				ActiveParticle();
@@ -599,7 +608,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		for (int i = 0; i < players.Length; i++)
 		{
-			if (players[i].name != GameManager.Instance.currentPlayerTurn.name)
+			if (players[i].name != GameManager.Instance.currentPlayerTurn.name && players.Length > 1)
 			{
 				Transform child = players[i].transform.GetChild(1);
 
@@ -613,36 +622,20 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1:
-					textWhenNoZombieAreSelected[0].gameObject.SetActive(true);
-					break;
-				case 2:
-					textWhenNoZombieAreSelected[0].gameObject.SetActive(true);
-					break;
-				case 3:
-					textWhenNoZombieAreSelected[1].gameObject.SetActive(true);
-					break;
-				case 4:
-					textWhenNoZombieAreSelected[1].gameObject.SetActive(true);
-					break;
+				case 1: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
+				case 2: textWhenNoZombieAreSelected[0].gameObject.SetActive(true); break;
+				case 3: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
+				case 4: textWhenNoZombieAreSelected[1].gameObject.SetActive(true); break;
 			}
 		}
 		else
 		{
 			switch (GameManager.Instance.actualCamPreset.presetNumber)
 			{
-				case 1:
-					textWhenThereAreNoZombieAround[0].gameObject.SetActive(true);
-					break;
-				case 2:
-					textWhenThereAreNoZombieAround[0].gameObject.SetActive(true);
-					break;
-				case 3:
-					textWhenThereAreNoZombieAround[1].gameObject.SetActive(true);
-					break;
-				case 4:
-					textWhenThereAreNoZombieAround[1].gameObject.SetActive(true);
-					break;
+				case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
 			}
 		}
 	}
