@@ -157,7 +157,10 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		yield return new WaitForSeconds(3f);
 		
-		_particleToDeactivatePlayerOne.SetActive(false);
-		_particleToDeactivatePlayerTwo.SetActive(false);
+		if(_particleToDeactivatePlayerOne != null)
+			_particleToDeactivatePlayerOne.SetActive(false);
+		
+		if(_particleToDeactivatePlayerOne != null)
+			_particleToDeactivatePlayerTwo.SetActive(false);
 	}
 }

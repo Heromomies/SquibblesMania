@@ -665,7 +665,9 @@ public class DashPower : MonoBehaviour, IManagePower
 	{
 		yield return new WaitForSeconds(0.1f);
 		
-		_particleToDeactivate.SetActive(false);
+		if(_particleToDeactivate != null)
+			_particleToDeactivate.SetActive(false);
+		
 		hitTransforms.Clear();
 
 		foreach (var g in listObjectToSetActiveFalse)

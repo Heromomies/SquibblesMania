@@ -103,8 +103,11 @@ public class JumpPower : MonoBehaviour, IManagePower
 		
 		_particleImpact = BezierAlgorithm.Instance.particleImpact;
 		
-		_particleImpact.SetActive(false);
-		_particleImpulse.SetActive(false);
+		if(_particleImpact != null)
+			_particleImpact.SetActive(false);
+		
+		if(_particleImpulse != null)
+			_particleImpulse.SetActive(false);
 	}
 	
 	
