@@ -193,6 +193,7 @@ public class GameManager : MonoBehaviour
 
         NFCManager.Instance.PlayerChangeTurn();
         CamConfig(count);
+        if (UiManager.Instance.textActionPointPopUp) UiManager.Instance.textActionPointPopUp.SetActive(false);
     }
 
     public void DecreaseVariable()
