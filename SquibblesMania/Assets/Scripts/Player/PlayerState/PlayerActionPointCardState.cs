@@ -383,6 +383,9 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     private void Clear(PlayerStateManager player)
     {
+        
+        player.currentBlockPlayerOn = player.currentTouchBlock;
+        
         Node currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
         currentNodePlayerOn.isActive = false;
         //We add the player to the list of block group which the player is currently on 
@@ -410,7 +413,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         SetFalsePathObjects();
-        player.currentBlockPlayerOn = player.currentTouchBlock;
+     
         if (player.playerActionPoint > 0)
         {
             EnterState(player);
@@ -419,6 +422,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (player.playerActionPoint <= 0)
         {
             currentNodePlayerOn.isActive = false;
+            UiManager.Instance.buttonNextTurn.SetActive(true);
         }
     }
 }
