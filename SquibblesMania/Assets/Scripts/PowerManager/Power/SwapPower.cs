@@ -20,7 +20,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public Material secondMat;
 
 	private GameObject _playerToSwap;
-	public GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
+	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
@@ -146,9 +146,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		
 		for (int i = 0; i < players.Length; i++)
 		{
-			Transform child = players[i].transform.GetChild(1);
-
-			child.GetComponentInChildren<Renderer>().material.color = firstMat.color;
+			GameManager.Instance.SetUpMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
 		}
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);

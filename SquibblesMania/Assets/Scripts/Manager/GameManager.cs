@@ -134,6 +134,21 @@ public class GameManager : MonoBehaviour
         NFCManager.Instance.PlayerChangeTurn();
     }
 
+    public void SetUpMaterial(PlayerStateManager player, int playerNumber)
+    {
+        switch (playerNumber)
+        {
+            case 0 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
+                break;
+            case 1 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
+                break;
+            case 2 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
+                break;
+            case 3 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
+                break; 
+        }
+    }
+    
     void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)

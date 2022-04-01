@@ -704,8 +704,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		foreach (var p in players)
 		{
-			Transform child = p.transform.GetChild(1);
-			child.GetComponentInChildren<Renderer>().material.color = zombieMat.color;
+			GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 		}
 
 		foreach (var g in textWhenThereAreNoZombieAround)
