@@ -16,7 +16,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	public LayerMask layerShowPath;
 
 	public float rangeDetectionPlayer;
-	public List<Transform> hitTransforms;
+	
 	[HideInInspector] public GameObject zombiePlayer;
 	[Space(25)] public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
 	[Space(25)] public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
@@ -32,11 +32,10 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 
-	[Header("MATERIAL SETTINGS")] [Space] public Material firstMat;
-	public Material secondMat;
-	public Material thirdMat;
-
-	[Space] public Material zombieMat;
+	[Header("MATERIAL SETTINGS")] 
+	[Space] 
+	public Material selectableMat;
+	[Space]
 	public Material changeZombieMat;
 
 	[HideInInspector] public Collider[] players;
@@ -613,7 +612,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				Transform child = players[i].transform.GetChild(1);
 
 				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = thirdMat.color;
+				color = selectableMat.color;
 				child.GetComponentInChildren<Renderer>().material.color = color;
 			}
 		}
@@ -696,11 +695,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 		yield return new WaitForSeconds(0.1f);
 		
 		_particleToDeactivate.SetActive(false);
-		
-		for (int i = 0; i < hitTransforms.Count; i++)
-		{
-			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
-		}
 
 		foreach (var p in players)
 		{
@@ -713,7 +707,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		}
 
 		zombiePlayer = null;
-		hitTransforms.Clear();
+		
 		foreach (var g in listObjectToSetActiveFalse)
 		{
 			g.SetActive(false);
