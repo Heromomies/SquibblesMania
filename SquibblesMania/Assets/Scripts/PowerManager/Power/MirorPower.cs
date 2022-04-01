@@ -38,7 +38,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Space]
 	public Material changeZombieMat;
 
-	[HideInInspector] public Collider[] players;
+	 public Collider[] players;
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -601,6 +601,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Display the zone who the players can swipe
 	{
+		Debug.Log("ODoezjd");
+		
 		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 
 		players = Physics.OverlapSphere(transform.position, rangeDetectionPlayer, layerPlayer);
@@ -697,6 +699,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 		if(_particleToDeactivate != null)
 			_particleToDeactivate.SetActive(false);
 
+
+		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
+		{
+			textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
+		}
+
 		foreach (var p in players)
 		{
 			GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
@@ -708,7 +716,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		}
 
 		zombiePlayer = null;
-		
+		players = null;
 		foreach (var g in listObjectToSetActiveFalse)
 		{
 			g.SetActive(false);
@@ -716,7 +724,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		listObjectToSetActiveFalse.Clear();
 
-		PowerManager.Instance.ActivateDeactivatePower(3, false);
+		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
