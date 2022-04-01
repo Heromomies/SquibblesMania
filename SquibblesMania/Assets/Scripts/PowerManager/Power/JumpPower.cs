@@ -15,16 +15,13 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 10.0f)] public float ySpawn;
 	
 	[Space] public LayerMask layer;
-	[Space] public LayerMask layerBlocTouched;
+	[Space] public LayerMask layerPowerPath;
 	[Space]
 	[HideInInspector] public Collider[] collidersMin;
 	[HideInInspector] public Collider[] collidersMax;
 	public List<Collider> collidersFinished = new List<Collider>();
-	[Header("MATERIAL SETTINGS")]
-	[Space]
-	public Material firstMat;
-	public Material secondMat;
 
+	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 	private GameObject _particleImpact, _particleImpulse;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
@@ -54,7 +51,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 			EventSystem.current.RaycastAll(p, _raycast);
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
-			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerBlocTouched))
+			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerPowerPath))
 			{
 				NFCManager.Instance.powerActivated = true;
 				
@@ -79,11 +76,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, 0.02f);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
-				
-				if (hitInfo.collider.CompareTag("Platform"))
-				{
-					StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
-				}
+
+				StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
 
 				ClearPower();
 			}
@@ -97,19 +91,17 @@ public class JumpPower : MonoBehaviour, IManagePower
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
 		yield return new WaitForSeconds(1.5f);
-
-		_particleImpact = BezierAlgorithm.Instance.particleImpact;
 		
 		var hitPosition = hitInfoTransform.position;
 		hitInfoTransform.DOMove(new Vector3(hitPosition.x,
 			hitPosition.y -1, hitPosition.z), speedBloc);
-		
-		
 	}
 
 	IEnumerator CoroutineClearParticles()
 	{
 		yield return new WaitForSeconds(3f);
+		
+		_particleImpact = BezierAlgorithm.Instance.particleImpact;
 		
 		_particleImpact.SetActive(false);
 		_particleImpulse.SetActive(false);
@@ -143,11 +135,15 @@ public class JumpPower : MonoBehaviour, IManagePower
 		
 		foreach (var colFinished in collidersFinished)
 		{
-			var color = colFinished.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-			color = secondMat.color;
-			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor",color);
-			
-			colFinished.gameObject.layer = 10;
+			if (colFinished != null && colFinished.gameObject.GetComponent<Node>() && colFinished.gameObject.GetComponent<Node>().colorBloc != Node.ColorBloc.None)
+			{
+				var objPos = colFinished.transform.position;
+		
+				GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
+					new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, colFinished.transform);
+
+				listObjectToSetActiveFalse.Add(obj);
+			}
 		}
 	}
 
@@ -165,11 +161,9 @@ public class JumpPower : MonoBehaviour, IManagePower
 	{
 		StartCoroutine(CoroutineClearParticles());
 		
-		foreach (var colFinished in collidersFinished)
+		foreach (var colFinished in listObjectToSetActiveFalse)
 		{
-			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
-			
-			colFinished.gameObject.layer = 3;
+			colFinished.SetActive(false);
 		}
 		for ( int i = 0; i < collidersMax.Length; i++)
 		{
@@ -181,6 +175,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 		
 		collidersFinished.Clear();
+		listObjectToSetActiveFalse.Clear();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();

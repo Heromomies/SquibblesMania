@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DigitalRubyShared;
@@ -19,7 +20,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public Material secondMat;
 
 	private GameObject _playerToSwap;
-	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
+	public GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
@@ -133,12 +134,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 	}
 	
 	public void ClearPower()
-	{	
+	{
+		StartCoroutine(StartBeforeClearCoroutine());
+		
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
-		
-		_particleToDeactivatePlayerOne.SetActive(false);
-		_particleToDeactivatePlayerTwo.SetActive(false);
-		
+
 		foreach (var g in textWhenThereAreNoZombieAround)
 		{
 			g.gameObject.SetActive(false);
@@ -153,5 +153,13 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+	}
+
+	IEnumerator StartBeforeClearCoroutine()
+	{
+		yield return new WaitForSeconds(3f);
+		
+		_particleToDeactivatePlayerOne.SetActive(false);
+		_particleToDeactivatePlayerTwo.SetActive(false);
 	}
 }
