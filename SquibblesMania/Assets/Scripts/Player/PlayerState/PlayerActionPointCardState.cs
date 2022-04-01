@@ -423,6 +423,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             currentNodePlayerOn.isActive = false;
             UiManager.Instance.buttonNextTurn.SetActive(true);
+            
         }
     }
 }

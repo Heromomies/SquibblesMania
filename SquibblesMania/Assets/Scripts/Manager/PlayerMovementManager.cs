@@ -128,12 +128,11 @@ public class PlayerMovementManager : MonoBehaviour
 
 					if (currentPlayer.nextBlockPath.Contains(_hit.transform) && currentPlayer.PlayerActionPointCardState.PathParentPosComparedToPlayerPos(hitBlocParentPos, currentPlayer.transform.position) && HitBlockEqualToCurrentBlockPlayerOn(_hit, currentPlayer))
 					{
-						
 						currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
 						isPlayerPreviewPath = true;
 						currentPlayer.StartPreviewPathFinding();
 					}
-					else if (!currentPlayer.nextBlockPath.Contains(_hit.transform) && isPlayerPreviewPath )
+					else if (!currentPlayer.nextBlockPath.Contains(_hit.transform) && isPlayerPreviewPath)
 					{
 						isPlayerPreviewPath = false;
 						currentPlayer.ResetPreviewPathFinding();
@@ -265,12 +264,12 @@ public class PlayerMovementManager : MonoBehaviour
 		if (blockParentCurrentlySelected.GetComponent<GroupBlockDetection>() != null)
 		{
 			_blocParentCurrentlySelectedPos = blockParentCurrentlySelected.transform.position;
-			UiManager.Instance.SpawnTextActionPointPopUp(currentPlayer);
-			if (blockParentCurrentlySelected != null)
+			if (!UiManager.Instance.textActionPointPopUp)
 			{
-				SetUpBlocPreviewMesh(blockParentCurrentlySelected);
+				UiManager.Instance.SpawnTextActionPointPopUp(currentPlayer);
 			}
-			
+		
+			if(blockParentCurrentlySelected != null) SetUpBlocPreviewMesh(blockParentCurrentlySelected);
 			hasStopMovingBloc = true;
 		}
 	}
@@ -295,9 +294,7 @@ public class PlayerMovementManager : MonoBehaviour
 		blockParentCurrentlySelected = null;
 
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-		{
 			UiManager.Instance.buttonNextTurn.SetActive(true);
-		}
 
 		_lastDirectionBloc = Vector3.zero;
 	}
