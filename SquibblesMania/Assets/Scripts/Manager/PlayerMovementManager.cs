@@ -261,6 +261,7 @@ public class PlayerMovementManager : MonoBehaviour
 		_isBlocSelected = true;
 		var currentPlayer = currentPlayerTurn.transform;
 		blockParentCurrentlySelected = _blockCurrentlySelected.transform.parent;
+		UiManager.Instance.totalCurrentActionPoint = currentPlayerTurn.playerActionPoint;
 		if (blockParentCurrentlySelected.GetComponent<GroupBlockDetection>() != null)
 		{
 			_blocParentCurrentlySelectedPos = blockParentCurrentlySelected.transform.position;
