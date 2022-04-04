@@ -10,6 +10,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public float easing = 0.5f;
     public int totalPages;
     public int currentPage = 1;
+    public bool transitionf;
     // Start is called before the first frame update
     void Start()
     {
@@ -67,11 +68,13 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     IEnumerator SmoothMove(Vector3 startpos, Vector3 endpos, float seconds)
     {
+        
         float t = 0f;
         while(t <= 1.0)
         {
             t += Time.deltaTime / seconds;
             transform.position = Vector3.Lerp(startpos, endpos, Mathf.SmoothStep(0f, 1f, t));
+            
             yield return null;
         }
     }
