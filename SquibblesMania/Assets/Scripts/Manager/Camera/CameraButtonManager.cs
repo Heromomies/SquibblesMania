@@ -36,11 +36,24 @@ public class CameraButtonManager : MonoBehaviour
     {
         if (isCamRotateButtonPressed)
         {
+            Vector3 worldUp = Vector3.up;
             Vector3 orbit = -Vector3.forward * radius;
             var camEulerAngles = transform.eulerAngles;
             orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + (targetAngle * Time.deltaTime) , camEulerAngles.z) * orbit;
+            
+            
             transform.position = target.transform.position + orbit;
-            transform.LookAt(target.position);
+
+            if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+            {
+                transform.LookAt(target.position, worldUp);
+            }
+            else
+            {
+                transform.LookAt(target.position, -worldUp);
+            }
+            
+            
         }
     }
 
