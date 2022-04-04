@@ -28,8 +28,6 @@ public class PlayerSave : MonoBehaviour
         playerData.P4colorID = P4.GetComponent<CharacterCustomization>().colorID;
         playerData.P4hatID = P4.GetComponent<CharacterCustomization>().hatID;
 
-        Debug.Log("lel");
-
         mapID = playerData.MapID;
 
         SceneManager.LoadScene(mapID);
