@@ -71,16 +71,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	private void OnEnable() // Add swipe gesture and pan gesture to select a player and move it
 	{
-		/*swipe = new SwipeGestureRecognizer();
-		swipe.StateUpdated += SwipeUpdated;
-		swipe.DirectionThreshold = 0;
-		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
-		swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
-		swipe.ThresholdSeconds = swipeThresholdSeconds;
-		swipe.AllowSimultaneousExecutionWithAllGestures();
-		FingersScript.Instance.AddGesture(swipe);*/
-
 		SwapTouchGesture = new PanGestureRecognizer();
 		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
 		//Add new gesture
@@ -247,138 +237,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 				}
 
 				ActiveParticle();
-			}
-		}
-	}
-
-	#endregion
-
-	/// <summary>
-	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
-	/// </summary>
-
-	#region SwipeAdaptation
-
-	public SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
-	{
-		_focus = new Vector2(swipeDirection.FocusX, swipeDirection.FocusY);
-		_startFocus = new Vector2(swipeDirection.StartFocusX, swipeDirection.StartFocusY);
-
-		var dir = _focus - _startFocus;
-
-		float angle = Vector3.SignedAngle(dir, Vector3.up, Vector3.forward);
-		angle = angle < 0 ? angle + 360 : angle;
-
-		var offsetCamera = _cam.transform.eulerAngles.y - _offset;
-		angle = Mathf.Repeat(angle + offsetCamera, 360);
-
-		if (270 < angle || angle < 0)
-		{
-			return SwipeGestureRecognizerDirection.Up;
-		}
-		else if (0 < angle && angle < 90)
-		{
-			return SwipeGestureRecognizerDirection.Right;
-		}
-		else if (90 < angle && angle < 180)
-		{
-			return SwipeGestureRecognizerDirection.Down;
-		}
-		else if (180 < angle && angle < 270)
-		{
-			return SwipeGestureRecognizerDirection.Left;
-		}
-		else
-		{
-			return SwipeGestureRecognizerDirection.Any;
-		}
-	}
-
-	#endregion
-
-	#region SwipeUpdated
-
-	private void SwipeUpdated(GestureRecognizer gestureRecognizer) // Swipe update, when we select a player, we can swipe after that
-	{
-		SwipeGestureRecognizer swipeGestureRecognizer = gestureRecognizer as SwipeGestureRecognizer;
-		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended && zombiePlayer != null)
-		{
-			var endDirection = Swipe(swipeGestureRecognizer);
-
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(2);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(3);
-							break;
-					}
-
-					break;
-				case 2:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(2);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(3);
-							break;
-					}
-
-					break;
-				case 3:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(3);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(2);
-							break;
-					}
-
-					break;
-				case 4:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(3);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(2);
-							break;
-					}
-
-					break;
 			}
 		}
 	}
@@ -601,8 +459,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Display the zone who the players can swipe
 	{
-		Debug.Log("ODoezjd");
-		
 		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
 
 		players = Physics.OverlapSphere(transform.position, rangeDetectionPlayer, layerPlayer);
@@ -675,17 +531,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	#region CHANGE PLAYER MATERIAL
-
-	private void ChangePlayerMaterial(Transform objectToChange, Material mat) // Change the material of the object
-	{
-		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-		color = mat.color;
-		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
-	}
-
-	#endregion
-
 	private void ActiveParticle()
 	{
 		var playerTransform = GameManager.Instance.currentPlayerTurn.transform;
@@ -724,7 +569,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		listObjectToSetActiveFalse.Clear();
 
-		PowerManager.Instance.ActivateDeactivatePower(2, false);
+		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
@@ -741,12 +586,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
-	public void OnDisable()
+	private void OnDisable()
 	{
 		if (FingersScript.HasInstance)
 		{
 			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
-			FingersScript.Instance.RemoveGesture(swipe);
 		}
 	}
 }

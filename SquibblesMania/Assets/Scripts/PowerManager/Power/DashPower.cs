@@ -19,19 +19,10 @@ public class DashPower : MonoBehaviour, IManagePower
 	public Transform raycastPlayer;
 
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
-
-	[Header("TOUCH SETTINGS")] [Range(1, 10)]
-	public int swipeTouchCount = 1;
-
-	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
-	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
-
-	public SwipeGestureRecognizer swipe;
+	
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
-
-	private Vector2 _focus, _startFocus;
-	private float _offset;
+	
 	private Camera _cam;
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
@@ -52,16 +43,6 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	private void OnEnable()
 	{
-		/*swipe = new SwipeGestureRecognizer();
-		swipe.StateUpdated += SwipeUpdated;
-		swipe.DirectionThreshold = 0;
-		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
-		swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
-		swipe.ThresholdSeconds = swipeThresholdSeconds;
-		swipe.AllowSimultaneousExecutionWithAllGestures();
-		FingersScript.Instance.AddGesture(swipe);*/
-
 		SwapTouchGesture = new PanGestureRecognizer();
 		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
 		//Add new gesture
@@ -71,7 +52,6 @@ public class DashPower : MonoBehaviour, IManagePower
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
 
 		_cam = Camera.main;
-		_offset = PlayerMovementManager.Instance.offset;
 
 		DisplayPower();
 	}
@@ -131,139 +111,6 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 		}
 	}
-
-
-	/// <summary>
-	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
-	/// </summary>
-
-	#region SwipeAdaptation
-
-	public SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
-	{
-		_focus = new Vector2(swipeDirection.FocusX, swipeDirection.FocusY);
-		_startFocus = new Vector2(swipeDirection.StartFocusX, swipeDirection.StartFocusY);
-
-		var dir = _focus - _startFocus;
-
-		float angle = Vector3.SignedAngle(dir, Vector3.up, Vector3.forward);
-		angle = angle < 0 ? angle + 360 : angle;
-
-		var offsetCamera = _cam.transform.eulerAngles.y - _offset;
-		angle = Mathf.Repeat(angle + offsetCamera, 360);
-
-		if (270 < angle || angle < 0)
-		{
-			return SwipeGestureRecognizerDirection.Up;
-		}
-		else if (0 < angle && angle < 90)
-		{
-			return SwipeGestureRecognizerDirection.Right;
-		}
-		else if (90 < angle && angle < 180)
-		{
-			return SwipeGestureRecognizerDirection.Down;
-		}
-		else if (180 < angle && angle < 270)
-		{
-			return SwipeGestureRecognizerDirection.Left;
-		}
-		else
-		{
-			return SwipeGestureRecognizerDirection.Any;
-		}
-	}
-
-	#endregion
-
-	#region Swipe To Dash
-
-	private void SwipeUpdated(GestureRecognizer gesture) // When we swipe
-	{
-		SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
-		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended)
-		{
-			var endDirection = Swipe(swipeGestureRecognizer);
-
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							DashDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							DashDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							DashDirection(2);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							DashDirection(3);
-							break;
-					}
-
-					break;
-				case 2:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							DashDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							DashDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							DashDirection(2);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							DashDirection(3);
-							break;
-					}
-
-					break;
-				case 3:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							DashDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							DashDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							DashDirection(3);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							DashDirection(2);
-							break;
-					}
-
-					break;
-				case 4:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							DashDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							DashDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							DashDirection(3);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							DashDirection(2);
-							break;
-					}
-
-					break;
-			}
-		}
-	}
-
-	#endregion
 
 	#region Dash Direction
 
@@ -392,6 +239,8 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Show the path 
 	{
+		Debug.Log("IDecihfih");
+		
 		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 		baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 		raycastPlayer.position = baseSpawnRaycastTransform.position;
@@ -685,11 +534,11 @@ public class DashPower : MonoBehaviour, IManagePower
 		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
-	public void OnDisable()
+	private void OnDisable()
 	{
 		if (FingersScript.HasInstance)
 		{
-			FingersScript.Instance.RemoveGesture(swipe);
+			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
 		}
 	}
 }

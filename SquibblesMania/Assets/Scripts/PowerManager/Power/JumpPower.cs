@@ -159,7 +159,13 @@ public class JumpPower : MonoBehaviour, IManagePower
 	{
 		
 	}
-
+	private void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
+		}
+	}
 	public void ClearPower()
 	{
 		StartCoroutine(CoroutineClearParticles());
@@ -180,7 +186,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		collidersFinished.Clear();
 		listObjectToSetActiveFalse.Clear();
 		
-		PowerManager.Instance.ActivateDeactivatePower(3, false);
+		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

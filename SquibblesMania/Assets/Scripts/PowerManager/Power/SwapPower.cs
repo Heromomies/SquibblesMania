@@ -15,9 +15,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 	[Space (10)] 
 	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
 	[Space (10)] 
-	[Header("MATERIALS")] 
-	public Material firstMat; 
-	public Material secondMat;
+	[Header("MATERIALS")]
+	public Material matToChange;
 
 	private GameObject _playerToSwap;
 	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
@@ -62,7 +61,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 				Transform child = players[i].transform.GetChild(1);
 
 				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = secondMat.color;
+				color = matToChange.color;
 				child.GetComponentInChildren<Renderer>().material.color = color;
 			}
 		}
@@ -162,5 +161,13 @@ public class SwapPower : MonoBehaviour, IManagePower
 		
 		if(_particleToDeactivatePlayerOne != null)
 			_particleToDeactivatePlayerTwo.SetActive(false);
+	}
+	
+	private void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
+		}
 	}
 }
