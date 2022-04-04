@@ -63,7 +63,7 @@ public class UiManager : MonoBehaviour
         winText.text = $"{playerTeam} WIN";
     }
 
-    public void ButtonChangeCamMoveUi()
+  /*  public void ButtonChangeCamMoveUi()
     {
         FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
         
@@ -80,7 +80,7 @@ public class UiManager : MonoBehaviour
             cameraTouchMovement.enabled = true;
             CameraButtonManager.Instance.BaseViewMode();
         }
-    }
+    }*/
     /// <summary>
     /// Spawn Text Action Point to indicate to the player his action's point
     /// </summary>
