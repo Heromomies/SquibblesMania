@@ -103,7 +103,7 @@ public class CameraViewModeGesture : MonoBehaviour
 
     private IEnumerator StartMovementViewModeStateCoroutine(int indexUiCircleSelection, Color uiCircleColor, float angleRotation, float camIconAngleZ)
     {
-       
+        CheckIndexCamButtonManager(indexUiCircleSelection);
         actualUiViewMode.uiCircleSelection[indexUiCircleSelection].color = uiCircleColor;
         SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZ);
         StartCoroutine(StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleRotation));
@@ -114,6 +114,35 @@ public class CameraViewModeGesture : MonoBehaviour
         foreach (var image in actualUiViewMode.uiCircleSelection)
         {
             image.gameObject.SetActive(true);
+        }
+    }
+
+    void CheckIndexCamButtonManager(int indexUiCircleSelection)
+    {
+        if (indexUiCircleSelection >= 2)
+        {
+            foreach (var button in CameraButtonManager.Instance.actualUiCamPreset.buttonsCamRotate)
+            {
+                var eventTriggerButton = button.gameObject.GetComponent<EventTrigger>();
+                if (button.interactable)
+                {
+                    button.interactable = false;
+                    eventTriggerButton.enabled = false;
+                }
+                    
+            }
+        }
+        else
+        {
+            foreach (var button in CameraButtonManager.Instance.actualUiCamPreset.buttonsCamRotate)
+            {
+                var eventTriggerButton = button.gameObject.GetComponent<EventTrigger>();
+                if (!button.interactable)
+                {
+                    button.interactable = true;
+                    eventTriggerButton.enabled = true;
+                }
+            }
         }
     }
 
