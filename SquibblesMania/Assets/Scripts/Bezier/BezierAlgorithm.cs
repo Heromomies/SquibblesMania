@@ -12,6 +12,7 @@ public class BezierAlgorithm : MonoBehaviour
 	private bool _canMove;
 
 	private float _timeLeft;
+	private AnimationCurve _animationCurve;
 	private static BezierAlgorithm _instance = null;
      
 	// Game Instance Singleton
@@ -66,12 +67,13 @@ public class BezierAlgorithm : MonoBehaviour
 		return allPoints[0];
 	}
 
-	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f)
+	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f, AnimationCurve curve)
 	{
 		_go = objectToMove;
 		_points = pointsList;
 		_f = f;
-
+		_animationCurve = curve;
+		
 		_canMove = true;
 	}
 
@@ -82,7 +84,7 @@ public class BezierAlgorithm : MonoBehaviour
 			_timeLeft += _f;
 			if (_timeLeft < 1)
 			{
-				_go.transform.position = Curve(_points, _timeLeft);
+				_go.transform.position = Curve(_points, _animationCurve.Evaluate(_timeLeft));
 			}
 			else
 			{
