@@ -14,6 +14,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public LayerMask layer;
 	[Space (10)] 
 	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space (10)]
+	public List<TextMeshProUGUI> textSelectPlayer;
 	[Space (10)] 
 	[Header("MATERIALS")]
 	public Material matToChange;
@@ -66,22 +68,26 @@ public class SwapPower : MonoBehaviour, IManagePower
 			}
 		}
 
-		switch (players.Length)
+		if (players.Length > 1)
 		{
-			case 1:
-				switch (GameManager.Instance.actualCamPreset.presetNumber)
-				{
-					case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
-					case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
-					case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
-					case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
-				}
-				break;
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textSelectPlayer[0].gameObject.SetActive(true); break;
+				case 2: textSelectPlayer[0].gameObject.SetActive(true); break;
+				case 3: textSelectPlayer[1].gameObject.SetActive(true); break;
+				case 4: textSelectPlayer[1].gameObject.SetActive(true); break;
+			}
 		}
-	}
-
-	public void CancelPower()
-	{
+		else
+		{
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+			}
+		}
 	}
 
 	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
@@ -139,6 +145,10 @@ public class SwapPower : MonoBehaviour, IManagePower
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
 		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+		foreach (var g in textSelectPlayer)
 		{
 			g.gameObject.SetActive(false);
 		}
