@@ -13,7 +13,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 5.0f)] public int radiusMax;
 	[Range(0.0f, 3.0f)] public float speedBloc;
 	[Range(0.0f, 10.0f)] public float ySpawn;
-	[Range(0.0f, 0.1f)] public float speedPower;
+	[Range(0.0f, 0.1f)] public float speedAnimationCurve;
 	
 	public AnimationCurve curve;
 	
@@ -76,7 +76,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
-				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, 0.01f, curve);
+				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
 

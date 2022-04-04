@@ -43,17 +43,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e17cb7a137f520d4c806abb8a6e1b9fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiusMin: 3
-  radiusMax: 4
+  radiusMin: 2
+  radiusMax: 3
   speedBloc: 1
   ySpawn: 5
-  speedPower: 0.05
+  speedAnimationCurve: 0.02
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.0088694
+      value: 0.9572457
+      inSlope: 2.205229
+      outSlope: 2.205229
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07249885
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   layer:
     serializedVersion: 2
     m_Bits: 8
   layerPowerPath:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16384
   collidersMin: []
   collidersMax: []
   collidersFinished: []
