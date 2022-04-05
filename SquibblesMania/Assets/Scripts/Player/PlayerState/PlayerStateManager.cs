@@ -27,10 +27,6 @@ public class PlayerStateManager : Player
 	
 	public GameObject psStun;
 
-	[HideInInspector] public bool isInJump;
-
-	private float _timeLeft = 1.5f;
-
 	private void Start()
 	{
 		DetectBlockBelowPlayer();
@@ -109,26 +105,8 @@ public class PlayerStateManager : Player
 			if (hit.collider.gameObject.GetComponent<Node>() != null)
 			{
 				currentBlockPlayerOn = hit.transform;
-				_timeLeft = 1.5f;
 			}
 		}
-		/*else
-		{
-			_timeLeft -= Time.deltaTime;
-			if (_timeLeft < 0)
-			{
-				var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
-				var obj = blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
-				var children = obj.GetComponentsInChildren<Node>();
-
-				var randomNumber = Random.Range(0, children.Length);
-
-				GameManager.Instance.currentPlayerTurn.transform.position =
-						children[randomNumber].transform.position + new Vector3(0, 1, 0);
-				_timeLeft = 1.5f;
-			}
-			
-		}*/
 	}
 	
 	public void StunPlayer(PlayerStateManager player, int stunTurnCount)

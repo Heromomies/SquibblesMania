@@ -46,6 +46,20 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
+
+		if (_particleToDeactivatePlayerOne != null)
+		{
+			_particleToDeactivatePlayerOne.SetActive(false);
+			_particleToDeactivatePlayerOne = null;
+		}
+
+		if (_particleToDeactivatePlayerOne != null)
+		{
+			_particleToDeactivatePlayerTwo.SetActive(false);
+			_particleToDeactivatePlayerTwo = null;
+		}
+		
+		
 		DisplayPower();
 	}
 
@@ -140,8 +154,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower()
 	{
-		StartCoroutine(StartBeforeClearCoroutine());
-		
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
 		foreach (var g in textWhenThereAreNoZombieAround)
@@ -160,17 +172,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
-	}
-
-	IEnumerator StartBeforeClearCoroutine()
-	{
-		yield return new WaitForSeconds(3f);
-		
-		if(_particleToDeactivatePlayerOne != null)
-			_particleToDeactivatePlayerOne.SetActive(false);
-		
-		if(_particleToDeactivatePlayerOne != null)
-			_particleToDeactivatePlayerTwo.SetActive(false);
 	}
 	
 	private void OnDisable()
