@@ -115,7 +115,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
-		yield return new WaitForSeconds(1.75f);
+		yield return new WaitForSeconds(2f);
 
 		var hitPosition = hitInfoTransform.position;
 		
