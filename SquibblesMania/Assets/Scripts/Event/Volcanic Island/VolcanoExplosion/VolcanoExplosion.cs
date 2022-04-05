@@ -92,7 +92,6 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	void LaunchBullet() // Launch the bullets 
 	{
-		cubeTouched[0].tag = "BlackBlock";
 		cubeTouched[0].layer = 7;
 
 		var positionVol = volcanoTransform.position;
