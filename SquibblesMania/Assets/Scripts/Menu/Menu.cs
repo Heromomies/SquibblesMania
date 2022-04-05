@@ -31,6 +31,7 @@ public class Menu : MonoBehaviour
     {
         
         playerData.MapID = panelManager.GetComponent<PageSwiper>().currentPage;
+        panelManager.transform.position = panelManager.GetComponent<PageSwiper>().panelLocation;
         mapManager.SetActive(false);
         characterManager.SetActive(true);
     }
