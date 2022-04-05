@@ -16,12 +16,21 @@ public class CameraButtonManager : MonoBehaviour
 
     private static CameraButtonManager _cameraManager;
     public static CameraButtonManager Instance => _cameraManager;
+    public UICamPresets actualUiCamPreset;
+    public List<UICamPresets> uiCamPresetList;
+    [Serializable]
+    public struct UICamPresets
+    {
+        public Button[] buttonsCamRotate;
+    }
     
     [SerializeField] private float radius = 10;
     
     [SerializeField] private GameObject[] uiCamPresets;
     [SerializeField] private bool isCamRotateButtonPressed;
     [SerializeField] private float targetAngle;
+    
+    
     private void Awake()
     {
         _cameraManager = this;
@@ -73,38 +82,16 @@ public class CameraButtonManager : MonoBehaviour
         if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
         {
             uiCamPresets[0].SetActive(true);
+            actualUiCamPreset = uiCamPresetList[0];
         }
         else
         {
             uiCamPresets[1].SetActive(true);
+            actualUiCamPreset = uiCamPresetList[1];
         }
+       
     }
     
-
-   /* private void SetUpSquareIcon(int indexSquareIcon)
-    {
-        Transform childIconSelected = actualUiCamPreset.uiCamSquare[indexSquareIcon].transform.GetChild(0);
-        childIconSelected.gameObject.SetActive(true);
-        var uiCamSquareColor = actualUiCamPreset.uiCamSquare[indexSquareIcon].color;
-        uiCamSquareColor.a = 1f;
-        actualUiCamPreset.uiCamSquare[indexSquareIcon].color = uiCamSquareColor;
-      
-        foreach (var iconImage in actualUiCamPreset.uiCamSquare)
-        {
-            if (iconImage != actualUiCamPreset.uiCamSquare[indexSquareIcon])
-            {
-                var iconImageColor = iconImage.color;
-                iconImageColor.a = 0.75f;
-                iconImage.color = iconImageColor;
-
-                Transform childIconImage = iconImage.transform.GetChild(0);
-                childIconImage.gameObject.SetActive(false);
-            }
-        }
-    }*/
-     
-    
-
    /* public void TopViewMode()
     {
         int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
