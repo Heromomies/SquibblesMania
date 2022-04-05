@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 {
-    private Vector3 panelLocation;
+    public Vector3 panelLocation;
     public float percentThreshold = 0.2f;
     public float easing = 0.5f;
     public int totalPages;
