@@ -71,10 +71,9 @@ public class Meteorite : MonoBehaviour
 			
 			//other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
 			var otherPos = other.transform.position;
-			GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",
-				new Vector3(otherPos.x, otherPos.y + 0.75f, otherPos.z), Quaternion.identity, null);
+			//GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",new Vector3(otherPos.x, otherPos.y + 0.75f, otherPos.z), Quaternion.identity, null);
 
-			other.gameObject.GetComponent<PlayerStateManager>().psStun = stunVFX;
+			//other.gameObject.GetComponent<PlayerStateManager>().psStun = stunVFX;
 			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
