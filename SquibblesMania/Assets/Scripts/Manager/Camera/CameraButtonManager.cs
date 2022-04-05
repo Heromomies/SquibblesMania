@@ -41,14 +41,14 @@ public class CameraButtonManager : MonoBehaviour
         isCamRotateButtonPressed = value;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (isCamRotateButtonPressed)
         {
             Vector3 worldUp = Vector3.up;
             Vector3 orbit = -Vector3.forward * radius;
             var camEulerAngles = transform.eulerAngles;
-            orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + (targetAngle * Time.deltaTime) , camEulerAngles.z) * orbit;
+            orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + targetAngle, camEulerAngles.z) * orbit;
             
             
             transform.position = target.transform.position + orbit;
@@ -77,6 +77,7 @@ public class CameraButtonManager : MonoBehaviour
     {
         // Set up cam ui buttons
         
+        
         foreach (var uiCamPreset in uiCamPresets) uiCamPreset.SetActive(false);
 
         if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
@@ -89,8 +90,9 @@ public class CameraButtonManager : MonoBehaviour
             uiCamPresets[1].SetActive(true);
             actualUiCamPreset = uiCamPresetList[1];
         }
-       
+        
     }
+}
     
    /* public void TopViewMode()
     {
@@ -107,4 +109,3 @@ public class CameraButtonManager : MonoBehaviour
     }*/
 
   
-}
