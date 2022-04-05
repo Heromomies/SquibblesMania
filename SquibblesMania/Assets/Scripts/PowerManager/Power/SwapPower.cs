@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DigitalRubyShared;
@@ -13,10 +14,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public LayerMask layer;
 	[Space (10)] 
 	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space (10)]
+	public List<TextMeshProUGUI> textSelectPlayer;
 	[Space (10)] 
-	[Header("MATERIALS")] 
-	public Material firstMat; 
-	public Material secondMat;
+	[Header("MATERIALS")]
+	public Material matToChange;
 
 	private GameObject _playerToSwap;
 	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
@@ -44,6 +46,20 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
+
+		if (_particleToDeactivatePlayerOne != null)
+		{
+			_particleToDeactivatePlayerOne.SetActive(false);
+			_particleToDeactivatePlayerOne = null;
+		}
+
+		if (_particleToDeactivatePlayerOne != null)
+		{
+			_particleToDeactivatePlayerTwo.SetActive(false);
+			_particleToDeactivatePlayerTwo = null;
+		}
+		
+		
 		DisplayPower();
 	}
 
@@ -61,27 +77,31 @@ public class SwapPower : MonoBehaviour, IManagePower
 				Transform child = players[i].transform.GetChild(1);
 
 				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = secondMat.color;
+				color = matToChange.color;
 				child.GetComponentInChildren<Renderer>().material.color = color;
 			}
 		}
 
-		switch (players.Length)
+		if (players.Length > 1)
 		{
-			case 1:
-				switch (GameManager.Instance.actualCamPreset.presetNumber)
-				{
-					case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
-					case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
-					case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
-					case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
-				}
-				break;
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textSelectPlayer[0].gameObject.SetActive(true); break;
+				case 2: textSelectPlayer[0].gameObject.SetActive(true); break;
+				case 3: textSelectPlayer[1].gameObject.SetActive(true); break;
+				case 4: textSelectPlayer[1].gameObject.SetActive(true); break;
+			}
 		}
-	}
-
-	public void CancelPower()
-	{
+		else
+		{
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+			}
+		}
 	}
 
 	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
@@ -133,25 +153,32 @@ public class SwapPower : MonoBehaviour, IManagePower
 	}
 	
 	public void ClearPower()
-	{	
+	{
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
-		
-		_particleToDeactivatePlayerOne.SetActive(false);
-		_particleToDeactivatePlayerTwo.SetActive(false);
-		
+
 		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+		foreach (var g in textSelectPlayer)
 		{
 			g.gameObject.SetActive(false);
 		}
 		
 		for (int i = 0; i < players.Length; i++)
 		{
-			Transform child = players[i].transform.GetChild(1);
-
-			child.GetComponentInChildren<Renderer>().material.color = firstMat.color;
+			GameManager.Instance.SetUpMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
 		}
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+	}
+	
+	private void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
+		}
 	}
 }

@@ -13,18 +13,18 @@ public class JumpPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 5.0f)] public int radiusMax;
 	[Range(0.0f, 3.0f)] public float speedBloc;
 	[Range(0.0f, 10.0f)] public float ySpawn;
+	[Range(0.0f, 0.1f)] public float speedAnimationCurve;
 	
-	[Space] public LayerMask layer;
-	[Space] public LayerMask layerBlocTouched;
+	public AnimationCurve curve;
+	
+	[Space] public LayerMask layerInteractable;
+	[Space] public LayerMask layerPowerPath;
 	[Space]
 	[HideInInspector] public Collider[] collidersMin;
 	[HideInInspector] public Collider[] collidersMax;
 	public List<Collider> collidersFinished = new List<Collider>();
-	[Header("MATERIAL SETTINGS")]
-	[Space]
-	public Material firstMat;
-	public Material secondMat;
 
+	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 	private GameObject _particleImpact, _particleImpulse;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
@@ -41,6 +41,21 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
 
+		_particleImpact = BezierAlgorithm.Instance.particleImpact;
+
+		if (_particleImpact != null)
+		{
+			_particleImpact.SetActive(false);
+			_particleImpact = null;
+		}
+
+		if (_particleImpulse != null)
+		{
+			_particleImpulse.SetActive(false);
+			_particleImpulse = null;
+		}
+		
+		
 		DisplayPower();
 	}
 
@@ -54,15 +69,14 @@ public class JumpPower : MonoBehaviour, IManagePower
 			EventSystem.current.RaycastAll(p, _raycast);
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
-			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerBlocTouched))
+			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerPowerPath))
 			{
 				NFCManager.Instance.powerActivated = true;
 				
 				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
 
 				var posHitInfo = hitInfo.transform.position;
-				posHitInfo.y += 1;
-				
+
 				var playerPos = tCurrentPlayerTurn.position;
 				
 				var xSpawn = (posHitInfo.x + playerPos.x) /2;
@@ -76,16 +90,21 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
-				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, 0.02f);
+				BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
-				
-				if (hitInfo.collider.CompareTag("Platform"))
-				{
-					StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
-				}
 
-				ClearPower();
+				if (Physics.Raycast(hitInfo.transform.position, Vector3.down, out var hitInfoTwo, Mathf.Infinity))
+				{
+					if (hitInfoTwo.collider.CompareTag("Platform"))
+					{
+						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
+					}
+					else
+					{
+						ClearPower();
+					}
+				}
 			}
 			else
 			{
@@ -96,35 +115,29 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
-		yield return new WaitForSeconds(1.5f);
+		yield return new WaitForSeconds(2f);
 
-		_particleImpact = BezierAlgorithm.Instance.particleImpact;
-		
 		var hitPosition = hitInfoTransform.position;
-		hitInfoTransform.DOMove(new Vector3(hitPosition.x,
-			hitPosition.y -1, hitPosition.z), speedBloc);
 		
+		if (hitPosition.y - 1 >= GameManager.Instance.minHeightBlocMovement)
+		{
+			hitInfoTransform.DOMove(new Vector3(hitPosition.x,
+				hitPosition.y -1, hitPosition.z), speedBloc);
+		}
 		
+		ClearPower();
 	}
 
-	IEnumerator CoroutineClearParticles()
-	{
-		yield return new WaitForSeconds(3f);
-		
-		_particleImpact.SetActive(false);
-		_particleImpulse.SetActive(false);
-	}
-	
-	
+
 	public void DisplayPower()
 	{
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = tPosPower;
 
 		// ReSharper disable once Unity.PreferNonAllocApi
-		collidersMin = Physics.OverlapSphere(tPosPower, radiusMin, layer); // Detect bloc around the object
+		collidersMin = Physics.OverlapSphere(tPosPower, radiusMin, layerInteractable); // Detect bloc around the object
 		// ReSharper disable once Unity.PreferNonAllocApi
-		collidersMax = Physics.OverlapSphere(tPosPower, radiusMax, layer); // Detect bloc around the object
+		collidersMax = Physics.OverlapSphere(tPosPower, radiusMax, layerInteractable); // Detect bloc around the object
 
 		collidersFinished.AddRange(collidersMin);
 
@@ -140,36 +153,32 @@ public class JumpPower : MonoBehaviour, IManagePower
 			}
 		}
 
-		
 		foreach (var colFinished in collidersFinished)
 		{
-			var color = colFinished.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-			color = secondMat.color;
-			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor",color);
-			
-			colFinished.gameObject.layer = 10;
+			if (colFinished != null && colFinished.gameObject.GetComponent<Node>())
+			{
+				var objPos = colFinished.transform.position;
+		
+				GameObject obj = PoolManager.Instance.SpawnObjectFromPool("PlanePowerPath",
+					new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.identity, colFinished.transform);
+
+				listObjectToSetActiveFalse.Add(obj);
+			}
 		}
 	}
-
-	public void CancelPower()
+	private void OnDisable()
 	{
-		
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
+		}
 	}
-
-	public void DoPower()
-	{
-		
-	}
-
+	
 	public void ClearPower()
 	{
-		StartCoroutine(CoroutineClearParticles());
-		
-		foreach (var colFinished in collidersFinished)
+		foreach (var colFinished in listObjectToSetActiveFalse)
 		{
-			colFinished.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
-			
-			colFinished.gameObject.layer = 3;
+			colFinished.SetActive(false);
 		}
 		for ( int i = 0; i < collidersMax.Length; i++)
 		{
@@ -181,6 +190,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 		
 		collidersFinished.Clear();
+		listObjectToSetActiveFalse.Clear();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();

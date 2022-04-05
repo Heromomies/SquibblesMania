@@ -6,9 +6,5 @@ public interface IManagePower
 {
 	public void DisplayPower();
 
-	public void CancelPower();
-
-	public void DoPower();
-
 	public void ClearPower();
 }

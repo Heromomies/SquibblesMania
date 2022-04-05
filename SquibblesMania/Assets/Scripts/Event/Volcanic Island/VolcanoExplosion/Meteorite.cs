@@ -36,47 +36,44 @@ public class Meteorite : MonoBehaviour
 
 	private void OnCollisionEnter(Collision other)
 	{
-		if (other.gameObject.CompareTag("BlackBlock"))
-		{
-			StartCoroutine(SetActiveFalseBullet(2f));
-			
-			other.gameObject.GetComponent<Node>().isActive = false;
-			transform.parent = other.transform;
-			_turn = GameManager.Instance.turnCount;
-
-			AudioManager.Instance.Play("FireballEnd");
-			
-			transform.rotation = new Quaternion(0,0,0,0);
-			stopRotating = true;
-
-			var transformPlayer = transform.position;
-			
-			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
-			Destroy(explosionPS, 2f);
-
-			var otherPosition = other.transform.position;
-			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
-				new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, null);
-			_particleFireToDelete = firePS;
-			
-			_rb.constraints = RigidbodyConstraints.FreezeAll;
-			
-			transform.position = new Vector3(otherPosition.x, transformPlayer.y -0.1f, otherPosition.z);
-
-			transform.rotation = other.transform.rotation;
-		}
-		else if (other.gameObject.CompareTag("Player"))
+		if (other.gameObject.CompareTag("Player"))
 		{
 			AudioManager.Instance.Play("Stun");
 			
-			//other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
-			var otherPos = other.transform.position;
-			GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",
-				new Vector3(otherPos.x, otherPos.y + 0.75f, otherPos.z), Quaternion.identity, null);
-
-			other.gameObject.GetComponent<PlayerStateManager>().psStun = stunVFX;
-			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
+		}
+		else
+		{
+			StartCoroutine(SetActiveFalseBullet(2f));
+
+			if (other.gameObject.GetComponent<Node>() != null)
+			{
+				other.gameObject.GetComponent<Node>().isActive = false;
+			
+				transform.parent = other.transform;
+				_turn = GameManager.Instance.turnCount;
+
+				AudioManager.Instance.Play("FireballEnd");
+			
+				transform.rotation = new Quaternion(0,0,0,0);
+				stopRotating = true;
+
+				var transformPlayer = transform.position;
+			
+				GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
+				Destroy(explosionPS, 2f);
+
+				var otherPosition = other.transform.position;
+				GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
+					new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, null);
+				_particleFireToDelete = firePS;
+			
+				_rb.constraints = RigidbodyConstraints.FreezeAll;
+			
+				transform.position = new Vector3(otherPosition.x, transformPlayer.y -0.1f, otherPosition.z);
+
+				transform.rotation = other.transform.rotation;
+			}
 		}
 	}
 

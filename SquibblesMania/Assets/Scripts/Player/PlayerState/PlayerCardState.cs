@@ -56,16 +56,13 @@ public class PlayerCardState : PlayerBaseState
 					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
 						break;
-					case 'R':
-						PowerManager.Instance.ActivateDeactivatePower(1, true);
+					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
 						break;
-					case 'Y':
-						PowerManager.Instance.ActivateDeactivatePower(2, true);
+					case 'Y': PowerManager.Instance.ActivateDeactivatePower(2, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
 						break;
-					case 'G':
-						PowerManager.Instance.ActivateDeactivatePower(3, true);
+					case 'G': PowerManager.Instance.ActivateDeactivatePower(3, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
 						break;
 				}
@@ -81,18 +78,10 @@ public class PlayerCardState : PlayerBaseState
 
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 				{
-					case 'B':
-						ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
-						break;
-					case 'R':
-						ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
-						break;
-					case 'G':
-						ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
-						break;
-					case 'Y':
-						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
-						break;
+					case 'B': ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer); break;
+					case 'R': ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer); break;
+					case 'Y': ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer); break;
+					case 'G': ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer); break;
 				}
 				
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
@@ -168,6 +157,10 @@ public class PlayerCardState : PlayerBaseState
 					}
 
 					GameManager.Instance.DecreaseVariable();
+				}
+				else
+				{
+					NFCController.StopPolling();
 				}
 			}
 			

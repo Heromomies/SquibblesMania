@@ -16,7 +16,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	public LayerMask layerShowPath;
 
 	public float rangeDetectionPlayer;
-	public List<Transform> hitTransforms;
+	
 	[HideInInspector] public GameObject zombiePlayer;
 	[Space(25)] public List<TextMeshProUGUI> textWhenNoZombieAreSelected;
 	[Space(25)] public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
@@ -32,14 +32,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
 	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
 
-	[Header("MATERIAL SETTINGS")] [Space] public Material firstMat;
-	public Material secondMat;
-	public Material thirdMat;
-
-	[Space] public Material zombieMat;
+	[Header("MATERIAL SETTINGS")] 
+	[Space] 
+	public Material selectableMat;
+	[Space]
 	public Material changeZombieMat;
 
-	[HideInInspector] public Collider[] players;
+	 public Collider[] players;
 	public SwipeGestureRecognizer swipe;
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
@@ -72,16 +71,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	private void OnEnable() // Add swipe gesture and pan gesture to select a player and move it
 	{
-		/*swipe = new SwipeGestureRecognizer();
-		swipe.StateUpdated += SwipeUpdated;
-		swipe.DirectionThreshold = 0;
-		swipe.MinimumNumberOfTouchesToTrack = swipe.MaximumNumberOfTouchesToTrack = swipeTouchCount;
-		swipe.MinimumDistanceUnits = minimumDistanceUnits;
-		swipe.EndMode = SwipeGestureRecognizerEndMode.EndImmediately;
-		swipe.ThresholdSeconds = swipeThresholdSeconds;
-		swipe.AllowSimultaneousExecutionWithAllGestures();
-		FingersScript.Instance.AddGesture(swipe);*/
-
 		SwapTouchGesture = new PanGestureRecognizer();
 		SwapTouchGesture.ThresholdUnits = 0.0f; // start right away
 		//Add new gesture
@@ -254,139 +243,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	/// <summary>
-	/// Swipe adaptation for the isometric view, check the Y rotation of the camera to adapt the swipe
-	/// </summary>
-
-	#region SwipeAdaptation
-
-	public SwipeGestureRecognizerDirection Swipe(GestureRecognizer swipeDirection)
-	{
-		_focus = new Vector2(swipeDirection.FocusX, swipeDirection.FocusY);
-		_startFocus = new Vector2(swipeDirection.StartFocusX, swipeDirection.StartFocusY);
-
-		var dir = _focus - _startFocus;
-
-		float angle = Vector3.SignedAngle(dir, Vector3.up, Vector3.forward);
-		angle = angle < 0 ? angle + 360 : angle;
-
-		var offsetCamera = _cam.transform.eulerAngles.y - _offset;
-		angle = Mathf.Repeat(angle + offsetCamera, 360);
-
-		if (270 < angle || angle < 0)
-		{
-			return SwipeGestureRecognizerDirection.Up;
-		}
-		else if (0 < angle && angle < 90)
-		{
-			return SwipeGestureRecognizerDirection.Right;
-		}
-		else if (90 < angle && angle < 180)
-		{
-			return SwipeGestureRecognizerDirection.Down;
-		}
-		else if (180 < angle && angle < 270)
-		{
-			return SwipeGestureRecognizerDirection.Left;
-		}
-		else
-		{
-			return SwipeGestureRecognizerDirection.Any;
-		}
-	}
-
-	#endregion
-
-	#region SwipeUpdated
-
-	private void SwipeUpdated(GestureRecognizer gestureRecognizer) // Swipe update, when we select a player, we can swipe after that
-	{
-		SwipeGestureRecognizer swipeGestureRecognizer = gestureRecognizer as SwipeGestureRecognizer;
-		if (swipeGestureRecognizer.State == GestureRecognizerState.Ended && zombiePlayer != null)
-		{
-			var endDirection = Swipe(swipeGestureRecognizer);
-
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(2);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(3);
-							break;
-					}
-
-					break;
-				case 2:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(2);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(3);
-							break;
-					}
-
-					break;
-				case 3:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(3);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(2);
-							break;
-					}
-
-					break;
-				case 4:
-					switch (endDirection)
-					{
-						case SwipeGestureRecognizerDirection.Down:
-							MirrorDirection(1);
-							break;
-						case SwipeGestureRecognizerDirection.Up:
-							MirrorDirection(0);
-							break;
-						case SwipeGestureRecognizerDirection.Right:
-							MirrorDirection(3);
-							break;
-						case SwipeGestureRecognizerDirection.Left:
-							MirrorDirection(2);
-							break;
-					}
-
-					break;
-			}
-		}
-	}
-
-	#endregion
-
-	#region SwipeMirorDirection
+	#region MirorDirection
 
 	private void MirrorDirection(int directionIndex) // When we clicked on button
 	{
@@ -395,7 +252,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, dashRange)) // launch the raycast
 		{
-			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0)
+			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 				distance = (int) distance;
@@ -613,7 +470,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				Transform child = players[i].transform.GetChild(1);
 
 				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = thirdMat.color;
+				color = selectableMat.color;
 				child.GetComponentInChildren<Renderer>().material.color = color;
 			}
 		}
@@ -674,17 +531,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	#region CHANGE PLAYER MATERIAL
-
-	private void ChangePlayerMaterial(Transform objectToChange, Material mat) // Change the material of the object
-	{
-		var color = objectToChange.GetComponent<Renderer>().materials[2].GetColor("_EmissionColor");
-		color = mat.color;
-		objectToChange.GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", color);
-	}
-
-	#endregion
-
 	private void ActiveParticle()
 	{
 		var playerTransform = GameManager.Instance.currentPlayerTurn.transform;
@@ -695,17 +541,18 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 		yield return new WaitForSeconds(0.1f);
 		
-		_particleToDeactivate.SetActive(false);
-		
-		for (int i = 0; i < hitTransforms.Count; i++)
+		if(_particleToDeactivate != null)
+			_particleToDeactivate.SetActive(false);
+
+
+		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
 		{
-			hitTransforms[i].GetComponent<Renderer>().materials[2].SetColor("_EmissionColor", firstMat.color);
+			textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
 		}
 
 		foreach (var p in players)
 		{
-			Transform child = p.transform.GetChild(1);
-			child.GetComponentInChildren<Renderer>().material.color = zombieMat.color;
+			GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 		}
 
 		foreach (var g in textWhenThereAreNoZombieAround)
@@ -714,7 +561,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		}
 
 		zombiePlayer = null;
-		hitTransforms.Clear();
+		players = null;
 		foreach (var g in listObjectToSetActiveFalse)
 		{
 			g.SetActive(false);
@@ -739,12 +586,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
-	public void OnDisable()
+	private void OnDisable()
 	{
 		if (FingersScript.HasInstance)
 		{
 			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
-			FingersScript.Instance.RemoveGesture(swipe);
 		}
 	}
 }
