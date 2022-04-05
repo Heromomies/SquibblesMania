@@ -75,7 +75,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var playerPos = player.transform.position;
 				var hitInfoPos = hitInfo.collider.transform.position;
-				Quaternion quat = Quaternion.Euler(0,0,0);
+				var quat = Quaternion.Euler(0,0,0);
 				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
@@ -122,7 +122,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[numberDirectionVector], out var hit, dashRange)) // launch the raycast
 		{
-			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0)
+			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 				distance = (int) distance;
@@ -239,8 +239,6 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Show the path 
 	{
-		Debug.Log("IDecihfih");
-		
 		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 		baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 		raycastPlayer.position = baseSpawnRaycastTransform.position;
@@ -500,15 +498,6 @@ public class DashPower : MonoBehaviour, IManagePower
 	}
 
 	#endregion
-
-
-	public void CancelPower()
-	{
-	}
-
-	public void DoPower()
-	{
-	}
 
 	IEnumerator CoroutineDeactivateParticle()
 	{

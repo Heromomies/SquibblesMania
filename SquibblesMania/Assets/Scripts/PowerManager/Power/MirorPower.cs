@@ -243,7 +243,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#endregion
 
-	#region SwipeMirorDirection
+	#region MirorDirection
 
 	private void MirrorDirection(int directionIndex) // When we clicked on button
 	{
@@ -252,7 +252,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, dashRange)) // launch the raycast
 		{
-			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0)
+			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 				distance = (int) distance;

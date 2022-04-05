@@ -112,7 +112,7 @@ public class PlayerStateManager : Player
 				_timeLeft = 1.5f;
 			}
 		}
-		else
+		/*else
 		{
 			_timeLeft -= Time.deltaTime;
 			if (_timeLeft < 0)
@@ -128,7 +128,7 @@ public class PlayerStateManager : Player
 				_timeLeft = 1.5f;
 			}
 			
-		}
+		}*/
 	}
 	
 	public void StunPlayer(PlayerStateManager player, int stunTurnCount)
