@@ -467,11 +467,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			if (players[i].name != GameManager.Instance.currentPlayerTurn.name && players.Length > 1)
 			{
-				Transform child = players[i].transform.GetChild(1);
-
-				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = selectableMat.color;
-				child.GetComponentInChildren<Renderer>().material.color = color;
+				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = selectableMat;
 			}
 		}
 

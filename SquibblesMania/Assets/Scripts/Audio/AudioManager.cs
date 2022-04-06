@@ -70,7 +70,6 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogWarning("Le son n'a pas été trouvé");
         }
-        //Debug.Log("play");
     }
 
     public void Stop(string name) // Stop a sound
