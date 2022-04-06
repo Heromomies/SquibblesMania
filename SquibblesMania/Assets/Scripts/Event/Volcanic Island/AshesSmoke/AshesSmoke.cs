@@ -7,8 +7,7 @@ using Random = UnityEngine.Random;
 
 public class AshesSmoke : MonoBehaviour, IManageEvent
 {
-	[Header("EVENT SETTINGS")] 
-	public List<GameObject> parentBlocs; [Space]
+	[Header("EVENT SETTINGS")]
 	public float heightSpawnParticle;[Space]
 
 	public List<GameObject> childrenBlocs;
@@ -24,23 +23,9 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
-		Shuffle(parentBlocs);
 		ShowEvent();
 	}
 
-	/// <summary>
-	/// To random a list easily
-	/// </summary>
-	void Shuffle<T>(List<T> inputList)
-	{
-		for (int i = 0; i < inputList.Count; i++)
-		{
-			T temp = inputList[i];
-			int random = Random.Range(1, inputList.Count);
-			inputList[i] = inputList[random];
-			inputList[random] = temp;
-		}
-	}
 	public void ShowEvent() // Show the event
 	{
 		childrenBlocs = EventManager.Instance.cleanList;
@@ -67,10 +52,10 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 			}
 		}
 
-		StartCoroutine(SetActiveFalseBullet());
+		StartCoroutine(SetActiveFalseGameObjectCoroutine());
 	}
 	
-	IEnumerator SetActiveFalseBullet()
+	IEnumerator SetActiveFalseGameObjectCoroutine()
 	{
 		yield return new WaitForSeconds(1f);
 		gameObject.SetActive(false);
