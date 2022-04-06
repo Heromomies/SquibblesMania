@@ -22,7 +22,7 @@ public class Meteorite : MonoBehaviour
 	{
 		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + lifeParticle)
 		{
-			gameObject.GetComponentInParent<Node>().isActive = true;
+			_particleFireToDelete.GetComponentInParent<Node>().isActive = true;
 			_particleFireToDelete.gameObject.SetActive(false);
 			gameObject.SetActive(false);
 		}
@@ -65,7 +65,7 @@ public class Meteorite : MonoBehaviour
 
 				var otherPosition = other.transform.position;
 				GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
-					new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, null);
+					new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, other.transform);
 				_particleFireToDelete = firePS;
 			
 				_rb.constraints = RigidbodyConstraints.FreezeAll;

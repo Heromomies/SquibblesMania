@@ -118,7 +118,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layer))
 			{
-				if (players.ToList().Contains(hitInfo.collider))
+				if (players.ToList().Contains(hitInfo.collider) && hitInfo.collider.name != GameManager.Instance.name)
 				{
 					NFCManager.Instance.powerActivated = true;
 					
