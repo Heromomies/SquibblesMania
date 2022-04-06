@@ -72,13 +72,9 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		for (int i = 0; i < players.Length; i++)
 		{
-			if (players[i].name != _playerOne.name)
+			if (players[i].name != _playerOne.name && players.Length > 1)
 			{
-				Transform child = players[i].transform.GetChild(1);
-
-				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = matToChange.color;
-				child.GetComponentInChildren<Renderer>().material.color = color;
+				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = matToChange;
 			}
 		}
 
