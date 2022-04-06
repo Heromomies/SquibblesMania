@@ -90,6 +90,11 @@ public class CameraButtonManager : MonoBehaviour
             uiCamPresets[1].SetActive(true);
             actualUiCamPreset = uiCamPresetList[1];
         }
+        foreach (var button in actualUiCamPreset.buttonsCamRotate)
+        {
+            button.interactable = true;
+            button.gameObject.GetComponent<EventTrigger>().enabled = true;
+        }
         
     }
 }
