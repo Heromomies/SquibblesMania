@@ -17544,7 +17544,7 @@ GameObject:
   - component: {fileID: 1774329084}
   - component: {fileID: 1774329085}
   m_Layer: 0
-  m_Name: GAME_Power_Dash_End
+  m_Name: GAME_Power_Swap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17576,8 +17576,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundName: PowerDashEnd
-  clip: {fileID: 8300000, guid: b154c8b424a7073459b2159638a1ea8f, type: 3}
+  soundName: PowerSwap
+  clip: {fileID: 8300000, guid: 80e67ca0c6db4b64ba5bff9e3b926929, type: 3}
   volume: 1
   pitch: 1
   source: {fileID: 0}
@@ -20852,7 +20852,7 @@ PrefabInstance:
       objectReference: {fileID: 515301327}
     - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
       propertyPath: sounds.Array.size
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
       propertyPath: sounds.Array.data[0]
@@ -20934,6 +20934,10 @@ PrefabInstance:
       propertyPath: sounds.Array.data[19]
       value: 
       objectReference: {fileID: 1822331643}
+    - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
+      propertyPath: sounds.Array.data[20]
+      value: 
+      objectReference: {fileID: 1774329085}
     - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
       propertyPath: soundsToPlayOnAwake.Array.size
       value: 1
