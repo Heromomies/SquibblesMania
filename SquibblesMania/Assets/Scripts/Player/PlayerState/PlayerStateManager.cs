@@ -95,7 +95,7 @@ public class PlayerStateManager : Player
 		}
 	}
 
-	private void DetectBlockBelowPlayer()
+	public void DetectBlockBelowPlayer()
 	{
 		Ray ray = new Ray(transform.position, -transform.up);
 		RaycastHit hit;

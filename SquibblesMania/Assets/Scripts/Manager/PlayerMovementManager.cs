@@ -230,19 +230,11 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 			}
 			//If press is ended
-			else if (gesture.State == GestureRecognizerState.Ended)
+			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null)
 			{
 				//End of the drag
 				EndMovingBloc();
 				_canTouchBloc = true;
-			}
-		}
-		else if (gesture.State == GestureRecognizerState.Ended && playerCurrentlySelected != null)
-		{
-
-			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-			{
-				UiManager.Instance.buttonNextTurn.SetActive(true);
 			}
 		}
 	}

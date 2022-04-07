@@ -28,12 +28,14 @@ public class CameraButtonManager : MonoBehaviour
     
     [SerializeField] private GameObject[] uiCamPresets;
     [SerializeField] private bool isCamRotateButtonPressed;
-    [SerializeField] private float targetAngle;
-    
+    [SerializeField] private float targetAngle = 45;
+    private Vector3 _orbitCam;
     
     private void Awake()
     {
         _cameraManager = this;
+        _orbitCam = -Vector3.forward * radius;
+        CamRotation(Vector3.up, _orbitCam, transform.eulerAngles);
     }
 
     public void TogglePressed(bool value)
@@ -45,24 +47,23 @@ public class CameraButtonManager : MonoBehaviour
     {
         if (isCamRotateButtonPressed)
         {
-            Vector3 worldUp = Vector3.up;
-            Vector3 orbit = -Vector3.forward * radius;
-            var camEulerAngles = transform.eulerAngles;
-            orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + targetAngle, camEulerAngles.z) * orbit;
-            
-            
-            transform.position = target.transform.position + orbit;
+            CamRotation(Vector3.up, _orbitCam, transform.eulerAngles);
+        }
+    }
 
-            if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
-            {
-                transform.LookAt(target.position, worldUp);
-            }
-            else
-            {
-                transform.LookAt(target.position, -worldUp);
-            }
-            
-            
+    private void CamRotation(Vector3 worldUp, Vector3 orbit, Vector3 camEulerAngles)
+    {
+        orbit = Quaternion.Euler(camEulerAngles.x, camEulerAngles.y + targetAngle, camEulerAngles.z) * orbit;
+        
+        transform.position = target.transform.position + orbit;
+
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+        {
+            transform.LookAt(target.position, worldUp);
+        }
+        else
+        {
+            transform.LookAt(target.position, -worldUp);
         }
     }
 
@@ -70,14 +71,11 @@ public class CameraButtonManager : MonoBehaviour
     {
         AudioManager.Instance.Play("Button");
         targetAngle = rotateAmount;
-        
     }
 
     public void SetUpUiCamPreset()
     {
         // Set up cam ui buttons
-        
-        
         foreach (var uiCamPreset in uiCamPresets) uiCamPreset.SetActive(false);
 
         if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
@@ -90,22 +88,14 @@ public class CameraButtonManager : MonoBehaviour
             uiCamPresets[1].SetActive(true);
             actualUiCamPreset = uiCamPresetList[1];
         }
+        foreach (var button in actualUiCamPreset.buttonsCamRotate)
+        {
+            button.interactable = true;
+            button.gameObject.GetComponent<EventTrigger>().enabled = true;
+        }
         
     }
 }
-    
-   /* public void TopViewMode()
-    {
-        int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
-        if (presetNumber == 1 || presetNumber == 2) _cam.RotateAround(target.transform.position, _cam.right, 45f);
-        else if (presetNumber == 3 || presetNumber == 4) _cam.RotateAround(target.transform.position, _cam.right, -45f);
-    }
 
-    public void BaseViewMode()
-    {
-        int presetNumber = GameManager.Instance.actualCamPreset.presetNumber;
-        if (presetNumber == 1 || presetNumber == 2) _cam.RotateAround(target.transform.position, _cam.right, -45f);
-        else if (presetNumber == 3 || presetNumber == 4) _cam.RotateAround(target.transform.position, _cam.right, 45f);
-    }*/
 
   

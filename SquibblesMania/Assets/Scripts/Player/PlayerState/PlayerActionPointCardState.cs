@@ -339,7 +339,6 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 var movePos = walkPoint + new Vector3(0, 1, 0);
                 var direction = (movePos - player.transform.position).normalized;
-
                 var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
@@ -383,7 +382,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     private void Clear(PlayerStateManager player)
     {
-        
         player.currentBlockPlayerOn = player.currentTouchBlock;
         
         Node currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
@@ -423,7 +421,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             currentNodePlayerOn.isActive = false;
             UiManager.Instance.buttonNextTurn.SetActive(true);
-            
         }
     }
 }

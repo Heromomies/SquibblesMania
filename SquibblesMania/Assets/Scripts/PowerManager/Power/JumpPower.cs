@@ -72,9 +72,12 @@ public class JumpPower : MonoBehaviour, IManagePower
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerPowerPath))
 			{
 				NFCManager.Instance.powerActivated = true;
+				var player = GameManager.Instance.currentPlayerTurn;
+				var tCurrentPlayerTurn = player.transform;
 				
-				var tCurrentPlayerTurn = GameManager.Instance.currentPlayerTurn.transform;
-
+				var playerNode = player.currentBlockPlayerOn.GetComponent<Node>();
+				playerNode.groupBlockParent.AddOrRemovePlayerFromList(true, player.transform);
+				
 				var posHitInfo = hitInfo.transform.position;
 
 				var playerPos = tCurrentPlayerTurn.position;
@@ -96,6 +99,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				if (Physics.Raycast(hitInfo.transform.position, Vector3.down, out var hitInfoTwo, Mathf.Infinity))
 				{
+					player.currentBlockPlayerOn = hitInfoTwo.transform;
 					if (hitInfoTwo.collider.CompareTag("Platform"))
 					{
 						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
@@ -191,6 +195,10 @@ public class JumpPower : MonoBehaviour, IManagePower
 		
 		collidersFinished.Clear();
 		listObjectToSetActiveFalse.Clear();
+		
+		var player = GameManager.Instance.currentPlayerTurn;
+		var playerNode = player.currentBlockPlayerOn.GetComponent<Node>();
+		playerNode.groupBlockParent.AddOrRemovePlayerFromList(false, player.transform);
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();
