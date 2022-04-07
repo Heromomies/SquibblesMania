@@ -38,8 +38,9 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Space]
 	public Material changeZombieMat;
 
-	 public Collider[] players;
-	public SwipeGestureRecognizer swipe;
+	public Collider[] players;
+	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
+	private WaitForSeconds _waitDetectBlocUnderZombie = new WaitForSeconds(1f);
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
@@ -547,7 +548,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	IEnumerator CoroutineDeactivateParticle()
 	{
-		yield return new WaitForSeconds(0.1f);
+		yield return _waitParticles;
 		
 		if(_particleToDeactivate != null)
 			_particleToDeactivate.SetActive(false);
@@ -586,7 +587,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	IEnumerator WaitBeforeDetectUnderZombie()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return _waitDetectBlocUnderZombie;
 		
 		var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
 		zombieStateManager.DetectBlockBelowPlayer();
