@@ -142,14 +142,21 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 	private void SwapPosition(Transform playerOne, Transform playerTwo) // Swap the position between the two players
 	{
+		foreach (var playerCol in players)
+		{
+			GameObject player = playerCol.gameObject;
+			player.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(true, player.transform);
+		}
+		
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
-
+		
 		ClearPower();
 	}
 	
 	public void ClearPower()
 	{
+		
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
 		foreach (var g in textWhenThereAreNoZombieAround)
@@ -168,6 +175,14 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+			
+		//Set up player groupblockParent list 
+		PlayerStateManager playerOneSwap =_playerOne.gameObject.GetComponent<PlayerStateManager>();
+		PlayerStateManager playerTwoSwap = _playerTwo.gameObject.GetComponent<PlayerStateManager>();
+	
+		playerOneSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerTwoSwap.transform);
+		playerTwoSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerOneSwap.transform);
+	
 	}
 	
 	private void OnDisable()

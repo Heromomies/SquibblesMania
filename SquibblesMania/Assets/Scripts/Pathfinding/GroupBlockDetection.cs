@@ -18,4 +18,19 @@ public class GroupBlockDetection : MonoBehaviour
         }
 
     }
+
+    public void AddOrRemovePlayerFromList(bool isRemoved, Transform item)
+    {
+        if (isRemoved)
+        {
+            playersOnGroupBlock.Remove(item);
+        }
+        else
+        {
+            if (!playersOnGroupBlock.Contains(item))
+            {
+                playersOnGroupBlock.Add(item);
+            }
+        }
+    }
 }

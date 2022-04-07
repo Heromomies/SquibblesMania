@@ -247,25 +247,27 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	private void MirrorDirection(int directionIndex) // When we clicked on button
 	{
-		var position = GameManager.Instance.currentPlayerTurn.transform.position;
-		transform.position = position;
+		var currentPlayer = GameManager.Instance.currentPlayerTurn;
+		var currentPlayerTransform = currentPlayer.transform;
+		var playerPos = currentPlayerTransform.position;
+		transform.position = playerPos;
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, dashRange)) // launch the raycast
 		{
 			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
-				var distance = Vector3.Distance(position, hit.collider.transform.position);
+				var distance = Vector3.Distance(playerPos, hit.collider.transform.position);
 				distance = (int) distance;
 
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						position + _vectorRaycast[directionIndex] * (distance - 1), 0.05f);
+						playerPos + _vectorRaycast[directionIndex] * (distance - 1), 0.05f);
 				}
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
 			{
-				var distanceBetweenTwoPlayers = Vector3.Distance(position, hit.collider.transform.position);
+				var distanceBetweenTwoPlayers = Vector3.Distance(playerPos, hit.collider.transform.position);
 				distanceBetweenTwoPlayers += 0.1f;
 				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers; // check distance between two players
 
@@ -287,7 +289,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 					distanceBetweenBlockAndPlayerTouched += 0.1f;
 					distanceBetweenBlockAndPlayerTouched = (int) distanceBetweenBlockAndPlayerTouched; //Check distance between himself and the block behind him
 
-					var distanceBetweenTwoPlayersWhenABlockIsBehind = Vector3.Distance(position, hit.collider.transform.position);
+					var distanceBetweenTwoPlayersWhenABlockIsBehind = Vector3.Distance(playerPos, hit.collider.transform.position);
 					distanceBetweenTwoPlayersWhenABlockIsBehind += 0.1f;
 					distanceBetweenTwoPlayersWhenABlockIsBehind =
 						(int) distanceBetweenTwoPlayersWhenABlockIsBehind; // Check the distance between the two players
@@ -308,12 +310,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 						{
 							case 2:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
-									position + _vectorRaycast[directionIndex] *
+									playerPos + _vectorRaycast[directionIndex] *
 									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
 								break;
 							case 3:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
-									position + _vectorRaycast[directionIndex] *
+									playerPos + _vectorRaycast[directionIndex] *
 									(distanceBetweenTwoPlayers - 1), 0.05f);
 								break;
 						}
@@ -326,7 +328,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						position + _vectorRaycast[directionIndex] * dashRange, 0.05f);
+						playerPos + _vectorRaycast[directionIndex] * dashRange, 0.05f);
 					hit.collider.transform.DOMove(hit.collider.transform.position
 					                              + _vectorRaycast[directionIndex] * distanceBetweenTwoPlayers, 1f);
 				}
@@ -334,13 +336,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					position + _vectorRaycast[directionIndex] * dashRange, 0.1f);
+					playerPos + _vectorRaycast[directionIndex] * dashRange, 0.1f);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				position + _vectorRaycast[directionIndex] * dashRange, 0.05f);
+				playerPos + _vectorRaycast[directionIndex] * dashRange, 0.05f);
 		}
 
 		StartCoroutine(DisplaceZombiePlayer(directionIndex));
@@ -356,7 +358,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		NFCManager.Instance.powerActivated = true;
 		var positionZombiePlayer = zombiePlayer.transform.position;
 		transform.position = positionZombiePlayer;
-
+		
 		if (Physics.Raycast(transform.position, -_vectorRaycast[directionZombieIndex], out var hitZombie, dashRange)) // launch the raycast
 		{
 			if (hitZombie.collider.gameObject.layer == 3 || hitZombie.collider.gameObject.layer == 0)
@@ -555,9 +557,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			g.gameObject.SetActive(false);
 		}
-
+		
+		
 		zombiePlayer = null;
 		players = null;
+		
 		foreach (var g in listObjectToSetActiveFalse)
 		{
 			g.SetActive(false);
