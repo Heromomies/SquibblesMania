@@ -28,6 +28,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayDash = 3;
 	private float _distV1, _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
+	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -504,7 +505,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	IEnumerator CoroutineDeactivateParticle()
 	{
-		yield return new WaitForSeconds(0.1f);
+		yield return _waitParticles;
 		
 		if(_particleToDeactivate != null)
 			_particleToDeactivate.SetActive(false);

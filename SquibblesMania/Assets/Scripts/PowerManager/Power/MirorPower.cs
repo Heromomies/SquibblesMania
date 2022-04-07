@@ -38,8 +38,9 @@ public class MirorPower : MonoBehaviour, IManagePower
 	[Space]
 	public Material changeZombieMat;
 
-	 public Collider[] players;
-	public SwipeGestureRecognizer swipe;
+	public Collider[] players;
+	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
+	private WaitForSeconds _waitDetectBlocUnderZombie = new WaitForSeconds(1f);
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
@@ -112,6 +113,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 					raycastPlayer.position = baseSpawnRaycastTransform.position;
+					
+					var currentPlayer = GameManager.Instance.currentPlayerTurn;
+					var playerNode = currentPlayer.currentBlockPlayerOn.GetComponent<Node>();
+					playerNode.groupBlockParent.AddOrRemovePlayerFromList(true, currentPlayer.transform);
+					
+					var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
+		
+					var zombieNode = zombieStateManager.currentBlockPlayerOn.GetComponent<Node>();
+					zombieNode.groupBlockParent.AddOrRemovePlayerFromList(true, zombieStateManager.transform);
+
 					
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
@@ -358,7 +369,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		NFCManager.Instance.powerActivated = true;
 		var positionZombiePlayer = zombiePlayer.transform.position;
 		transform.position = positionZombiePlayer;
-		
+
 		if (Physics.Raycast(transform.position, -_vectorRaycast[directionZombieIndex], out var hitZombie, dashRange)) // launch the raycast
 		{
 			if (hitZombie.collider.gameObject.layer == 3 || hitZombie.collider.gameObject.layer == 0)
@@ -537,7 +548,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	IEnumerator CoroutineDeactivateParticle()
 	{
-		yield return new WaitForSeconds(0.1f);
+		yield return _waitParticles;
 		
 		if(_particleToDeactivate != null)
 			_particleToDeactivate.SetActive(false);
@@ -558,8 +569,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 			g.gameObject.SetActive(false);
 		}
 		
+		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+		currentPlayer.DetectBlockBelowPlayer();
+		currentPlayer.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, currentPlayer.transform);
+
+		StartCoroutine(WaitBeforeDetectUnderZombie());
 		
-		zombiePlayer = null;
 		players = null;
 		
 		foreach (var g in listObjectToSetActiveFalse)
@@ -568,19 +583,22 @@ public class MirorPower : MonoBehaviour, IManagePower
 		}
 
 		listObjectToSetActiveFalse.Clear();
+	}
+
+	IEnumerator WaitBeforeDetectUnderZombie()
+	{
+		yield return _waitDetectBlocUnderZombie;
+		
+		var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
+		zombieStateManager.DetectBlockBelowPlayer();
+		zombieStateManager.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, zombieStateManager.transform);
+
+		zombiePlayer = null;
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
-	public void CancelPower()
-	{
-	}
-
-	public void DoPower()
-	{
-	}
-
 	public void ClearPower() // Clear the power
 	{
 		StartCoroutine(CoroutineDeactivateParticle());
