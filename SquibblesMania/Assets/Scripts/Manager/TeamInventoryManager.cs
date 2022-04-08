@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class TeamInventoryManager : MonoBehaviour
@@ -16,6 +17,12 @@ public class TeamInventoryManager : MonoBehaviour
 
 	public static TeamInventoryManager Instance => _teamInventoryManager;
 
+	[Header("Objective Display")]
+	public GameObject winT1;
+	public GameObject winT2;
+	public int nbObjectiveT1 = 0;
+	public int nbObjectiveT2 = 0;
+	public Sprite green;
 	// Start is called before the first frame update
 	void Awake()
 	{
@@ -33,6 +40,9 @@ public class TeamInventoryManager : MonoBehaviour
 				inventory[0].objectAcquired += indexObject;
 			
 				inventory[0].boatObject.Add(objectTransport[0]);
+
+				winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
+				nbObjectiveT1++;
 			}
 			else
 			{
@@ -40,6 +50,9 @@ public class TeamInventoryManager : MonoBehaviour
 					inventory[0].spawnObject.rotation, inventory[1].spawnObject);
 				inventory[1].objectAcquired += indexObject;
 				inventory[1].boatObject.Add(objectTransport[0]);
+
+				winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
+				nbObjectiveT2++;
 			}
 		
 			if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)

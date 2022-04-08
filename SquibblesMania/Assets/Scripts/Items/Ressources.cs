@@ -8,13 +8,7 @@ using UnityEngine.UI;
 public class Ressources : Item
 {
     public GameObject particleSystemPrefab;
-    public GameObject winT1;
-    public GameObject winT2;
 
-    public int nbObjectiveT1 = 0;
-    public int nbObjectiveT2 = 0;
-
-    public Sprite green;
 
     private void OnTriggerEnter(Collider other) // When we collide with a player 
     {   //Check if current player doesnt already collide with the ressources
@@ -31,16 +25,7 @@ public class Ressources : Item
 
             gameObject.SetActive(false);
 
-            if (player.playerTeam == Player.PlayerTeam.TeamOne)
-            {
-                winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
-                nbObjectiveT1++;
-            }
-            else if(player.playerTeam == Player.PlayerTeam.TeamTwo)
-            {
-                winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
-                nbObjectiveT2++;
-            }
+            
         }
     }
 }

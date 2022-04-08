@@ -42,6 +42,7 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.powerActivated = false;
         GameManager.Instance.currentPlayerTurn.canSwitch = true;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
+
     }
 
     public void LoadScene(string sceneName)
