@@ -59,9 +59,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 30;
         _gameManager = this;
         _cam = Camera.main;
-        Application.targetFrameRate = 30;
     }
 
 
