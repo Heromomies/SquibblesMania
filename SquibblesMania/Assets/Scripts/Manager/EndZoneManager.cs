@@ -49,8 +49,8 @@ public class EndZoneManager : MonoBehaviour
 
         for (int i = 0; i < blocksChild.Count; i++)
         {
-            Instantiate(planeEndZone, blocksChild[i].transform.position + new Vector3(0f, 1.03f, 0f),
-                Quaternion.identity);
+            Vector3 planeEndZonePos = blocksChild[i].transform.position + new Vector3(0f, 1.03f, 0f);
+            Instantiate(planeEndZone, planeEndZonePos, Quaternion.identity, blocksChild[i]);
         }
     }
 
