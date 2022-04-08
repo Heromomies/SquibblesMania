@@ -439,14 +439,15 @@ public class PlayerMovementManager : MonoBehaviour
 
 		if (yPos > 0.0f)
 		{
-			AudioManager.Instance.Play("CubeIsMoving");
 			
 			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 			{
 				Debug.Log("Im blocked up");
+				AudioManager.Instance.Play("CardFalse");
 			}
 			else
 			{
+				AudioManager.Instance.Play("CubeIsMoving");
 				StartMoveBloc(_nextBlocUpMeshPos, groupBlocDetection, blocParentNewPos, movementBlocAmount);
 				yield return _timeInSecondsBetweenBlocSwipe;
 				EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y >= 0, direction);
@@ -454,14 +455,16 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 		else if (yPos < 0.0f)
 		{
-			AudioManager.Instance.Play("CubeIsMoving");
+			
 			
 			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 			{
 				Debug.Log("Im blocked down");
+				AudioManager.Instance.Play("CardFalse");
 			}
 			else
 			{
+				AudioManager.Instance.Play("CubeIsMoving");
 				StartMoveBloc(_nextBlocDownMeshPos, groupBlocDetection, blocParentNewPos, -movementBlocAmount);
 				yield return _timeInSecondsBetweenBlocSwipe;
 				EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y <= 0, direction);
