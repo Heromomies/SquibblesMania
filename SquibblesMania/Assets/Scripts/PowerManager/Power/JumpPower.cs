@@ -159,7 +159,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 		foreach (var colFinished in collidersFinished)
 		{
-			if (colFinished != null && colFinished.gameObject.GetComponent<Node>())
+			if (colFinished != null && colFinished.gameObject.GetComponent<Node>() && colFinished.gameObject.GetComponent<Node>().isActive)
 			{
 				var objPos = colFinished.transform.position;
 		

@@ -25,7 +25,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	
 	private Camera _cam;
 	private int _distanceDisplayPower = 10;
-	private int _distanceDisplayDash = 3;
+	private int _distanceDisplayDash = 5;
 	private float _distV1, _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
 	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
@@ -268,17 +268,17 @@ public class DashPower : MonoBehaviour, IManagePower
 				rot = 270f;
 			}
 			
-			if (Physics.Raycast(displayPower[i].raycastTransform[2].position, Vector3.down, out var hitOne, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+			if (Physics.Raycast(displayPower[i].raycastTransform[2].position, Vector3.down, out var hitOne, _distanceDisplayPower, layerInteractable)) // launch the raycast
 			{
 				var distV1 = Vector3.Distance(displayPower[i].raycastTransform[2].position, hitOne.transform.position);
 				_distV1 = distV1;
 				
-				if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
 					var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
 					_distV2 = distV2;
 				}
-				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
 					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
 					_distV3 = distV3;
@@ -308,14 +308,14 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 			else if(hitOne.collider == null)
 			{
-				if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				if (Physics.Raycast(displayPower[i].raycastTransform[1].position, Vector3.down, out var hitTwo, _distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
 					var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
 					_distV2 = distV2;
 				}
 				else if(hitTwo.collider == null)
 				{
-					if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitFourth, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+					if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitFourth, _distanceDisplayPower, layerInteractable)) // launch the raycast
 					{
 						var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitFourth.transform.position);
 						_distV3 = distV3;
@@ -337,7 +337,7 @@ public class DashPower : MonoBehaviour, IManagePower
 					}
 				}
 				
-				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerPlayerInteractable)) // launch the raycast
+				if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower, layerInteractable)) // launch the raycast
 				{
 					var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
 					_distV3 = distV3;
@@ -359,114 +359,6 @@ public class DashPower : MonoBehaviour, IManagePower
 				}
 			}
 		}
-
-		#region OldCode
-
-		/*var currentBlockUnderPlayer = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
-		var parentCurrentBlock = currentBlockUnderPlayer.GetComponentInParent<GroupBlockDetection>().transform.position.y;
-
-		for (int i = 0; i < _vectorRaycast.Count; i++)
-		{
-			var dist = 0;
-			var rot = 0f;
-			
-			if (_vectorRaycast[i] == Vector3.right)
-			{
-				rot = 90f;
-			}
-			else if (_vectorRaycast[i] == Vector3.back)
-			{
-				rot = 180f;
-			}
-			else if (_vectorRaycast[i] == Vector3.forward)
-			{
-				rot = 0f;
-			}
-			else if (_vectorRaycast[i] == Vector3.left)
-			{
-				rot = 270f;
-			}
-
-			if (Physics.Raycast(GameManager.Instance.currentPlayerTurn.transform.position, _vectorRaycast[i], out var hitBloc,
-				dashRange, layerInteractable))
-			{
-				var distBetweenPlayerAndBloc = Vector3.Distance(GameManager.Instance.currentPlayerTurn.transform.position, hitBloc.transform.position);
-
-				dist = (int) distBetweenPlayerAndBloc;
-				dist -= 1;
-			}
-			if (dist == 1)
-			{
-				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
-					_distanceDisplayPower, layerInteractable)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						SpawnObjectOnFinalPathDash(hitFirstBloc.transform);
-						hitTransforms.Add(hitFirstBloc.transform);
-					}
-				}
-			}
-
-			else if (dist == 2 || dist == 3)
-			{
-				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
-					_distanceDisplayPower, layerInteractable)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						SpawnShaderOnPathDash(hitFirstBloc.transform, rot);
-						hitTransforms.Add(hitFirstBloc.transform);
-					}
-				}
-
-				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-					_distanceDisplayPower, layerInteractable)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						SpawnObjectOnFinalPathDash(hitSecondBloc.transform);
-						hitTransforms.Add(hitSecondBloc.transform);
-					}
-				}
-			}
-
-			// ReSharper disable once UselessComparisonToIntegralConstant
-			else if (dist == 0 || dist > 3)
-			{
-				if (Physics.Raycast(currentBlockUnderPlayer.position, _vectorRaycast[i], out var hitFirstBloc,
-					_distanceDisplayPower, layerInteractable)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitFirstBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						SpawnShaderOnPathDash(hitFirstBloc.transform, rot);
-						hitTransforms.Add(hitFirstBloc.transform);
-					}
-				}
-
-				if (Physics.Raycast(currentBlockUnderPlayer.position + _vectorRaycast[i], _vectorRaycast[i], out var hitSecondBloc,
-					_distanceDisplayPower, layerInteractable)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitSecondBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						SpawnShaderOnPathDash(hitSecondBloc.transform, rot);
-						hitTransforms.Add(hitSecondBloc.transform);
-					}
-				}
-
-				if (Physics.Raycast(currentBlockUnderPlayer.position + (_vectorRaycast[i] * 2), _vectorRaycast[i], out var hitThirdBloc,
-					_distanceDisplayPower, layerInteractable)) // launch the raycast
-				{
-					if (Math.Abs(parentCurrentBlock - hitThirdBloc.transform.GetComponentInParent<GroupBlockDetection>().transform.position.y) < 0.1f)
-					{
-						SpawnObjectOnFinalPathDash(hitThirdBloc.transform);
-						hitTransforms.Add(hitThirdBloc.transform);
-					}
-				}
-			}
-		}*/
-
-		#endregion
 	}
 
 	#endregion

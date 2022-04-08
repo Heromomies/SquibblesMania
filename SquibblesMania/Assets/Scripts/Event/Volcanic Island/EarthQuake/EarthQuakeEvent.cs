@@ -10,8 +10,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT SETTINGS")]
 	[Range(0f, 10f)] public float speedBloc;
-
-	private Camera _cam;
+	
 	[Space]
 	[Header("CONDITIONS DANGEROUSNESS")]
 	
@@ -23,9 +22,10 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 		public int numberOfBlocsTouched;
 	}
 
+	private float _playerHeight = 2.5f;
+
 	private void OnEnable()
 	{
-		_cam = Camera.main;
 		ShowEvent();
 	}
 
@@ -41,7 +41,6 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			if (Math.Abs(blocParent[randomNumber].transform.position.y - 1) < GameManager.Instance.minHeightBlocMovement) // If the Y position is equal to 0, add one bloc to touch
 			{
 				i--;
-				Debug.Log("EarthQuake Event");
 			}
 			else // When a bloc can be moved 
 			{
@@ -49,10 +48,23 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 				
 				var col = blocParent[randomNumber].transform.position;
 
+				var blocParentPlayer = blocParent[randomNumber].GetComponent<GroupBlockDetection>().playersOnGroupBlock;
+				
 				if (Math.Abs(col.y - blocHeight) > 0.1f)
 				{
 					col = new Vector3(col.x, blocHeight, col.z);
 					blocParent[randomNumber].transform.DOMove(col, speedBloc);
+					
+					for (int j = 0; j < blocParentPlayer.Count; j++)
+					{				
+						var blocParentPlayerPos = blocParent[randomNumber].GetComponent<GroupBlockDetection>().playersOnGroupBlock[j].transform.position;
+
+						if (blocParent[randomNumber].transform.position.y < blocHeight)
+						{
+							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, blocHeight + _playerHeight, blocParentPlayerPos.z);
+							blocParentPlayer[j].transform.DOMove(blocParentPlayerPos, speedBloc); 
+						}
+					}
 				}
 				else
 				{
