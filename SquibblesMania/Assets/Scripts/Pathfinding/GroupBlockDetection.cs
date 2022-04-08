@@ -21,8 +21,6 @@ public class GroupBlockDetection : MonoBehaviour
 
     public void AddOrRemovePlayerFromList(bool isRemoved, Transform item)
     {
-        Debug.Log(item.name);
-        
         if (isRemoved)
         {
             playersOnGroupBlock.Remove(item);
