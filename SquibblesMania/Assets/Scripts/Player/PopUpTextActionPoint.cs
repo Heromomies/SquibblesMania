@@ -19,7 +19,8 @@ public class PopUpTextActionPoint : MonoBehaviour
 
     private void OnEnable()
     {
-        _actionPointMax = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+        if(GameManager.Instance.currentPlayerTurn.isPlayerInActionCardState)
+            _actionPointMax = GameManager.Instance.currentPlayerTurn.playerActionPoint;
     }
 
     public void SetUpText(int value)

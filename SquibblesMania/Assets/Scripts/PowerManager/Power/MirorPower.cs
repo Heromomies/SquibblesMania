@@ -588,11 +588,14 @@ public class MirorPower : MonoBehaviour, IManagePower
 	IEnumerator WaitBeforeDetectUnderZombie()
 	{
 		yield return _waitDetectBlocUnderZombie;
-		
-		var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-		zombieStateManager.DetectBlockBelowPlayer();
-		zombieStateManager.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, zombieStateManager.transform);
 
+		if (zombiePlayer != null)
+		{
+			var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
+			zombieStateManager.DetectBlockBelowPlayer();
+			zombieStateManager.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, zombieStateManager.transform);
+		}
+		
 		zombiePlayer = null;
 
 		PowerManager.Instance.ActivateDeactivatePower(3, false);

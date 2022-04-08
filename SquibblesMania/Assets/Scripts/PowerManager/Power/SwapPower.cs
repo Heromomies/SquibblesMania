@@ -177,12 +177,15 @@ public class SwapPower : MonoBehaviour, IManagePower
 		PowerManager.Instance.ChangeTurnPlayer();
 			
 		//Set up player groupblockParent list 
-		PlayerStateManager playerOneSwap =_playerOne.gameObject.GetComponent<PlayerStateManager>();
-		PlayerStateManager playerTwoSwap = _playerTwo.gameObject.GetComponent<PlayerStateManager>();
 	
-		playerOneSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerTwoSwap.transform);
-		playerTwoSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerOneSwap.transform);
-	
+		if (_playerTwo != null && _playerOne != null)
+		{
+			PlayerStateManager playerOneSwap =_playerOne.gameObject.GetComponent<PlayerStateManager>();
+			PlayerStateManager playerTwoSwap = _playerTwo.gameObject.GetComponent<PlayerStateManager>();
+			
+			playerOneSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerTwoSwap.transform);
+			playerTwoSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerOneSwap.transform);
+		}
 	}
 	
 	private void OnDisable()
