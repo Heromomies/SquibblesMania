@@ -25,8 +25,8 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void EnterState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = true;
-        player.nextBlockPath.Clear();
-        previewPath.Clear();
+        player.nextBlockPath.Clear();  
+        ResetPreviewPath(player);
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         PreviewPath(player.playerActionPoint, player);
     }
@@ -175,7 +175,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        //Update the preview Path of the player 
+        
     }
 
     public override void ExitState(PlayerStateManager player)
@@ -380,7 +380,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.finalPathFinding.Clear();
     }
 
-    private void Clear(PlayerStateManager player)
+    public void Clear(PlayerStateManager player)
     {
         player.currentBlockPlayerOn = player.currentTouchBlock;
         
@@ -411,7 +411,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         SetFalsePathObjects();
-     
+    
         if (player.playerActionPoint > 0)
         {
             EnterState(player);

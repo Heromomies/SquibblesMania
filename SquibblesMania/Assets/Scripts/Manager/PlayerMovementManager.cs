@@ -442,7 +442,6 @@ public class PlayerMovementManager : MonoBehaviour
 			
 			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 			{
-				Debug.Log("Im blocked up");
 				AudioManager.Instance.Play("CardFalse");
 			}
 			else
@@ -459,7 +458,6 @@ public class PlayerMovementManager : MonoBehaviour
 			
 			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 			{
-				Debug.Log("Im blocked down");
 				AudioManager.Instance.Play("CardFalse");
 			}
 			else
@@ -477,19 +475,7 @@ public class PlayerMovementManager : MonoBehaviour
 		_isBlocSelected = true;
 		hasStopMovingBloc = false;
 	}
-
-	private void CheckPlayerUseActionPoint(bool isPlayerUseActionPoint)
-	{
-		switch (isPlayerUseActionPoint)
-		{
-			case true:
-				UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--);
-				break;
-			case false:
-				UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint++);
-				break;
-		}
-	}
+	
 	
 	#endregion
 
@@ -572,10 +558,12 @@ public class PlayerMovementManager : MonoBehaviour
 	public void ResetDisplacement()
 	{
 		var player = GameManager.Instance.currentPlayerTurn;
+		isPlayerPreviewPath = false;
 		player.PlayerActionPointCardState.SetFalsePathObjects();
 		player.playerActionPoint = 0;
 		player.PlayerActionPointCardState.EnterState(player);
-
+		UiManager.Instance.textActionPointPopUp.SetActive(false);
+		UiManager.Instance.textActionPointPopUp = null;
 		GameManager.Instance.DecreaseVariable();
 	}
 
