@@ -24,13 +24,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	public Transform baseSpawnRaycastTransform;
 	public Transform raycastPlayer;
-
-	[Header("TOUCH SETTINGS")] [Space] [Range(1, 10)]
-	public int dashRange;
-
-	[Range(1, 10)] public int swipeTouchCount = 1;
-	[Range(0.0f, 10.0f)] public float swipeThresholdSeconds;
-	[Range(0.0f, 1.0f)] public float minimumDistanceUnits;
+	[Space] [Range(1, 10)]
+	public int mirorRange;
 
 	[Header("MATERIAL SETTINGS")] 
 	[Space] 
@@ -263,7 +258,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		var playerPos = currentPlayerTransform.position;
 		transform.position = playerPos;
 
-		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, dashRange)) // launch the raycast
+		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, mirorRange)) // launch the raycast
 		{
 			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
@@ -339,7 +334,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						playerPos + _vectorRaycast[directionIndex] * dashRange, 0.05f);
+						playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.05f);
 					hit.collider.transform.DOMove(hit.collider.transform.position
 					                              + _vectorRaycast[directionIndex] * distanceBetweenTwoPlayers, 1f);
 				}
@@ -347,13 +342,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					playerPos + _vectorRaycast[directionIndex] * dashRange, 0.1f);
+					playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.1f);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				playerPos + _vectorRaycast[directionIndex] * dashRange, 0.05f);
+				playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.05f);
 		}
 
 		StartCoroutine(DisplaceZombiePlayer(directionIndex));
@@ -370,7 +365,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		var positionZombiePlayer = zombiePlayer.transform.position;
 		transform.position = positionZombiePlayer;
 
-		if (Physics.Raycast(transform.position, -_vectorRaycast[directionZombieIndex], out var hitZombie, dashRange)) // launch the raycast
+		if (Physics.Raycast(transform.position, -_vectorRaycast[directionZombieIndex], out var hitZombie, mirorRange)) // launch the raycast
 		{
 			if (hitZombie.collider.gameObject.layer == 3 || hitZombie.collider.gameObject.layer == 0)
 			{
@@ -446,7 +441,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					zombiePlayer.transform.DOMove(
-						positionZombiePlayer - _vectorRaycast[directionZombieIndex] * dashRange, 0.05f);
+						positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.05f);
 					hitZombie.collider.transform.DOMove(hitZombie.collider.transform.position
 					                                    - _vectorRaycast[directionZombieIndex] * distanceBetweenTwoPlayers, 1f);
 				}
@@ -454,13 +449,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 			else if (hitZombie.collider.gameObject.layer == 0)
 			{
 				zombiePlayer.transform.DOMove(
-					positionZombiePlayer - _vectorRaycast[directionZombieIndex] * dashRange, 0.1f);
+					positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.1f);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			zombiePlayer.transform.DOMove(
-				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * dashRange, 0.05f);
+				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.05f);
 		}
 
 		ClearPower();

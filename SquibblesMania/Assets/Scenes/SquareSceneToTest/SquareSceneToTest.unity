@@ -996,6 +996,7 @@ Transform:
   - {fileID: 940860390}
   - {fileID: 1921174041}
   - {fileID: 1704448079}
+  - {fileID: 1277824373}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2742,7 +2743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventToTest:
   - {fileID: 1198056434}
-  powerToTest: {fileID: 1651227385}
+  powerToTest: {fileID: 1198056434}
 --- !u!1 &331189454
 GameObject:
   m_ObjectHideFlags: 0
@@ -13054,7 +13055,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 124381507}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1277824374
 MonoBehaviour:
@@ -21039,11 +21040,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: maxHeightBlocMovement
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: minHeightBlocMovement
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: allBlocks.Array.data[0]
@@ -21368,7 +21369,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 1967886387}
+      objectReference: {fileID: 1999417275}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
@@ -23580,33 +23581,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 142818256}
     - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: layerShowPath.m_Bits
-      value: 16384
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: displayPower.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
       propertyPath: baseSpawnRaycastTransform
       value: 
       objectReference: {fileID: 1921174041}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: displayPower.Array.data[0].raycastTransform.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: displayPower.Array.data[1].raycastTransform.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: displayPower.Array.data[2].raycastTransform.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: displayPower.Array.data[3].raycastTransform.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
       propertyPath: displayPower.Array.data[0].raycastTransform.Array.data[0]
       value: 
