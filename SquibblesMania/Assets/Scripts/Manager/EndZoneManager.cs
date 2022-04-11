@@ -60,7 +60,7 @@ public class EndZoneManager : MonoBehaviour
         {
             int playerCountTeamOne = 0;
             int playerCountTeamTwo = 0;
-
+            
             foreach (Transform player in playerInEndZone)
             {
                 PlayerStateManager playerStateManager = player.GetComponent<PlayerStateManager>();
