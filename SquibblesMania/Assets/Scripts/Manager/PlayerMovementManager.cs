@@ -562,8 +562,12 @@ public class PlayerMovementManager : MonoBehaviour
 		player.PlayerActionPointCardState.SetFalsePathObjects();
 		player.playerActionPoint = 0;
 		player.PlayerActionPointCardState.EnterState(player);
-		UiManager.Instance.textActionPointPopUp.SetActive(false);
-		UiManager.Instance.textActionPointPopUp = null;
+
+		if (UiManager.Instance.textActionPointPopUp != null)
+		{
+			UiManager.Instance.textActionPointPopUp.SetActive(false);
+			UiManager.Instance.textActionPointPopUp = null;
+		}
 		GameManager.Instance.DecreaseVariable();
 	}
 
