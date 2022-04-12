@@ -13228,7 +13228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1297739190
 Transform:
   m_ObjectHideFlags: 0
@@ -13256,6 +13256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+  numberOfFrames: 0
 --- !u!114 &1308155672 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7927582302253253041, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
@@ -13326,7 +13327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1354937337
 Transform:
   m_ObjectHideFlags: 0
@@ -13354,6 +13355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+  numberOfFrames: 0
 --- !u!1 &1361156593
 GameObject:
   m_ObjectHideFlags: 0
@@ -15510,6 +15512,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &1630368139 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3354633206713222536, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
+  m_PrefabInstance: {fileID: 3588334655326171228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1634521307
 GameObject:
   m_ObjectHideFlags: 0
@@ -20431,7 +20444,11 @@ PrefabInstance:
     - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
       propertyPath: slider
       value: 
-      objectReference: {fileID: 3588334655326171234}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
+      propertyPath: sliderMainSound
+      value: 
+      objectReference: {fileID: 1630368139}
     - target: {fileID: 1927612973409916416, guid: 7f70d047f390eb2428f76187af9acb7f, type: 3}
       propertyPath: sounds.Array.size
       value: 16
@@ -21200,6 +21217,22 @@ PrefabInstance:
       propertyPath: conditionVictory.endZoneSpawnPoints.Array.data[3]
       value: 
       objectReference: {fileID: 676940066}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: previousCamPreSetsList.Array.data[0].buttonNextTurn
+      value: 
+      objectReference: {fileID: 3588334655326171238}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: previousCamPreSetsList.Array.data[1].buttonNextTurn
+      value: 
+      objectReference: {fileID: 205498581}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: previousCamPreSetsList.Array.data[2].buttonNextTurn
+      value: 
+      objectReference: {fileID: 3588334655326171232}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: previousCamPreSetsList.Array.data[3].buttonNextTurn
+      value: 
+      objectReference: {fileID: 1720709368}
     - target: {fileID: 3429993922607711533, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -23029,17 +23062,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6257555808334104069, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
   m_PrefabInstance: {fileID: 3588334655326171228}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3588334655326171234 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2491705705834836563, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
-  m_PrefabInstance: {fileID: 3588334655326171228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3588334655326171235 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5279823850318663609, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}

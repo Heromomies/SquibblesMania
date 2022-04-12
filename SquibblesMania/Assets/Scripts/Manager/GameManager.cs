@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour
     public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-    
+
+    [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
     {
@@ -37,12 +38,7 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public GameObject buttonNextTurn;
-        public float rotYEulerAngles;
-
-        public void SetUpCamRot()
-        {
-            camRot = new Vector3(camRot.x, rotYEulerAngles, camRot.z);
-        }
+        
     }
 
 
@@ -186,22 +182,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*private void SavePreviousCamRotY(int indexCam)
+   /* private void SavePreviousCamRotY(int indexCam)
     {
-        Debug.Log(indexCam);
+      
         if (indexCam <= 0) indexCam = 0;
 
-        var camEulerAngles = _cam.transform.eulerAngles;
-        var camPos = _cam.transform.position;
+        Vector3 camEulerAngles = _cam.transform.eulerAngles;
+        Vector3 camPos = _cam.transform.position;
         
-        var camPreSet = camPreSets[indexCam];
         camEulerAngles.y = (camEulerAngles.y  > 180) ?  camEulerAngles.y  - 360 :  camEulerAngles.y;
 
-        camPreSet.camRot = new Vector3(camPreSet.camRot.x , camEulerAngles.y, camPreSet.camRot.z);
-        camPreSet.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
-        Debug.Log(camPreSet.camRot);
-        camPreSets[indexCam] = camPreSet;
+        CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
         
+        previousCamPreSets.camRot = new Vector3(previousCamPreSets.camRot.x , camEulerAngles.y, previousCamPreSets.camRot.z);
+        previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
+        previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
+        previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
+
+        previousCamPreSetsList[indexCam] = previousCamPreSets;
+        
+        camPreSets[indexCam] = previousCamPreSetsList[indexCam];
+
     }*/
 
     private void IncreaseDemiCycle()
@@ -229,7 +230,15 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
 
         NFCManager.Instance.PlayerChangeTurn();
-        //SavePreviousCamRotY(count-1);
+       /* if (count <= 0)
+        {
+            SavePreviousCamRotY(previousCamPreSetsList.Count-1);
+        }
+        else
+        {
+            SavePreviousCamRotY(count-1);
+        }*/
+       
         CamConfig(count);
         if (UiManager.Instance.textActionPointPopUp)
         {
@@ -274,7 +283,7 @@ public class GameManager : MonoBehaviour
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-      //  Time.timeScale = 0f;
+     
         UiManager.Instance.WinSetUp(playerTeam);
     }
 
