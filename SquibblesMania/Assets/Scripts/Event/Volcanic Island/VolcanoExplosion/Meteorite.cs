@@ -24,6 +24,7 @@ public class Meteorite : MonoBehaviour
 		{
 			_particleFireToDelete.GetComponentInParent<Node>().isActive = true;
 			_particleFireToDelete.gameObject.SetActive(false);
+			_particleFireToDelete.GetComponentInParent<Node>().gameObject.layer = 3;
 			gameObject.SetActive(false);
 		}
 
