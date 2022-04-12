@@ -12,7 +12,9 @@ public class AudioManager : MonoBehaviour
 
     public AudioMixerGroup group;
 
-    public Slider slider;
+    public Slider sliderMainSound;
+    public Slider sliderMusicSound;
+    public Slider sliderSfxSound;
     public AudioMixer mixer;
 
     public List<String> soundsToPlayOnAwake;
@@ -27,14 +29,27 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        slider.onValueChanged.AddListener(HandleSliderValueChanged);
+        sliderMainSound.onValueChanged.AddListener(HandleSliderMainValueChanged);
     }
 
-    public void HandleSliderValueChanged(float value) // When we change the value of the slider
+    private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
     { 
-        value  = slider.value;
-        mixer.SetFloat(_volumeParameter, value);
+        value  = sliderMainSound.value;
+        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
     }
+    
+    private void HandleSliderMusicValueChanged(float value) // When we change the value of the slider
+    { 
+        value  = sliderMusicSound.value;
+        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
+    }
+    
+    private void HandleSliderSfxValueChanged(float value) // When we change the value of the slider
+    { 
+        value  = sliderSfxSound.value;
+        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
+    }
+    
     private void Start()
     {
         //DontDestroyOnLoad(gameObject);
@@ -46,16 +61,12 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.spatialBlend = 1;
+            s.source.outputAudioMixerGroup = group;
         }
 
         foreach (var sound in soundsToPlayOnAwake)
         {
             Play(sound);
-        }
-
-        foreach (var sound in sounds)
-        {
-            sound.GetComponent<AudioSource>().outputAudioMixerGroup = group;
         }
     }
     
