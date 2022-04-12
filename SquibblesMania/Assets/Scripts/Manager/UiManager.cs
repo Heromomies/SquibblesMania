@@ -7,6 +7,7 @@ using I2.Loc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class UiManager : MonoBehaviour
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-
+    public Toggle mainToggle, effectToggle;
+    
     [Header("WIN PANEL")] public GameObject winPanel;
     public TextMeshProUGUI winText;
     public static UiManager Instance => _uiManager;
@@ -63,27 +65,37 @@ public class UiManager : MonoBehaviour
         winText.text = $"{playerTeam} WIN";
     }
 
-  /*  public void ButtonChangeCamMoveUi()
+    public void StopMainMusic()
     {
-        FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
-        
-        if (!CameraButtonManager.Instance.enabled)
+        if (mainToggle.isOn)
         {
-            CameraButtonManager.Instance.enabled = true;
-            cameraTouchMovement.enabled = false;
-            CameraButtonManager.Instance.TopViewMode();
-          
+            AudioManager.Instance.UnPause("MainSound");
         }
         else
         {
-            CameraButtonManager.Instance.enabled = false;
-            cameraTouchMovement.enabled = true;
-            CameraButtonManager.Instance.BaseViewMode();
+            AudioManager.Instance.Pause("MainSound");
         }
-    }*/
-    /// <summary>
-    /// Spawn Text Action Point to indicate to the player his action's point
-    /// </summary>
+    }
+    
+    public void StopEffectMusic()
+    {
+        if (effectToggle.isOn)
+        {
+            foreach (var s in  AudioManager.Instance.sounds)
+            {
+                if(s.isEffect)
+                    s.canPlay = true;
+            }
+        }
+        else
+        {
+            foreach (var s in  AudioManager.Instance.sounds)
+            {
+                if(s.isEffect)
+                   s.canPlay = false;
+            }
+        }
+    }
 
     #region SpawnTextActionPoint
 

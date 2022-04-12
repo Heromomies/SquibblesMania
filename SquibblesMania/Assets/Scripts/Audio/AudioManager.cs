@@ -12,11 +12,6 @@ public class AudioManager : MonoBehaviour
 
     public AudioMixerGroup group;
 
-    public Slider sliderMainSound;
-    public Slider sliderMusicSound;
-    public Slider sliderSfxSound;
-    public AudioMixer mixer;
-
     public List<String> soundsToPlayOnAwake;
     private string _volumeParameter = "MasterVolume";
     void Awake()
@@ -29,28 +24,9 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        sliderMainSound.onValueChanged.AddListener(HandleSliderMainValueChanged);
+      
     }
 
-    private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
-    { 
-        value  = sliderMainSound.value;
-      
-        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
-    }
-    
-    private void HandleSliderMusicValueChanged(float value) // When we change the value of the slider
-    { 
-        value  = sliderMusicSound.value;
-        mixer.outputAudioMixerGroup.audioMixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
-    }
-    
-    private void HandleSliderSfxValueChanged(float value) // When we change the value of the slider
-    { 
-        value  = sliderSfxSound.value;
-        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
-    }
-    
     private void Start()
     {
         //DontDestroyOnLoad(gameObject);
@@ -74,13 +50,9 @@ public class AudioManager : MonoBehaviour
     public void Play(string name) // Play a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
-        if (s != null)
+        if (s != null && s.canPlay)
         {
             s.source.Play();
-        }
-        else
-        {
-            Debug.LogWarning("Le son n'a pas été trouvé");
         }
     }
 
@@ -91,9 +63,21 @@ public class AudioManager : MonoBehaviour
         {
             s.source.Stop();
         }
-        else
+    }
+    public void Pause(string name) // Stop a sound
+    {
+        Sound s = Array.Find(sounds, sound => sound.soundName == name);
+        if (s != null)
         {
-            Debug.LogWarning("Le son n'a pas été trouvé");
+            s.source.Pause();
+        }
+    }
+    public void UnPause(string name) // Stop a sound
+    {
+        Sound s = Array.Find(sounds, sound => sound.soundName == name);
+        if (s != null && s.canPlay)
+        {
+            s.source.UnPause();
         }
     }
 }

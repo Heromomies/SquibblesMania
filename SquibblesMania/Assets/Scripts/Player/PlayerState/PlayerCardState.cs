@@ -8,7 +8,7 @@ using Wizama.Hardware.Light;
 
 public class PlayerCardState : PlayerBaseState
 {
-	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
+	private List<int> _number = new List<int> { 2, 6, 7, 8, 9, 10};
 	private int _maxNumberOfTheCard;
 	private char _charCardsStockage;
 	private char _cardNumber;
@@ -45,6 +45,11 @@ public class PlayerCardState : PlayerBaseState
 		{
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 			NFCManager.Instance.newCardDetected = true;
+			
+			if (nfcTag.Data.Contains("1"))
+			{
+				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+			}
 			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{

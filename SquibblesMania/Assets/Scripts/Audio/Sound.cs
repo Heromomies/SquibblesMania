@@ -19,6 +19,6 @@ public class Sound : MonoBehaviour
 
     public bool loop;
 
-    public AudioMixerGroup mainGroup;
-    public AudioMixerGroup secondGroup;
+    public bool canPlay;
+    public bool isEffect;
 }
