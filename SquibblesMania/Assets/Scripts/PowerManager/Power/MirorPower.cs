@@ -351,6 +351,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.05f);
 		}
 
+		AudioManager.Instance.Play("PowerMirorEnd");
 		StartCoroutine(DisplaceZombiePlayer(directionIndex));
 	}
 
@@ -458,6 +459,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.05f);
 		}
 
+		AudioManager.Instance.Play("PowerMirorEnd");
+		
 		ClearPower();
 	}
 

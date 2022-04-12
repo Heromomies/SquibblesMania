@@ -35,13 +35,14 @@ public class AudioManager : MonoBehaviour
     private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
     { 
         value  = sliderMainSound.value;
+      
         mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
     }
     
     private void HandleSliderMusicValueChanged(float value) // When we change the value of the slider
     { 
         value  = sliderMusicSound.value;
-        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
+        mixer.outputAudioMixerGroup.audioMixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
     }
     
     private void HandleSliderSfxValueChanged(float value) // When we change the value of the slider

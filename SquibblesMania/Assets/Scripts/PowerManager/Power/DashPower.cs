@@ -226,6 +226,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			ActiveParticle();
 		}
 
+		AudioManager.Instance.Play("PowerDashEnd");
 		NFCManager.Instance.powerActivated = true;
 
 		ClearPower();

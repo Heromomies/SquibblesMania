@@ -88,6 +88,8 @@ public class BezierAlgorithm : MonoBehaviour
 			}
 			else
 			{
+				AudioManager.Instance.Play("PowerJumpEnd");
+				
 				particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				_canMove = false;
 				_go = null;
