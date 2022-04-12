@@ -148,6 +148,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 			player.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(true, player.transform);
 		}
 		
+		AudioManager.Instance.Play("PowerSwap");
+		
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
 		

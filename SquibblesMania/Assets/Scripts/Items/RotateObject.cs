@@ -7,7 +7,7 @@ public class RotateObject : MonoBehaviour
 {
     private Transform _target;
     public float speed;
-    private int interval = 3;
+    public int numberOfFrames;
 
     private void Start()
     {
@@ -17,7 +17,7 @@ public class RotateObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.frameCount % interval == 0)
+        if (Time.frameCount % numberOfFrames == 0)
         {
             transform.RotateAround(_target.position, Vector3.up, speed * Time.deltaTime);
         }
