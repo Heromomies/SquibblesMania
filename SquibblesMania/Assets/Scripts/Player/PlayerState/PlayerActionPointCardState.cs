@@ -12,7 +12,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 {
    
     private int _actionPointText;
-    public Color blocBaseEmissiveColor;
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<Transform> previewPath = new List<Transform>();
    
@@ -48,7 +47,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
                 bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
-
+                
                 if (path.isActive && isNextPathActive && actualNode.isActive)
                 {
                     possiblePath.Add(path.nextPath);

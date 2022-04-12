@@ -193,11 +193,11 @@ public class CameraViewModeGesture : MonoBehaviour
 
         if (actualCamPresetNumber <= 2)
         {
-            SetObjectStateUiViewModeItem(uiViewModeList[0]);
+            SetObjectStateUiViewModeItem(uiViewModeList[0], 0);
         }
         else
         {
-            SetObjectStateUiViewModeItem(uiViewModeList[1]);
+            SetObjectStateUiViewModeItem(uiViewModeList[1], 0);
         }
     }
 
@@ -205,7 +205,7 @@ public class CameraViewModeGesture : MonoBehaviour
     /// //Set up the ui game objects of the desiredUi view mode
     /// </summary>
     /// <param name="desiredUIViewMode"></param>
-    private void SetObjectStateUiViewModeItem(UIViewMode desiredUIViewMode)
+    private void SetObjectStateUiViewModeItem(UIViewMode desiredUIViewMode, int indexCircleSelection)
     {
         foreach (var uiViewMode in uiViewModeList)
         {
@@ -216,7 +216,7 @@ public class CameraViewModeGesture : MonoBehaviour
         desiredUIViewMode.parentUiCamViewMode.gameObject.SetActive(true);
         actualUiViewMode = desiredUIViewMode;
         
-        SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZCameraLowerView);
+        SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZCameraBaseView);
         if (currentUiCircleSelection != null)
         {
             var color = currentUiCircleSelection.color;
@@ -225,12 +225,12 @@ public class CameraViewModeGesture : MonoBehaviour
         }
       
         
-        currentUiCircleSelection = actualUiViewMode.uiCircleSelection[0];
+        currentUiCircleSelection = actualUiViewMode.uiCircleSelection[indexCircleSelection];
 
         var colorAlphaFull= currentUiCircleSelection.color;
         colorAlphaFull.a = 1f;
         currentUiCircleSelection.color = colorAlphaFull;
-        _indexUiCircleSelection = 0;
+        _indexUiCircleSelection = indexCircleSelection;
     }
 
    private void SetCamIconEulerAngles(Vector3 camEulerAngles, float desiredAngle)
