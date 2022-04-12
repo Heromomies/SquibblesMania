@@ -10,6 +10,9 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
     public Sound[] sounds;
 
+    public Slider sliderMainSound;
+    public AudioMixer mixer;
+    
     public AudioMixerGroup group;
 
     public List<String> soundsToPlayOnAwake;
@@ -24,9 +27,16 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-      
+        sliderMainSound.onValueChanged.AddListener(HandleSliderMainValueChanged);
     }
 
+    private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
+    { 
+        value  = sliderMainSound.value;
+      
+        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
+    }
+    
     private void Start()
     {
         //DontDestroyOnLoad(gameObject);
