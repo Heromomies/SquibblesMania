@@ -546,11 +546,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	IEnumerator CoroutineDeactivateParticle()
 	{
-		foreach (var p in players)
-		{
-			GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
-		}
-		
 		yield return _waitParticles;
 		
 		if(_particleToDeactivate != null)
@@ -602,6 +597,14 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower() // Clear the power
 	{
+		if(players.Length > 0)
+		{
+			foreach (var p in players)
+			{
+				GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+			}
+		}
+		
 		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
