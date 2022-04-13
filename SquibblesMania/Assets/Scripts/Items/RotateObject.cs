@@ -7,7 +7,6 @@ public class RotateObject : MonoBehaviour
 {
     private Transform _target;
     public float speed;
-    public int numberOfFrames;
 
     private void Start()
     {
