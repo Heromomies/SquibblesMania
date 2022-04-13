@@ -145,7 +145,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		foreach (var playerCol in players)
 		{
 			GameObject player = playerCol.gameObject;
-			player.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(true, player.transform);
+			player.GetComponent<PlayerStateManager>().RemoveParentBelowPlayer(player.transform);
 		}
 		
 		AudioManager.Instance.Play("PowerSwap");
@@ -185,8 +185,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 			PlayerStateManager playerOneSwap =_playerOne.gameObject.GetComponent<PlayerStateManager>();
 			PlayerStateManager playerTwoSwap = _playerTwo.gameObject.GetComponent<PlayerStateManager>();
 			
-			playerOneSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerTwoSwap.transform);
-			playerTwoSwap.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, playerOneSwap.transform);
+			playerOneSwap.DetectBlockBelowPlayer();
+			playerTwoSwap.DetectBlockBelowPlayer();
+			
+			playerOneSwap.DetectParentBelowPlayer(playerOneSwap.transform);
+			playerTwoSwap.DetectParentBelowPlayer(playerTwoSwap.transform);
 		}
 	}
 	

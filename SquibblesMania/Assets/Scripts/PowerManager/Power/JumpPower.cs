@@ -75,8 +75,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 				
-				var playerNode = player.currentBlockPlayerOn.GetComponent<Node>();
-				playerNode.groupBlockParent.AddOrRemovePlayerFromList(true, player.transform);
+				player.RemoveParentBelowPlayer(tCurrentPlayerTurn);
 				
 				var posHitInfo = hitInfo.transform.position;
 
@@ -197,8 +196,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		listObjectToSetActiveFalse.Clear();
 		
 		var player = GameManager.Instance.currentPlayerTurn;
-		var playerNode = player.currentBlockPlayerOn.GetComponent<Node>();
-		playerNode.groupBlockParent.AddOrRemovePlayerFromList(false, player.transform);
+		player.DetectParentBelowPlayer(player.transform);
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();

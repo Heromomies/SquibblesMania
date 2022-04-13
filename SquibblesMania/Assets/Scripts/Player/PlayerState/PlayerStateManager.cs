@@ -109,6 +109,16 @@ public class PlayerStateManager : Player
 		}
 	}
 	
+	public void RemoveParentBelowPlayer(Transform playerToCheck)
+	{
+		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(playerToCheck);
+	}
+	
+	public void DetectParentBelowPlayer(Transform playerToCheck)
+	{
+		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Add(playerToCheck);
+	}
+	
 	public void StunPlayer(PlayerStateManager player, int stunTurnCount)
 	{
 		player.isPlayerStun = true;

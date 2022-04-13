@@ -108,16 +108,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 					raycastPlayer.position = baseSpawnRaycastTransform.position;
-					
+				
 					var currentPlayer = GameManager.Instance.currentPlayerTurn;
-					var playerNode = currentPlayer.currentBlockPlayerOn.GetComponent<Node>();
-					playerNode.groupBlockParent.AddOrRemovePlayerFromList(true, currentPlayer.transform);
+					currentPlayer.RemoveParentBelowPlayer(currentPlayer.transform);
 					
 					var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-		
-					var zombieNode = zombieStateManager.currentBlockPlayerOn.GetComponent<Node>();
-					zombieNode.groupBlockParent.AddOrRemovePlayerFromList(true, zombieStateManager.transform);
-
+					zombieStateManager.RemoveParentBelowPlayer(zombieStateManager.transform);
 					
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
@@ -561,10 +557,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			g.gameObject.SetActive(false);
 		}
-		
-		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
-		currentPlayer.DetectBlockBelowPlayer();
-		currentPlayer.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, currentPlayer.transform);
 
 		StartCoroutine(WaitBeforeDetectUnderZombie());
 		
@@ -582,11 +574,15 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 		yield return _waitDetectBlocUnderZombie;
 
+		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+		currentPlayer.DetectBlockBelowPlayer();
+		currentPlayer.DetectParentBelowPlayer(currentPlayer.transform);
+		
 		if (zombiePlayer != null)
 		{
 			var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
 			zombieStateManager.DetectBlockBelowPlayer();
-			zombieStateManager.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, zombieStateManager.transform);
+			zombieStateManager.DetectParentBelowPlayer(zombieStateManager.transform);
 		}
 		
 		zombiePlayer = null;
