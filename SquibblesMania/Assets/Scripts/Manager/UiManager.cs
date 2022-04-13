@@ -18,7 +18,7 @@ public class UiManager : MonoBehaviour
     public Toggle mainToggle, effectToggle;
     
     [Header("WIN PANEL")] public GameObject winPanel;
-    public TextMeshProUGUI winText;
+    public GameObject textTeamOne, textTeamTwo;
     public static UiManager Instance => _uiManager;
 
     [Header("CARD UI VFX")]
@@ -56,13 +56,23 @@ public class UiManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        
+        textTeamOne.SetActive(false);
+        textTeamTwo.SetActive(false);
     }
     
     
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
-        winText.text = $"{playerTeam} WIN";
+        if (playerTeam == Player.PlayerTeam.TeamOne)
+        {
+            textTeamOne.SetActive(true);
+        }
+        else
+        {
+            textTeamTwo.SetActive(true);
+        }
     }
 
     public void StopMainMusic()
