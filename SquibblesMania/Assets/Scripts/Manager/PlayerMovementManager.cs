@@ -110,7 +110,7 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
 	
-		if (currentPlayer.isPlayerInActionCardState && currentPlayer.playerActionPoint > 0)
+		if (currentPlayer.isPlayerInActionCardState && currentPlayer.playerActionPoint > 0 && !currentPlayer.walking)
 		{
 			
 			if (gesture.State == GestureRecognizerState.Began)
@@ -184,12 +184,13 @@ public class PlayerMovementManager : MonoBehaviour
 	//Update method of the long press gesture
 	private void LongPressBlocMovementGestureOnStateUpdated(GestureRecognizer gesture)
 	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint > 0)
+		PlayerStateManager currentPlayerTurn = GameManager.Instance.currentPlayerTurn;
+		
+		if (currentPlayerTurn.playerActionPoint > 0 && !currentPlayerTurn.walking)
 		{
 			if (gesture.State == GestureRecognizerState.Began)
 			{
-				PlayerStateManager currentPlayerTurn = GameManager.Instance.currentPlayerTurn;
-
+				
 				PointerEventData p = new PointerEventData(EventSystem.current);
 				p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
