@@ -37,7 +37,7 @@ public class TeamInventoryManager : MonoBehaviour
 			else
 			{
 				Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
-					inventory[0].spawnObject.rotation, inventory[1].spawnObject);
+					inventory[1].spawnObject.rotation, inventory[1].spawnObject);
 				inventory[1].objectAcquired += indexObject;
 				inventory[1].boatObject.Add(objectTransport[0]);
 			}
