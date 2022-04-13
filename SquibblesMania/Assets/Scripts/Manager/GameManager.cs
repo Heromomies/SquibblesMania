@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
 
-    [SerializeField] private List<CamPreSets> previousCamPreSetsList;
+    //[SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
     {
@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public GameObject buttonNextTurn;
-        
     }
 
 
