@@ -923,6 +923,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3588334655326171231}
     - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
+      propertyPath: mainToggle
+      value: 
+      objectReference: {fileID: 733555469}
+    - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
+      propertyPath: effectToggle
+      value: 
+      objectReference: {fileID: 293182571}
+    - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
       propertyPath: buttonNextTurn
       value: 
       objectReference: {fileID: 3588334655326171232}
@@ -2223,6 +2231,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &293182571 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2062058299739053104, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
+  m_PrefabInstance: {fileID: 3588334655326171228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &296240343
@@ -8407,6 +8426,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d7205f740c20b714385d97b4dd96ac70, type: 3}
   m_PrefabInstance: {fileID: 729346508}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &733555469 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5704832343079710028, guid: b898a388c0d80b24588a4bba8b175b09, type: 3}
+  m_PrefabInstance: {fileID: 3588334655326171228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &733737437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12628,7 +12658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2172740034879341551, guid: b473d86146c8dff4caa38953851cecc3, type: 3}
       propertyPath: actionPointToAdd
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b473d86146c8dff4caa38953851cecc3, type: 3}
@@ -20789,11 +20819,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: maxHeightBlocMovement
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: minHeightBlocMovement
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: allBlocks.Array.data[0]

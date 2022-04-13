@@ -15,7 +15,6 @@ public class PlayerMovementManager : MonoBehaviour
 	public LayerMask blocLayerMask;
 	[Range(0.0f, 1.0f)] public float longPressureDurationSeconds;
 	
-	[HideInInspector] public GameObject playerCurrentlySelected;
 
 	[Header("PLAYER SETTINGS")] public GameObject ghostPlayer;
 	private Vector3 _touchPos;
@@ -77,7 +76,6 @@ public class PlayerMovementManager : MonoBehaviour
 		//Set up the new gesture 
 		LongPressBlocMovementGesture = new LongPressGestureRecognizer();
 		LongPressBlocMovementGesture.StateUpdated += LongPressBlocMovementGestureOnStateUpdated;
-		//LongPressBlocMovementGesture.ThresholdUnits = 0.0f;
 		LongPressBlocMovementGesture.MinimumDurationSeconds = longPressureDurationSeconds;
 		LongPressBlocMovementGesture.AllowSimultaneousExecutionWithAllGestures();
 		FingersScript.Instance.AddGesture(LongPressBlocMovementGesture);
@@ -233,6 +231,7 @@ public class PlayerMovementManager : MonoBehaviour
 			//If press is ended
 			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null)
 			{
+				Debug.Log("Hey");
 				//End of the drag
 				EndMovingBloc();
 				_canTouchBloc = true;
