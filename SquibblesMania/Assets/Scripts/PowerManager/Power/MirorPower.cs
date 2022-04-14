@@ -39,7 +39,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
-	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 
 	private Camera _cam;
@@ -87,8 +87,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 			PointerEventData p = new PointerEventData(EventSystem.current);
 			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
-			raycast.Clear();
-			EventSystem.current.RaycastAll(p, raycast);
+			_raycast.Clear();
+			EventSystem.current.RaycastAll(p, _raycast);
 
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
@@ -137,30 +137,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 						{
 							var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
 							_distV2 = distV2;
-							
-							if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower,
-								layerInteractable)) // launch the raycast
-							{
-								var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
-								_distV3 = distV3;
-							}
-
-							if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower,
-								layerInteractable)) // launch the raycast
-							{
-								var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
-								_distV4 = distV4;
-							}
-
-							if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
-							{
-								SpawnObjectOnFinalPathDash(hitTwo.transform);
-								SpawnShaderOnPathDash(hitThird.transform, rot);
-							}
-							else if (_distV4 <= _distV3)
-							{
-								SpawnObjectOnFinalPathDash(hitThird.transform);
-							}
 						}
 						else if (hitTwo.collider == null)
 						{
@@ -186,6 +162,30 @@ public class MirorPower : MonoBehaviour, IManagePower
 							{
 								_distV3 = _distanceDisplayDash;
 							}
+						}
+
+						if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
+						{
+							var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
+							_distV3 = distV3;
+						}
+
+						if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower,
+							layerInteractable)) // launch the raycast
+						{
+							var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
+							_distV4 = distV4;
+						}
+
+						if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
+						{
+							SpawnObjectOnFinalPathDash(hitTwo.transform);
+							SpawnShaderOnPathDash(hitThird.transform, rot);
+						}
+						else if (_distV4 <= _distV3)
+						{
+							SpawnObjectOnFinalPathDash(hitThird.transform);
 						}
 					}
 
