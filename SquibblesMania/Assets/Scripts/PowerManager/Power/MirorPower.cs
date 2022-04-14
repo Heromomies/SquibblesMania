@@ -43,13 +43,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 
 	private Camera _cam;
-	private Vector2 _focus, _startFocus;
-	private float _offset;
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
 	private float _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
-	
+
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
 	[Serializable]
@@ -74,9 +72,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
-
-		_offset = PlayerMovementManager.Instance.offset;
-
+		
 		DisplayPower();
 	}
 
@@ -141,6 +137,30 @@ public class MirorPower : MonoBehaviour, IManagePower
 						{
 							var distV2 = Vector3.Distance(displayPower[i].raycastTransform[1].position, hitTwo.transform.position);
 							_distV2 = distV2;
+							
+							if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower,
+								layerInteractable)) // launch the raycast
+							{
+								var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
+								_distV3 = distV3;
+							}
+
+							if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower,
+								layerInteractable)) // launch the raycast
+							{
+								var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
+								_distV4 = distV4;
+							}
+
+							if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
+							{
+								SpawnObjectOnFinalPathDash(hitTwo.transform);
+								SpawnShaderOnPathDash(hitThird.transform, rot);
+							}
+							else if (_distV4 <= _distV3)
+							{
+								SpawnObjectOnFinalPathDash(hitThird.transform);
+							}
 						}
 						else if (hitTwo.collider == null)
 						{
@@ -167,30 +187,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 								_distV3 = _distanceDisplayDash;
 							}
 						}
-
-						if (Physics.Raycast(displayPower[i].raycastTransform[0].position, Vector3.down, out var hitThird, _distanceDisplayPower,
-							layerInteractable)) // launch the raycast
-						{
-							var distV3 = Vector3.Distance(displayPower[i].raycastTransform[0].position, hitThird.transform.position);
-							_distV3 = distV3;
-						}
-
-						if (Physics.Raycast(raycastPlayer.position, Vector3.down, out var hitPlayerTwo, _distanceDisplayPower,
-							layerInteractable)) // launch the raycast
-						{
-							var distV4 = Vector3.Distance(raycastPlayer.position, hitPlayerTwo.transform.position);
-							_distV4 = distV4;
-						}
-
-						if (_distV4 <= _distV3 && _distV3 <= _distV2 && _distV4 <= _distV2)
-						{
-							SpawnObjectOnFinalPathDash(hitTwo.transform);
-							SpawnShaderOnPathDash(hitThird.transform, rot);
-						}
-						else if (_distV4 <= _distV3)
-						{
-							SpawnObjectOnFinalPathDash(hitThird.transform);
-						}
 					}
 
 					foreach (var actionPlayerPreset in textWhenNoZombieAreSelected)
@@ -208,7 +204,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitShowPath.collider.transform.position;
-				Quaternion quat = Quaternion.Euler(0,0,0);
+				var quat = Quaternion.Euler(0,0,0);
 				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
