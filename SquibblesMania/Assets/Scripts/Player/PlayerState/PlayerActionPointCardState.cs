@@ -379,19 +379,17 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.finalPathFinding.Clear();
     }
 
-    public void Clear(PlayerStateManager player)
+    private void Clear(PlayerStateManager player)
     {
         player.currentBlockPlayerOn = player.currentTouchBlock;
         
-        Node currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
+        var currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
         currentNodePlayerOn.isActive = false;
         //We add the player to the list of block group which the player is currently on 
         GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
 
         var pMovementManager = player.playerMovementManager;
-
-        pMovementManager.playerCurrentlySelected = null;
         pMovementManager.ghostPlayer.SetActive(false);
 
         //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
