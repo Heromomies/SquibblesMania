@@ -111,11 +111,14 @@ public class PlayerStateManager : Player
 	
 	public void RemoveParentBelowPlayer(Transform playerToCheck)
 	{
+		playerToCheck.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().isActive = true;
+		
 		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(playerToCheck);
 	}
 	
 	public void DetectParentBelowPlayer(Transform playerToCheck)
 	{
+		playerToCheck.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().isActive = false;
 		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Add(playerToCheck);
 	}
 	
