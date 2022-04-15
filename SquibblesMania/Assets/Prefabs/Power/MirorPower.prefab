@@ -48,16 +48,42 @@ MonoBehaviour:
     m_Bits: 64
   layerMaskInteractableAndPlayer:
     serializedVersion: 2
-    m_Bits: 72
-  rangeDetectionPlayer: 25
-  hitTransforms: []
+    m_Bits: 32840
+  layerInteractable:
+    serializedVersion: 2
+    m_Bits: 8
+  layerShowPath:
+    serializedVersion: 2
+    m_Bits: 16384
+  rangeDetectionPlayer: 5
   zombiePlayer: {fileID: 0}
-  textWhenNoZombieAreSelected: {fileID: 0}
-  dashRange: 2
-  swipeTouchCount: 1
-  swipeThresholdSeconds: 0.1
-  minimumDistanceUnits: 0.1
-  firstMat: {fileID: 2100000, guid: e983180ce4b63434eab2ffc6e2e2c206, type: 2}
-  secondMat: {fileID: 2100000, guid: a8c9a9c5099158a468c204df7979c808, type: 2}
-  zombieMat: {fileID: -876546973899608171, guid: 90f91472e2269644388a4b7b0944866f, type: 3}
+  textWhenNoZombieAreSelected:
+  - {fileID: 0}
+  - {fileID: 0}
+  textWhenThereAreNoZombieAround:
+  - {fileID: 0}
+  - {fileID: 0}
+  listObjectToSetActiveFalse: []
+  baseSpawnRaycastTransform: {fileID: 0}
+  raycastPlayer: {fileID: 0}
+  mirorRange: 2
+  selectableMat: {fileID: 2100000, guid: db3f9dc7bb3ab1d4d9e6621e5d3dea85, type: 2}
   changeZombieMat: {fileID: 2100000, guid: d480dd8d23f276f43be766d0278b83c9, type: 2}
+  players: []
+  displayPower:
+  - raycastTransform:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - raycastTransform:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - raycastTransform:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - raycastTransform:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}

@@ -23,9 +23,15 @@ public class CheatCodeManager : MonoBehaviour
                 GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Instance.turnCount++;
+        }
         
-       
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
+        }
     }
-    
-    
 }

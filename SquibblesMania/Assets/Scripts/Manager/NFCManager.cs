@@ -47,10 +47,10 @@ public class NFCManager : MonoBehaviour
 	#region PRIVATE VAR
 
 	[HideInInspector] public int numberOfTheCard;
-	public char[] charCards;
-	public bool newCardDetected;
+	[HideInInspector] public char[] charCards;
+	[HideInInspector] public bool newCardDetected; 
 	[HideInInspector] public bool powerActivated;
-	public bool displacementActivated;
+	[HideInInspector] public bool displacementActivated;
 	[HideInInspector] public int changeColor;
 	[HideInInspector] public int indexPlayer;
 
@@ -78,26 +78,22 @@ public class NFCManager : MonoBehaviour
 	{
 		StopAllCoroutines();
 		NFCController.StopPolling();
-
+		
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
-			case 0:
-				NFCController.StartPollingAsync(antennaPlayerOne);
+			case 0: NFCController.StartPollingAsync(antennaPlayerOne);
 				LightController.Colorize(lightIndexesPlayerOne, lightColor, false);
 				indexPlayer = 0;
 				break;
-			case 1:
-				NFCController.StartPollingAsync(antennaPlayerTwo);
+			case 1: NFCController.StartPollingAsync(antennaPlayerTwo);
 				LightController.Colorize(lightIndexesPlayerTwo, lightColor, false);
 				indexPlayer = 1;
 				break;
-			case 2:
-				NFCController.StartPollingAsync(antennaPlayerThree);
+			case 2: NFCController.StartPollingAsync(antennaPlayerThree);
 				LightController.Colorize(lightIndexesPlayerThree, lightColor, false);
 				indexPlayer = 2;
 				break;
-			case 3:
-				NFCController.StartPollingAsync(antennaPlayerFour);
+			case 3: NFCController.StartPollingAsync(antennaPlayerFour);
 				LightController.Colorize(lightIndexesPlayerFour, lightColor, false);
 				indexPlayer = 3;
 				break;

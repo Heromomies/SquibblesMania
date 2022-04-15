@@ -10,16 +10,15 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
     public Sound[] sounds;
 
-    public AudioMixerGroup group;
-
-    public Slider slider;
+    public Slider sliderMainSound;
     public AudioMixer mixer;
+    
+    public AudioMixerGroup group;
 
     public List<String> soundsToPlayOnAwake;
     private string _volumeParameter = "MasterVolume";
     void Awake()
     {
-        mixer.SetFloat(_volumeParameter,PlayerPrefs.GetFloat("Volume"));
         if (Instance == null)
         {
             Instance = this;
@@ -28,19 +27,19 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        slider.onValueChanged.AddListener(HandleSliderValueChanged);
+        sliderMainSound.onValueChanged.AddListener(HandleSliderMainValueChanged);
     }
 
-    public void HandleSliderValueChanged(float value) // When we change the value of the slider
+    private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
     { 
-        value  = slider.value;
-        mixer.SetFloat(_volumeParameter, value);
-        PlayerPrefs.SetFloat("Volume",value);
+        value  = sliderMainSound.value;
+      
+        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
     }
+    
     private void Start()
     {
-        PlayerPrefs.GetFloat("Volume", slider.value);
-       //DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         foreach (Sound s in sounds)
         {
             s.source = s.gameObject.AddComponent<AudioSource>();
@@ -49,31 +48,22 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.spatialBlend = 1;
+            s.source.outputAudioMixerGroup = group;
         }
 
         foreach (var sound in soundsToPlayOnAwake)
         {
             Play(sound);
         }
-
-        foreach (var sound in sounds)
-        {
-            sound.GetComponent<AudioSource>().outputAudioMixerGroup = group;
-        }
     }
     
     public void Play(string name) // Play a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
-        if (s != null)
+        if (s != null && s.canPlay)
         {
             s.source.Play();
         }
-        else
-        {
-            Debug.LogWarning("Le son n'a pas été trouvé");
-        }
-        //Debug.Log("play");
     }
 
     public void Stop(string name) // Stop a sound
@@ -83,9 +73,21 @@ public class AudioManager : MonoBehaviour
         {
             s.source.Stop();
         }
-        else
+    }
+    public void Pause(string name) // Stop a sound
+    {
+        Sound s = Array.Find(sounds, sound => sound.soundName == name);
+        if (s != null)
         {
-            Debug.LogWarning("Le son n'a pas été trouvé");
+            s.source.Pause();
+        }
+    }
+    public void UnPause(string name) // Stop a sound
+    {
+        Sound s = Array.Find(sounds, sound => sound.soundName == name);
+        if (s != null && s.canPlay)
+        {
+            s.source.UnPause();
         }
     }
 }

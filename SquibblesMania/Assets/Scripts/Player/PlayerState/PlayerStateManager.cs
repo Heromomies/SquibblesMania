@@ -22,13 +22,10 @@ public class PlayerStateManager : Player
 	[Header("PLAYER UTILITIES")] public int playerNumber;
 	public bool isPlayerInActionCardState;
 	public List<Transform> nextBlockPath;
+	
 	public PlayerMovementManager playerMovementManager;
-
+	
 	public GameObject psStun;
-
-	[HideInInspector] public bool isInJump;
-
-	private float _timeLeft = 1.5f;
 
 	private void Start()
 	{
@@ -60,7 +57,7 @@ public class PlayerStateManager : Player
 	}
 
 
-	public void StartPathFinding()
+	public void StartPreviewPathFinding()
 	{
 		//If the current state of the player is when he use his action point
 		if (CurrentState == PlayerActionPointCardState)
@@ -69,6 +66,22 @@ public class PlayerStateManager : Player
 		}
 	}
 
+	public void StartPlayerMovement()
+	{
+		if (!walking)
+		{
+			walking = true;
+			StartCoroutine(PlayerActionPointCardState.FollowPath(this));
+		}
+	}
+
+	public void ResetPreviewPathFinding()
+	{
+		if (CurrentState == PlayerActionPointCardState)
+		{
+			PlayerActionPointCardState.ResetPreviewPath(this);
+		}
+	}
 
 	public void SwitchState(PlayerBaseState state)
 	{
@@ -82,7 +95,7 @@ public class PlayerStateManager : Player
 		}
 	}
 
-	private void DetectBlockBelowPlayer()
+	public void DetectBlockBelowPlayer()
 	{
 		Ray ray = new Ray(transform.position, -transform.up);
 		RaycastHit hit;
@@ -92,38 +105,23 @@ public class PlayerStateManager : Player
 			if (hit.collider.gameObject.GetComponent<Node>() != null)
 			{
 				currentBlockPlayerOn = hit.transform;
-				_timeLeft = 1.5f;
-			}
-		}
-		else
-		{
-			if (!isInJump)
-			{
-				_timeLeft -= Time.deltaTime;
-				if (_timeLeft < 0)
-				{
-					StartCoroutine(WaitUntilRespawn());
-					_timeLeft = 1.5f;
-				}
 			}
 		}
 	}
-
-	private IEnumerator WaitUntilRespawn()
+	
+	public void RemoveParentBelowPlayer(Transform playerToCheck)
 	{
-		yield return new WaitForSeconds(1f);
-
-		var blockPlayerOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn.gameObject;
-		var obj = blockPlayerOn.GetComponentInParent<GroupBlockDetection>();
-		var children = obj.GetComponentsInChildren<Node>();
-
-		var randomNumber = Random.Range(0, children.Length);
-
-		GameManager.Instance.currentPlayerTurn.transform.position =
-			children[randomNumber].transform.position + new Vector3(0, 1, 0);
-		StopAllCoroutines();
+		playerToCheck.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().isActive = true;
+		
+		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(playerToCheck);
 	}
-
+	
+	public void DetectParentBelowPlayer(Transform playerToCheck)
+	{
+		playerToCheck.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().isActive = false;
+		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Add(playerToCheck);
+	}
+	
 	public void StunPlayer(PlayerStateManager player, int stunTurnCount)
 	{
 		player.isPlayerStun = true;

@@ -49,7 +49,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &1026829964
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,7 +100,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &1429732176
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +151,212 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &1482455714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1482455716}
+  - component: {fileID: 1482455715}
+  m_Layer: 0
+  m_Name: EVENT_Moutain_Wind
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1482455716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482455714}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1482455715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482455714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: Wind
+  clip: {fileID: 8300000, guid: 012bdb62183d4df49ad1f05c86b0e36b, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &1737338372
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1737338374}
+  - component: {fileID: 1737338373}
+  m_Layer: 0
+  m_Name: GAME_Power_MirrorEnd
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1737338374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737338372}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1737338373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737338372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: PowerMirorEnd
+  clip: {fileID: 8300000, guid: e005006dba0e2524585639a3f6a5a05e, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &1774329083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1774329084}
+  - component: {fileID: 1774329085}
+  m_Layer: 0
+  m_Name: GAME_Power_Swap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1774329084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774329083}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1774329085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774329083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: PowerSwap
+  clip: {fileID: 8300000, guid: 80e67ca0c6db4b64ba5bff9e3b926929, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &1822331642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1822331644}
+  - component: {fileID: 1822331643}
+  m_Layer: 0
+  m_Name: GAME_Power_Dash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1822331644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822331642}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1822331643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822331642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: PowerDashEnd
+  clip: {fileID: 8300000, guid: 537ae5dd59b81ed458cc25cc28624d1e, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &2000760930
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +406,59 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &2037736499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2037736500}
+  - component: {fileID: 2037736501}
+  m_Layer: 0
+  m_Name: GAME_Power_JumpEnd
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2037736500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037736499}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2037736501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037736499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: PowerJumpEnd
+  clip: {fileID: 8300000, guid: dc09162e43364374a869edf936d41c61, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303674451224331
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +508,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303674941194694
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,12 +554,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundName: FireballEnd
-  clip: {fileID: 8300000, guid: 7dc4166f9208d9340af0ad34e34e5448, type: 3}
+  clip: {fileID: 8300000, guid: 85b69963038834c4eb9bc2df8cfc173f, type: 3}
   volume: 1
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675021000331
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,7 +610,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675023893810
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,12 +656,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundName: MainSound
-  clip: {fileID: 8300000, guid: f071474e7d0b48e46a8f96e5fa7b7fc9, type: 3}
+  clip: {fileID: 8300000, guid: d3ee8e366da01224396bd86fb2bb2045, type: 3}
   volume: 1
   pitch: 1
   source: {fileID: 0}
   loop: 1
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 0
 --- !u!1 &3006303675248070211
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +712,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675314906342
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +763,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675459363798
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,11 +810,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: Button
   clip: {fileID: 8300000, guid: 732859d043fb3824d8c200e61a5ed74e, type: 3}
-  volume: 1
+  volume: 0.3
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675667628574
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +865,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 1
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675683900082
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,7 +916,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303675828633392
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,6 +961,11 @@ Transform:
   - {fileID: 1429732177}
   - {fileID: 446858194}
   - {fileID: 2000760931}
+  - {fileID: 1482455716}
+  - {fileID: 1822331644}
+  - {fileID: 1774329084}
+  - {fileID: 2037736500}
+  - {fileID: 1737338374}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -745,7 +1018,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303676052972417
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +1069,8 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303676139388286
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,4 +1120,5 @@ MonoBehaviour:
   pitch: 1
   source: {fileID: 0}
   loop: 0
-  group: {fileID: 24300002, guid: b9eec96af751e544b887102caa5c7797, type: 2}
+  canPlay: 1
+  isEffect: 1

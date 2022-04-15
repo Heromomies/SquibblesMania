@@ -103,27 +103,46 @@ public class CameraViewModeGesture : MonoBehaviour
 
     private IEnumerator StartMovementViewModeStateCoroutine(int indexUiCircleSelection, Color uiCircleColor, float angleRotation, float camIconAngleZ)
     {
-        var camEulerAngles = actualUiViewMode.uiCamIcon.eulerAngles;
+        CheckIndexCamButtonManager(indexUiCircleSelection);
         actualUiViewMode.uiCircleSelection[indexUiCircleSelection].color = uiCircleColor;
-        
-        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
-        {
-            camEulerAngles.z = camIconAngleZ;
-            actualUiViewMode.uiCamIcon.eulerAngles = camEulerAngles;
-        }
-        else
-        {
-            camEulerAngles.z = camIconAngleZ + 180f;
-            actualUiViewMode.uiCamIcon.eulerAngles = camEulerAngles;
-        }
-        
+        SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZ);
         StartCoroutine(StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleRotation));
+        
         _indexUiCircleSelection = indexUiCircleSelection;
         currentUiCircleSelection = actualUiViewMode.uiCircleSelection[indexUiCircleSelection];
         yield return _timeInSecondsForSwitchViewMode;
         foreach (var image in actualUiViewMode.uiCircleSelection)
         {
             image.gameObject.SetActive(true);
+        }
+    }
+
+    void CheckIndexCamButtonManager(int indexUiCircleSelection)
+    {
+        if (indexUiCircleSelection >= 2)
+        {
+            foreach (var button in CameraButtonManager.Instance.actualUiCamPreset.buttonsCamRotate)
+            {
+                var eventTriggerButton = button.gameObject.GetComponent<EventTrigger>();
+                if (button.interactable)
+                {
+                    button.interactable = false;
+                    eventTriggerButton.enabled = false;
+                }
+                    
+            }
+        }
+        else
+        {
+            foreach (var button in CameraButtonManager.Instance.actualUiCamPreset.buttonsCamRotate)
+            {
+                var eventTriggerButton = button.gameObject.GetComponent<EventTrigger>();
+                if (!button.interactable)
+                {
+                    button.interactable = true;
+                    eventTriggerButton.enabled = true;
+                }
+            }
         }
     }
 
@@ -174,11 +193,11 @@ public class CameraViewModeGesture : MonoBehaviour
 
         if (actualCamPresetNumber <= 2)
         {
-            SetObjectStateUiViewModeItem(uiViewModeList[0]);
+            SetObjectStateUiViewModeItem(uiViewModeList[0], 0);
         }
         else
         {
-            SetObjectStateUiViewModeItem(uiViewModeList[1]);
+            SetObjectStateUiViewModeItem(uiViewModeList[1], 0);
         }
     }
 
@@ -186,16 +205,45 @@ public class CameraViewModeGesture : MonoBehaviour
     /// //Set up the ui game objects of the desiredUi view mode
     /// </summary>
     /// <param name="desiredUIViewMode"></param>
-    private void SetObjectStateUiViewModeItem(UIViewMode desiredUIViewMode)
+    private void SetObjectStateUiViewModeItem(UIViewMode desiredUIViewMode, int indexCircleSelection)
     {
         foreach (var uiViewMode in uiViewModeList)
         {
             uiViewMode.parentUiCamViewMode.gameObject.SetActive(false);
         }
-
+        
+        
         desiredUIViewMode.parentUiCamViewMode.gameObject.SetActive(true);
         actualUiViewMode = desiredUIViewMode;
-        currentUiCircleSelection = actualUiViewMode.uiCircleSelection[0];
-        _indexUiCircleSelection = 0;
+        
+        SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZCameraBaseView);
+        if (currentUiCircleSelection != null)
+        {
+            var color = currentUiCircleSelection.color;
+            color.a = 0f;
+            currentUiCircleSelection.color = color;
+        }
+      
+        
+        currentUiCircleSelection = actualUiViewMode.uiCircleSelection[indexCircleSelection];
+
+        var colorAlphaFull= currentUiCircleSelection.color;
+        colorAlphaFull.a = 1f;
+        currentUiCircleSelection.color = colorAlphaFull;
+        _indexUiCircleSelection = indexCircleSelection;
+    }
+
+   private void SetCamIconEulerAngles(Vector3 camEulerAngles, float desiredAngle)
+    {
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+        {
+            camEulerAngles.z = desiredAngle;
+            actualUiViewMode.uiCamIcon.eulerAngles = camEulerAngles;
+        }
+        else
+        {
+            camEulerAngles.z = desiredAngle + 180f;
+            actualUiViewMode.uiCamIcon.eulerAngles = camEulerAngles;
+        }
     }
 }

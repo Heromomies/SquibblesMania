@@ -59,6 +59,7 @@ MonoBehaviour:
   stunCount: 0
   isPlayerStun: 0
   canSwitch: 1
+  currentCardEffect: {fileID: 0}
   currentBlockPlayerOn: {fileID: 0}
   currentTouchBlock: {fileID: 0}
   finalPathFinding: []
@@ -70,7 +71,6 @@ MonoBehaviour:
   nextBlockPath: []
   playerMovementManager: {fileID: 0}
   psStun: {fileID: 2936173512648054684, guid: a763f0a2aeebd2449a43529d3510a105, type: 3}
-  isInJump: 0
 --- !u!65 &3654437144936034677
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -82,7 +82,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8, z: 0.8}
+  m_Size: {x: 0.6, y: 0.8, z: 0.6}
   m_Center: {x: 0, y: -0.093681484, z: 0}
 --- !u!54 &3857268635799056752
 Rigidbody:

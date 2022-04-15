@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour
     public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-    
+
+    //[SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
     {
@@ -53,10 +54,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 30;
         _gameManager = this;
         _cam = Camera.main;
-        Application.targetFrameRate = 30;
-        
     }
 
 
@@ -71,8 +71,6 @@ public class GameManager : MonoBehaviour
         _cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
         SpawnPlayers();
         StartGame();
-
-        
     }
 
     void SpawnPlayers()
@@ -134,6 +132,21 @@ public class GameManager : MonoBehaviour
         NFCManager.Instance.PlayerChangeTurn();
     }
 
+    public void SetUpMaterial(PlayerStateManager player, int playerNumber)
+    {
+        switch (playerNumber)
+        {
+            case 0 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
+                break;
+            case 1 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
+                break;
+            case 2 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
+                break;
+            case 3 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
+                break; 
+        }
+    }
+    
     void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
@@ -142,21 +155,22 @@ public class GameManager : MonoBehaviour
             {
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
-
+            
+          
             Transform cameraTransform = _cam.transform;
             Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-        
+            
             //Smooth Transition
             cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
         
             actualCamPreset = camPreSets[countTurn];
-        
+            
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
             _cameraViewModeGesture.SetUpCameraBaseViewMode();
-        
+             
             count++;
             if (count >= camPreSets.Count)
             {
@@ -166,6 +180,29 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn.canSwitch = false;
         }
     }
+
+   /* private void SavePreviousCamRotY(int indexCam)
+    {
+      
+        if (indexCam <= 0) indexCam = 0;
+
+        Vector3 camEulerAngles = _cam.transform.eulerAngles;
+        Vector3 camPos = _cam.transform.position;
+        
+        camEulerAngles.y = (camEulerAngles.y  > 180) ?  camEulerAngles.y  - 360 :  camEulerAngles.y;
+
+        CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
+        
+        previousCamPreSets.camRot = new Vector3(previousCamPreSets.camRot.x , camEulerAngles.y, previousCamPreSets.camRot.z);
+        previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
+        previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
+        previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
+
+        previousCamPreSetsList[indexCam] = previousCamPreSets;
+        
+        camPreSets[indexCam] = previousCamPreSetsList[indexCam];
+
+    }*/
 
     private void IncreaseDemiCycle()
     {
@@ -182,12 +219,31 @@ public class GameManager : MonoBehaviour
         }
 
         turnCount++;
-
+        if (currentPlayerTurn.currentCardEffect)
+        {
+            currentPlayerTurn.currentCardEffect.SetActive(false);
+            currentPlayerTurn.currentCardEffect = null;
+        }
+       
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
 
         NFCManager.Instance.PlayerChangeTurn();
+       /* if (count <= 0)
+        {
+            SavePreviousCamRotY(previousCamPreSetsList.Count-1);
+        }
+        else
+        {
+            SavePreviousCamRotY(count-1);
+        }*/
+       
         CamConfig(count);
+        if (UiManager.Instance.textActionPointPopUp)
+        {
+            UiManager.Instance.textActionPointPopUp.SetActive(false);
+            UiManager.Instance.textActionPointPopUp = null;
+        }
     }
 
     public void DecreaseVariable()
@@ -196,8 +252,17 @@ public class GameManager : MonoBehaviour
 
         if(turnCount <= 0)
             turnCount=0;
+
+        if (count != 0)
+        {
+            currentPlayerTurn = players[count -1];
+        }
+        else if (count == 0)
+        {
+            currentPlayerTurn = players[3];
+        }
         
-        currentPlayerTurn = players[count -1];
+        
         currentPlayerTurn.StartState();
     }    
     
@@ -216,9 +281,8 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
-        Debug.Log("Player Win");
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-        Time.timeScale = 0f;
+     
         UiManager.Instance.WinSetUp(playerTeam);
     }
 

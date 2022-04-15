@@ -7,6 +7,7 @@ using I2.Loc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
@@ -14,11 +15,21 @@ public class UiManager : MonoBehaviour
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-
-    [Header("WIN PANEL")] public GameObject winPanel;
-    public TextMeshProUGUI winText;
-    public static UiManager Instance => _uiManager;
+    public Toggle mainToggle, effectToggle;
     
+    [Header("WIN PANEL")] public GameObject winPanel;
+    public GameObject textTeamOne, textTeamTwo;
+    public static UiManager Instance => _uiManager;
+
+    [Header("CARD UI VFX")]
+    public Transform[] parentSpawnCardUiVFX;
+    
+    [Header("POP UP TEXT PARAMETERS")]
+    public GameObject textActionPointPopUp;
+    public int totalCurrentActionPoint;
+    [SerializeField] private Vector3 offsetText;
+
+    public Camera uiCam;
     private void Awake()
     {
         _uiManager = this;
@@ -28,9 +39,6 @@ public class UiManager : MonoBehaviour
     {
         buttonNextTurn = buttonNextTurnPlayer;
     }
-
-
-
 
     public void ButtonNextTurn()
     {
@@ -49,32 +57,74 @@ public class UiManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        
+        textTeamOne.SetActive(false);
+        textTeamTwo.SetActive(false);
     }
     
     
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
-        winText.text = $"{playerTeam} WIN";
-    }
-
-    public void ButtonChangeCamMoveUi()
-    {
-        FingersPanOrbitComponentScript cameraTouchMovement = Camera.main.gameObject.GetComponent<FingersPanOrbitComponentScript>();
-        
-        if (!CameraButtonManager.Instance.enabled)
+        if (playerTeam == Player.PlayerTeam.TeamOne)
         {
-            CameraButtonManager.Instance.enabled = true;
-            cameraTouchMovement.enabled = false;
-            CameraButtonManager.Instance.TopViewMode();
-          
+            textTeamOne.SetActive(true);
         }
         else
         {
-            CameraButtonManager.Instance.enabled = false;
-            cameraTouchMovement.enabled = true;
-            CameraButtonManager.Instance.BaseViewMode();
+            textTeamTwo.SetActive(true);
         }
     }
+
+    public void StopMainMusic()
+    {
+        if (mainToggle.isOn)
+        {
+            AudioManager.Instance.UnPause("MainSound");
+        }
+        else
+        {
+            AudioManager.Instance.Pause("MainSound");
+        }
+    }
+    
+    public void StopEffectMusic()
+    {
+        if (effectToggle.isOn)
+        {
+            foreach (var s in  AudioManager.Instance.sounds)
+            {
+                if(s.isEffect)
+                    s.canPlay = true;
+            }
+        }
+        else
+        {
+            foreach (var s in  AudioManager.Instance.sounds)
+            {
+                if(s.isEffect)
+                   s.canPlay = false;
+            }
+        }
+    }
+
+    #region SpawnTextActionPoint
+
+    public void SpawnTextActionPointPopUp(Transform currentPlayer)
+    {
+        totalCurrentActionPoint = GameManager.Instance.currentPlayerTurn.playerActionPoint;
+        if (!textActionPointPopUp)
+        {
+            textActionPointPopUp = PoolManager.Instance.SpawnObjectFromPool("PopUpTextActionPoint", currentPlayer.position + offsetText, Quaternion.identity, currentPlayer);
+        }
+        else
+        {
+            textActionPointPopUp.SetActive(true);
+        }
+        
+        textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(GameManager.Instance.currentPlayerTurn.playerActionPoint);
+    }
+
+    #endregion
     
 }
