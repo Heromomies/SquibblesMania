@@ -89,7 +89,21 @@ public class TeamInventoryManager : MonoBehaviour
 		{
 			Instantiate(objectToSpawn, new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
 		}
+
+        if (playerTeam == Player.PlayerTeam.TeamOne)
+        {
+            winT2.SetActive(false);
+            winT1.SetActive(true);
+            
+        }
+        else
+        {
+            winT1.SetActive(false);
+            winT2.SetActive(true);
+        }
 	}
+
+   
 }
 
 [Serializable]
