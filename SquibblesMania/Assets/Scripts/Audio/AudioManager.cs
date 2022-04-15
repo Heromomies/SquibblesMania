@@ -35,10 +35,19 @@ public class AudioManager : MonoBehaviour
         value  = sliderMainSound.value;
       
         mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
+        
+        PlayerPrefs.SetFloat("Sound", value);
+        
+       
     }
     
     private void Start()
     {
+        if (PlayerPrefs.HasKey("Sound"))
+        {
+            sliderMainSound.value = PlayerPrefs.GetFloat("Sound");
+        }
+        
         //DontDestroyOnLoad(gameObject);
         foreach (Sound s in sounds)
         {
@@ -55,6 +64,8 @@ public class AudioManager : MonoBehaviour
         {
             Play(sound);
         }
+
+      
     }
     
     public void Play(string name) // Play a sound
@@ -74,7 +85,7 @@ public class AudioManager : MonoBehaviour
             s.source.Stop();
         }
     }
-    public void Pause(string name) // Stop a sound
+    public void Pause(string name) // Pause a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
         if (s != null)
@@ -82,7 +93,7 @@ public class AudioManager : MonoBehaviour
             s.source.Pause();
         }
     }
-    public void UnPause(string name) // Stop a sound
+    public void UnPause(string name) // UnPause a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
         if (s != null && s.canPlay)
