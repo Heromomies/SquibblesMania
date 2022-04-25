@@ -39,8 +39,6 @@ public class AudioManager : MonoBehaviour
         mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * multiplier);
 
         PlayerPrefs.SetFloat("Sound", value);
-        
-        Debug.Log(value);
     }
     
     private void Start()
