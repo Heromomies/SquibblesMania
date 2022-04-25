@@ -47,7 +47,7 @@ public class TeamInventoryManager : MonoBehaviour
 			else
 			{
 				Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
-					inventory[0].spawnObject.rotation, inventory[1].spawnObject);
+					inventory[1].spawnObject.rotation, inventory[1].spawnObject);
 				inventory[1].objectAcquired += indexObject;
 				inventory[1].boatObject.Add(objectTransport[0]);
 
@@ -90,17 +90,7 @@ public class TeamInventoryManager : MonoBehaviour
 			Instantiate(objectToSpawn, new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
 		}
 
-        if (playerTeam == Player.PlayerTeam.TeamOne)
-        {
-            winT2.SetActive(false);
-            winT1.SetActive(true);
-            
-        }
-        else
-        {
-            winT1.SetActive(false);
-            winT2.SetActive(true);
-        }
+        
 	}
 
    
