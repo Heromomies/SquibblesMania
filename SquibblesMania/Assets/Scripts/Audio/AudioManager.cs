@@ -11,6 +11,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     public Slider sliderMainSound;
+    public Toggle mainToggle, effectToggle;
+    
     public AudioMixer mixer;
     
     public AudioMixerGroup group;
@@ -35,10 +37,8 @@ public class AudioManager : MonoBehaviour
         value  = sliderMainSound.value;
       
         mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
-        
+
         PlayerPrefs.SetFloat("Sound", value);
-        
-       
     }
     
     private void Start()
@@ -101,4 +101,37 @@ public class AudioManager : MonoBehaviour
             s.source.UnPause();
         }
     }
+    
+    public void StopMainMusic()
+    {
+        if (mainToggle.isOn)
+        {
+            UnPause("MainSound");
+        }
+        else
+        {
+            Pause("MainSound");
+        }
+    }
+    
+    public void StopEffectMusic()
+    {
+        if (effectToggle.isOn)
+        {
+            foreach (var s in sounds)
+            {
+                if(s.isEffect)
+                    s.canPlay = true;
+            }
+        }
+        else
+        {
+            foreach (var s in sounds)
+            {
+                if(s.isEffect)
+                    s.canPlay = false;
+            }
+        }
+    }
+
 }
