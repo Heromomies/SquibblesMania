@@ -15,10 +15,10 @@ public class UiManager : MonoBehaviour
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-    public Toggle mainToggle, effectToggle;
+   
     
     [Header("WIN PANEL")] public GameObject winPanel;
-    public TextMeshProUGUI winText;
+    public GameObject textTeamOne, textTeamTwo;
     public static UiManager Instance => _uiManager;
 
     [Header("CARD UI VFX")]
@@ -50,53 +50,32 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.powerActivated = false;
         GameManager.Instance.currentPlayerTurn.canSwitch = true;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
+
     }
 
     public void LoadScene(string sceneName)
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        
+        textTeamOne.SetActive(false);
+        textTeamTwo.SetActive(false);
     }
     
     
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
-        winText.text = $"{playerTeam} WIN";
-    }
-
-    public void StopMainMusic()
-    {
-        if (mainToggle.isOn)
+        if (playerTeam == Player.PlayerTeam.TeamOne)
         {
-            AudioManager.Instance.UnPause("MainSound");
+            textTeamOne.SetActive(true);
         }
         else
         {
-            AudioManager.Instance.Pause("MainSound");
+            textTeamTwo.SetActive(true);
         }
     }
     
-    public void StopEffectMusic()
-    {
-        if (effectToggle.isOn)
-        {
-            foreach (var s in  AudioManager.Instance.sounds)
-            {
-                if(s.isEffect)
-                    s.canPlay = true;
-            }
-        }
-        else
-        {
-            foreach (var s in  AudioManager.Instance.sounds)
-            {
-                if(s.isEffect)
-                   s.canPlay = false;
-            }
-        }
-    }
-
     #region SpawnTextActionPoint
 
     public void SpawnTextActionPointPopUp(Transform currentPlayer)

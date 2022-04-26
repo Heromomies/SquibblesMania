@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
     [HideInInspector] public int cycleCount;
+    public GameObject winT1;
+    public GameObject winT2;
 
     [Header("PLAYER CUSTOMIZATION")]
     public PlayerData playerData;
@@ -206,7 +208,7 @@ public class GameManager : MonoBehaviour
 
     private void IncreaseDemiCycle()
     {
-        EventManager.Instance.CyclePassed();
+        VolcanoManager.Instance.CyclePassed();
         PowerManager.Instance.CyclePassed();
     }
 
@@ -243,6 +245,18 @@ public class GameManager : MonoBehaviour
         {
             UiManager.Instance.textActionPointPopUp.SetActive(false);
             UiManager.Instance.textActionPointPopUp = null;
+        }
+
+        if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
+        {
+            winT2.SetActive(false);
+            winT1.SetActive(true);
+
+        }
+        else
+        {
+            winT1.SetActive(false);
+            winT2.SetActive(true);
         }
     }
 

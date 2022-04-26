@@ -39,17 +39,15 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private readonly WaitForSeconds _timeBetweenPlayerZombieMovement = new WaitForSeconds(0.3f);
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 
-	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 
 	private Camera _cam;
-	private Vector2 _focus, _startFocus;
-	private float _offset;
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
 	private float _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
-	
+
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
 	[Serializable]
@@ -74,9 +72,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
 		FingersScript.Instance.AddGesture(SwapTouchGesture);
-
-		_offset = PlayerMovementManager.Instance.offset;
-
+		
 		DisplayPower();
 	}
 
@@ -91,8 +87,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 			PointerEventData p = new PointerEventData(EventSystem.current);
 			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
-			raycast.Clear();
-			EventSystem.current.RaycastAll(p, raycast);
+			_raycast.Clear();
+			EventSystem.current.RaycastAll(p, _raycast);
 
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
@@ -108,16 +104,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 					raycastPlayer.position = baseSpawnRaycastTransform.position;
-					
+				
 					var currentPlayer = GameManager.Instance.currentPlayerTurn;
-					var playerNode = currentPlayer.currentBlockPlayerOn.GetComponent<Node>();
-					playerNode.groupBlockParent.AddOrRemovePlayerFromList(true, currentPlayer.transform);
+					currentPlayer.RemoveParentBelowPlayer(currentPlayer.transform);
 					
 					var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-		
-					var zombieNode = zombieStateManager.currentBlockPlayerOn.GetComponent<Node>();
-					zombieNode.groupBlockParent.AddOrRemovePlayerFromList(true, zombieStateManager.transform);
-
+					zombieStateManager.RemoveParentBelowPlayer(zombieStateManager.transform);
 					
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
@@ -212,7 +204,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitShowPath.collider.transform.position;
-				Quaternion quat = Quaternion.Euler(0,0,0);
+				var quat = Quaternion.Euler(0,0,0);
 				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
@@ -561,10 +553,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			g.gameObject.SetActive(false);
 		}
-		
-		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
-		currentPlayer.DetectBlockBelowPlayer();
-		currentPlayer.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, currentPlayer.transform);
 
 		StartCoroutine(WaitBeforeDetectUnderZombie());
 		
@@ -582,11 +570,15 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 		yield return _waitDetectBlocUnderZombie;
 
+		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+		currentPlayer.DetectBlockBelowPlayer();
+		currentPlayer.DetectParentBelowPlayer(currentPlayer.transform);
+		
 		if (zombiePlayer != null)
 		{
 			var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
 			zombieStateManager.DetectBlockBelowPlayer();
-			zombieStateManager.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent.AddOrRemovePlayerFromList(false, zombieStateManager.transform);
+			zombieStateManager.DetectParentBelowPlayer(zombieStateManager.transform);
 		}
 		
 		zombiePlayer = null;

@@ -11,8 +11,11 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     public Slider sliderMainSound;
-    public AudioMixer mixer;
+    public Toggle mainToggle, effectToggle;
+
+    public int multiplier;
     
+    public AudioMixer mixer;
     public AudioMixerGroup group;
 
     public List<String> soundsToPlayOnAwake;
@@ -34,11 +37,18 @@ public class AudioManager : MonoBehaviour
     { 
         value  = sliderMainSound.value;
       
-        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * 20);
+        mixer.SetFloat(_volumeParameter, Mathf.Log10(value) * multiplier);
+
+        PlayerPrefs.SetFloat("Sound", value);
     }
     
     private void Start()
     {
+        if (PlayerPrefs.HasKey("Sound"))
+        {
+            sliderMainSound.value = PlayerPrefs.GetFloat("Sound");
+        }
+        
         //DontDestroyOnLoad(gameObject);
         foreach (Sound s in sounds)
         {
@@ -47,7 +57,6 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
-            s.source.spatialBlend = 1;
             s.source.outputAudioMixerGroup = group;
         }
 
@@ -55,6 +64,8 @@ public class AudioManager : MonoBehaviour
         {
             Play(sound);
         }
+
+      
     }
     
     public void Play(string name) // Play a sound
@@ -74,7 +85,7 @@ public class AudioManager : MonoBehaviour
             s.source.Stop();
         }
     }
-    public void Pause(string name) // Stop a sound
+    private void Pause(string name) // Pause a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
         if (s != null)
@@ -82,7 +93,7 @@ public class AudioManager : MonoBehaviour
             s.source.Pause();
         }
     }
-    public void UnPause(string name) // Stop a sound
+    private void UnPause(string name) // UnPause a sound
     {
         Sound s = Array.Find(sounds, sound => sound.soundName == name);
         if (s != null && s.canPlay)
@@ -90,4 +101,37 @@ public class AudioManager : MonoBehaviour
             s.source.UnPause();
         }
     }
+    
+    public void StopMainMusic()
+    {
+        if (mainToggle.isOn)
+        {
+            UnPause("MainSound");
+        }
+        else
+        {
+            Pause("MainSound");
+        }
+    }
+    
+    public void StopEffectMusic()
+    {
+        if (effectToggle.isOn)
+        {
+            foreach (var s in sounds)
+            {
+                if(s.isEffect)
+                    s.canPlay = true;
+            }
+        }
+        else
+        {
+            foreach (var s in sounds)
+            {
+                if(s.isEffect)
+                    s.canPlay = false;
+            }
+        }
+    }
+
 }

@@ -231,7 +231,6 @@ public class PlayerMovementManager : MonoBehaviour
 			//If press is ended
 			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null)
 			{
-				Debug.Log("Hey");
 				//End of the drag
 				EndMovingBloc();
 				_canTouchBloc = true;
