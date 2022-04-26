@@ -9,6 +9,7 @@ public class BezierAlgorithm : MonoBehaviour
 	private GameObject _go;
 	private List<Vector3> _points;
 	private float _f;
+	private bool _canJump;
 	private bool _canMove;
 
 	private float _timeLeft;
@@ -67,19 +68,45 @@ public class BezierAlgorithm : MonoBehaviour
 		return allPoints[0];
 	}
 
-	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f, AnimationCurve curve)
+	public void ObjectJumpWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f, AnimationCurve curve)
 	{
 		_go = objectToMove;
 		_points = pointsList;
 		_f = f;
 		_animationCurve = curve;
 		
+		_canJump = true;
+	}
+	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f)
+	{
+		_go = objectToMove;
+		_points = pointsList;
+		_f = f;
+
 		_canMove = true;
 	}
-
+	
+	
 	private void Update()
 	{
 		if (_canMove)
+		{
+			_timeLeft += _f;
+			if (_timeLeft < 1)
+			{
+				_go.transform.position = Curve(_points, _timeLeft);
+			}
+			else
+			{
+				_canMove = false;
+				_go = null;
+				_points.Clear();
+				_f = 0f;
+				_timeLeft = 0f;
+			}
+		}
+		
+		if (_canJump)
 		{
 			_timeLeft += _f;
 			if (_timeLeft < 1)
@@ -91,7 +118,7 @@ public class BezierAlgorithm : MonoBehaviour
 				AudioManager.Instance.Play("PowerJumpEnd");
 				
 				particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
-				_canMove = false;
+				_canJump = false;
 				_go = null;
 				_points.Clear();
 				_f = 0f;
