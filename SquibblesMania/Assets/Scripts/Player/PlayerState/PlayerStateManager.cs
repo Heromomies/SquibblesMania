@@ -71,7 +71,7 @@ public class PlayerStateManager : Player
 		if (!walking)
 		{
 			walking = true;
-			StartCoroutine(PlayerActionPointCardState.FollowPath(this));
+			StartCoroutine(PlayerActionPointCardState.BeginFollowPath(this));
 		}
 	}
 

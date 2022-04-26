@@ -318,8 +318,47 @@ public class PlayerActionPointCardState : PlayerBaseState
         yield return null;
     }
 
+    public IEnumerator BeginFollowPath(PlayerStateManager player)
+    {
+        //Last index of the list finalPathfinding
+        int index = player.finalPathFinding.Count - 1;
+        
+        Vector3 lastDirection = (player.finalPathFinding[index].transform.position - player.currentBlockPlayerOn.position).normalized;
+        
+        
+        UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
+        _actionPointText = player.playerActionPoint;
+        
+        for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
+        {
+            
+            if (i < player.finalPathFinding.Count-1)
+            {
+                var firstBloc = player.finalPathFinding[index];
+                var secondBloc = player.finalPathFinding[index-1];
+                
+                var blocDirection = (secondBloc.position - firstBloc.position).normalized;
+
+                //Si la dernière direction n'est pas égale a la direction actuel du bloc 1
+                if (lastDirection != blocDirection)
+                {
+                    lastDirection = blocDirection;
+                } 
+                else
+                {
+                    player.finalPathFinding.Remove(firstBloc);
+                    _actionPointText--;
+                    UpdateActionPointTextPopUp(_actionPointText);
+                }
+                index--;
+            }
+        }
+        yield return null;
+        player.playerActionPoint = _actionPointText;
+        player.StartCoroutine(FollowPath(player));
+    }
     //Movement of player
-    public IEnumerator FollowPath(PlayerStateManager player)
+    private IEnumerator FollowPath(PlayerStateManager player)
     {
         //We remove the player from the list of block group which the player is currently on 
         GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
@@ -339,10 +378,11 @@ public class PlayerActionPointCardState : PlayerBaseState
                 var movePos = walkPoint + new Vector3(0, 1, 0);
                 var direction = (movePos - player.transform.position).normalized;
                 var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-
+               
                 player.transform.DOMove(movePos, player.timeMoveSpeed);
+                
                 player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
-                player.finalPathFinding.Remove(player.finalPathFinding[i]);
+                //player.finalPathFinding.Remove(player.finalPathFinding[i]);
                 _actionPointText--;
                 UpdateActionPointTextPopUp(_actionPointText);
                 movementPlayer++;
@@ -351,7 +391,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         player.playerActionPoint = _actionPointText;
-        Clear(player);
+        ClearFollowPath(player);
     }
 
     private void UpdateActionPointTextPopUp(int actionPoint)
@@ -379,7 +419,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.finalPathFinding.Clear();
     }
 
-    private void Clear(PlayerStateManager player)
+    private void ClearFollowPath(PlayerStateManager player)
     {
         player.currentBlockPlayerOn = player.currentTouchBlock;
         
