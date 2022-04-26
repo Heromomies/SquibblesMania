@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class EventManager : MonoBehaviour
+public class VolcanoManager : MonoBehaviour
 {
 	[Space] [Header("EVENTS")] public List<GameObject> events;
 	
@@ -26,14 +24,14 @@ public class EventManager : MonoBehaviour
 	
 	#region Singleton
 
-	private static EventManager eventManager;
+	private static VolcanoManager _volcanoManager;
 
-	public static EventManager Instance => eventManager;
+	public static VolcanoManager Instance => _volcanoManager;
 	// Start is called before the first frame update
 
 	private void Awake()
 	{
-		eventManager = this;
+		_volcanoManager = this;
 	}
 
 	#endregion

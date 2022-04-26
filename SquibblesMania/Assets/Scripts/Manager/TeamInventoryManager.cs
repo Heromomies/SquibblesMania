@@ -82,8 +82,8 @@ public class TeamInventoryManager : MonoBehaviour
 			_isFull = true;
 		}
 
-		var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
-		var bloc = EventManager.Instance.cleanList[randomBloc].transform;
+		var randomBloc = Random.Range(0, VolcanoManager.Instance.cleanList.Count - 1);
+		var bloc = VolcanoManager.Instance.cleanList[randomBloc].transform;
 
 		if (bloc.GetComponent<Node>().isActive && !_isFull)
 		{

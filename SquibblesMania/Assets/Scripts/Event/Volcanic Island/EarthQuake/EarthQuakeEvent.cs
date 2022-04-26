@@ -35,7 +35,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 		
 		AudioManager.Instance.Play("VolcanoShaking");
 		
-		for (int i = 0; i < conditionsDangerousnessEarthQuake[EventManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
+		for (int i = 0; i < conditionsDangerousnessEarthQuake[VolcanoManager.Instance.dangerousness].numberOfBlocsTouched; i++) // Set the position of random blocs touched in Y equal to 0
 		{
 			int randomNumber = Random.Range(0, blocParent.Count);
 			if (Math.Abs(blocParent[randomNumber].transform.position.y - 1) < GameManager.Instance.minHeightBlocMovement) // If the Y position is equal to 0, add one bloc to touch

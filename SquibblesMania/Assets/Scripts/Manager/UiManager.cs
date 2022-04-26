@@ -15,7 +15,7 @@ public class UiManager : MonoBehaviour
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     public GameObject buttonNextTurn;
-    public Toggle mainToggle, effectToggle;
+   
     
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
@@ -75,39 +75,7 @@ public class UiManager : MonoBehaviour
             textTeamTwo.SetActive(true);
         }
     }
-
-    public void StopMainMusic()
-    {
-        if (mainToggle.isOn)
-        {
-            AudioManager.Instance.UnPause("MainSound");
-        }
-        else
-        {
-            AudioManager.Instance.Pause("MainSound");
-        }
-    }
     
-    public void StopEffectMusic()
-    {
-        if (effectToggle.isOn)
-        {
-            foreach (var s in  AudioManager.Instance.sounds)
-            {
-                if(s.isEffect)
-                    s.canPlay = true;
-            }
-        }
-        else
-        {
-            foreach (var s in  AudioManager.Instance.sounds)
-            {
-                if(s.isEffect)
-                   s.canPlay = false;
-            }
-        }
-    }
-
     #region SpawnTextActionPoint
 
     public void SpawnTextActionPointPopUp(Transform currentPlayer)
