@@ -1,45 +1,25 @@
 using TMPro;
 using UnityEngine;
 
-public class Yeti : MonoBehaviour, IManageEvent
+public class SnowGun : MonoBehaviour, IManageEvent
 {
     public Rigidbody bulletPrefab;
 
     [Range(0.0f, 3.0f)] public float speed;
 
-    public TextMeshProUGUI textPrevention;
-    
     public void ShowEvent()
     {
-        textPrevention.text ="The yeti is going to shoot the nearest player !";
-       // transform.position = EventManager.Instance.yetiFinalSpawn.position;
+       
     }
 
     public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player
     {
-        Transform bestTarget = null;
-        float closestDistanceSqr = Mathf.Infinity;
-        Vector3 currentPosition = transform.position;
-        foreach (PlayerStateManager potentialTarget in GameManager.Instance.players)
-        {
-            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-            if (dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                bestTarget = potentialTarget.transform;
-            }
-        }
-
-        if (bestTarget != null)
-        {
-            Vector3 vo = CalculateVelocity(bestTarget.position, transform.position,
+        Vector3 vo = CalculateVelocity(transform.position, transform.position,
                 speed); // Add the velocity to make an effect of parabola for the bullets
-            transform.rotation = Quaternion.LookRotation(vo);
+        transform.rotation = Quaternion.LookRotation(vo);
 
-            Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            obj.velocity = vo;
-        }
+        Rigidbody obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        obj.velocity = vo;
     }
     
     #region CalculateVelocity
