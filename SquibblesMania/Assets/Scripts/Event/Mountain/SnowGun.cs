@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -6,10 +8,10 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public Rigidbody bulletPrefab;
 
     [Range(0.0f, 3.0f)] public float speed;
-
+    
     public void ShowEvent()
     {
-       
+       //TODO launch the snow gun animation. 
     }
 
     public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player

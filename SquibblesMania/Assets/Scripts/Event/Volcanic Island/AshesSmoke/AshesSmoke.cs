@@ -28,14 +28,14 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	public void ShowEvent() // Show the event
 	{
-		childrenBlocs = EventManager.Instance.cleanList;
+		childrenBlocs = VolcanoManager.Instance.cleanList;
 
 		var rand = Random.Range(0, childrenBlocs.Count
-		                           - conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered);
+		                           - conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered);
 
 		AudioManager.Instance.Play("VolcanoSmoking");
 		
-		for (int i = 0; i < conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered; i++)
+		for (int i = 0; i < conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered; i++)
 		{
 			if (childrenBlocs[i + rand].CompareTag("BlackBlock"))
 			{
