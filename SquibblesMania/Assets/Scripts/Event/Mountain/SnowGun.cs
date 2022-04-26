@@ -12,6 +12,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public GameObject hatchDetectPlayerNearSnowGun;
     public LayerMask playerLayerMask;
     
+    public AnimationCurve curve;
+    
     [HideInInspector] public List<Vector3> listPoint = new List<Vector3>();
     
     private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
@@ -85,7 +87,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
                     
                     GameObject snowBullet = Instantiate(snowPrefab, transform.position, Quaternion.identity);
                     
-                    BezierAlgorithm.Instance.ObjectToMoveWithBezierCurve(snowBullet, listPoint, speed);
+                    BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(snowBullet, listPoint, speed, curve);
                     
                     LaunchEvent();
                 }
