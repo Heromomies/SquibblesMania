@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HatchSnowGun : MonoBehaviour
+public class DetectionSnowGun : MonoBehaviour
 {
    private void OnTriggerEnter(Collider other)
    {

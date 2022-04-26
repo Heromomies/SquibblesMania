@@ -16,7 +16,8 @@ public class AudioManager : MonoBehaviour
     public int multiplier;
     
     public AudioMixer mixer;
-    
+    public AudioMixerGroup group;
+
     public List<String> soundsToPlayOnAwake;
     private string _volumeParameter = "MasterVolume";
     void Awake()
@@ -56,7 +57,7 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
-            
+            s.source.outputAudioMixerGroup = group;
         }
 
         foreach (var sound in soundsToPlayOnAwake)

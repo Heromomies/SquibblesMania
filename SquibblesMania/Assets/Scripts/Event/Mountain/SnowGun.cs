@@ -8,10 +8,23 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public Rigidbody bulletPrefab;
 
     [Range(0.0f, 3.0f)] public float speed;
+    public GameObject hatchDetectPlayerNearSnowGun;
+
+    public GameObject snowGun;
     
+    private void Start()
+    {
+        ShowEvent();
+    }
+
     public void ShowEvent()
     {
-       //TODO launch the snow gun animation. 
+        var hatchPossiblePath = GetComponentInParent<Node>().possiblePath;
+        
+        for (int i = 0; i <  hatchPossiblePath.Count; i++)
+        {
+            Instantiate(hatchDetectPlayerNearSnowGun, hatchPossiblePath[i].nextPath.transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        }
     }
 
     public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player
