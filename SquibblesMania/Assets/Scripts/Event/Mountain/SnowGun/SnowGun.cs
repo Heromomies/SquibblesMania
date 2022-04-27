@@ -9,10 +9,14 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     [Range(0.0f, 0.1f)] public float speed;
     [Range(0.0f, 10.0f)] public float ySpawn;
+    [Range(0.0f, 10.0f)] public float damping;
     public GameObject hatchDetectPlayerNearSnowGun;
     public LayerMask playerLayerMask;
     
     public AnimationCurve curve;
+
+    public Transform snowGun;
+    public Transform snowGunEndLaunchSnow;
     
     [HideInInspector] public List<Vector3> listPoint = new List<Vector3>();
     
@@ -30,13 +34,13 @@ public class SnowGun : MonoBehaviour, IManageEvent
         SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
         FingersScript.Instance.AddGesture(SwapTouchGesture);
+        
+        ShowEvent();
     }
-
 
     private void Start()
     {
         _cam = Camera.main;
-        ShowEvent();
     }
 
     public void ShowEvent()
@@ -71,21 +75,27 @@ public class SnowGun : MonoBehaviour, IManageEvent
             {
                 if (hitInfo.collider.name != GameManager.Instance.name)
                 {
-                    var player = GameManager.Instance.currentPlayerTurn;
-                    var tCurrentPlayerTurn = player.transform;
-                    
                     var posHitInfo = hitInfo.transform.position;
 
-                    var playerPos = tCurrentPlayerTurn.position;
-				
-                    var xSpawn = (posHitInfo.x + playerPos.x) /2;
-                    var zSpawn = (posHitInfo.z + playerPos.z) /2;
+                    var objectPosition = transform.position;
                     
-                    listPoint.Add(playerPos);
+                    snowGun.gameObject.SetActive(true);
+                    
+                    snowGun.position = objectPosition + new Vector3(0, 1, 0);
+                        
+                    Vector3 targetPosition = new Vector3(posHitInfo.x, snowGun.position.y, posHitInfo.z ) ;
+                    snowGun.LookAt(targetPosition) ;
+                    
+                    var snowEndLaunchSnowPos = snowGunEndLaunchSnow.position;
+				
+                    var xSpawn = (posHitInfo.x + snowEndLaunchSnowPos.x) /2;
+                    var zSpawn = (posHitInfo.z + snowEndLaunchSnowPos.z) /2;
+                    
+                    listPoint.Add(snowEndLaunchSnowPos);
                     listPoint.Add(new Vector3(xSpawn, ySpawn, zSpawn));
                     listPoint.Add(posHitInfo);
                     
-                    GameObject snowBullet = Instantiate(snowPrefab, transform.position, Quaternion.identity);
+                    GameObject snowBullet = Instantiate(snowPrefab,  snowGun.transform.position, Quaternion.identity);
                     
                     BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(snowBullet, listPoint, speed, curve);
                     
@@ -102,36 +112,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
     void ClearGun()
     {
         canClick = false;
+        //snowGun.gameObject.SetActive(false);
     }
-    
-    #region CalculateVelocity
-
-    Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola
-    {
-        //define the distance x and y first
-        Vector3 distance = target - origin;
-        Vector3 distanceXZ = distance;
-        distanceXZ.Normalize();
-        distanceXZ.y = 0;
-
-        //creating a float that represents our distance 
-        float sy = distance.y;
-        float sxz = distance.magnitude;
-
-        //calculating initial x velocity
-        //Vx = x / t
-
-        float vxz = sxz / velocity;
-
-        ////calculating initial y velocity
-        //Vy0 = y/t + 1/2 * g * t
-
-        float vy = sy / velocity + 0.6f * Mathf.Abs(Physics.gravity.y + 0.7f) * velocity;
-        Vector3 result = distanceXZ * vxz;
-        result.y = vy;
-
-        return result;
-    }
-
-    #endregion
 }
