@@ -61,7 +61,19 @@ public class UiManager : MonoBehaviour
         textTeamOne.SetActive(false);
         textTeamTwo.SetActive(false);
     }
-    
+
+
+    public void StunTextPopUp(int actualCamPresetNumber)
+    {
+        if (actualCamPresetNumber <= 2)
+        {
+            //TODO Set active du Stun text Team 1
+        }
+        else
+        {
+            //TODO Set active du Stun text Team 2
+        }
+    }
     
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
