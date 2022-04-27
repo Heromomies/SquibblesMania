@@ -9,7 +9,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     [Range(0.0f, 0.1f)] public float speed;
     [Range(0.0f, 10.0f)] public float ySpawn;
-    [Range(0.0f, 10.0f)] public float damping;
     public GameObject hatchDetectPlayerNearSnowGun;
     public LayerMask playerLayerMask;
     
