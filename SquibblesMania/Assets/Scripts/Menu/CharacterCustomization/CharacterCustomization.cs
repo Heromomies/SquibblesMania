@@ -19,6 +19,9 @@ public class CharacterCustomization : MonoBehaviour
 
     [SerializeField] private Sprite[] hats;
 
+    public GameObject otherPlayer;
+    public GameObject otherTeam;
+
 
     void Start()
     {
@@ -37,7 +40,7 @@ public class CharacterCustomization : MonoBehaviour
     private void Update()
     {
 
-        
+      
     }
 
 
@@ -45,7 +48,7 @@ public class CharacterCustomization : MonoBehaviour
     {
         if (isForward)
         {
-            if (colorID == colors.Count - 1)
+            if (colorID == colors.Count - 1 || otherTeam.GetComponent<CharacterCustomization>().colorID == colors.Count - 1 && colorID == colors.Count - 2)
             {
                 colorID = 0;
             }
@@ -53,10 +56,17 @@ public class CharacterCustomization : MonoBehaviour
             {
                 colorID++;
             }
+
+            if (colorID == otherTeam.GetComponent<CharacterCustomization>().colorID)
+            {
+                colorID++;
+            }
+
+
         }
         else
         {
-            if (colorID == 0)
+            if (colorID == 0 || otherTeam.GetComponent<CharacterCustomization>().colorID == 0 && colorID == 1)
             {
                 colorID = colors.Count - 1;
             }
@@ -64,6 +74,12 @@ public class CharacterCustomization : MonoBehaviour
             {
                 colorID--;
             }
+
+            if (colorID == otherTeam.GetComponent<CharacterCustomization>().colorID)
+            {
+                colorID--;
+            }
+
         }
 
         SetItem("colors");
@@ -73,7 +89,7 @@ public class CharacterCustomization : MonoBehaviour
     {
         if (isForward)
         {
-            if (hatID == hats.Length - 1)
+            if (hatID == hats.Length - 1 || otherPlayer.GetComponent<CharacterCustomization>().hatID == hats.Length - 1 && hatID == hats.Length - 2)
             {
                 hatID = 0;
             }
@@ -81,14 +97,26 @@ public class CharacterCustomization : MonoBehaviour
             {
                 hatID++;
             }
+
+            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
+            {
+                hatID++;
+            }
+
+            
         }
         else
         {
-            if (hatID == 0)
+            if (hatID == 0 || otherPlayer.GetComponent<CharacterCustomization>().hatID == 0 && hatID == 1)
             {
                 hatID = hats.Length - 1;
             }
             else
+            {
+                hatID--;
+            }
+
+            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
             {
                 hatID--;
             }
