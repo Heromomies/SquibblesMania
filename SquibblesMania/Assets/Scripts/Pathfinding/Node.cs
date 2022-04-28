@@ -28,11 +28,7 @@ public class Node : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        foreach (var path in possiblePath)
-        {
-            path.currentBlock = gameObject;
-        }
-
+      
         groupBlockParent = gameObject.transform.parent.GetComponent<GroupBlockDetection>();
         isActive = true;
     }
@@ -42,17 +38,20 @@ public class Node : MonoBehaviour
         //The position in the center of the block
         return transform.position + (transform.up * blockSizeOffset);
     }
+    
 
     
     public void SetUpPossiblePath()
     {
         radius = 1f;
+        
+        
+        
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, radius);
         possiblePath.Clear();
         int count = 0;
         foreach (var collider in colliders)
         {
-            
             if (Vector3.Distance(collider.transform.position, transform.position) <= (radius + 0.1f) &&
                 collider.transform != transform && collider.gameObject.GetComponent<Node>())
             {
@@ -70,7 +69,6 @@ public class Node : MonoBehaviour
 [Serializable]
 public class GamePath
 {
-    [HideInInspector] public GameObject currentBlock;
     public Transform nextPath;
     public bool isActive;
 }

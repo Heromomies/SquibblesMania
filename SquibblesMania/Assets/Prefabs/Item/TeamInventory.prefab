@@ -44,27 +44,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory:
-  - inventoryTeam: 0
-    items:
-    - objetName: Wood
-      isTeamHasObjet: 0
-      objetTextUi: {fileID: 0}
-    - objetName: Rock
-      isTeamHasObjet: 0
-      objetTextUi: {fileID: 0}
-    - objetName: Rope
-      isTeamHasObjet: 0
-      objetTextUi: {fileID: 0}
-    isAllObjetAcquired: 0
-  - inventoryTeam: 1
-    items:
-    - objetName: Wood
-      isTeamHasObjet: 0
-      objetTextUi: {fileID: 0}
-    - objetName: Rock
-      isTeamHasObjet: 0
-      objetTextUi: {fileID: 0}
-    - objetName: Rope
-      isTeamHasObjet: 0
-      objetTextUi: {fileID: 0}
-    isAllObjetAcquired: 0
+  - spawnObject: {fileID: 0}
+    objectAcquired: 0
+    boatObject: []
+  - spawnObject: {fileID: 0}
+    objectAcquired: 0
+    boatObject: []
+  objectTransport:
+  - {fileID: 3632781479816233305, guid: a03634cc765130b41b33da92f0c0b17d, type: 3}
+  - {fileID: 4582150742951598002, guid: 694aa4c196e9d8a448b3286d46cf0ddc, type: 3}
+  - {fileID: 6473844652531801274, guid: 84a5021cd86da884a9e5d3d73e3a7645, type: 3}
+  - {fileID: 2573843942207758871, guid: 5d2cf4b4eb0ea334e830f211d1d3d845, type: 3}
+  - {fileID: 823573976988943803, guid: cd543ca0813054843a159d0bda6481d2, type: 3}
+  objectToSpawn: {fileID: 7622582973880197895, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+  winT1: {fileID: 0}
+  winT2: {fileID: 0}
+  nbObjectiveT1: 0
+  nbObjectiveT2: 0
+  green: {fileID: 21300000, guid: ea12861a713b206499928543395e512e, type: 3}

@@ -39,12 +39,12 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	public void ShowEvent() // Chose the bloc 
 	{
-		cubeOnMap = EventManager.Instance.cleanList;
+		cubeOnMap = VolcanoManager.Instance.cleanList;
 		
-		for (int i = 0; i < conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite; i++)
+		for (int i = 0; i < conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
-			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[EventManager.Instance.dangerousness].numberOfMeteorite);
-			EventManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
+			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite);
+			VolcanoManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
 			
 			RandomEvent(placeOfCube);
 		}
@@ -92,7 +92,6 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	void LaunchBullet() // Launch the bullets 
 	{
-		cubeTouched[0].tag = "BlackBlock";
 		cubeTouched[0].layer = 7;
 
 		var positionVol = volcanoTransform.position;

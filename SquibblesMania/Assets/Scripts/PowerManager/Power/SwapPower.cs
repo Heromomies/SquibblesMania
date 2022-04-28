@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DigitalRubyShared;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,12 +12,16 @@ public class SwapPower : MonoBehaviour, IManagePower
 	[Header("POWER SETTINGS")]
 	public int range;
 	public LayerMask layer;
-	[Space] 
-	[Header("MATERIALS")] 
-	public Material firstMat; 
-	public Material secondMat;
+	[Space (10)] 
+	public List<TextMeshProUGUI> textWhenThereAreNoZombieAround;
+	[Space (10)]
+	public List<TextMeshProUGUI> textSelectPlayer;
+	[Space (10)] 
+	[Header("MATERIALS")]
+	public Material matToChange;
 
 	private GameObject _playerToSwap;
+	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
 	private Vector3 _pos;
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
@@ -40,6 +46,20 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		_playerToSwap = GameManager.Instance.currentPlayerTurn.gameObject;
 		transform.position = _playerToSwap.transform.position;
+
+		if (_particleToDeactivatePlayerOne != null)
+		{
+			_particleToDeactivatePlayerOne.SetActive(false);
+			_particleToDeactivatePlayerOne = null;
+		}
+
+		if (_particleToDeactivatePlayerOne != null)
+		{
+			_particleToDeactivatePlayerTwo.SetActive(false);
+			_particleToDeactivatePlayerTwo = null;
+		}
+		
+		
 		DisplayPower();
 	}
 
@@ -52,27 +72,32 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 		for (int i = 0; i < players.Length; i++)
 		{
-			if (players[i].name != _playerOne.name)
+			if (players[i].name != _playerOne.name && players.Length > 1)
 			{
-				Transform child = players[i].transform.GetChild(1);
-
-				var color = child.GetComponentInChildren<Renderer>().material.color;
-				color = secondMat.color;
-				child.GetComponentInChildren<Renderer>().material.color = color;
+				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = matToChange;
 			}
 		}
 
-		/*switch (players.Length)
+		if (players.Length > 1)
 		{
-			case 1:
-				PowerManager.Instance.ActivateDeactivatePower(0, false);
-				PowerManager.Instance.ChangeTurnPlayer();
-				break;
-		}*/
-	}
-
-	public void CancelPower()
-	{
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textSelectPlayer[0].gameObject.SetActive(true); break;
+				case 2: textSelectPlayer[0].gameObject.SetActive(true); break;
+				case 3: textSelectPlayer[1].gameObject.SetActive(true); break;
+				case 4: textSelectPlayer[1].gameObject.SetActive(true); break;
+			}
+		}
+		else
+		{
+			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			{
+				case 1: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 2: textWhenThereAreNoZombieAround[0].gameObject.SetActive(true); break;
+				case 3: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+				case 4: textWhenThereAreNoZombieAround[1].gameObject.SetActive(true); break;
+			}
+		}
 	}
 
 	private void PlayerTouchGestureUpdated(GestureRecognizer gesture)
@@ -89,7 +114,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layer))
 			{
-				if (players.ToList().Contains(hitInfo.collider))
+				if (players.ToList().Contains(hitInfo.collider) && hitInfo.collider.name != GameManager.Instance.name)
 				{
 					NFCManager.Instance.powerActivated = true;
 					
@@ -108,29 +133,71 @@ public class SwapPower : MonoBehaviour, IManagePower
 	{
 		var transformPlayerOne = _playerOne.transform;
 		_pos = transformPlayerOne.position;
+
+		_particleToDeactivatePlayerOne = PoolManager.Instance.SpawnObjectFromPool("ParticleSwap", _pos, Quaternion.identity, null);
+		_particleToDeactivatePlayerTwo = PoolManager.Instance.SpawnObjectFromPool("ParticleSwap", _playerTwo.transform.position, Quaternion.identity, null);
+		
 		SwapPosition(transformPlayerOne, _playerTwo.transform);
 	}
 
 	private void SwapPosition(Transform playerOne, Transform playerTwo) // Swap the position between the two players
 	{
+		foreach (var playerCol in players)
+		{
+			GameObject player = playerCol.gameObject;
+			player.GetComponent<PlayerStateManager>().RemoveParentBelowPlayer(player.transform);
+		}
+		
+		AudioManager.Instance.Play("PowerSwap");
+		
 		playerOne.position = playerTwo.position;
 		playerTwo.position = _pos;
-
+		
 		ClearPower();
 	}
 	
 	public void ClearPower()
-	{	
+	{
+		
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
+		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+		foreach (var g in textSelectPlayer)
+		{
+			g.gameObject.SetActive(false);
+		}
+		
 		for (int i = 0; i < players.Length; i++)
 		{
-			Transform child = players[i].transform.GetChild(1);
-
-			child.GetComponentInChildren<Renderer>().material.color = firstMat.color;
+			GameManager.Instance.SetUpMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
 		}
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
 		PowerManager.Instance.ChangeTurnPlayer();
+			
+		//Set up player groupblockParent list 
+	
+		if (_playerTwo != null && _playerOne != null)
+		{
+			PlayerStateManager playerOneSwap =_playerOne.gameObject.GetComponent<PlayerStateManager>();
+			PlayerStateManager playerTwoSwap = _playerTwo.gameObject.GetComponent<PlayerStateManager>();
+			
+			playerOneSwap.DetectBlockBelowPlayer();
+			playerTwoSwap.DetectBlockBelowPlayer();
+			
+			playerOneSwap.DetectParentBelowPlayer(playerOneSwap.transform);
+			playerTwoSwap.DetectParentBelowPlayer(playerTwoSwap.transform);
+		}
+	}
+	
+	private void OnDisable()
+	{
+		if (FingersScript.HasInstance)
+		{
+			FingersScript.Instance.RemoveGesture(SwapTouchGesture);
+		}
 	}
 }

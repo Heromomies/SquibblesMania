@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour
     public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-    
+
+    [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
     {
@@ -45,13 +46,19 @@ public class GameManager : MonoBehaviour
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
     [HideInInspector] public int cycleCount;
+    public GameObject winT1;
+    public GameObject winT2;
+
+    [Header("PLAYER CUSTOMIZATION")]
+    public PlayerData playerData;
+    public List<GameObject> hats = new List<GameObject>();
+    public List<Material> colors = new List<Material>();
 
     private void Awake()
     {
+        Application.targetFrameRate = 30;
         _gameManager = this;
         _cam = Camera.main;
-        Application.targetFrameRate = 30;
-        
     }
 
 
@@ -91,15 +98,27 @@ public class GameManager : MonoBehaviour
         players[0].playerTeam = Player.PlayerTeam.TeamOne;
         players[0].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
         players[0].indicatorPlayer.SetActive(false);
+        Instantiate(hats[playerData.P1hatID], players[0].hat.transform.position, players[0].hat.transform.rotation).transform.parent = players[0].hat.transform;
+        players[0].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
+        
+
         players[1].playerTeam = Player.PlayerTeam.TeamTwo;
         players[1].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
         players[1].indicatorPlayer.SetActive(false);
+        Instantiate(hats[playerData.P2hatID], players[1].hat.transform.position, players[1].hat.transform.rotation).transform.parent = players[1].hat.transform; ;
+        players[1].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
+
         players[2].playerTeam = Player.PlayerTeam.TeamOne;
         players[2].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
         players[2].indicatorPlayer.SetActive(false);
+        Instantiate(hats[playerData.P3hatID], players[2].hat.transform.position, players[2].hat.transform.rotation).transform.parent = players[2].hat.transform; ;
+        players[2].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
+
         players[3].playerTeam = Player.PlayerTeam.TeamTwo;
         players[3].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
         players[3].indicatorPlayer.SetActive(false);
+        Instantiate(hats[playerData.P4hatID], players[3].hat.transform.position, players[3].hat.transform.rotation).transform.parent = players[3].hat.transform;
+        players[3].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
     }
 
     void StartGame()
@@ -115,6 +134,21 @@ public class GameManager : MonoBehaviour
         NFCManager.Instance.PlayerChangeTurn();
     }
 
+    public void SetUpMaterial(PlayerStateManager player, int playerNumber)
+    {
+        switch (playerNumber)
+        {
+            case 0 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
+                break;
+            case 1 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
+                break;
+            case 2 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
+                break;
+            case 3 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
+                break; 
+        }
+    }
+    
     void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
@@ -123,34 +157,65 @@ public class GameManager : MonoBehaviour
             {
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
-
+            
+          
             Transform cameraTransform = _cam.transform;
             Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-        
+            
             //Smooth Transition
             cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
         
             actualCamPreset = camPreSets[countTurn];
-        
+            
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
-            _cameraViewModeGesture.SetUpCameraBaseViewMode();
-        
-            count++;
-            if (count >= camPreSets.Count)
+            
+            //Register Previous Cam View Mode
+            if (turnCount <= 4)
+            {
+                _cameraViewModeGesture.SetUpCameraViewMode(true, 1);
+            }
+            else
+            {
+                _cameraViewModeGesture.SetUpCameraViewMode(false, count);
+            }
+            
+            //count++;
+           /* if (count >= camPreSets.Count)
             {
                 count = 0;
-            }
+            }*/
 
+            count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
         }
     }
 
+    private void SavePreviousCamRotY(int indexCam)
+    {
+        
+        Vector3 camEulerAngles = _cam.transform.eulerAngles;
+        Vector3 camPos = _cam.transform.position;
+       
+
+        CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
+
+        previousCamPreSets.camRot = camEulerAngles;
+        previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
+        previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
+        previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
+
+        previousCamPreSetsList[indexCam] = previousCamPreSets;
+        
+        camPreSets[indexCam] = previousCamPreSetsList[indexCam];
+
+    }
+
     private void IncreaseDemiCycle()
     {
-        EventManager.Instance.CyclePassed();
+        VolcanoManager.Instance.CyclePassed();
         PowerManager.Instance.CyclePassed();
     }
 
@@ -162,6 +227,11 @@ public class GameManager : MonoBehaviour
             cycleCount++;
         }
 
+        if (playerNumberTurn == players[3].playerNumber)
+        {
+            MoutainManager.Instance.ChangeCycle();
+        }
+        
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
@@ -173,7 +243,27 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
 
         NFCManager.Instance.PlayerChangeTurn();
+       
+        SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
+        _cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
         CamConfig(count);
+        
+        if (UiManager.Instance.textActionPointPopUp)
+        {
+            UiManager.Instance.textActionPointPopUp.SetActive(false);
+            UiManager.Instance.textActionPointPopUp = null;
+        }
+
+        if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
+        {
+            winT2.SetActive(false);
+            winT1.SetActive(true);
+        }
+        else
+        {
+            winT1.SetActive(false);
+            winT2.SetActive(true);
+        }
     }
 
     public void DecreaseVariable()
@@ -212,7 +302,7 @@ public class GameManager : MonoBehaviour
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-        Time.timeScale = 0f;
+     
         UiManager.Instance.WinSetUp(playerTeam);
     }
 

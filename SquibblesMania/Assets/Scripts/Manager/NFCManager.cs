@@ -17,7 +17,7 @@ public class NFCManager : MonoBehaviour
 
 	#endregion
 
-	#region UI SETTINGS
+/*	#region UI SETTINGS
 
 	[Space] [Header("UI SETTINGS")] public ActionPlayerPreset[] actionPlayerPreset;
 
@@ -27,7 +27,7 @@ public class NFCManager : MonoBehaviour
 		public TextMeshProUGUI textTakeOffCard;
 	}
 
-	#endregion
+	#endregion*/
 
 	#region LIGHT SETTINGS
 
@@ -81,23 +81,19 @@ public class NFCManager : MonoBehaviour
 		
 		switch (GameManager.Instance.currentPlayerTurn.playerNumber)
 		{
-			case 0:
-				NFCController.StartPollingAsync(antennaPlayerOne);
+			case 0: NFCController.StartPollingAsync(antennaPlayerOne);
 				LightController.Colorize(lightIndexesPlayerOne, lightColor, false);
 				indexPlayer = 0;
 				break;
-			case 1:
-				NFCController.StartPollingAsync(antennaPlayerTwo);
+			case 1: NFCController.StartPollingAsync(antennaPlayerTwo);
 				LightController.Colorize(lightIndexesPlayerTwo, lightColor, false);
 				indexPlayer = 1;
 				break;
-			case 2:
-				NFCController.StartPollingAsync(antennaPlayerThree);
+			case 2: NFCController.StartPollingAsync(antennaPlayerThree);
 				LightController.Colorize(lightIndexesPlayerThree, lightColor, false);
 				indexPlayer = 2;
 				break;
-			case 3:
-				NFCController.StartPollingAsync(antennaPlayerFour);
+			case 3: NFCController.StartPollingAsync(antennaPlayerFour);
 				LightController.Colorize(lightIndexesPlayerFour, lightColor, false);
 				indexPlayer = 3;
 				break;

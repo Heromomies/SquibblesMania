@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 3226517119791555220}
   - component: {fileID: 3226517119791555221}
   - component: {fileID: 3226517119791555223}
-  - component: {fileID: 3226517119791555226}
-  - component: {fileID: 3226517119791555217}
   - component: {fileID: 8398261687759252214}
   - component: {fileID: 918057241538110752}
   m_Layer: 0
@@ -69,7 +67,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2527
+    m_Bits: 27103
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -115,30 +113,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &3226517119791555226
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 1
---- !u!114 &3226517119791555217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3226517119791555227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EventMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_MaxRayIntersections: 0
 --- !u!114 &8398261687759252214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,32 +126,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  indexUiCamSquareList: 0
-  baseIndexUICamSquare: 2
   actualUiCamPreset:
-    uiCamSquare: []
     buttonsCamRotate: []
   uiCamPresetList:
-  - uiCamSquare:
+  - buttonsCamRotate:
     - {fileID: 0}
     - {fileID: 0}
+  - buttonsCamRotate:
     - {fileID: 0}
     - {fileID: 0}
-    buttonsCamRotate:
-    - {fileID: 0}
-    - {fileID: 0}
-  - uiCamSquare:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    buttonsCamRotate:
-    - {fileID: 0}
-    - {fileID: 0}
-  timeRotateSpeedInSeconds: 1
+  radius: 10
   uiCamPresets:
   - {fileID: 0}
   - {fileID: 0}
+  isCamRotateButtonPressed: 0
+  targetAngle: 0
 --- !u!114 &918057241538110752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +180,15 @@ MonoBehaviour:
   minAngle: 30
   timeRotateSpeedInSeconds: 1
   currentUiCircleSelection: {fileID: 0}
+  savedCamViewModeGestures:
+  - lastIndexUiCircleSelection: 0
+    lastCamIconAngleView: 0
+  - lastIndexUiCircleSelection: 0
+    lastCamIconAngleView: 0
+  - lastIndexUiCircleSelection: 0
+    lastCamIconAngleView: 0
+  - lastIndexUiCircleSelection: 0
+    lastCamIconAngleView: 0
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0

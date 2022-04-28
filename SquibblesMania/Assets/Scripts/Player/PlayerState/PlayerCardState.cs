@@ -8,7 +8,7 @@ using Wizama.Hardware.Light;
 
 public class PlayerCardState : PlayerBaseState
 {
-	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
+	private List<int> _number = new List<int> { 2, 6, 7, 8, 9, 10};
 	private int _maxNumberOfTheCard;
 	private char _charCardsStockage;
 	private char _cardNumber;
@@ -44,11 +44,16 @@ public class PlayerCardState : PlayerBaseState
 		if (!NFCManager.Instance.newCardDetected)
 		{
 			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
-
+			NFCManager.Instance.newCardDetected = true;
+			
+			if (nfcTag.Data.Contains("1"))
+			{
+				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+			}
+			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
 				AudioManager.Instance.Play("CardTrue");
-				NFCManager.Instance.newCardDetected = true;
 
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
@@ -56,16 +61,13 @@ public class PlayerCardState : PlayerBaseState
 					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
 						break;
-					case 'R':
-						PowerManager.Instance.ActivateDeactivatePower(1, true);
+					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
 						break;
-					case 'Y':
-						PowerManager.Instance.ActivateDeactivatePower(2, true);
+					case 'Y': PowerManager.Instance.ActivateDeactivatePower(2, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
 						break;
-					case 'G':
-						PowerManager.Instance.ActivateDeactivatePower(3, true);
+					case 'G': PowerManager.Instance.ActivateDeactivatePower(3, true);
 						ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
 						break;
 				}
@@ -73,7 +75,6 @@ public class PlayerCardState : PlayerBaseState
 			else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
 				AudioManager.Instance.Play("CardTrue");
-				NFCManager.Instance.newCardDetected = true;
 
 				_maxNumberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 
@@ -82,18 +83,10 @@ public class PlayerCardState : PlayerBaseState
 
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 				{
-					case 'B':
-						ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
-						break;
-					case 'R':
-						ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
-						break;
-					case 'G':
-						ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
-						break;
-					case 'Y':
-						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
-						break;
+					case 'B': ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer); break;
+					case 'R': ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer); break;
+					case 'Y': ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer); break;
+					case 'G': ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer); break;
 				}
 				
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
@@ -151,7 +144,6 @@ public class PlayerCardState : PlayerBaseState
 				    !NFCManager.Instance.displacementActivated)
 				{
 					PlayerMovementManager.Instance.ResetDisplacement();
-					NFCManager.Instance.newCardDetected = false;
 				}
 				else
 				{
@@ -170,10 +162,16 @@ public class PlayerCardState : PlayerBaseState
 					}
 
 					GameManager.Instance.DecreaseVariable();
-					NFCManager.Instance.newCardDetected = false;
+				}
+				else
+				{
+					NFCController.StopPolling();
 				}
 			}
+			
 			ChangeColorLight(LIGHT_COLOR.COLOR_WHITE, _currentPlayer);
+			NFCManager.Instance.newCardDetected = false;
+			
 			if (_currentPlayer.currentCardEffect != null)
 			{
 				_currentPlayer.currentCardEffect.SetActive(false);
@@ -192,44 +190,11 @@ public class PlayerCardState : PlayerBaseState
 			player.isPlayerStun = false;
 			player.psStun.SetActive(false);
 		}
-
-		switch (player.playerNumber)
-		{
-			case 0:
-				GameManager.Instance.ChangePlayerTurn(1);
-				break;
-			case 1:
-				GameManager.Instance.ChangePlayerTurn(2);
-				break;
-			case 2:
-				GameManager.Instance.ChangePlayerTurn(3);
-				break;
-			case 3:
-				GameManager.Instance.ChangePlayerTurn(0);
-				break;
-		}
+		
 	}
 
 	public override void UpdateState(PlayerStateManager player)
 	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
-		{
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
-					break;
-				case 2:
-					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
-					break;
-				case 3:
-					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
-					break;
-				case 4:
-					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
-					break;
-			}
-		}
 	}
 
 	public override void ExitState(PlayerStateManager player)

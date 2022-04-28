@@ -2,21 +2,36 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class TeamInventoryManager : MonoBehaviour
 {
-	public Inventory[] inventory;
+	[Header("Balloon")] public Inventory[] inventory;
 	public List<GameObject> objectTransport;
 	public GameObject objectToSpawn;
+	private GameObject _balloonT1;
+	private GameObject _balloonT2;
 
 	private bool _isFull;
-	
+
 	private static TeamInventoryManager _teamInventoryManager;
 
 	public static TeamInventoryManager Instance => _teamInventoryManager;
 
+	[Header("Objective Display")] public GameObject winT1;
+	public GameObject winT2;
+	public int nbObjectiveT1 = 0;
+	public int nbObjectiveT2 = 0;
+
+	public Sprite green;
 	// Start is called before the first frame update
+
+	 void Start()
+	 {
+	     _balloonT1 = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+	     _balloonT2 = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+	 }
 	void Awake()
 	{
 		_teamInventoryManager = this;
@@ -24,49 +39,55 @@ public class TeamInventoryManager : MonoBehaviour
 
 	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam) // Add resources to the inventory
 	{
-		if (!_isFull)
+		if (playerTeam == Player.PlayerTeam.TeamOne && inventory[0].objectAcquired < 3)
 		{
-			if (playerTeam == Player.PlayerTeam.TeamOne)
-			{
-				Instantiate(objectTransport[inventory[0].objectAcquired],inventory[0].spawnObject.position, 
-					inventory[0].spawnObject.rotation, inventory[0].spawnObject);
-				inventory[0].objectAcquired += indexObject;
-			
-				inventory[0].boatObject.Add(objectTransport[0]);
-			}
-			else
-			{
-				Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
-					inventory[0].spawnObject.rotation, inventory[1].spawnObject);
-				inventory[1].objectAcquired += indexObject;
-				inventory[1].boatObject.Add(objectTransport[0]);
-			}
-		
-			if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
-			{
-				GameManager.Instance.isConditionVictory = true;
-				GameManager.Instance.ShowEndZone();
-			}
+			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position,
+				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+			inventory[0].objectAcquired += indexObject;
 
-			if (inventory[0].boatObject.Count == 3 && inventory[1].boatObject.Count == 3)
-			{
-				_isFull = true;
-			}
-		
-			var randomBloc = Random.Range(0, EventManager.Instance.cleanList.Count - 1);
-			var bloc = EventManager.Instance.cleanList[randomBloc].transform;
+			inventory[0].boatObject.Add(objectTransport[0]);
 
-			if (bloc.GetComponent<Node>().isActive && !_isFull)
-			{
-				Instantiate(objectToSpawn,new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
-			}
-			else
-			{
-				AddResourcesToInventory(0, Player.PlayerTeam.None);
-			}
+			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
+			nbObjectiveT1++;
+
+			inventory[0].boatObject.Add(objectTransport[0]);
+
+			Destroy(_balloonT1.gameObject.transform.GetChild(0 ).gameObject);
+		}
+
+		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].objectAcquired < 3)
+		{
+			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position,
+				inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+			inventory[1].objectAcquired += indexObject;
+			inventory[1].boatObject.Add(objectTransport[0]);
+
+			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
+			nbObjectiveT2++;
+
+			Destroy(_balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
+		}
+
+		if (inventory[0].objectAcquired == 3 || inventory[1].objectAcquired == 3)
+		{
+			GameManager.Instance.isConditionVictory = true;
+			GameManager.Instance.ShowEndZone();
+		}
+
+		if (inventory[0].objectAcquired == 3 && inventory[1].objectAcquired == 3)
+		{
+			Debug.Log("I'm here");
+			_isFull = true;
+		}
+
+		var randomBloc = Random.Range(0, VolcanoManager.Instance.cleanList.Count - 1);
+		var bloc = VolcanoManager.Instance.cleanList[randomBloc].transform;
+
+		if (bloc.GetComponent<Node>().isActive && !_isFull)
+		{
+			Instantiate(objectToSpawn, new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
 		}
 	}
-	
 }
 
 [Serializable]

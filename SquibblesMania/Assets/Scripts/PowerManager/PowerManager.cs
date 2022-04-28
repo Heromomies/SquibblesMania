@@ -39,7 +39,21 @@ public class PowerManager : MonoBehaviour
 
 	public void ChangeTurnPlayer()
 	{
-		if(NFCManager.Instance.powerActivated)
+		if (NFCManager.Instance.powerActivated)
+		{
+			StartCoroutine(CheckPlayerEndCoroutine());
 			UiManager.Instance.buttonNextTurn.SetActive(true);
+		}
+	}
+
+	private IEnumerator CheckPlayerEndCoroutine()
+	{
+		yield return new WaitForSeconds(0.5f);
+		
+		if (EndZoneManager.Instance != null)
+		{
+			EndZoneManager.Instance.PlayersIsOnEndZone();
+			EndZoneManager.Instance.CheckPlayersTeam();
+		}
 	}
 }
