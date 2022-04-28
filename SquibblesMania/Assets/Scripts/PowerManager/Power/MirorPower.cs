@@ -549,6 +549,16 @@ public class MirorPower : MonoBehaviour, IManagePower
 		if(_particleToDeactivate != null)
 			_particleToDeactivate.SetActive(false);
 
+		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
+		{
+			textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
+		}
+
+		foreach (var g in textWhenThereAreNoZombieAround)
+		{
+			g.gameObject.SetActive(false);
+		}
+
 		StartCoroutine(WaitBeforeDetectUnderZombie());
 		
 		foreach (var g in listObjectToSetActiveFalse)
@@ -582,29 +592,42 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower() // Clear the power
 	{
-		if(players.Length > 0)
+		if (NFCManager.Instance.powerActivated)
 		{
-			foreach (var p in players)
+			if(players.Length > 0)
 			{
-				GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+				foreach (var p in players)
+				{
+					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+				}
 			}
+
+			StartCoroutine(CoroutineDeactivateParticle());
 		}
 		else
 		{
-			return;
-		}
-		
-		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
-		{
-			textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
-		}
+			if(players.Length > 0)
+			{
+				foreach (var p in players)
+				{
+					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+				}
+			}
+			
+			for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
+			{
+				textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
+			}
 
-		foreach (var g in textWhenThereAreNoZombieAround)
-		{
-			g.gameObject.SetActive(false);
+			foreach (var g in textWhenThereAreNoZombieAround)
+			{
+				g.gameObject.SetActive(false);
+			}
+			
+			listObjectToSetActiveFalse.Clear();
+			
+			PowerManager.Instance.ActivateDeactivatePower(3, false);
 		}
-		
-		StartCoroutine(CoroutineDeactivateParticle());
 	}
 
 	private void OnDisable()
