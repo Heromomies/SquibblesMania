@@ -19,6 +19,8 @@ public class CharacterCustomization : MonoBehaviour
 
     [SerializeField] private Sprite[] hats;
 
+    public GameObject otherPlayer;
+
 
     void Start()
     {
@@ -37,7 +39,7 @@ public class CharacterCustomization : MonoBehaviour
     private void Update()
     {
 
-        
+      
     }
 
 
@@ -53,6 +55,8 @@ public class CharacterCustomization : MonoBehaviour
             {
                 colorID++;
             }
+
+            
         }
         else
         {
@@ -64,6 +68,7 @@ public class CharacterCustomization : MonoBehaviour
             {
                 colorID--;
             }
+
         }
 
         SetItem("colors");
@@ -73,7 +78,7 @@ public class CharacterCustomization : MonoBehaviour
     {
         if (isForward)
         {
-            if (hatID == hats.Length - 1)
+            if (hatID == hats.Length - 1 || otherPlayer.GetComponent<CharacterCustomization>().hatID == hats.Length - 1 && hatID == hats.Length - 2)
             {
                 hatID = 0;
             }
@@ -81,14 +86,26 @@ public class CharacterCustomization : MonoBehaviour
             {
                 hatID++;
             }
+
+            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
+            {
+                hatID++;
+            }
+
+            
         }
         else
         {
-            if (hatID == 0)
+            if (hatID == 0 || otherPlayer.GetComponent<CharacterCustomization>().hatID == 0 && hatID == 1)
             {
                 hatID = hats.Length - 1;
             }
             else
+            {
+                hatID--;
+            }
+
+            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
             {
                 hatID--;
             }
