@@ -10,8 +10,8 @@ public class TeamInventoryManager : MonoBehaviour
 	[Header("Balloon")] public Inventory[] inventory;
 	public List<GameObject> objectTransport;
 	public GameObject objectToSpawn;
-	private GameObject balloonT1;
-	private GameObject balloonT2;
+	private GameObject _balloonT1;
+	private GameObject _balloonT2;
 
 	private bool _isFull;
 
@@ -27,11 +27,11 @@ public class TeamInventoryManager : MonoBehaviour
 	public Sprite green;
 	// Start is called before the first frame update
 
-	/* void Start()
+	 void Start()
 	 {
-	     balloonT1 = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
-	     balloonT2 = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
-	 }*/
+	     _balloonT1 = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+	     _balloonT2 = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+	 }
 	void Awake()
 	{
 		_teamInventoryManager = this;
@@ -45,8 +45,6 @@ public class TeamInventoryManager : MonoBehaviour
 				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 			inventory[0].objectAcquired += indexObject;
 
-			Debug.Log("JDIzjdij");
-			
 			inventory[0].boatObject.Add(objectTransport[0]);
 
 			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
@@ -54,7 +52,7 @@ public class TeamInventoryManager : MonoBehaviour
 
 			inventory[0].boatObject.Add(objectTransport[0]);
 
-			//Destroy(balloonT1.gameObject.transform.GetChild(inventory[0].objectAcquired - 1).gameObject);
+			Destroy(_balloonT1.gameObject.transform.GetChild(0 ).gameObject);
 		}
 
 		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].objectAcquired < 3)
@@ -67,17 +65,18 @@ public class TeamInventoryManager : MonoBehaviour
 			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
 			nbObjectiveT2++;
 
-			//Destroy(balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
+			Destroy(_balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
 		}
 
-		if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
+		if (inventory[0].objectAcquired == 3 || inventory[1].objectAcquired == 3)
 		{
 			GameManager.Instance.isConditionVictory = true;
 			GameManager.Instance.ShowEndZone();
 		}
 
-		if (inventory[0].boatObject.Count == 3 && inventory[1].boatObject.Count == 3)
+		if (inventory[0].objectAcquired == 3 && inventory[1].objectAcquired == 3)
 		{
+			Debug.Log("I'm here");
 			_isFull = true;
 		}
 

@@ -16,16 +16,18 @@ public class Ressources : Item
         {
             var player = other.gameObject.GetComponent<PlayerStateManager>();
 
-            AudioManager.Instance.Play("CratePickup");
-            AudioManager.Instance.Play("CrateFirework");
+            if (player.playerTeam == Player.PlayerTeam.TeamOne && TeamInventoryManager.Instance.inventory[0].objectAcquired < 3 || 
+                player.playerTeam == Player.PlayerTeam.TeamTwo && TeamInventoryManager.Instance.inventory[1].objectAcquired < 3)
+            {
+                AudioManager.Instance.Play("CratePickup");
+                AudioManager.Instance.Play("CrateFirework");
 
-            TeamInventoryManager.Instance.AddResourcesToInventory(1, player.playerTeam);
-            var particle = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
-            Destroy(particle, 2f);
+                TeamInventoryManager.Instance.AddResourcesToInventory(1, player.playerTeam);
+                var particle = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
+                Destroy(particle, 2f);
 
-            gameObject.SetActive(false);
-
-            
+                gameObject.SetActive(false);
+            }
         }
     }
 }
