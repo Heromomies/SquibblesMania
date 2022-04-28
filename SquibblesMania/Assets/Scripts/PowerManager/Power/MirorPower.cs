@@ -234,6 +234,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
+				Debug.Log("I'm here");
+				
 				ActiveParticle();
 			}
 		}
@@ -462,9 +464,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	public void DisplayPower() // Display the zone who the players can swipe
 	{
-		transform.position = GameManager.Instance.currentPlayerTurn.transform.position;
+		players = null;
 
-		players = Physics.OverlapSphere(transform.position, rangeDetectionPlayer, layerPlayer);
+		var t = transform;
+		t.position = GameManager.Instance.currentPlayerTurn.transform.position;
+
+		// ReSharper disable once Unity.PreferNonAllocApi
+		players = Physics.OverlapSphere(t.position, rangeDetectionPlayer, layerPlayer);
 
 		for (int i = 0; i < players.Length; i++)
 		{
@@ -543,7 +549,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 		if(_particleToDeactivate != null)
 			_particleToDeactivate.SetActive(false);
 
-
 		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
 		{
 			textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
@@ -555,8 +560,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 		}
 
 		StartCoroutine(WaitBeforeDetectUnderZombie());
-		
-		players = null;
 		
 		foreach (var g in listObjectToSetActiveFalse)
 		{
@@ -589,15 +592,42 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower() // Clear the power
 	{
-		if(players.Length > 0)
+		if (NFCManager.Instance.powerActivated)
 		{
-			foreach (var p in players)
+			if(players.Length > 0)
 			{
-				GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+				foreach (var p in players)
+				{
+					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+				}
 			}
+
+			StartCoroutine(CoroutineDeactivateParticle());
 		}
-		
-		StartCoroutine(CoroutineDeactivateParticle());
+		else
+		{
+			if(players.Length > 0)
+			{
+				foreach (var p in players)
+				{
+					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+				}
+			}
+			
+			for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
+			{
+				textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
+			}
+
+			foreach (var g in textWhenThereAreNoZombieAround)
+			{
+				g.gameObject.SetActive(false);
+			}
+			
+			listObjectToSetActiveFalse.Clear();
+			
+			PowerManager.Instance.ActivateDeactivatePower(3, false);
+		}
 	}
 
 	private void OnDisable()
