@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class BezierAlgorithm : MonoBehaviour
 {
-	[HideInInspector] public GameObject particleImpact;
-	
 	private GameObject _go;
 	private List<Vector3> _points;
 	private float _f;
+	private bool _canJump;
 	private bool _canMove;
 
 	private float _timeLeft;
@@ -67,19 +66,19 @@ public class BezierAlgorithm : MonoBehaviour
 		return allPoints[0];
 	}
 
-	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f, AnimationCurve curve)
+	public void ObjectJumpWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f, AnimationCurve curve)
 	{
 		_go = objectToMove;
 		_points = pointsList;
 		_f = f;
 		_animationCurve = curve;
 		
-		_canMove = true;
+		_canJump = true;
 	}
-
+	
 	private void Update()
 	{
-		if (_canMove)
+		if (_canJump)
 		{
 			_timeLeft += _f;
 			if (_timeLeft < 1)
@@ -88,10 +87,7 @@ public class BezierAlgorithm : MonoBehaviour
 			}
 			else
 			{
-				AudioManager.Instance.Play("PowerJumpEnd");
-				
-				particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
-				_canMove = false;
+				_canJump = false;
 				_go = null;
 				_points.Clear();
 				_f = 0f;

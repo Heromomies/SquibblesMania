@@ -44,6 +44,9 @@ public class Node : MonoBehaviour
     public void SetUpPossiblePath()
     {
         radius = 1f;
+        
+        
+        
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, radius);
         possiblePath.Clear();
         int count = 0;

@@ -7,9 +7,11 @@ using Random = UnityEngine.Random;
 
 public class TeamInventoryManager : MonoBehaviour
 {
-	public Inventory[] inventory;
+	[Header("Balloon")] public Inventory[] inventory;
 	public List<GameObject> objectTransport;
 	public GameObject objectToSpawn;
+	private GameObject balloonT1;
+	private GameObject balloonT2;
 
 	private bool _isFull;
 
@@ -17,13 +19,19 @@ public class TeamInventoryManager : MonoBehaviour
 
 	public static TeamInventoryManager Instance => _teamInventoryManager;
 
-	[Header("Objective Display")]
-	public GameObject winT1;
+	[Header("Objective Display")] public GameObject winT1;
 	public GameObject winT2;
 	public int nbObjectiveT1 = 0;
 	public int nbObjectiveT2 = 0;
+
 	public Sprite green;
 	// Start is called before the first frame update
+
+	/* void Start()
+	 {
+	     balloonT1 = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+	     balloonT2 = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+	 }*/
 	void Awake()
 	{
 		_teamInventoryManager = this;
@@ -33,42 +41,31 @@ public class TeamInventoryManager : MonoBehaviour
 	{
 		if (playerTeam == Player.PlayerTeam.TeamOne && inventory[0].boatObject.Count < 3)
 		{
-			if (playerTeam == Player.PlayerTeam.TeamOne)
-			{
-				Instantiate(objectTransport[inventory[0].objectAcquired],inventory[0].spawnObject.position, 
-					inventory[0].spawnObject.rotation, inventory[0].spawnObject);
-				inventory[0].objectAcquired += indexObject;
-			
-				inventory[0].boatObject.Add(objectTransport[0]);
-
-				winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
-				nbObjectiveT1++;
-			}
-			else
-			{
-				Instantiate(objectTransport[inventory[1].objectAcquired],inventory[1].spawnObject.position, 
-					inventory[1].spawnObject.rotation, inventory[1].spawnObject);
-				inventory[1].objectAcquired += indexObject;
-				inventory[1].boatObject.Add(objectTransport[0]);
-
-				winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
-				nbObjectiveT2++;
-			}
-		
-			if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
-			{
-				GameManager.Instance.isConditionVictory = true;
-				GameManager.Instance.ShowEndZone();
-			}
+			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position,
+				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+			inventory[0].objectAcquired += indexObject;
 
 			inventory[0].boatObject.Add(objectTransport[0]);
+
+			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
+			nbObjectiveT1++;
+
+			inventory[0].boatObject.Add(objectTransport[0]);
+
+			Destroy(balloonT1.gameObject.transform.GetChild(inventory[0].objectAcquired - 1).gameObject);
 		}
+
 		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].boatObject.Count < 3)
 		{
 			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position,
 				inventory[1].spawnObject.rotation, inventory[1].spawnObject);
 			inventory[1].objectAcquired += indexObject;
 			inventory[1].boatObject.Add(objectTransport[0]);
+
+			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
+			nbObjectiveT2++;
+
+			Destroy(balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
 		}
 
 		if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
@@ -89,11 +86,7 @@ public class TeamInventoryManager : MonoBehaviour
 		{
 			Instantiate(objectToSpawn, new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
 		}
-
-        
 	}
-
-   
 }
 
 [Serializable]
