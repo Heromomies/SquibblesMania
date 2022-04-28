@@ -17,7 +17,7 @@ public class NFCManager : MonoBehaviour
 
 	#endregion
 
-	#region UI SETTINGS
+/*	#region UI SETTINGS
 
 	[Space] [Header("UI SETTINGS")] public ActionPlayerPreset[] actionPlayerPreset;
 
@@ -27,7 +27,7 @@ public class NFCManager : MonoBehaviour
 		public TextMeshProUGUI textTakeOffCard;
 	}
 
-	#endregion
+	#endregion*/
 
 	#region LIGHT SETTINGS
 

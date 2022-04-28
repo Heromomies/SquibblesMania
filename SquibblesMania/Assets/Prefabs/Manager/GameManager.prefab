@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7fa4c8d885c784aa6b34f925c827c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHeightBlocMovement: 2
-  minHeightBlocMovement: -1
+  maxHeightBlocMovement: 1
+  minHeightBlocMovement: 0
   players: []
   playersSpawnPoints:
   - {fileID: 0}
@@ -62,20 +62,20 @@ MonoBehaviour:
     buttonNextTurn: {fileID: 0}
   camPreSets:
   - presetNumber: 1
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 30, y: 45, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 60, y: 45, z: 0}
     buttonNextTurn: {fileID: 0}
   - presetNumber: 3
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 150, y: 225, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 120, y: -135, z: 0}
     buttonNextTurn: {fileID: 0}
   - presetNumber: 2
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 30, y: 45, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 60, y: 45, z: 0}
     buttonNextTurn: {fileID: 0}
   - presetNumber: 4
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 150, y: 225, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 120, y: -135, z: 0}
     buttonNextTurn: {fileID: 0}
   count: 0
   smoothTransitionTime: 1
@@ -123,6 +123,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   cycleCount: 0
+  winT1: {fileID: 0}
+  winT2: {fileID: 0}
   playerData: {fileID: 11400000, guid: 37b2b51b7eead4042abb429527d65873, type: 2}
   hats:
   - {fileID: 244345663624797596, guid: a4ce1ef17b8960145a461e48f5d25c9b, type: 3}
