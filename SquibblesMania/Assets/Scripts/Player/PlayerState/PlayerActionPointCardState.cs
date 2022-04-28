@@ -10,21 +10,19 @@ using UnityEngine.Rendering.Universal.Internal;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
-   
     private int _actionPointText;
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<Transform> previewPath = new List<Transform>();
-   
 
-    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.5f);
-    
-    
+
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.6f);
+
 
     //The state when player use is card action point
     public override void EnterState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = true;
-        player.nextBlockPath.Clear();  
+        player.nextBlockPath.Clear();
         ResetPreviewPath(player);
         player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
         PreviewPath(player.playerActionPoint, player);
@@ -47,7 +45,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             {
                 Node actualNode = player.currentBlockPlayerOn.GetComponent<Node>();
                 bool isNextPathActive = path.nextPath.GetComponent<Node>().isActive;
-                
+
                 if (path.isActive && isNextPathActive && actualNode.isActive)
                 {
                     possiblePath.Add(path.nextPath);
@@ -130,7 +128,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 new Vector3(bPos.x, bPos.y + 1.01f, bPos.z), Quaternion.identity, null);
             pathObjects.Add(goPathObject);
         }
-        
     }
 
     void CheckPossiblePaths(List<Transform> currentCheckedBlocks, List<Transform> previousBlocksPath,
@@ -174,7 +171,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        
     }
 
     public override void ExitState(PlayerStateManager player)
@@ -192,10 +188,18 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {
-            case 0: GameManager.Instance.ChangePlayerTurn(1); break;
-            case 1: GameManager.Instance.ChangePlayerTurn(2); break;
-            case 2: GameManager.Instance.ChangePlayerTurn(3); break;
-            case 3: GameManager.Instance.ChangePlayerTurn(0); break;
+            case 0:
+                GameManager.Instance.ChangePlayerTurn(1);
+                break;
+            case 1:
+                GameManager.Instance.ChangePlayerTurn(2);
+                break;
+            case 2:
+                GameManager.Instance.ChangePlayerTurn(3);
+                break;
+            case 3:
+                GameManager.Instance.ChangePlayerTurn(0);
+                break;
         }
     }
 
@@ -292,26 +296,29 @@ public class PlayerActionPointCardState : PlayerBaseState
                 return;
             }
         }
-        
+
 
         if (PlayerMovementManager.Instance.isPlayerPreviewPath)
         {
             player.StartCoroutine(ShowPreviewPath(player));
         }
-        
+
         player.finalPathFinding.Insert(0, player.currentTouchBlock);
     }
 
     private IEnumerator ShowPreviewPath(PlayerStateManager player)
     {
         var instanceGhostPlayer = PlayerMovementManager.Instance.ghostPlayer;
-        for (int i = player.finalPathFinding.Count -1; i > 0; i--)
+        for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
             var spawnBulletPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
-            var sphere = PoolManager.Instance.SpawnObjectFromPool("SphereShowPath", new Vector3(spawnBulletPoint.x, spawnBulletPoint.y + 1.2f, spawnBulletPoint.z), Quaternion.identity, null);
+            var sphere = PoolManager.Instance.SpawnObjectFromPool("SphereShowPath",
+                new Vector3(spawnBulletPoint.x, spawnBulletPoint.y + 1.2f, spawnBulletPoint.z), Quaternion.identity,
+                null);
             previewPath.Add(sphere.transform);
         }
-        var ghostPlayerPos = player.currentTouchBlock.GetComponent<Node>().GetWalkPoint() + new Vector3(0,0.5f,0);
+
+        var ghostPlayerPos = player.currentTouchBlock.GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
         instanceGhostPlayer.SetActive(true);
         instanceGhostPlayer.transform.position = ghostPlayerPos;
         previewPath.Add(instanceGhostPlayer.transform);
@@ -322,50 +329,54 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         //Last index of the list finalPathfinding
         int index = player.finalPathFinding.Count - 1;
-        
-        Vector3 lastDirection = (player.finalPathFinding[index].transform.position - player.currentBlockPlayerOn.position).normalized;
-        
-        
+
+        Vector3 lastDirection =
+            (player.finalPathFinding[index].transform.position - player.currentBlockPlayerOn.position).normalized;
+
+
         UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
         _actionPointText = player.playerActionPoint;
-        
+
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
-            
-            if (i < player.finalPathFinding.Count-1)
+            if (i < player.finalPathFinding.Count - 1)
             {
                 var firstBloc = player.finalPathFinding[index];
-                var secondBloc = player.finalPathFinding[index-1];
-                
+                var secondBloc = player.finalPathFinding[index - 1];
+
                 var blocDirection = (secondBloc.position - firstBloc.position).normalized;
 
                 //Si la dernière direction n'est pas égale a la direction actuel du bloc 1
                 if (lastDirection != blocDirection)
                 {
                     lastDirection = blocDirection;
-                } 
+                }
                 else
                 {
                     player.finalPathFinding.Remove(firstBloc);
                     _actionPointText--;
                     UpdateActionPointTextPopUp(_actionPointText);
                 }
+
                 index--;
             }
         }
+
         yield return null;
         player.playerActionPoint = _actionPointText;
         player.StartCoroutine(FollowPath(player));
     }
+
     //Movement of player
     private IEnumerator FollowPath(PlayerStateManager player)
     {
+        
         //We remove the player from the list of block group which the player is currently on 
         GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
         groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
 
         NFCManager.Instance.displacementActivated = true;
-        var movementPlayer = 0;
+        // var movementPlayer = 0;
         _actionPointText = player.playerActionPoint;
 
         UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
@@ -373,21 +384,19 @@ public class PlayerActionPointCardState : PlayerBaseState
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
             var walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
-            if (movementPlayer < player.playerActionPoint)
-            {
-                var movePos = walkPoint + new Vector3(0, 1, 0);
-                var direction = (movePos - player.transform.position).normalized;
-                var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-               
-                player.transform.DOMove(movePos, player.timeMoveSpeed);
-                
-                player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
-                //player.finalPathFinding.Remove(player.finalPathFinding[i]);
-                _actionPointText--;
-                UpdateActionPointTextPopUp(_actionPointText);
-                movementPlayer++;
-                yield return _timeBetweenPlayerMovement;
-            }
+
+            var movePos = walkPoint + new Vector3(0, 1, 0);
+            var direction = (movePos - player.transform.position).normalized;
+            var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+            player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
+
+            player.transform.DOMove(movePos, player.timeMoveSpeed);
+            
+            _actionPointText--;
+            UpdateActionPointTextPopUp(_actionPointText);
+            
+            yield return _timeBetweenPlayerMovement;
         }
 
         player.playerActionPoint = _actionPointText;
@@ -406,6 +415,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             obj.SetActive(false);
         }
+
         pathObjects.Clear();
     }
 
@@ -415,6 +425,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             path.gameObject.SetActive(false);
         }
+
         previewPath.Clear();
         player.finalPathFinding.Clear();
     }
@@ -422,7 +433,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     private void ClearFollowPath(PlayerStateManager player)
     {
         player.currentBlockPlayerOn = player.currentTouchBlock;
-        
+
         var currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
         currentNodePlayerOn.isActive = false;
         //We add the player to the list of block group which the player is currently on 
@@ -448,7 +459,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         SetFalsePathObjects();
-    
+
         if (player.playerActionPoint > 0)
         {
             EnterState(player);

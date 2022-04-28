@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
 
-    //[SerializeField] private List<CamPreSets> previousCamPreSetsList;
+    [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
     {
@@ -171,31 +171,36 @@ public class GameManager : MonoBehaviour
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
-            _cameraViewModeGesture.SetUpCameraBaseViewMode();
-             
-            count++;
-            if (count >= camPreSets.Count)
+            if (turnCount <= 4)
+            {
+                _cameraViewModeGesture.SetUpCameraViewMode(true, 0);
+            }
+            else
+            {
+                _cameraViewModeGesture.SetUpCameraViewMode(false, count);
+            }
+            
+            //count++;
+           /* if (count >= camPreSets.Count)
             {
                 count = 0;
-            }
+            }*/
 
+            count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
         }
     }
 
-   /* private void SavePreviousCamRotY(int indexCam)
+    private void SavePreviousCamRotY(int indexCam)
     {
-      
-        if (indexCam <= 0) indexCam = 0;
-
+        
         Vector3 camEulerAngles = _cam.transform.eulerAngles;
         Vector3 camPos = _cam.transform.position;
-        
-        camEulerAngles.y = (camEulerAngles.y  > 180) ?  camEulerAngles.y  - 360 :  camEulerAngles.y;
+       
 
         CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
-        
-        previousCamPreSets.camRot = new Vector3(previousCamPreSets.camRot.x , camEulerAngles.y, previousCamPreSets.camRot.z);
+
+        previousCamPreSets.camRot = camEulerAngles;
         previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
         previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
         previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
@@ -204,7 +209,7 @@ public class GameManager : MonoBehaviour
         
         camPreSets[indexCam] = previousCamPreSetsList[indexCam];
 
-    }*/
+    }
 
     private void IncreaseDemiCycle()
     {
@@ -220,6 +225,11 @@ public class GameManager : MonoBehaviour
             cycleCount++;
         }
 
+        if (playerNumberTurn == players[3].playerNumber)
+        {
+            MoutainManager.Instance.ChangeCycle();
+        }
+        
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
@@ -231,16 +241,11 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
 
         NFCManager.Instance.PlayerChangeTurn();
-       /* if (count <= 0)
-        {
-            SavePreviousCamRotY(previousCamPreSetsList.Count-1);
-        }
-        else
-        {
-            SavePreviousCamRotY(count-1);
-        }*/
        
+        SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
+        _cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
         CamConfig(count);
+        
         if (UiManager.Instance.textActionPointPopUp)
         {
             UiManager.Instance.textActionPointPopUp.SetActive(false);
@@ -251,7 +256,6 @@ public class GameManager : MonoBehaviour
         {
             winT2.SetActive(false);
             winT1.SetActive(true);
-
         }
         else
         {
