@@ -392,7 +392,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
 
             player.transform.DOMove(movePos, player.timeMoveSpeed);
-
+            
             _actionPointText--;
             UpdateActionPointTextPopUp(_actionPointText);
             
