@@ -60,6 +60,7 @@ public class CameraViewModeGesture : MonoBehaviour
     {
         if (indexUiCircleSelection != _indexUiCircleSelection)
         {
+            CameraButtonManager.Instance.isCamRotateButtonPressed = false;
             AudioManager.Instance.Play("Button");
             foreach (var image in actualUiViewMode.uiCircleSelection)
             {
