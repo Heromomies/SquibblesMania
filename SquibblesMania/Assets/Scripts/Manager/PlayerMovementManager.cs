@@ -324,9 +324,9 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				var blocPosition = bloc.position;
 
-				GameObject blocPreviewUpMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreview",
+				GameObject blocPreviewUpMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreviewUp",
 					blocPosition + Vector3.up, Quaternion.identity, null);
-				GameObject blocPreviewDownMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreview",
+				GameObject blocPreviewDownMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreviewDown",
 					blocPosition + Vector3.down * 2, Quaternion.identity, null);
 
 				RoundYBlocPreviewMeshPos(blocPreviewUpMesh);
