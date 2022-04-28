@@ -28,11 +28,11 @@ public class TeamInventoryManager : MonoBehaviour
     public Sprite green;
     // Start is called before the first frame update
 
-    void Start()
+   /* void Start()
     {
         balloonT1 = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
         balloonT2 = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
-    }
+    }*/
     void Awake()
 	{
 		_teamInventoryManager = this;

@@ -37,16 +37,16 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
         FingersScript.Instance.AddGesture(SwapTouchGesture);
         
+        snowGun = Instantiate(snowGun, transform.position + new Vector3(0,0.02f,0), Quaternion.identity);
+        
+        animatorSnowGun = snowGun.GetComponent<Animator>();
+        
         ShowEvent();
     }
 
     private void Start()
     {
         _cam = Camera.main;
-
-        snowGun = Instantiate(snowGun, transform.position + new Vector3(0,0.02f,0), Quaternion.identity);
-        
-        animatorSnowGun = snowGun.GetComponent<Animator>();
     }
 
     public void ShowEvent()
@@ -62,7 +62,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
         }
     }
 
-    public void LaunchEvent() // Check the distance between each players launch a bullet to the nearest player
+    public void LaunchEvent() 
     {
     }
 
@@ -109,6 +109,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
                     animatorSnowGun.SetBool("isShooting", true);
 
                     StartCoroutine(DelayAnimationOut(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length, listPoint, speed, curve));
+                    
+                    canClick = false;
                 }
             }
             else
@@ -131,7 +133,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
     void ClearGun()
     {
         animatorSnowGun.SetBool("isShooting", false);
-        
         animatorSnowGun.SetBool("canRemoveCannon", true);
 
         StartCoroutine(DelayAnimationCanRemoveCannon(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length));
@@ -139,16 +140,23 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     IEnumerator DelayAnimationCanRemoveCannon(float delay)
     {
-        Debug.Log(delay);
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(delay * 2);
 
+        animatorSnowGun.SetBool("onHatche", false);
+        StartCoroutine(DelaySetActiveFalseObject(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length));
+    }
+
+    IEnumerator DelaySetActiveFalseObject(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
         foreach (var h in _hatchesList)
         {
             h.SetActive(false);
         }
         _hatchesList.Clear();
         
-        animatorSnowGun.SetBool("onHatche", false);
-        canClick = false;
+        snowGun.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
