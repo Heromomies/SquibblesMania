@@ -39,12 +39,14 @@ public class TeamInventoryManager : MonoBehaviour
 
 	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam) // Add resources to the inventory
 	{
-		if (playerTeam == Player.PlayerTeam.TeamOne && inventory[0].boatObject.Count < 3)
+		if (playerTeam == Player.PlayerTeam.TeamOne && inventory[0].objectAcquired < 3)
 		{
 			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position,
 				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 			inventory[0].objectAcquired += indexObject;
 
+			Debug.Log("JDIzjdij");
+			
 			inventory[0].boatObject.Add(objectTransport[0]);
 
 			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
@@ -52,10 +54,10 @@ public class TeamInventoryManager : MonoBehaviour
 
 			inventory[0].boatObject.Add(objectTransport[0]);
 
-			Destroy(balloonT1.gameObject.transform.GetChild(inventory[0].objectAcquired - 1).gameObject);
+			//Destroy(balloonT1.gameObject.transform.GetChild(inventory[0].objectAcquired - 1).gameObject);
 		}
 
-		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].boatObject.Count < 3)
+		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].objectAcquired < 3)
 		{
 			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position,
 				inventory[1].spawnObject.rotation, inventory[1].spawnObject);
@@ -65,7 +67,7 @@ public class TeamInventoryManager : MonoBehaviour
 			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
 			nbObjectiveT2++;
 
-			Destroy(balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
+			//Destroy(balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
 		}
 
 		if (inventory[0].boatObject.Count == 3 || inventory[1].boatObject.Count == 3)
