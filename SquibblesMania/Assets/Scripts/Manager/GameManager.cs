@@ -171,9 +171,11 @@ public class GameManager : MonoBehaviour
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
+            
+            //Register Previous Cam View Mode
             if (turnCount <= 4)
             {
-                _cameraViewModeGesture.SetUpCameraViewMode(true, 0);
+                _cameraViewModeGesture.SetUpCameraViewMode(true, 1);
             }
             else
             {
