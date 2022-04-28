@@ -195,24 +195,6 @@ public class PlayerCardState : PlayerBaseState
 
 	public override void UpdateState(PlayerStateManager player)
 	{
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
-		{
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1:
-					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
-					break;
-				case 2:
-					NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false);
-					break;
-				case 3:
-					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
-					break;
-				case 4:
-					NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false);
-					break;
-			}
-		}
 	}
 
 	public override void ExitState(PlayerStateManager player)
