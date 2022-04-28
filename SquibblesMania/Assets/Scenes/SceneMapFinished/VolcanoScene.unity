@@ -1446,6 +1446,36 @@ MonoBehaviour:
     isActive: 1
   groupBlockParent: {fileID: 0}
   colorBloc: 4
+--- !u!1 &159077279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 159077280}
+  m_Layer: 0
+  m_Name: VFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &159077280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159077279}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1236012610}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &170818305
 GameObject:
   m_ObjectHideFlags: 0
@@ -11637,17 +11667,6 @@ MonoBehaviour:
     isActive: 1
   groupBlockParent: {fileID: 0}
   colorBloc: 4
---- !u!114 &1105659821 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7538133571302557130, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-  m_PrefabInstance: {fileID: 2081713977}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1117797640 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7538133570414798070, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
@@ -12323,6 +12342,7 @@ Transform:
   - {fileID: 7861496720921463965}
   - {fileID: 651951313}
   - {fileID: 1260958855}
+  - {fileID: 159077280}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19484,11 +19504,11 @@ PrefabInstance:
     - target: {fileID: 1761057229600335648, guid: aeac33240b3ead2429674b152eee272b, type: 3}
       propertyPath: actionPlayerPreset.Array.data[0].textTakeOffCard
       value: 
-      objectReference: {fileID: 2081713998}
+      objectReference: {fileID: 0}
     - target: {fileID: 1761057229600335648, guid: aeac33240b3ead2429674b152eee272b, type: 3}
       propertyPath: actionPlayerPreset.Array.data[1].textTakeOffCard
       value: 
-      objectReference: {fileID: 1105659821}
+      objectReference: {fileID: 0}
     - target: {fileID: 1761057229600335654, guid: aeac33240b3ead2429674b152eee272b, type: 3}
       propertyPath: m_Name
       value: NFCManager
@@ -20405,17 +20425,6 @@ GameObject:
 --- !u!114 &2081713997 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7538133571599560730, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-  m_PrefabInstance: {fileID: 2081713977}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2081713998 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7538133571502776956, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
   m_PrefabInstance: {fileID: 2081713977}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
