@@ -41,7 +41,7 @@ public class Meteorite : MonoBehaviour
 		{
 			AudioManager.Instance.Play("Stun");
 
-			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
+			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
 			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
