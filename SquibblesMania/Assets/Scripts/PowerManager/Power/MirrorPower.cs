@@ -401,9 +401,9 @@ public class MirrorPower : MonoBehaviour, IManagePower
 						switch (distanceBetweenTwoPlayersWhenABlockIsBehind) // inverse distance for the dash, else the player repulsed don't follow the range  
 						{
 							case 1:
-								distanceBetweenTwoPlayersWhenABlockIsBehind = 2;
+								distanceBetweenTwoPlayersWhenABlockIsBehind = 3;
 								break;
-							case 2:
+							case 3:
 								distanceBetweenTwoPlayersWhenABlockIsBehind = 1;
 								break;
 						}

@@ -40,6 +40,8 @@ public class Meteorite : MonoBehaviour
 		if (other.gameObject.CompareTag("Player"))
 		{
 			AudioManager.Instance.Play("Stun");
+
+			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
 			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
