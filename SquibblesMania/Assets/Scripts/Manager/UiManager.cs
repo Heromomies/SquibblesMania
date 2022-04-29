@@ -28,8 +28,10 @@ public class UiManager : MonoBehaviour
     public GameObject textActionPointPopUp;
     public int totalCurrentActionPoint;
     [SerializeField] private Vector3 offsetText;
-
     public Camera uiCam;
+
+    [Header("STUN TEXT PARAMETERS")] [SerializeField]
+    private GameObject[] playerStunTextParents;
     private void Awake()
     {
         _uiManager = this;
@@ -43,11 +45,15 @@ public class UiManager : MonoBehaviour
     public void ButtonNextTurn()
     {
         AudioManager.Instance.Play("ButtonNextTurn");
-        
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
+        {
+            StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, false);
+        }
+        
         GameManager.Instance.currentPlayerTurn.canSwitch = true;
         GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
 
@@ -57,21 +63,46 @@ public class UiManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        
         textTeamOne.SetActive(false);
         textTeamTwo.SetActive(false);
     }
 
 
-    public void StunTextPopUp(int actualCamPresetNumber)
+    public void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
+        Debug.Log("Hello world");
+       
         if (actualCamPresetNumber <= 2)
         {
             //TODO Set active du Stun text Team 1
+            GameObject playerStunTextParent = playerStunTextParents[1];
+            playerStunTextParent.SetActive(setActiveGameObject);
+            Transform spriteArrow;
+            switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+            {
+                case 0: spriteArrow = playerStunTextParent.transform.GetChild(0);
+                        spriteArrow.gameObject.SetActive(setActiveGameObject);
+                        break;
+                case 2: spriteArrow = playerStunTextParent.transform.GetChild(1); 
+                        spriteArrow.gameObject.SetActive(setActiveGameObject);
+                        break;
+            }
         }
         else
         {
             //TODO Set active du Stun text Team 2
+            GameObject playerStunTextParent = playerStunTextParents[0];
+            playerStunTextParent.SetActive(setActiveGameObject);
+            Transform spriteArrow;
+            switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+            {
+                case 1: spriteArrow = playerStunTextParent.transform.GetChild(0);
+                    spriteArrow.gameObject.SetActive(setActiveGameObject);
+                    break;
+                case 3: spriteArrow = playerStunTextParent.transform.GetChild(1); 
+                    spriteArrow.gameObject.SetActive(setActiveGameObject);
+                    break;
+            }
         }
     }
     

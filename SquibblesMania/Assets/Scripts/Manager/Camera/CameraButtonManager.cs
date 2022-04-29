@@ -27,8 +27,8 @@ public class CameraButtonManager : MonoBehaviour
     [SerializeField] private float radius = 10;
     
     [SerializeField] private GameObject[] uiCamPresets;
-    [SerializeField] private bool isCamRotateButtonPressed;
-    [SerializeField] private float targetAngle = 45;
+    public bool isCamRotateButtonPressed;
+    [SerializeField] private float targetAngle;
     private Vector3 _orbitCam;
     
     private void Awake()

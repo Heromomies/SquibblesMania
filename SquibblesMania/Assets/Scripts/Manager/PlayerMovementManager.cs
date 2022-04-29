@@ -324,9 +324,9 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				var blocPosition = bloc.position;
 
-				GameObject blocPreviewUpMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreview",
+				GameObject blocPreviewUpMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreviewUp",
 					blocPosition + Vector3.up, Quaternion.identity, null);
-				GameObject blocPreviewDownMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreview",
+				GameObject blocPreviewDownMesh = PoolManager.Instance.SpawnObjectFromPool("BlocPreviewDown",
 					blocPosition + Vector3.down * 2, Quaternion.identity, null);
 
 				RoundYBlocPreviewMeshPos(blocPreviewUpMesh);
@@ -438,7 +438,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 		if (yPos > 0.0f)
 		{
-			
 			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 			{
 				AudioManager.Instance.Play("CardFalse");
@@ -453,8 +452,6 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 		else if (yPos < 0.0f)
 		{
-			
-			
 			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 			{
 				AudioManager.Instance.Play("CardFalse");

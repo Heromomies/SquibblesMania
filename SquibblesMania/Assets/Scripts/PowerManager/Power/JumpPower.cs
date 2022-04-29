@@ -72,9 +72,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 				NFCManager.Instance.powerActivated = true;
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
-				
-				player.RemoveParentBelowPlayer(tCurrentPlayerTurn);
-				
+
 				var posHitInfo = hitInfo.transform.position;
 
 				var playerPos = tCurrentPlayerTurn.position;
@@ -197,8 +195,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		collidersFinished.Clear();
 		listObjectToSetActiveFalse.Clear();
 		
-		var player = GameManager.Instance.currentPlayerTurn;
-		player.DetectParentBelowPlayer(player.transform);
+		GameManager.Instance.DetectParentBelowPlayers();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();
