@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+  private void Start()
     {
         for (int i = 0; i < allBlocks.Count; i++)
         {
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
-    void SpawnPlayers()
+  private void SpawnPlayers()
     {
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
@@ -93,30 +93,27 @@ public class GameManager : MonoBehaviour
       
     }
 
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Color color)
+  {
+      player.playerTeam = playerTeam;
+      player.gameObject.GetComponentInChildren<Renderer>().material.color = color;
+      player.indicatorPlayer.SetActive(false);
+  }
     void SetUpPlayers()
     {
-        players[0].playerTeam = Player.PlayerTeam.TeamOne;
-        players[0].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
-        players[0].indicatorPlayer.SetActive(false);
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red);
         Instantiate(hats[playerData.P1hatID], players[0].hat.transform.position, players[0].hat.transform.rotation).transform.parent = players[0].hat.transform;
         players[0].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
         
-
-        players[1].playerTeam = Player.PlayerTeam.TeamTwo;
-        players[1].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
-        players[1].indicatorPlayer.SetActive(false);
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue);
         Instantiate(hats[playerData.P2hatID], players[1].hat.transform.position, players[1].hat.transform.rotation).transform.parent = players[1].hat.transform; ;
         players[1].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
-
-        players[2].playerTeam = Player.PlayerTeam.TeamOne;
-        players[2].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
-        players[2].indicatorPlayer.SetActive(false);
+        
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red);
         Instantiate(hats[playerData.P3hatID], players[2].hat.transform.position, players[2].hat.transform.rotation).transform.parent = players[2].hat.transform; ;
         players[2].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
-
-        players[3].playerTeam = Player.PlayerTeam.TeamTwo;
-        players[3].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
-        players[3].indicatorPlayer.SetActive(false);
+        
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue);
         Instantiate(hats[playerData.P4hatID], players[3].hat.transform.position, players[3].hat.transform.rotation).transform.parent = players[3].hat.transform;
         players[3].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
     }

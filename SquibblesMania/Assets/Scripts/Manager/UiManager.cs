@@ -28,8 +28,10 @@ public class UiManager : MonoBehaviour
     public GameObject textActionPointPopUp;
     public int totalCurrentActionPoint;
     [SerializeField] private Vector3 offsetText;
-
     public Camera uiCam;
+
+    [Header("STUN TEXT PARAMETERS")] [SerializeField]
+    private GameObject[] playerStunTextParents;
     private void Awake()
     {
         _uiManager = this;
