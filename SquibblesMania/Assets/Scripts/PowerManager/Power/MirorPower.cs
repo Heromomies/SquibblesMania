@@ -104,13 +104,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 					raycastPlayer.position = baseSpawnRaycastTransform.position;
-				
-					var currentPlayer = GameManager.Instance.currentPlayerTurn;
-					currentPlayer.RemoveParentBelowPlayer(currentPlayer.transform);
-					
-					var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-					zombieStateManager.RemoveParentBelowPlayer(zombieStateManager.transform);
-					
+
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
 						var rot = 0f;
@@ -573,19 +567,10 @@ public class MirorPower : MonoBehaviour, IManagePower
 	{
 		yield return _waitDetectBlocUnderZombie;
 
-		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
-		currentPlayer.DetectBlockBelowPlayer();
-		currentPlayer.DetectParentBelowPlayer(currentPlayer.transform);
-		
-		if (zombiePlayer != null)
-		{
-			var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-			zombieStateManager.DetectBlockBelowPlayer();
-			zombieStateManager.DetectParentBelowPlayer(zombieStateManager.transform);
-		}
-		
 		zombiePlayer = null;
 
+		GameManager.Instance.DetectParentBelowPlayers();
+		
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}

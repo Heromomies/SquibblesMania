@@ -438,7 +438,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 		if (yPos > 0.0f)
 		{
-			
 			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 			{
 				AudioManager.Instance.Play("CardFalse");
@@ -453,8 +452,6 @@ public class PlayerMovementManager : MonoBehaviour
 		}
 		else if (yPos < 0.0f)
 		{
-			
-			
 			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 			{
 				AudioManager.Instance.Play("CardFalse");
