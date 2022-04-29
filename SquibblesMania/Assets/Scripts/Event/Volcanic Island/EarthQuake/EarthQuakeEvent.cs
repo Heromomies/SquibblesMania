@@ -10,6 +10,8 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT SETTINGS")]
 	[Range(0f, 10f)] public float speedBloc;
+
+	public Transform volcanoTransform;
 	
 	[Space]
 	[Header("CONDITIONS DANGEROUSNESS")]
@@ -79,7 +81,10 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	}
 	IEnumerator SetActiveFalseBullet()
 	{
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ParticleLavaProjection", volcanoTransform.position, Quaternion.Euler(-90,0,0), null);
+
 		yield return new WaitForSeconds(1f);
+		obj.SetActive(false);
 		gameObject.SetActive(false);
 	}
 	public void LaunchEvent()
