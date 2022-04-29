@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MoutainManager : MonoBehaviour
+public class MountainManager : MonoBehaviour
 {
     public List<GameObject> snowGuns;
     
     #region Singleton
 
-    private static MoutainManager _mountainManager;
+    private static MountainManager _mountainManager;
 
-    public static MoutainManager Instance => _mountainManager;
+    public static MountainManager Instance => _mountainManager;
     // Start is called before the first frame update
 
     private void Awake()
