@@ -23,7 +23,7 @@ public class PlayerCardState : PlayerBaseState
 		//Turn of player x
 		//Message player turn x "Put a card on the corresponding surface"
 		_currentPlayer = player;
-		if (player.isPlayerStun)
+		if (player.isPlayerStun && player.stunCount > 0)
 		{
 			player.stunCount--;
 			PlayerIsStun(player);
@@ -189,6 +189,14 @@ public class PlayerCardState : PlayerBaseState
 		{
 			player.isPlayerStun = false;
 			player.psStun.SetActive(false);
+			player.indicatorPlayer.SetActive(true);
+			NFCController.OnNewTag = OnNewTagDetected;
+			NFCController.OnTagRemoved = OnTagRemoveDetected;
+			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
+		}
+		else
+		{
+			UiManager.Instance.StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, true);
 		}
 		
 	}
