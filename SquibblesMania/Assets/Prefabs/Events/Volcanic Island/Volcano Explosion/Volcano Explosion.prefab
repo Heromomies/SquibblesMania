@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8885060723732602601
 Transform:
   m_ObjectHideFlags: 0
@@ -43,13 +43,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dbafc86a164d346805d66ddeff8a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorOne: {r: 1, g: 0.51320755, b: 0.51320755, a: 0}
-  colorTwo: {r: 0.5188679, g: 0, b: 0, a: 0}
   particleSystemExplosion: {fileID: 5123500826265043806, guid: 7d34824224cc8ad499617e003f22e2e9, type: 3}
   cubeOnMap: []
   cubeTouched: []
-  bulletPrefab: {fileID: -2439834658567328607, guid: d7dff3febd5faa441b054ed7d2add88e, type: 3}
+  smokeEffect: {fileID: 0}
+  volcanoGameObject: {fileID: 0}
   volcanoTransform: {fileID: 0}
+  bulletParent: {fileID: 0}
   speed: 1.5
   repeatRate: 0.5
-  conditionsDangerousness: []
+  conditionsDangerousness:
+  - numberOfMeteorite: 1
+  - numberOfMeteorite: 3
+  - numberOfMeteorite: 5
+  - numberOfMeteorite: 7
