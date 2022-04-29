@@ -29,12 +29,9 @@ public class PlayerStateManager : Player
 
 	private void Start()
 	{
-		GameManager.Instance.DetectParentBelowPlayers();
-		Node currentNodePlayerOn = currentBlockPlayerOn.GetComponent<Node>();
 		//Assign the player to a list for know on what block group is currently on
-		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
-		groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
-		currentNodePlayerOn.isActive = false;
+		GameManager.Instance.DetectParentBelowPlayers();
+		
 		playerMovementManager = PlayerMovementManager.Instance;
 	}
 
@@ -45,7 +42,7 @@ public class PlayerStateManager : Player
 		if (CurrentState != null)
 		{
 			CurrentState.UpdateState(this);
-			GameManager.Instance.DetectParentBelowPlayers();
+			//GameManager.Instance.DetectParentBelowPlayers();
 		}
 	}
 
