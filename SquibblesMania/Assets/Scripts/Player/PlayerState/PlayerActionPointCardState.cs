@@ -400,6 +400,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         player.playerActionPoint = _actionPointText;
+        
         ClearFollowPath(player);
     }
 
@@ -433,12 +434,8 @@ public class PlayerActionPointCardState : PlayerBaseState
     private void ClearFollowPath(PlayerStateManager player)
     {
         player.currentBlockPlayerOn = player.currentTouchBlock;
-
-        var currentNodePlayerOn = player.currentBlockPlayerOn.GetComponent<Node>();
-        currentNodePlayerOn.isActive = false;
-        //We add the player to the list of block group which the player is currently on 
-        GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
-        groupBlockDetection.playersOnGroupBlock.Add(player.gameObject.transform);
+        
+        GameManager.Instance.DetectParentBelowPlayers();
 
         var pMovementManager = player.playerMovementManager;
         pMovementManager.ghostPlayer.SetActive(false);
@@ -467,7 +464,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         if (player.playerActionPoint <= 0)
         {
-            currentNodePlayerOn.isActive = false;
             UiManager.Instance.buttonNextTurn.SetActive(true);
         }
     }

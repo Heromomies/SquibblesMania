@@ -23,9 +23,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	{
 		public int numberOfBlocsTouched;
 	}
-
-	private float _playerHeight = 2.5f;
-
+	
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -63,7 +61,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 						if (blocParent[randomNumber].transform.position.y < blocHeight)
 						{
-							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, blocHeight + _playerHeight, blocParentPlayerPos.z);
+							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, col.y + blocParentPlayerPos.y + 1f, blocParentPlayerPos.z);
 							blocParentPlayer[j].transform.DOMove(blocParentPlayerPos, speedBloc); 
 						}
 					}
@@ -76,6 +74,8 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 				
 			}
 		}
+		
+		GameManager.Instance.DetectParentBelowPlayers();
 		
 		StartCoroutine(SetActiveFalseBullet());
 	}

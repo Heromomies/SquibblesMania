@@ -296,6 +296,29 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void DetectParentBelowPlayers()
+    {
+        foreach (var player in players)
+        {
+            player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
+            player.currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+
+            Ray ray = new Ray(player.transform.position, -transform.up);
+            RaycastHit hit;
+            
+            if (Physics.Raycast(ray, out hit, 1.1f))
+            {
+                if (hit.collider.gameObject.GetComponent<Node>() != null)
+                {
+                    player.currentBlockPlayerOn = hit.transform;
+                }
+            }
+            
+            player.currentBlockPlayerOn.GetComponent<Node>().isActive = false;
+            player.currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Add(player.transform);
+        }
+    }
+
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());

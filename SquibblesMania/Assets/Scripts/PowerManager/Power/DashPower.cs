@@ -77,9 +77,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				var playerPos = player.transform.position;
 				var hitInfoPos = hitInfo.collider.transform.position;
 				var quat = Quaternion.Euler(0,0,0);
-				
-				player.RemoveParentBelowPlayer(player.transform);
-				
+
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					DashDirection(2); // Right
@@ -413,9 +411,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		
-		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
-		currentPlayer.DetectBlockBelowPlayer();
-		currentPlayer.DetectParentBelowPlayer(currentPlayer.transform);
+		GameManager.Instance.DetectParentBelowPlayers();
 	}
 	
 	public void ClearPower() // Clear the power

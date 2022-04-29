@@ -142,12 +142,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 	private void SwapPosition(Transform playerOne, Transform playerTwo) // Swap the position between the two players
 	{
-		foreach (var playerCol in players)
-		{
-			GameObject player = playerCol.gameObject;
-			player.GetComponent<PlayerStateManager>().RemoveParentBelowPlayer(player.transform);
-		}
-		
 		AudioManager.Instance.Play("PowerSwap");
 		
 		playerOne.position = playerTwo.position;
@@ -182,14 +176,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	
 		if (_playerTwo != null && _playerOne != null)
 		{
-			PlayerStateManager playerOneSwap =_playerOne.gameObject.GetComponent<PlayerStateManager>();
-			PlayerStateManager playerTwoSwap = _playerTwo.gameObject.GetComponent<PlayerStateManager>();
-			
-			playerOneSwap.DetectBlockBelowPlayer();
-			playerTwoSwap.DetectBlockBelowPlayer();
-			
-			playerOneSwap.DetectParentBelowPlayer(playerOneSwap.transform);
-			playerTwoSwap.DetectParentBelowPlayer(playerTwoSwap.transform);
+			GameManager.Instance.DetectParentBelowPlayers();
 		}
 	}
 	

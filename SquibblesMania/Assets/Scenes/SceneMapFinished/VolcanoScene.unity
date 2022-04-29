@@ -1772,7 +1772,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1586
+  m_Name: pb_Mesh-2968
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2672,8 +2672,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventToTest:
-  - {fileID: 1198056434}
-  - {fileID: 1263104351}
   - {fileID: 1651227385}
 --- !u!1 &331189454
 GameObject:
@@ -3552,6 +3550,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1236012610}
     m_Modifications:
+    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
+      propertyPath: dangerousness
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
+      propertyPath: levelOfDanger
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: events.Array.data[0]
       value: 
@@ -6075,6 +6081,10 @@ PrefabInstance:
       value: Miror Power
       objectReference: {fileID: 0}
     - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
+      propertyPath: mirrorRange
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: raycastPlayer
       value: 
       objectReference: {fileID: 142818256}
@@ -8588,7 +8598,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1610
+  m_Name: pb_Mesh-2992
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9868,10 +9878,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Meteorite Explosion
       objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602600, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8885060723732602601, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -9917,26 +9923,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: colorOne.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: colorOne.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: colorOne.r
-      value: 0.99257755
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: colorTwo.b
-      value: 0.5176471
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: colorTwo.r
-      value: 0.37258312
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: smokeEffect
       value: 
       objectReference: {fileID: 70098166}
@@ -9952,42 +9938,6 @@ PrefabInstance:
       propertyPath: volcanoGameObject
       value: 
       objectReference: {fileID: 65506711}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: transformToSpawnParticles
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: foldoutValues.bulletPrefab
-      value: 
-      objectReference: {fileID: -2439834658567328607, guid: d7dff3febd5faa441b054ed7d2add88e, type: 3}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: foldoutValues.volcanoTransform
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: conditionsDangerousness.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: foldoutValuesEvent.transformToSpawnParticles
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: conditionsDangerousness.Array.data[0].numberOfMeteorite
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: conditionsDangerousness.Array.data[1].numberOfMeteorite
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: conditionsDangerousness.Array.data[2].numberOfMeteorite
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
-      propertyPath: conditionsDangerousness.Array.data[3].numberOfMeteorite
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
 --- !u!1 &1198056434 stripped
@@ -13547,7 +13497,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2144
+  m_Name: pb_Mesh-3526
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -14045,7 +13995,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1600
+  m_Name: pb_Mesh-2982
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15068,7 +15018,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2152
+  m_Name: pb_Mesh-3534
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16400,11 +16350,11 @@ PrefabInstance:
     - target: {fileID: 8973617250078652130, guid: bbd5dadb744a5044ab92d57d7f10d7bd, type: 3}
       propertyPath: winT1
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 456008694}
     - target: {fileID: 8973617250078652130, guid: bbd5dadb744a5044ab92d57d7f10d7bd, type: 3}
       propertyPath: winT2
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 221350273}
     - target: {fileID: 8973617250078652130, guid: bbd5dadb744a5044ab92d57d7f10d7bd, type: 3}
       propertyPath: inventory.Array.data[0].spawnObject
       value: 
@@ -18045,6 +17995,42 @@ PrefabInstance:
     - target: {fileID: 7843621775167499337, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ButtonNextTurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499362, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 15305760}
+    - target: {fileID: 7843621775167499362, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StopMainMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 15305760}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StopEffectMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AudioManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
