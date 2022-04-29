@@ -8,6 +8,9 @@ public class MountainManager : MonoBehaviour
 {
     public List<GameObject> snowGuns;
     
+    public int turnBeforeActivateWind; 
+    [HideInInspector] public int turn;
+    
     #region Singleton
 
     private static MountainManager _mountainManager;
@@ -34,6 +37,11 @@ public class MountainManager : MonoBehaviour
 	    snowGuns[randomNumber].SetActive(true);
     }
 
+    public void TurnPassed()
+    {
+	    
+    }
+    
     private void Update()
     {
 	    if (Input.GetKeyDown(KeyCode.L))

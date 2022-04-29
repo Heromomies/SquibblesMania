@@ -36,8 +36,12 @@ public class SnowGun : MonoBehaviour, IManageEvent
         SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
         FingersScript.Instance.AddGesture(SwapTouchGesture);
-        
-        snowGun = Instantiate(snowGun, transform.position + new Vector3(0,0.02f,0), Quaternion.identity);
+
+        var t = transform;
+        var position = t.position;
+        snowGun = Instantiate(snowGun, position + new Vector3(0,position.y + 0.02f,0), Quaternion.identity, t);
+
+        t.GetComponentInParent<Node>().isActive = false;
         
         animatorSnowGun = snowGun.GetComponent<Animator>();
         
@@ -155,6 +159,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
             h.SetActive(false);
         }
         _hatchesList.Clear();
+        
+        gameObject.GetComponentInParent<Node>().isActive = false;
         
         snowGun.SetActive(false);
         gameObject.SetActive(false);

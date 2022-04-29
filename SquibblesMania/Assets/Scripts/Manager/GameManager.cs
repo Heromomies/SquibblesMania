@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
 
     private void IncreaseDemiCycle()
     {
-        VolcanoManager.Instance.CyclePassed();
+//        VolcanoManager.Instance.CyclePassed();
         PowerManager.Instance.CyclePassed();
     }
 
