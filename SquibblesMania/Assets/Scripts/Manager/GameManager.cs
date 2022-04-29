@@ -227,10 +227,10 @@ public class GameManager : MonoBehaviour
             cycleCount++;
         }
 
-        if (playerNumberTurn == players[3].playerNumber)
-        {
-            MoutainManager.Instance.ChangeCycle();
-        }
+        /* if (playerNumberTurn == players[3].playerNumber)
+         {
+             MoutainManager.Instance.ChangeCycle();
+        }*/
         
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
