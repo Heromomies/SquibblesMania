@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager currentPlayerTurn;
   
     public int turnCount;
-    [Header("CAMERA PARAMETERS")] private Camera _cam;
-    private CameraViewModeGesture _cameraViewModeGesture;
+    [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
+    [SerializeField] private CameraViewModeGesture _cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         Application.targetFrameRate = 30;
         _gameManager = this;
-        _cam = Camera.main;
+        //_cam = Camera.main;
     }
 
 
@@ -70,10 +70,28 @@ public class GameManager : MonoBehaviour
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
         }
-        _cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
+        //_cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
         SpawnPlayers();
         StartGame();
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        Setup();
+    }
+
+    private void Reset()
+    {
+        Setup();
+    }
+
+    private void Setup()
+    {
+        _cam = Camera.main;
+        _cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
+    }
+#endif
 
   private void SpawnPlayers()
     {

@@ -32,6 +32,12 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")] [SerializeField]
     private GameObject[] playerStunTextParents;
+    
+    
+    public struct UiPlayerStun
+    {
+        
+    }
     private void Awake()
     {
         _uiManager = this;
@@ -78,6 +84,7 @@ public class UiManager : MonoBehaviour
             GameObject playerStunTextParent = playerStunTextParents[1];
             playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
+            Debug.Log(GameManager.Instance.currentPlayerTurn.playerNumber);
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
                 case 0: spriteArrow = playerStunTextParent.transform.GetChild(0);
