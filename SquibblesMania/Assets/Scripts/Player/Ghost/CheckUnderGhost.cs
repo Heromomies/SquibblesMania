@@ -6,7 +6,7 @@ public class CheckUnderGhost : MonoBehaviour
     public LayerMask layerBloc;
     private void Start()
     {
-        currentBlockGhostOn = GameManager.Instance.currentPlayerTurn.currentBlockPlayerOn;
+        currentBlockGhostOn = GameManager.Instance.currentPlayerTurn.currentBlocPlayerOn;
     }
     
     public void GhostMoved()

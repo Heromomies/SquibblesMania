@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
   
     public int turnCount;
     [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
-    [SerializeField] private CameraViewModeGesture _cameraViewModeGesture;
+    [SerializeField] private CameraViewModeGesture cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
     {
         Application.targetFrameRate = 30;
         _gameManager = this;
-        //_cam = Camera.main;
     }
 
 
@@ -70,7 +69,7 @@ public class GameManager : MonoBehaviour
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
         }
-        //_cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
+        
         SpawnPlayers();
         StartGame();
     }
@@ -89,7 +88,7 @@ public class GameManager : MonoBehaviour
     private void Setup()
     {
         _cam = Camera.main;
-        _cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
+        cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
     }
 #endif
 
@@ -98,42 +97,41 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
-            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
-
-            PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
-            player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
-            player.gameObject.name = "Player " + (i + 1);
-            player.playerNumber = i;
-
-            players.Add(player);
+            if (playersSpawnPoints[i].gameObject.TryGetComponent(out Node playerNodeSpawnPoint))
+            {
+                Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
+                PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+                player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
+                player.gameObject.name = "Player " + (i + 1);
+                player.playerNumber = i;
+                players.Add(player);
+            }
         }
         SetUpPlayers();
       
     }
 
-  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Color color)
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Color color, Material playerCustomMat)
   {
       player.playerTeam = playerTeam;
       player.gameObject.GetComponentInChildren<Renderer>().material.color = color;
       player.indicatorPlayer.SetActive(false);
+      player.playerMesh.material = playerCustomMat;
   }
+  
     void SetUpPlayers()
     {
-        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red);
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red, colors[playerData.P1colorID] );
         Instantiate(hats[playerData.P1hatID], players[0].hat.transform.position, players[0].hat.transform.rotation).transform.parent = players[0].hat.transform;
-        players[0].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
         
-        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue);
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P2colorID]);
         Instantiate(hats[playerData.P2hatID], players[1].hat.transform.position, players[1].hat.transform.rotation).transform.parent = players[1].hat.transform; ;
-        players[1].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
-        
-        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red);
+
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red,colors[playerData.P3colorID] );
         Instantiate(hats[playerData.P3hatID], players[2].hat.transform.position, players[2].hat.transform.rotation).transform.parent = players[2].hat.transform; ;
-        players[2].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
         
-        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue);
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P4colorID]);
         Instantiate(hats[playerData.P4hatID], players[3].hat.transform.position, players[3].hat.transform.rotation).transform.parent = players[3].hat.transform;
-        players[3].meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
     }
 
     void StartGame()
@@ -149,18 +147,14 @@ public class GameManager : MonoBehaviour
         NFCManager.Instance.PlayerChangeTurn();
     }
 
-    public void SetUpMaterial(PlayerStateManager player, int playerNumber)
+    public void SetUpPlayerMaterial(PlayerStateManager player, int playerNumber)
     {
         switch (playerNumber)
         {
-            case 0 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P1colorID];
-                break;
-            case 1 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P2colorID];
-                break;
-            case 2 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P3colorID];
-                break;
-            case 3 : player.meshRenderer.GetComponent<Renderer>().material = colors[playerData.P4colorID];
-                break; 
+            case 0 : player.playerMesh.material = colors[playerData.P1colorID]; break;
+            case 1 : player.playerMesh.material = colors[playerData.P2colorID]; break;
+            case 2 : player.playerMesh.material = colors[playerData.P3colorID]; break;
+            case 3 : player.playerMesh.material = colors[playerData.P4colorID]; break; 
         }
     }
     
@@ -190,18 +184,12 @@ public class GameManager : MonoBehaviour
             //Register Previous Cam View Mode
             if (turnCount <= 4)
             {
-                _cameraViewModeGesture.SetUpCameraViewMode(true, 1);
+                cameraViewModeGesture.SetUpCameraViewMode(true, 1);
             }
             else
             {
-                _cameraViewModeGesture.SetUpCameraViewMode(false, count);
+                cameraViewModeGesture.SetUpCameraViewMode(false, count);
             }
-            
-            //count++;
-           /* if (count >= camPreSets.Count)
-            {
-                count = 0;
-            }*/
 
             count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
@@ -260,7 +248,7 @@ public class GameManager : MonoBehaviour
         NFCManager.Instance.PlayerChangeTurn();
        
         SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
-        _cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
+        cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
         CamConfig(count);
         
         if (UiManager.Instance.textActionPointPopUp)
@@ -318,22 +306,32 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-            player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
-            player.currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
-
+            
+            if (player.TryGetComponent(out Node currentPlayerNode))
+            {
+                currentPlayerNode.isActive = true;
+                currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+            }
+            
             Ray ray = new Ray(player.transform.position, -transform.up);
             RaycastHit hit;
             
             if (Physics.Raycast(ray, out hit, 1.1f))
             {
-                if (hit.collider.gameObject.GetComponent<Node>() != null)
+                if (hit.collider.gameObject.TryGetComponent(out Node node))
                 {
-                    player.currentBlockPlayerOn = hit.transform;
+                    player.currentBlocPlayerOn = hit.transform;
                 }
             }
             
-            player.currentBlockPlayerOn.GetComponent<Node>().isActive = false;
-            player.currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Add(player.transform);
+            player.currentBlocPlayerOn.GetComponent<Node>().isActive = false;
+            
+            GroupBlockDetection groupBlockDetection = player.currentBlocPlayerOn.transform.GetComponentInParent<GroupBlockDetection>();
+            if (!groupBlockDetection.playersOnGroupBlock.Contains(player.transform))
+            {
+                groupBlockDetection.playersOnGroupBlock.Add(player.transform);
+            }
+           
         }
     }
 

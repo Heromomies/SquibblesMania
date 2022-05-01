@@ -76,8 +76,6 @@ public class UiManager : MonoBehaviour
 
     public void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-        Debug.Log("Hello world");
-       
         if (actualCamPresetNumber <= 2)
         {
             //TODO Set active du Stun text Team 1

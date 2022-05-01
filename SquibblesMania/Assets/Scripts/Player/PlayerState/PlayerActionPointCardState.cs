@@ -24,7 +24,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         player.isPlayerInActionCardState = true;
         player.nextBlockPath.Clear();
         ResetPreviewPath(player);
-        player.currentBlockPlayerOn.GetComponent<Node>().isActive = true;
+        player.currentBlocPlayerOn.GetComponent<Node>().isActive = true;
         PreviewPath(player.playerActionPoint, player);
     }
 
@@ -41,7 +41,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (actionPoint > 0)
         {
             //Foreach possible path compared to the block wich player is currently on
-            if (player.currentBlockPlayerOn.TryGetComponent(out Node blocNode))
+            if (player.currentBlocPlayerOn.TryGetComponent(out Node blocNode))
             {
                 foreach (GamePath path in blocNode.possiblePath)
                 {
@@ -54,16 +54,16 @@ public class PlayerActionPointCardState : PlayerBaseState
                         {
                             possiblePath.Add(path.nextPath);
                             finalPreviewPath.Add(path.nextPath);
-                            nextPathNode.previousBlock = player.currentBlockPlayerOn;
+                            nextPathNode.previousBlock = player.currentBlocPlayerOn;
                         }
                     }
                 }
             }
             
-            finalPreviewPath.Add(player.currentBlockPlayerOn);
+            finalPreviewPath.Add(player.currentBlocPlayerOn);
 
             //We add in our list of past blocks, the block which the player is currently on
-            pastBlocks.Add(player.currentBlockPlayerOn);
+            pastBlocks.Add(player.currentBlocPlayerOn);
 
             ExplorePreviewPath(possiblePath, pastBlocks, finalPreviewPath, indexBlockNearby, actionPoint, player);
         }
@@ -212,7 +212,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         //Foreach possible path compared to the block wich player is currently on
 
-        if (player.currentBlockPlayerOn.TryGetComponent(out Node blocNode))
+        if (player.currentBlocPlayerOn.TryGetComponent(out Node blocNode))
         {
             foreach (var gamePath in blocNode.possiblePath)
             {
@@ -223,14 +223,14 @@ public class PlayerActionPointCardState : PlayerBaseState
                     if (gamePath.isActive && isNextPathActive && PathParentPosComparedToPlayerPos(pathParentPos, player.transform.position))
                     {
                         nextBlocks.Add(gamePath.nextPath);
-                        gamePathNode.previousBlock = player.currentBlockPlayerOn;
+                        gamePathNode.previousBlock = player.currentBlocPlayerOn;
                     }
                 }
             }
         }
 
         //We add in our list of past blocks, the block which the player is currently on
-        pastBlocks.Add(player.currentBlockPlayerOn);
+        pastBlocks.Add(player.currentBlocPlayerOn);
         //We explore our pathfinding
 
         ExplorePath(nextBlocks, pastBlocks, player);
@@ -245,7 +245,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         nextBlocksPath.Remove(currentBlock);
         //If our current block is = to the player selected block then out of the loop
-        if (currentBlock == player.currentTouchBlock)
+        if (currentBlock == player.currentTouchBloc)
         {
             //Player arrive to the destination
             return;
@@ -284,19 +284,25 @@ public class PlayerActionPointCardState : PlayerBaseState
     private void BuildPath(PlayerStateManager player)
     {
         //The block currently selectionned by the player
-        Transform block = player.currentTouchBlock;
+        Transform block = player.currentTouchBloc;
 
         //While the player selected block is != to the block wich player supposed to be 
-        while (block != player.currentBlockPlayerOn)
+        while (block != player.currentBlocPlayerOn)
         {
             //We add this block to our list final pathfinding
             player.finalPathFinding.Add(block);
 
+            
             //If in our selected block, the precedent block is not nul then the block become the past block
-            if (block.GetComponent<Node>().previousBlock != null)
+            if (block.TryGetComponent(out Node blocNode) && blocNode.previousBlock != null)
+            {
+                block = blocNode.previousBlock;
+            }
+            
+            /* if (block.GetComponent<Node>().previousBlock != null)
             {
                 block = block.GetComponent<Node>().previousBlock;
-            }
+            }*/
             else
             {
                 return;
@@ -309,7 +315,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             player.StartCoroutine(ShowPreviewPath(player));
         }
 
-        player.finalPathFinding.Insert(0, player.currentTouchBlock);
+        player.finalPathFinding.Insert(0, player.currentTouchBloc);
     }
 
     private IEnumerator ShowPreviewPath(PlayerStateManager player)
@@ -317,17 +323,23 @@ public class PlayerActionPointCardState : PlayerBaseState
         var instanceGhostPlayer = PlayerMovementManager.Instance.ghostPlayer;
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
-            var spawnBulletPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
-            var sphere = PoolManager.Instance.SpawnObjectFromPool("SphereShowPath",
-                new Vector3(spawnBulletPoint.x, spawnBulletPoint.y + 1.2f, spawnBulletPoint.z), Quaternion.identity,
-                null);
-            previewPath.Add(sphere.transform);
+            if (player.finalPathFinding[i].TryGetComponent(out Node finalBlocNode))
+            {
+                var spawnBulletPoint = finalBlocNode.GetWalkPoint();
+                var sphere = PoolManager.Instance.SpawnObjectFromPool("SphereShowPath", new Vector3(spawnBulletPoint.x, spawnBulletPoint.y + 1.2f, spawnBulletPoint.z), Quaternion.identity, null);
+                previewPath.Add(sphere.transform);
+            }
+            
         }
 
-        var ghostPlayerPos = player.currentTouchBlock.GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
-        instanceGhostPlayer.SetActive(true);
-        instanceGhostPlayer.transform.position = ghostPlayerPos;
-        previewPath.Add(instanceGhostPlayer.transform);
+        if (player.currentTouchBloc.TryGetComponent(out Node touchBlocNode))
+        {
+            var ghostPlayerPos = touchBlocNode.GetWalkPoint() + new Vector3(0, 0.5f, 0);
+            instanceGhostPlayer.SetActive(true);
+            instanceGhostPlayer.transform.position = ghostPlayerPos;
+            previewPath.Add(instanceGhostPlayer.transform);
+        }
+        
         yield return null;
     }
 
@@ -336,7 +348,7 @@ public class PlayerActionPointCardState : PlayerBaseState
         //Last index of the list finalPathfinding
         var index = player.finalPathFinding.Count - 1;
 
-        var lastDirection = (player.finalPathFinding[index].transform.position - player.currentBlockPlayerOn.position).normalized;
+        var lastDirection = (player.finalPathFinding[index].transform.position - player.currentBlocPlayerOn.position).normalized;
 
 
         UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
@@ -359,7 +371,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 {
                     player.finalPathFinding.Remove(firstBloc);
                     _actionPointText--;
-                    UpdateActionPointTextPopUp(_actionPointText);
                 }
 
                 index--;
@@ -367,7 +378,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         yield return null;
-        player.playerActionPoint = _actionPointText;
         player.StartCoroutine(FollowPath(player));
     }
 
@@ -376,33 +386,40 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         
         //We remove the player from the list of block group which the player is currently on 
-        GroupBlockDetection groupBlockDetection = player.currentBlockPlayerOn.GetComponent<Node>().groupBlockParent;
-        groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
+
+        if (player.currentBlocPlayerOn.TryGetComponent(out Node currentBlocNode))
+        {
+            GroupBlockDetection groupBlockDetection = currentBlocNode.groupBlockParent;
+            groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
+        }
+       
 
         NFCManager.Instance.displacementActivated = true;
-        // var movementPlayer = 0;
-        _actionPointText = player.playerActionPoint;
-
-        UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
-
+        
+        
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
-            var walkPoint = player.finalPathFinding[i].GetComponent<Node>().GetWalkPoint();
 
-            var movePos = walkPoint + new Vector3(0, 1, 0);
-            var direction = (movePos - player.transform.position).normalized;
-            var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            if (player.finalPathFinding[i].TryGetComponent(out Node finalBlocNode))
+            {
+                var walkPoint = finalBlocNode.GetWalkPoint();
 
-            player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
+                var movePos = walkPoint + new Vector3(0, 1, 0);
+                var direction = (movePos - player.transform.position).normalized;
+                var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
-            player.transform.DOMove(movePos, player.timeMoveSpeed);
+                player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
+
+                player.transform.DOMove(movePos, player.timeMoveSpeed);
             
-            _actionPointText--;
-            UpdateActionPointTextPopUp(_actionPointText);
+                _actionPointText--;
             
-            yield return _timeBetweenPlayerMovement;
+                yield return _timeBetweenPlayerMovement;
+            }
+            
+          
         }
-
+        UpdateActionPointTextPopUp(_actionPointText);
         player.playerActionPoint = _actionPointText;
         
         ClearFollowPath(player);
@@ -410,8 +427,12 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     private void UpdateActionPointTextPopUp(int actionPoint)
     {
-        UiManager.Instance.textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPoint);
-        GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+        if (UiManager.Instance.textActionPointPopUp.TryGetComponent(out PopUpTextActionPoint popUpTextActionPoint))
+        {
+            popUpTextActionPoint.SetUpText(actionPoint);
+            GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+        }
+       
     }
 
     public void SetFalsePathObjects()
@@ -437,7 +458,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     private void ClearFollowPath(PlayerStateManager player)
     {
-        player.currentBlockPlayerOn = player.currentTouchBlock;
+        player.currentBlocPlayerOn = player.currentTouchBloc;
         
         GameManager.Instance.DetectParentBelowPlayers();
 
@@ -445,9 +466,13 @@ public class PlayerActionPointCardState : PlayerBaseState
         pMovementManager.ghostPlayer.SetActive(false);
 
         //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
-        foreach (Transform t in player.finalPathFinding)
+        foreach (Transform finalBloc in player.finalPathFinding)
         {
-            t.GetComponent<Node>().previousBlock = null;
+            if (finalBloc.TryGetComponent(out Node finalBlocNode ))
+            {
+                finalBlocNode.previousBlock = null;
+            }
+            
         }
 
         player.finalPathFinding.Clear();

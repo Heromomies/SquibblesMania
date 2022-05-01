@@ -48,12 +48,27 @@ public class PlayerMovementManager : MonoBehaviour
 
 	public static PlayerMovementManager Instance => playerMovementManager;
 
-	// Start is called before the first frame update
+	
+#if UNITY_EDITOR
+	private void OnValidate()
+	{
+		Setup();
+	}
+
+	private void Reset()
+	{
+		Setup();
+	}
+
+	private void Setup()
+	{
+		_cam = Camera.main;
+	}
+#endif
 
 	private void Awake()
 	{
 		playerMovementManager = this;
-		_cam = Camera.main;
 	}
 
 	#endregion
@@ -126,7 +141,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 					if (currentPlayer.nextBlockPath.Contains(_hit.transform) && currentPlayer.PlayerActionPointCardState.PathParentPosComparedToPlayerPos(hitBlocParentPos, currentPlayer.transform.position) && HitBlockEqualToCurrentBlockPlayerOn(_hit, currentPlayer))
 					{
-						currentPlayer.currentTouchBlock = _hit.collider.gameObject.transform;
+						currentPlayer.currentTouchBloc = _hit.collider.gameObject.transform;
 						isPlayerPreviewPath = true;
 						currentPlayer.StartPreviewPathFinding();
 					}
@@ -160,7 +175,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private bool HitBlockEqualToCurrentBlockPlayerOn(RaycastHit hit, PlayerStateManager player)
 	{
-		return hit.transform != player.currentBlockPlayerOn;
+		return hit.transform != player.currentBlocPlayerOn;
 	}
 	private Ray TouchRay(GestureRecognizer gesture)
 	{
@@ -199,22 +214,26 @@ public class PlayerMovementManager : MonoBehaviour
 				
 				if (Physics.Raycast(ray, out _hit, Mathf.Infinity, blocLayerMask) && _canTouchBloc)
 				{
-					Node.ColorBloc colorBloc = _hit.collider.gameObject.GetComponent<Node>().colorBloc;
-
-					if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform))
+					if (_hit.collider.gameObject.TryGetComponent(out Node hitBlocNode))
 					{
-						//If current player have more than 0 action point then he can move bloc
-						if (currentPlayerTurn.playerActionPoint > 0)
+						Node.ColorBloc colorBloc = hitBlocNode.colorBloc;
+						
+						if (colorBloc != Node.ColorBloc.None && !currentPlayerTurn.walking && currentPlayerTurn.nextBlockPath.Contains(_hit.transform))
 						{
-							isPlayerPreviewPath = false;
-							currentPlayerTurn.ResetPreviewPathFinding();
-							if (!hasStopMovingBloc)
+							//If current player have more than 0 action point then he can move bloc
+							if (currentPlayerTurn.playerActionPoint > 0)
 							{
-								AudioManager.Instance.Play("CubeIsSelected");
-								StartMovingBloc(currentPlayerTurn);
+								isPlayerPreviewPath = false;
+								currentPlayerTurn.ResetPreviewPathFinding();
+								if (!hasStopMovingBloc)
+								{
+									AudioManager.Instance.Play("CubeIsSelected");
+									StartMovingBloc(currentPlayerTurn);
+								}
 							}
 						}
 					}
+					
 				}
 				
 			}
@@ -253,7 +272,8 @@ public class PlayerMovementManager : MonoBehaviour
 		var currentPlayer = currentPlayerTurn.transform;
 		blockParentCurrentlySelected = _blockCurrentlySelected.transform.parent;
 		UiManager.Instance.totalCurrentActionPoint = currentPlayerTurn.playerActionPoint;
-		if (blockParentCurrentlySelected.GetComponent<GroupBlockDetection>() != null)
+		
+		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlockDetection))
 		{
 			_blocParentCurrentlySelectedPos = blockParentCurrentlySelected.transform.position;
 			if (!UiManager.Instance.textActionPointPopUp)
@@ -304,7 +324,12 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		//Update text action point at player top pos
 		actionPointPlayer = UiManager.Instance.totalCurrentActionPoint > 0 ? UiManager.Instance.totalCurrentActionPoint : -UiManager.Instance.totalCurrentActionPoint;
-		UiManager.Instance.textActionPointPopUp.GetComponent<PopUpTextActionPoint>().SetUpText(actionPointPlayer);
+
+		if (UiManager.Instance.textActionPointPopUp.TryGetComponent(out PopUpTextActionPoint popUpTextActionPoint))
+		{
+			popUpTextActionPoint.SetUpText(actionPointPlayer);
+		}
+		
 	}
 
 	#endregion
@@ -416,60 +441,65 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
 	{
-		var groupBlocDetection = blockParentCurrentlySelected.GetComponent<GroupBlockDetection>();
-		var blocParentNewPos = blockParentCurrentlySelected.transform.position;
 
-		if (_lastDirectionBloc == Vector3.zero)
+		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlocDetection))
 		{
-			_lastDirectionBloc = direction;
+			var blocParentNewPos = blockParentCurrentlySelected.transform.position;
+				
+			if (_lastDirectionBloc == Vector3.zero)
+			{
+				_lastDirectionBloc = direction;
+			}
+		
+			if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
+			{
+				yPos = +yPos;
+			}
+
+			else if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamTwo)
+			{
+				yPos = -yPos;
+				direction = -direction;
+			}
+
+
+			if (yPos > 0.0f)
+			{
+				if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
+				{
+					AudioManager.Instance.Play("CardFalse");
+				}
+				else
+				{
+					AudioManager.Instance.Play("CubeIsMoving");
+					StartMoveBloc(_nextBlocUpMeshPos, groupBlocDetection, blocParentNewPos, movementBlocAmount);
+					yield return _timeInSecondsBetweenBlocSwipe;
+					EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y >= 0, direction);
+				}
+			}
+			else if (yPos < 0.0f)
+			{
+				if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
+				{
+					AudioManager.Instance.Play("CardFalse");
+				}
+				else
+				{
+					AudioManager.Instance.Play("CubeIsMoving");
+					StartMoveBloc(_nextBlocDownMeshPos, groupBlocDetection, blocParentNewPos, -movementBlocAmount);
+					yield return _timeInSecondsBetweenBlocSwipe;
+					EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y <= 0, direction);
+				}
+			}
+
+			yield return _timeInSecondsBetweenBlocMovement;
+			ResetPreviewPathObjects();
+			_touchPos = Vector3.zero;
+			_isBlocSelected = true;
+			hasStopMovingBloc = false;
+			
 		}
 		
-		if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamOne)
-		{
-			yPos = +yPos;
-		}
-
-		else if (ActualCamPreset.CamPresetTeam() == ActualCamPreset.Team.TeamTwo)
-		{
-			yPos = -yPos;
-			direction = -direction;
-		}
-
-
-		if (yPos > 0.0f)
-		{
-			if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
-			{
-				AudioManager.Instance.Play("CardFalse");
-			}
-			else
-			{
-				AudioManager.Instance.Play("CubeIsMoving");
-				StartMoveBloc(_nextBlocUpMeshPos, groupBlocDetection, blocParentNewPos, movementBlocAmount);
-				yield return _timeInSecondsBetweenBlocSwipe;
-				EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y >= 0, direction);
-			}
-		}
-		else if (yPos < 0.0f)
-		{
-			if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
-			{
-				AudioManager.Instance.Play("CardFalse");
-			}
-			else
-			{
-				AudioManager.Instance.Play("CubeIsMoving");
-				StartMoveBloc(_nextBlocDownMeshPos, groupBlocDetection, blocParentNewPos, -movementBlocAmount);
-				yield return _timeInSecondsBetweenBlocSwipe;
-				EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y <= 0, direction);
-			}
-		}
-
-		yield return _timeInSecondsBetweenBlocMovement;
-		ResetPreviewPathObjects();
-		_touchPos = Vector3.zero;
-		_isBlocSelected = true;
-		hasStopMovingBloc = false;
 	}
 	
 	

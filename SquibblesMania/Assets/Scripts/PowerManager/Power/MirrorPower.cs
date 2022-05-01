@@ -470,7 +470,7 @@ public class MirrorPower : MonoBehaviour, IManagePower
 		{
 			if (players[i].name != GameManager.Instance.currentPlayerTurn.name && players.Length > 1)
 			{
-				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = selectableMat;
+				players[i].GetComponent<PlayerStateManager>().playerMesh.GetComponent<Renderer>().material = selectableMat;
 			}
 		}
 
@@ -583,7 +583,7 @@ public class MirrorPower : MonoBehaviour, IManagePower
 			{
 				foreach (var p in players)
 				{
-					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 				}
 			}
 
@@ -597,7 +597,7 @@ public class MirrorPower : MonoBehaviour, IManagePower
 			{
 				foreach (var p in players)
 				{
-					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 				}
 			}
 			
