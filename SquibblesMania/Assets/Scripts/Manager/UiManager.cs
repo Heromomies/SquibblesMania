@@ -32,6 +32,12 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")] [SerializeField]
     private GameObject[] playerStunTextParents;
+    
+    
+    public struct UiPlayerStun
+    {
+        
+    }
     private void Awake()
     {
         _uiManager = this;
@@ -70,14 +76,13 @@ public class UiManager : MonoBehaviour
 
     public void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-        Debug.Log("Hello world");
-       
         if (actualCamPresetNumber <= 2)
         {
             //TODO Set active du Stun text Team 1
             GameObject playerStunTextParent = playerStunTextParents[1];
             playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
+            Debug.Log(GameManager.Instance.currentPlayerTurn.playerNumber);
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
                 case 0: spriteArrow = playerStunTextParent.transform.GetChild(0);

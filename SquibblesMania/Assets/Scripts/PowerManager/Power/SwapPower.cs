@@ -74,7 +74,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		{
 			if (players[i].name != _playerOne.name && players.Length > 1)
 			{
-				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = matToChange;
+				players[i].GetComponent<PlayerStateManager>().playerMesh.GetComponent<Renderer>().material = matToChange;
 			}
 		}
 
@@ -166,7 +166,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		
 		for (int i = 0; i < players.Length; i++)
 		{
-			GameManager.Instance.SetUpMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
+			GameManager.Instance.SetUpPlayerMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
 		}
 
 		PowerManager.Instance.ActivateDeactivatePower(0, false);

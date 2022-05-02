@@ -94,7 +94,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				if (Physics.Raycast(hitInfo.transform.position, Vector3.down, out var hitInfoTwo, Mathf.Infinity))
 				{
-					player.currentBlockPlayerOn = hitInfoTwo.transform;
+					player.currentBlocPlayerOn = hitInfoTwo.transform;
 					if (hitInfoTwo.collider.CompareTag("Platform"))
 					{
 						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
