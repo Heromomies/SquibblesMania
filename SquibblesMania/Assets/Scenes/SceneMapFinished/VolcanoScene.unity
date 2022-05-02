@@ -5325,6 +5325,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 629778894}
   m_Mesh: {fileID: 2709882932678351358, guid: d7205f740c20b714385d97b4dd96ac70, type: 3}
+--- !u!114 &632542119 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4090090077153554183, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2081713977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &634318032
 GameObject:
   m_ObjectHideFlags: 0
@@ -6081,10 +6092,6 @@ PrefabInstance:
       value: Miror Power
       objectReference: {fileID: 0}
     - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
-      propertyPath: mirrorRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: raycastPlayer
       value: 
       objectReference: {fileID: 142818256}
@@ -6794,6 +6801,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 799515161}
   m_Mesh: {fileID: 2709882932678351358, guid: d7205f740c20b714385d97b4dd96ac70, type: 3}
+--- !u!114 &808779573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTarget: {fileID: 632542119}
+  mAlignment_RTL: 516
+  mAlignment_LTR: 513
+  mAlignmentWasRTL: 0
+  mInitializeAlignment: 1
 --- !u!1001 &814643270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18032,6 +18056,10 @@ PrefabInstance:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8384577099579528956, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
 --- !u!114 &2088047725 stripped
@@ -19255,7 +19283,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 1999417275}
+      objectReference: {fileID: 148929060}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 

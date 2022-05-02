@@ -8,12 +8,12 @@ public class PlayerStateManager : Player
 {
 	public PlayerBaseState CurrentState;
 
-	public PlayerActionPointCardState PlayerActionPointCardState = new PlayerActionPointCardState();
-	public PlayerCardState PlayerCardState = new PlayerCardState();
-	public PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
+	public readonly PlayerActionPointCardState PlayerActionPointCardState = new PlayerActionPointCardState();
+	private readonly PlayerCardState _playerCardState = new PlayerCardState();
+	public readonly PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
 
-	[Header("PLAYER BLOCKS VIEW")] public Transform currentBlockPlayerOn;
-	public Transform currentTouchBlock;
+	[Header("PLAYER BLOCKS VIEW")] public Transform currentBlocPlayerOn;
+	public Transform currentTouchBloc;
 	public List<Transform> finalPathFinding = new List<Transform>();
 	public bool walking;
 	public float timeMoveSpeed;
@@ -26,12 +26,13 @@ public class PlayerStateManager : Player
 	public PlayerMovementManager playerMovementManager;
 	
 	public GameObject psStun;
+	
 
+	
 	private void Start()
 	{
 		//Assign the player to a list for know on what block group is currently on
 		GameManager.Instance.DetectParentBelowPlayers();
-		
 		playerMovementManager = PlayerMovementManager.Instance;
 	}
 
@@ -49,7 +50,7 @@ public class PlayerStateManager : Player
 	public void StartState()
 	{
 		//Start the player turn in the player card state
-		CurrentState = PlayerCardState;
+		CurrentState = _playerCardState;
 		CurrentState.EnterState(this);
 	}
 

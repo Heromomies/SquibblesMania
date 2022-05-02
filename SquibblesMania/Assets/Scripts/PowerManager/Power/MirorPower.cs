@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MirrorPower : MonoBehaviour, IManagePower
+public class MirorPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] [Space] public LayerMask layerPlayer;
 	public LayerMask layerMaskInteractableAndPlayer;
@@ -228,8 +228,6 @@ public class MirrorPower : MonoBehaviour, IManagePower
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
-				Debug.Log("I'm here");
-				
 				ActiveParticle();
 			}
 		}
@@ -401,9 +399,9 @@ public class MirrorPower : MonoBehaviour, IManagePower
 						switch (distanceBetweenTwoPlayersWhenABlockIsBehind) // inverse distance for the dash, else the player repulsed don't follow the range  
 						{
 							case 1:
-								distanceBetweenTwoPlayersWhenABlockIsBehind = 3;
+								distanceBetweenTwoPlayersWhenABlockIsBehind = 2;
 								break;
-							case 3:
+							case 2:
 								distanceBetweenTwoPlayersWhenABlockIsBehind = 1;
 								break;
 						}
@@ -470,7 +468,7 @@ public class MirrorPower : MonoBehaviour, IManagePower
 		{
 			if (players[i].name != GameManager.Instance.currentPlayerTurn.name && players.Length > 1)
 			{
-				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = selectableMat;
+				players[i].GetComponent<PlayerStateManager>().playerMesh.GetComponent<Renderer>().material = selectableMat;
 			}
 		}
 
@@ -583,12 +581,10 @@ public class MirrorPower : MonoBehaviour, IManagePower
 			{
 				foreach (var p in players)
 				{
-					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 				}
 			}
 
-			listObjectToSetActiveFalse.Clear();
-			
 			StartCoroutine(CoroutineDeactivateParticle());
 		}
 		else
@@ -597,7 +593,7 @@ public class MirrorPower : MonoBehaviour, IManagePower
 			{
 				foreach (var p in players)
 				{
-					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 				}
 			}
 			
@@ -611,8 +607,13 @@ public class MirrorPower : MonoBehaviour, IManagePower
 				g.gameObject.SetActive(false);
 			}
 			
-			listObjectToSetActiveFalse.Clear();
+			foreach (var g in listObjectToSetActiveFalse)
+			{
+				g.SetActive(false);
+			}
 			
+			listObjectToSetActiveFalse.Clear();
+
 			PowerManager.Instance.ActivateDeactivatePower(3, false);
 		}
 	}

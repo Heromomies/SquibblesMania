@@ -4,15 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MoutainManager : MonoBehaviour
+public class MountainManager : MonoBehaviour
 {
     public List<GameObject> snowGuns;
+
+    public PolarWind wind;
+
+    public List<GroupBlockDetection> powdersBlocs;
     
     #region Singleton
 
-    private static MoutainManager _mountainManager;
+    private static MountainManager _mountainManager;
 
-    public static MoutainManager Instance => _mountainManager;
+    public static MountainManager Instance => _mountainManager;
     // Start is called before the first frame update
 
     private void Awake()
@@ -33,12 +37,12 @@ public class MoutainManager : MonoBehaviour
 	    var randomNumber = Random.Range(0, snowGuns.Count);
 	    snowGuns[randomNumber].SetActive(true);
     }
-
+    
     private void Update()
     {
 	    if (Input.GetKeyDown(KeyCode.L))
 	    {
-		    ChangeCycle();
+		    wind.gameObject.SetActive(true);
 	    }
     }
 }
