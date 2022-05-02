@@ -11,13 +11,16 @@ public class PolarWind : MonoBehaviour, IManageEvent
 {
 	public int hideRaycastDistance;
 	public int turnMinBeforeActivate, turnMaxBeforeActivate;
-
 	public int distanceMovingPlayer;
+
+	public Transform spawnWind;
 	
 	public LayerMask layerBlocsWhichCanHide;
 	
 	public TextMeshProUGUI windIsComing;
 
+	public GameObject windGo;
+	
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 	private int _turnNumberChosenToLaunchTheWind;
 	private int _turnCount;
@@ -37,6 +40,22 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		_turnCount = GameManager.Instance.turnCount;
 
 		_directionChosen = Random.Range(0, _vectorRaycast.Count);
+		
+		windGo = PoolManager.Instance.SpawnObjectFromPool("ParticleWind", spawnWind.position, Quaternion.identity, null);
+
+		var rot = windGo.transform.rotation;
+		
+		switch (_directionChosen)
+		{
+			case 0 : windGo.transform.rotation = Quaternion.Euler(rot.x, -90, rot.z);
+				break;
+			case 1 : windGo.transform.rotation = Quaternion.Euler(rot.x, 90, rot.z);
+				break;
+			case 2 : windGo.transform.rotation = Quaternion.Euler(rot.x, 0, rot.z);
+				break;
+			case 3 : windGo.transform.rotation = Quaternion.Euler(rot.x, 180, rot.z);
+				break;
+		}
 	}
 
 	public void LaunchEvent()
@@ -47,8 +66,6 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 			for (int i = 0; i < players.Count; i++)
 			{
-				Debug.Log("Player name : "+ players[i].name + " : Player is hide ? : "+ players[i].isPlayerHide + " : Direction : " + players[i].transform.position);
-				
 				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], distanceMovingPlayer, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
 				{
 					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, -_vectorRaycast[_directionChosen]);
@@ -62,6 +79,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 				}
 			}
 			
+			windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
 		}
 	}
@@ -72,11 +90,16 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 		for (int i = 0; i < players.Count; i++)
 		{
-			if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
+			if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
 			{
-				PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
+				if(!players[i].isPlayerHide)
+					PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
 
 				players[i].isPlayerHide = true;
+			}
+			else
+			{
+				players[i].isPlayerHide = false;
 			}
 		}
 		
