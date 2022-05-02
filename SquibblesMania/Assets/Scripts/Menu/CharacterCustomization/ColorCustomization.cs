@@ -9,23 +9,15 @@ public class ColorCustomization : MonoBehaviour
 
     public int colorID;
 
-    public List<Material> colors = new List<Material>();
-    public List<string> hex = new List<string>();
+    public List<Sprite> colors = new List<Sprite>();
+    
 
     public GameObject otherTeam;
     // Start is called before the first frame update
 
     void Start()
     {
-
-        for (int i = 0; i < colors.Count; i++)
-        {
-            hex.Add(ColorUtility.ToHtmlStringRGB(colors[i].color));
-        }
-
         SetItem("colors");
-
-
     }
 
     public void SelectColor(bool isForward)
@@ -74,21 +66,13 @@ public class ColorCustomization : MonoBehaviour
     {
         switch (type)
         {
-           
             case "colors":
-                if (ColorUtility.TryParseHtmlString("#" + hex[colorID], out Color color))
-                {
-                    bodycolor.GetComponent<Image>().color = color;
-                    //hat.GetComponent<Image>().color = color;
-
-
-                }
-
-                break;
-
-
-
+                
+              bodycolor.GetComponent<Image>().sprite = colors[colorID];
+                  
+            break;
         }
+
     }
 
 
