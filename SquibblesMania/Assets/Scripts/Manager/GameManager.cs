@@ -218,7 +218,11 @@ public class GameManager : MonoBehaviour
 
     private void IncreaseDemiCycle()
     {
-//        VolcanoManager.Instance.CyclePassed();
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Volcano)
+        {
+            VolcanoManager.Instance.CyclePassed();
+        }
+
         PowerManager.Instance.CyclePassed();
     }
 
@@ -230,10 +234,13 @@ public class GameManager : MonoBehaviour
             cycleCount++;
         }
 
-        /* if (playerNumberTurn == players[3].playerNumber)
-         {
-             MoutainManager.Instance.ChangeCycle();
-        }*/
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
+        {
+            if (playerNumberTurn == players[3].playerNumber)
+            {
+                MountainManager.Instance.ChangeCycle();
+            }
+        }
         
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
@@ -306,7 +313,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-            
             if (player.TryGetComponent(out Node currentPlayerNode))
             {
                 currentPlayerNode.isActive = true;
@@ -331,7 +337,11 @@ public class GameManager : MonoBehaviour
             {
                 groupBlockDetection.playersOnGroupBlock.Add(player.transform);
             }
-           
+        }
+        
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain && turnCount != 1)
+        {
+            MountainManager.Instance.wind.CheckIfPlayersAreHide();
         }
     }
 

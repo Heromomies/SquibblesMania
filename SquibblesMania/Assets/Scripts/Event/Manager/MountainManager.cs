@@ -7,10 +7,9 @@ using Random = UnityEngine.Random;
 public class MountainManager : MonoBehaviour
 {
     public List<GameObject> snowGuns;
-    
-    public int turnBeforeActivateWind; 
-    [HideInInspector] public int turn;
-    
+
+    public PolarWind wind;
+
     #region Singleton
 
     private static MountainManager _mountainManager;
@@ -36,17 +35,12 @@ public class MountainManager : MonoBehaviour
 	    var randomNumber = Random.Range(0, snowGuns.Count);
 	    snowGuns[randomNumber].SetActive(true);
     }
-
-    public void TurnPassed()
-    {
-	    
-    }
     
     private void Update()
     {
 	    if (Input.GetKeyDown(KeyCode.L))
 	    {
-		    ChangeCycle();
+		    wind.gameObject.SetActive(true);
 	    }
     }
 }
