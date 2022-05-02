@@ -14,6 +14,7 @@ public class UiManager : MonoBehaviour
     //Manager for simple button Ui
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
+    [HideInInspector]
     public GameObject buttonNextTurn;
    
     
@@ -30,13 +31,14 @@ public class UiManager : MonoBehaviour
     [SerializeField] private Vector3 offsetText;
     public Camera uiCam;
 
-    [Header("STUN TEXT PARAMETERS")] [SerializeField]
-    private GameObject[] playerStunTextParents;
+    [Header("STUN TEXT PARAMETERS")]
+    [SerializeField] private UiPlayerStun[] uiPlayerStuns;
     
-    
+    [Serializable]
     public struct UiPlayerStun
     {
-        
+        public GameObject playerStunTextParent;
+        public Transform[] arrowSprite;
     }
     private void Awake()
     {
@@ -78,35 +80,26 @@ public class UiManager : MonoBehaviour
     {
         if (actualCamPresetNumber <= 2)
         {
-            //TODO Set active du Stun text Team 1
-            GameObject playerStunTextParent = playerStunTextParents[1];
-            playerStunTextParent.SetActive(setActiveGameObject);
+            uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
-            Debug.Log(GameManager.Instance.currentPlayerTurn.playerNumber);
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 0: spriteArrow = playerStunTextParent.transform.GetChild(0);
-                        spriteArrow.gameObject.SetActive(setActiveGameObject);
-                        break;
-                case 2: spriteArrow = playerStunTextParent.transform.GetChild(1); 
-                        spriteArrow.gameObject.SetActive(setActiveGameObject);
-                        break;
+                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                        spriteArrow.gameObject.SetActive(setActiveGameObject); break;
+                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                        spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
         else
         {
-            //TODO Set active du Stun text Team 2
-            GameObject playerStunTextParent = playerStunTextParents[0];
-            playerStunTextParent.SetActive(setActiveGameObject);
+            uiPlayerStuns[1].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 1: spriteArrow = playerStunTextParent.transform.GetChild(0);
-                    spriteArrow.gameObject.SetActive(setActiveGameObject);
-                    break;
-                case 3: spriteArrow = playerStunTextParent.transform.GetChild(1); 
-                    spriteArrow.gameObject.SetActive(setActiveGameObject);
-                    break;
+                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                    spriteArrow.gameObject.SetActive(setActiveGameObject); break;
+                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                    spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
     }

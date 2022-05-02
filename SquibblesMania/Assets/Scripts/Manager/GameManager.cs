@@ -75,6 +75,7 @@ public class GameManager : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+
     private void OnValidate()
     {
         Setup();
@@ -88,7 +89,7 @@ public class GameManager : MonoBehaviour
     private void Setup()
     {
         _cam = Camera.main;
-        cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
+        if (_cam != null) cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
     }
 #endif
 
@@ -198,11 +199,9 @@ public class GameManager : MonoBehaviour
 
     private void SavePreviousCamRotY(int indexCam)
     {
-        
         Vector3 camEulerAngles = _cam.transform.eulerAngles;
         Vector3 camPos = _cam.transform.position;
-       
-
+        
         CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
 
         previousCamPreSets.camRot = camEulerAngles;
@@ -213,7 +212,6 @@ public class GameManager : MonoBehaviour
         previousCamPreSetsList[indexCam] = previousCamPreSets;
         
         camPreSets[indexCam] = previousCamPreSetsList[indexCam];
-
     }
 
     private void IncreaseDemiCycle()
@@ -249,15 +247,15 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn.currentCardEffect = null;
         }
        
-        currentPlayerTurn = players[playerNumberTurn];
-        currentPlayerTurn.StartState();
-
-        NFCManager.Instance.PlayerChangeTurn();
-       
         SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
         cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
         CamConfig(count);
         
+        currentPlayerTurn = players[playerNumberTurn];
+        currentPlayerTurn.StartState();
+
+        NFCManager.Instance.PlayerChangeTurn();
+
         if (UiManager.Instance.textActionPointPopUp)
         {
             UiManager.Instance.textActionPointPopUp.SetActive(false);
