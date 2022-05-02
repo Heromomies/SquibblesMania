@@ -7,84 +7,30 @@ using UnityEngine.UI;
 
 public class CharacterCustomization : MonoBehaviour
 {
-    [SerializeField] private Image bodycolor;
+    
     [SerializeField] private Image hat;
 
-
-    public List<Material> colors = new List<Material>();
-    public List<string> hex = new List<string>();
-
-    public int colorID;
+    
     public int hatID;
 
     [SerializeField] private Sprite[] hats;
 
     public GameObject otherPlayer;
-    public GameObject otherTeam;
+    
 
 
     void Start()
     {
 
-        for (int i = 0; i < colors.Count; i++)
-        {
-            hex.Add(ColorUtility.ToHtmlStringRGB(colors[i].color));
-        }
+        
 
-        SetItem("colors");
         SetItem("hats");
 
         
     }
 
-    private void Update()
-    {
 
-      
-    }
-
-
-    public void SelectColor(bool isForward)
-    {
-        if (isForward)
-        {
-            if (colorID == colors.Count - 1 || otherTeam.GetComponent<CharacterCustomization>().colorID == colors.Count - 1 && colorID == colors.Count - 2)
-            {
-                colorID = 0;
-            }
-            else
-            {
-                colorID++;
-            }
-
-            if (colorID == otherTeam.GetComponent<CharacterCustomization>().colorID)
-            {
-                colorID++;
-            }
-
-
-
-        }
-        else
-        {
-            if (colorID == 0 || otherTeam.GetComponent<CharacterCustomization>().colorID == 0 && colorID == 1)
-            {
-                colorID = colors.Count - 1;
-            }
-            else
-            {
-                colorID--;
-            }
-
-            if (colorID == otherTeam.GetComponent<CharacterCustomization>().colorID)
-            {
-                colorID--;
-            }
-
-        }
-
-        SetItem("colors");
-    }
+    
 
     public void SelectHat(bool isForward)
     {
@@ -134,16 +80,7 @@ public class CharacterCustomization : MonoBehaviour
               hat.GetComponent<Image>().sprite = hats[hatID];
                
                 break;
-            case "colors":
-                if (ColorUtility.TryParseHtmlString("#" + hex[colorID], out Color color))
-                {
-                    bodycolor.GetComponent<Image>().color = color;
-                    //hat.GetComponent<Image>().color = color;
-                    
-
-                }
-
-                break;
+           
 
                 
                 

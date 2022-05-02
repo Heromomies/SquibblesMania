@@ -1236,31 +1236,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 348764710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1747ad3500abaf4da3cb1284f890c46, type: 3}
+  m_Script: {fileID: 11500000, guid: 25dfcb02e36dc16499d0df80ce8db705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodycolor: {fileID: 1389130707}
-  hat: {fileID: 2050637804}
+  colorID: 0
   colors:
   - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
   - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
   - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
   - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
   hex: []
-  colorID: 1
-  hatID: 7
-  hats:
-  - {fileID: 21300000, guid: 5d79e4fd09ef69045acdefdc901fd9e5, type: 3}
-  - {fileID: 21300000, guid: b0da2102f19e1574ba1b4add525a21e4, type: 3}
-  - {fileID: 21300000, guid: 1ac505594443df04691ffc7059fe1859, type: 3}
-  - {fileID: 21300000, guid: de853b0a79d493b40b9a398594304ef5, type: 3}
-  - {fileID: 21300000, guid: b7bd0523601e69c49b044a004c446a0d, type: 3}
-  - {fileID: 21300000, guid: e389379199a23444b93a935947af00c7, type: 3}
-  - {fileID: 21300000, guid: 082d139b99fc6754d89ce7f7849134ca, type: 3}
-  - {fileID: 21300000, guid: a35b374b581c847419f466f9c6003e98, type: 3}
-  - {fileID: 21300000, guid: 992cda8dc88dcd242bc8b7f2db5a07ef, type: 3}
-  - {fileID: 21300000, guid: 3c4534d556e6ae64eaf3ec2aaf1dc6c9, type: 3}
-  otherPlayer: {fileID: 0}
   otherTeam: {fileID: 1638513900}
 --- !u!1 &356958329
 GameObject:
@@ -1313,15 +1299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1747ad3500abaf4da3cb1284f890c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodycolor: {fileID: 1277451415}
   hat: {fileID: 2050637804}
-  colors:
-  - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
-  - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
-  - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
-  - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
-  hex: []
-  colorID: 3
   hatID: 0
   hats:
   - {fileID: 21300000, guid: 5d79e4fd09ef69045acdefdc901fd9e5, type: 3}
@@ -1335,7 +1313,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 992cda8dc88dcd242bc8b7f2db5a07ef, type: 3}
   - {fileID: 21300000, guid: 3c4534d556e6ae64eaf3ec2aaf1dc6c9, type: 3}
   otherPlayer: {fileID: 2146280489}
-  otherTeam: {fileID: 0}
 --- !u!1 &372768875
 GameObject:
   m_ObjectHideFlags: 0
@@ -4859,17 +4836,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926204349}
   m_CullTransparentMesh: 1
---- !u!114 &928672992 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7843621773514564657, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-  m_PrefabInstance: {fileID: 1181064498}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &952495288
 GameObject:
   m_ObjectHideFlags: 0
@@ -7867,23 +7833,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1435521090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mTarget: {fileID: 928672992}
-  mAlignment_RTL: 514
-  mAlignment_LTR: 514
-  mAlignmentWasRTL: 0
-  mInitializeAlignment: 0
 --- !u!1 &1435601521
 GameObject:
   m_ObjectHideFlags: 0
@@ -7968,7 +7917,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1638513902}
-        m_TargetAssemblyTypeName: CharacterCustomization, Assembly-CSharp
+        m_TargetAssemblyTypeName: ColorCustomization, Assembly-CSharp
         m_MethodName: SelectColor
         m_Mode: 6
         m_Arguments:
@@ -8718,15 +8667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1747ad3500abaf4da3cb1284f890c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodycolor: {fileID: 1389130707}
   hat: {fileID: 1987403435}
-  colors:
-  - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
-  - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
-  - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
-  - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
-  hex: []
-  colorID: 1
   hatID: 0
   hats:
   - {fileID: 21300000, guid: 5d79e4fd09ef69045acdefdc901fd9e5, type: 3}
@@ -8740,7 +8681,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 992cda8dc88dcd242bc8b7f2db5a07ef, type: 3}
   - {fileID: 21300000, guid: 3c4534d556e6ae64eaf3ec2aaf1dc6c9, type: 3}
   otherPlayer: {fileID: 1835414823}
-  otherTeam: {fileID: 0}
 --- !u!114 &1493515845 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
@@ -9272,31 +9212,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1638513900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1747ad3500abaf4da3cb1284f890c46, type: 3}
+  m_Script: {fileID: 11500000, guid: 25dfcb02e36dc16499d0df80ce8db705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodycolor: {fileID: 1277451415}
-  hat: {fileID: 2050637804}
+  colorID: 1
   colors:
   - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
   - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
   - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
   - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
   hex: []
-  colorID: 3
-  hatID: 7
-  hats:
-  - {fileID: 21300000, guid: 5d79e4fd09ef69045acdefdc901fd9e5, type: 3}
-  - {fileID: 21300000, guid: b0da2102f19e1574ba1b4add525a21e4, type: 3}
-  - {fileID: 21300000, guid: 1ac505594443df04691ffc7059fe1859, type: 3}
-  - {fileID: 21300000, guid: de853b0a79d493b40b9a398594304ef5, type: 3}
-  - {fileID: 21300000, guid: b7bd0523601e69c49b044a004c446a0d, type: 3}
-  - {fileID: 21300000, guid: e389379199a23444b93a935947af00c7, type: 3}
-  - {fileID: 21300000, guid: 082d139b99fc6754d89ce7f7849134ca, type: 3}
-  - {fileID: 21300000, guid: a35b374b581c847419f466f9c6003e98, type: 3}
-  - {fileID: 21300000, guid: 992cda8dc88dcd242bc8b7f2db5a07ef, type: 3}
-  - {fileID: 21300000, guid: 3c4534d556e6ae64eaf3ec2aaf1dc6c9, type: 3}
-  otherPlayer: {fileID: 0}
   otherTeam: {fileID: 348764710}
 --- !u!114 &1638790860
 MonoBehaviour:
@@ -9399,7 +9325,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1638513902}
-        m_TargetAssemblyTypeName: CharacterCustomization, Assembly-CSharp
+        m_TargetAssemblyTypeName: ColorCustomization, Assembly-CSharp
         m_MethodName: SelectColor
         m_Mode: 6
         m_Arguments:
@@ -10071,7 +9997,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 348764712}
-        m_TargetAssemblyTypeName: CharacterCustomization, Assembly-CSharp
+        m_TargetAssemblyTypeName: ColorCustomization, Assembly-CSharp
         m_MethodName: SelectColor
         m_Mode: 6
         m_Arguments:
@@ -10204,7 +10130,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 348764712}
-        m_TargetAssemblyTypeName: CharacterCustomization, Assembly-CSharp
+        m_TargetAssemblyTypeName: ColorCustomization, Assembly-CSharp
         m_MethodName: SelectColor
         m_Mode: 6
         m_Arguments:
@@ -10834,15 +10760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1747ad3500abaf4da3cb1284f890c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodycolor: {fileID: 1389130707}
   hat: {fileID: 1400025168}
-  colors:
-  - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
-  - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
-  - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
-  - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
-  hex: []
-  colorID: 0
   hatID: 1
   hats:
   - {fileID: 21300000, guid: 5d79e4fd09ef69045acdefdc901fd9e5, type: 3}
@@ -10856,7 +10774,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 992cda8dc88dcd242bc8b7f2db5a07ef, type: 3}
   - {fileID: 21300000, guid: 3c4534d556e6ae64eaf3ec2aaf1dc6c9, type: 3}
   otherPlayer: {fileID: 1489762452}
-  otherTeam: {fileID: 0}
 --- !u!114 &1851553706 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1851553706, guid: 8af888d51ca66c841958414759bd8d3d, type: 3}
@@ -12651,15 +12568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1747ad3500abaf4da3cb1284f890c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodycolor: {fileID: 1277451415}
   hat: {fileID: 1264005416}
-  colors:
-  - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
-  - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
-  - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
-  - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
-  hex: []
-  colorID: 2
   hatID: 1
   hats:
   - {fileID: 21300000, guid: 5d79e4fd09ef69045acdefdc901fd9e5, type: 3}
@@ -12673,4 +12582,3 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 992cda8dc88dcd242bc8b7f2db5a07ef, type: 3}
   - {fileID: 21300000, guid: 3c4534d556e6ae64eaf3ec2aaf1dc6c9, type: 3}
   otherPlayer: {fileID: 356958329}
-  otherTeam: {fileID: 0}
