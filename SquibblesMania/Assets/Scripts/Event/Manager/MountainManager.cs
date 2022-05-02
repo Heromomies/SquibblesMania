@@ -10,6 +10,8 @@ public class MountainManager : MonoBehaviour
 
     public PolarWind wind;
 
+    public List<GroupBlockDetection> powdersBlocs;
+    
     #region Singleton
 
     private static MountainManager _mountainManager;
