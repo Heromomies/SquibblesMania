@@ -42,6 +42,7 @@ public class PlayerStateManager : Player
 			CurrentState.UpdateState(this);
 			GameManager.Instance.DetectParentBelowPlayers();
 		}
+		
 	}
 
 	public void StartState()
