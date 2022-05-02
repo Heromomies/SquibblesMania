@@ -23,6 +23,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         player.isPlayerInActionCardState = true;
         player.nextBlockPath.Clear();
+        SetFalsePathObjects();
         ResetPreviewPath(player);
         player.currentBlocPlayerOn.GetComponent<Node>().isActive = true;
         PreviewPath(player.playerActionPoint, player);
