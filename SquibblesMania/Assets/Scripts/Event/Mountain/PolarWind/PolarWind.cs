@@ -9,12 +9,11 @@ using Random = UnityEngine.Random;
 
 public class PolarWind : MonoBehaviour, IManageEvent
 {
-	public int hideRaycastDistance;
-	public int turnMinBeforeActivate, turnMaxBeforeActivate;
-	public int distanceMovingPlayer;
+	[Range(0, 5)] public int hideRaycastDistance;
+	[Range(0, 10)] public int turnMinBeforeActivate, turnMaxBeforeActivate;
+	[Range(0, 5)] public int distanceMovingPlayer;
 
-	[Range(0.0f, 1.0f)]
-	public float speedPlayer;
+	[Range(0.0f, 1.0f)] public float speedPlayer;
 	
 	public Transform spawnWind;
 	

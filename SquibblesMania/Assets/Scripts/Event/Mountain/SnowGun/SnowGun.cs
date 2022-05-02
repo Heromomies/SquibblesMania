@@ -84,7 +84,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
             if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, playerLayerMask))
             {
-                if (hitInfo.collider.name != GameManager.Instance.name)
+                if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
                 {
                     var posHitInfo = hitInfo.transform.position;
 
