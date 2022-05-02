@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 [System.Serializable]
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     public bool isPlayerStun;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
+    [Header("ANIMATIONS")] public Animator playerAnimator;
     public enum PlayerTeam
     {
         TeamOne,

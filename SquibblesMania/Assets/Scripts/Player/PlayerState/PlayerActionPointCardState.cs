@@ -299,10 +299,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 block = blocNode.previousBlock;
             }
             
-            /* if (block.GetComponent<Node>().previousBlock != null)
-            {
-                block = block.GetComponent<Node>().previousBlock;
-            }*/
             else
             {
                 return;
@@ -392,10 +388,11 @@ public class PlayerActionPointCardState : PlayerBaseState
             GroupBlockDetection groupBlockDetection = currentBlocNode.groupBlockParent;
             groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
         }
-       
 
+      
         NFCManager.Instance.displacementActivated = true;
         
+        player.playerAnimator.SetBool("isMoving", player.walking);
         
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
@@ -476,7 +473,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-
+        player.playerAnimator.SetBool("isMoving", player.walking);
         if (EndZoneManager.Instance != null)
         {
             EndZoneManager.Instance.CheckPlayersTeam();
