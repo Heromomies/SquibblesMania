@@ -238,7 +238,9 @@ public class GameManager : MonoBehaviour
             {
                 MountainManager.Instance.ChangeCycle();
             }
+            MountainManager.Instance.ChangeTurn();
         }
+        
         
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)

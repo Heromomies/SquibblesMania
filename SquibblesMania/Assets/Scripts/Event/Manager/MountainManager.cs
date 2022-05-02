@@ -37,6 +37,17 @@ public class MountainManager : MonoBehaviour
 	    var randomNumber = Random.Range(0, snowGuns.Count);
 	    snowGuns[randomNumber].SetActive(true);
     }
+
+    public void ChangeTurn()
+    {
+	    foreach (var p in powdersBlocs)
+	    {
+		    if (p.playersOnGroupBlock.Count > 0)
+		    {
+			    p.gameObject.transform.position -= Vector3.down;
+		    }
+	    }
+    }
     
     private void Update()
     {
