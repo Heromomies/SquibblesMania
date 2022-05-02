@@ -13,19 +13,20 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	public int turnMinBeforeActivate, turnMaxBeforeActivate;
 	public int distanceMovingPlayer;
 
+	[Range(0.0f, 1.0f)]
+	public float speedPlayer;
+	
 	public Transform spawnWind;
 	
 	public LayerMask layerBlocsWhichCanHide;
 	
 	public TextMeshProUGUI windIsComing;
 
-	public GameObject windGo;
-	
+	private GameObject _windGo;
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
 	private int _turnNumberChosenToLaunchTheWind;
 	private int _turnCount;
 	private int _directionChosen;
-
 
 	private void OnEnable()
 	{
@@ -41,19 +42,19 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 		_directionChosen = Random.Range(0, _vectorRaycast.Count);
 		
-		windGo = PoolManager.Instance.SpawnObjectFromPool("ParticleWind", spawnWind.position, Quaternion.identity, null);
+		_windGo = PoolManager.Instance.SpawnObjectFromPool("ParticleWind", spawnWind.position, Quaternion.identity, null);
 
-		var rot = windGo.transform.rotation;
+		var rot = _windGo.transform.rotation;
 		
 		switch (_directionChosen)
 		{
-			case 0 : windGo.transform.rotation = Quaternion.Euler(rot.x, -90, rot.z);
+			case 0 : _windGo.transform.rotation = Quaternion.Euler(rot.x, -90, rot.z);
 				break;
-			case 1 : windGo.transform.rotation = Quaternion.Euler(rot.x, 90, rot.z);
+			case 1 : _windGo.transform.rotation = Quaternion.Euler(rot.x, 90, rot.z);
 				break;
-			case 2 : windGo.transform.rotation = Quaternion.Euler(rot.x, 0, rot.z);
+			case 2 : _windGo.transform.rotation = Quaternion.Euler(rot.x, 180, rot.z);
 				break;
-			case 3 : windGo.transform.rotation = Quaternion.Euler(rot.x, 180, rot.z);
+			case 3 : _windGo.transform.rotation = Quaternion.Euler(rot.x, 0, rot.z);
 				break;
 		}
 	}
@@ -71,15 +72,15 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, -_vectorRaycast[_directionChosen]);
 					distBetweenBlocAndPlayer = (int) distBetweenBlocAndPlayer;
 
-					players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen]) * distBetweenBlocAndPlayer), 0.05f);
+					players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen]) * distBetweenBlocAndPlayer), speedPlayer);
 				}
 				else if(!players[i].isPlayerHide)
 				{
-					players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen] * distanceMovingPlayer, 0.05f);
+					players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen] * distanceMovingPlayer, speedPlayer);
 				}
 			}
 			
-			windGo.SetActive(false);
+			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
 		}
 	}
