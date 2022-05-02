@@ -81,9 +81,15 @@ public class GameManager : MonoBehaviour
         Setup();
     }
 
+    private void Reset()
+    {
+        Setup();
+    }
+
     private void Setup()
     {
         _cam = Camera.main;
+        if (_cam != null) cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
     }
 #endif
 

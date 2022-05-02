@@ -409,8 +409,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
                 player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
-
-                player.transform.DOMove(movePos, player.timeMoveSpeed);
+                player.transform.LeanMove(movePos, player.timeMoveSpeed);
             
                 _actionPointText--;
             
