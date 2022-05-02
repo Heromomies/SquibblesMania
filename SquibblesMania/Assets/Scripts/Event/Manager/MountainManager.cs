@@ -7,10 +7,10 @@ using Random = UnityEngine.Random;
 public class MountainManager : MonoBehaviour
 {
     public List<GameObject> snowGuns;
-
     public PolarWind wind;
-
     public List<GroupBlockDetection> powdersBlocs;
+
+    [HideInInspector] public GameObject breakableIce;
     
     #region Singleton
 
@@ -44,8 +44,20 @@ public class MountainManager : MonoBehaviour
 	    {
 		    if (p.playersOnGroupBlock.Count > 0)
 		    {
-			    p.gameObject.transform.position -= Vector3.down;
+			    p.gameObject.transform.position += Vector3.down;
 		    }
+	    }
+    }
+
+    public void BreakableIce(GameObject ice)
+    {
+	    if (ice == GameManager.Instance.currentPlayerTurn.currentBlocPlayerOn.gameObject)
+	    {
+		    if (breakableIce != ice)
+		    {
+			    Debug.Log("Different");
+		    }
+		    breakableIce = ice;
 	    }
     }
     

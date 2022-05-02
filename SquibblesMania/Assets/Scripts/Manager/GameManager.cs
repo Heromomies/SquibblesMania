@@ -240,8 +240,7 @@ public class GameManager : MonoBehaviour
             }
             MountainManager.Instance.ChangeTurn();
         }
-        
-        
+
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
@@ -292,7 +291,6 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn = players[3];
         }
         
-        
         currentPlayerTurn.StartState();
     }    
     
@@ -317,6 +315,8 @@ public class GameManager : MonoBehaviour
             {
                 currentPlayerNode.isActive = true;
                 currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+                
+                
             }
             
             Ray ray = new Ray(player.transform.position, -transform.up);
@@ -327,6 +327,11 @@ public class GameManager : MonoBehaviour
                 if (hit.collider.gameObject.TryGetComponent(out Node node))
                 {
                     player.currentBlocPlayerOn = hit.transform;
+
+                    if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain && node.blocState == Node.BlocState.IceBreakable)
+                    {
+                        MountainManager.Instance.BreakableIce(hit.collider.gameObject);
+                    }
                 }
             }
             
@@ -339,7 +344,7 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain && turnCount != 1)
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
         {
             MountainManager.Instance.wind.CheckIfPlayersAreHide();
         }

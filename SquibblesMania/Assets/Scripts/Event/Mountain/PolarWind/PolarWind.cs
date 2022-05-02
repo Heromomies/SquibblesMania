@@ -86,24 +86,27 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	
 	public void CheckIfPlayersAreHide()
 	{
-		var players = GameManager.Instance.players;
-
-		for (int i = 0; i < players.Count; i++)
+		if (gameObject.activeSelf)
 		{
-			if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
-			{
-				if(!players[i].isPlayerHide)
-					PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
+			var players = GameManager.Instance.players;
 
-				players[i].isPlayerHide = true;
-			}
-			else
+			for (int i = 0; i < players.Count; i++)
 			{
-				players[i].isPlayerHide = false;
+				if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
+				{
+					if(!players[i].isPlayerHide)
+						PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
+
+					players[i].isPlayerHide = true;
+				}
+				else
+				{
+					players[i].isPlayerHide = false;
+				}
 			}
-		}
 		
-		LaunchEvent();
+			LaunchEvent();
+		}
 	}
 
 #if UNITY_EDITOR
