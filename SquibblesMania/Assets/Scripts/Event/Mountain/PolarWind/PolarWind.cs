@@ -13,7 +13,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	[Range(0, 10)] public int turnMinBeforeActivate, turnMaxBeforeActivate;
 	[Range(0, 5)] public int distanceMovingPlayer;
 
-	[Range(0.0f, 1.0f)] public float speedPlayer;
+	[Range(0.0f, 3.0f)] public float speedPlayer;
 	
 	public Transform spawnWind;
 	
@@ -26,7 +26,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _turnNumberChosenToLaunchTheWind;
 	private int _turnCount;
 	private int _directionChosen;
-
+	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -37,6 +37,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		_turnNumberChosenToLaunchTheWind = Random.Range(turnMinBeforeActivate, turnMaxBeforeActivate);
 
 		windIsComing.gameObject.SetActive(true);
+		
 		_turnCount = GameManager.Instance.turnCount;
 
 		_directionChosen = Random.Range(0, _vectorRaycast.Count);
@@ -56,6 +57,8 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			case 3 : _windGo.transform.rotation = Quaternion.Euler(rot.x, 0, rot.z);
 				break;
 		}
+
+		CheckIfPlayersAreHide();
 	}
 
 	public void LaunchEvent()
@@ -66,21 +69,29 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 			for (int i = 0; i < players.Count; i++)
 			{
-				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], distanceMovingPlayer, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
+				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
 				{
 					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, -_vectorRaycast[_directionChosen]);
 					distBetweenBlocAndPlayer = (int) distBetweenBlocAndPlayer;
-					
-					Debug.Log(distBetweenBlocAndPlayer);
 
-					players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen]) * distBetweenBlocAndPlayer), speedPlayer);
+					switch (distBetweenBlocAndPlayer)
+					{
+						case 0 : break;
+						case 1 : players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen])), speedPlayer);
+							break;
+					}
 				}
 				else if(!players[i].isPlayerHide)
 				{
 					players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen] * distanceMovingPlayer, speedPlayer);
 				}
 			}
-			
+
+			for (int i = 0; i < hideParticle.Count; i++)
+			{
+				hideParticle[i].SetActive(false);
+			}
+			hideParticle.Clear();			
 			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
 		}
@@ -96,8 +107,11 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			{
 				if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
 				{
-					if(!players[i].isPlayerHide)
-						PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
+					if (!players[i].isPlayerHide)
+					{
+						GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
+						hideParticle.Add(vfx);
+					}
 
 					players[i].isPlayerHide = true;
 				}

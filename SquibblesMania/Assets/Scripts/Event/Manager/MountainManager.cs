@@ -12,7 +12,7 @@ public class MountainManager : MonoBehaviour
    
     [Header("WIND")][Space (10)]
     public PolarWind wind;
-    
+
     [Header("POWDERS BLOCS")] [Space (10)]
     public List<GroupBlockDetection> powdersBlocs;
     
@@ -87,4 +87,6 @@ public class MountainManager : MonoBehaviour
 		}
 	}
 #endif
+    
+   
 }

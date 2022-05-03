@@ -16,20 +16,12 @@ public class BreakableIce : MonoBehaviour
     private int _turn;
     private int _randomNumber;
     [HideInInspector] public bool checkCondition;
-
-#if UNITY_EDITOR
-
-    private void OnValidate()
+    
+    private void Start()
     {
         _node = GetComponentInParent<Node>();
         _nodeGo = _node.gameObject;
         _nodeMeshRenderer = _nodeGo.GetComponent<MeshRenderer>();
-    }
-
-#endif
-    
-    private void Start()
-    {
         shaderReplaceObject = Instantiate(shaderReplaceObject, _nodeGo.transform.position, Quaternion.identity, _nodeGo.transform);
         shaderReplaceObject.SetActive(false);
     }

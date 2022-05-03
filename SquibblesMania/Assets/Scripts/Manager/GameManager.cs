@@ -312,13 +312,10 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-         
             if (player.currentBlocPlayerOn.TryGetComponent(out Node currentPlayerNode))
             {
                 currentPlayerNode.isActive = true;
                 currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
-                
-                
             }
            
             Ray ray = new Ray(player.transform.position, -transform.up);
