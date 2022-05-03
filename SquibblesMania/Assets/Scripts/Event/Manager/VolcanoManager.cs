@@ -5,10 +5,7 @@ using Random = UnityEngine.Random;
 public class VolcanoManager : MonoBehaviour
 {
 	[Space] [Header("EVENTS")] public List<GameObject> events;
-	
-	[Space] [Header("MAP ZONE")] 
-	public List<GameObject> cleanList;
-	
+
 	public int dangerousness;
 
 	public LevelOfDanger levelOfDanger;

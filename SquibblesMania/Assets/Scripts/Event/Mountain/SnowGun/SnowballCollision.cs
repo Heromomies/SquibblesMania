@@ -11,6 +11,8 @@ public class SnowballCollision : MonoBehaviour
     {
         if (other.CompareTag("Player") && other.name != GameManager.Instance.currentPlayerTurn.name)
         {
+            var player = other.GetComponent<PlayerStateManager>();
+            player.StunPlayer(player, 2);
             Instantiate(breakableIce, other.transform.position + new Vector3(0,0.25f,0), Quaternion.identity);
             gameObject.SetActive(false);
         }

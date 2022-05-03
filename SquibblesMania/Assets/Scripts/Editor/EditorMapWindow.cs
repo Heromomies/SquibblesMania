@@ -424,7 +424,7 @@ public class EditorMapWindow : EditorWindow
     {
         GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
         GameManager gameManager = FindObjectOfType<GameManager>();
-        VolcanoManager volcanoManager = FindObjectOfType<VolcanoManager>();
+        
         if (gameManager != null)
         {
             foreach (var parent in parents)
@@ -436,7 +436,7 @@ public class EditorMapWindow : EditorWindow
 
             foreach (var bloc in nodeBlocs)
             {
-                volcanoManager.cleanList.Add(bloc.gameObject);
+                gameManager.cleanList.Add(bloc.gameObject);
             }
         }
         

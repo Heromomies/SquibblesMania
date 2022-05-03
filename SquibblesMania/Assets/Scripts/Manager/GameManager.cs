@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
     public GameObject winT1;
     public GameObject winT2;
 
+    [Space] [Header("MAP ZONE")] 
+    public List<GameObject> cleanList;
+    
     [Header("PLAYER CUSTOMIZATION")]
     public PlayerData playerData;
     public List<GameObject> hats = new List<GameObject>();
