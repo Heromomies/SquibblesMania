@@ -48,7 +48,7 @@ public class PlayerCardState : PlayerBaseState
 			
 			if (nfcTag.Data.Contains("1"))
 			{
-				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+				TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
 			}
 			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))

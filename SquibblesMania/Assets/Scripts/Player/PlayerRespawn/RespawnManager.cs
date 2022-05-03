@@ -9,7 +9,6 @@ public class RespawnManager : MonoBehaviour
     public static RespawnManager Instance => _respawnManager;
     [SerializeField]
     private Vector3 offsetRespawnPos = new Vector3(0f, 1f, 0f);
-    // Start is called before the first frame update
     void Awake()
     {
         _respawnManager = this;
@@ -19,7 +18,11 @@ public class RespawnManager : MonoBehaviour
     {
         player.transform.position = player.playerRespawnPoint + offsetRespawnPos;
         Physics.SyncTransforms();
-        StartCoroutine(player.PlayerRespawnUpdateBlocBelow(player)); 
+
+        if (player.isPlayerInActionCardState)
+        {
+            StartCoroutine(player.PlayerRespawnUpdateBlocBelow(player)); 
+        }
         
     }
 }
