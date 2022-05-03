@@ -169,9 +169,10 @@ public class GameManager : MonoBehaviour
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
             
-          
+            
             Transform cameraTransform = _cam.transform;
             Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
+
             
             //Smooth Transition
             cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
