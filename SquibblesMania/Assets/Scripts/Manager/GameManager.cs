@@ -329,11 +329,6 @@ public class GameManager : MonoBehaviour
                 if (hit.collider.gameObject.TryGetComponent(out Node node))
                 {
                     player.currentBlocPlayerOn = hit.transform;
-
-                    if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain && node.blocState == Node.BlocState.IceBreakable)
-                    {
-                        MountainManager.Instance.BreakableIce(hit.collider.gameObject);
-                    }
                 }
             }
             
