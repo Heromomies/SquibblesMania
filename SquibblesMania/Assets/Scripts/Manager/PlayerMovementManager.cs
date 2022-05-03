@@ -40,34 +40,17 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private bool _canTouchBloc = true;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
-	public float offset;
 
 	#region Singleton
 
 	private static PlayerMovementManager playerMovementManager;
 
 	public static PlayerMovementManager Instance => playerMovementManager;
-
 	
-#if UNITY_EDITOR
-	private void OnValidate()
-	{
-		Setup();
-	}
-
-	private void Reset()
-	{
-		Setup();
-	}
-
-	private void Setup()
-	{
-		_cam = Camera.main;
-	}
-#endif
 
 	private void Awake()
 	{
+		_cam = Camera.main;
 		playerMovementManager = this;
 	}
 

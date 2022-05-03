@@ -19,7 +19,7 @@ public class RespawnZone : MonoBehaviour
     void SetUp()
     {
         var transformPosition = transform.position;
-        transformPosition.y = GameObject.Find("GameManager").GetComponent<GameManager>().minHeightBlocMovement;
+       //transformPosition.y = GameObject.Find("GameManager").GetComponent<GameManager>().minHeightBlocMovement;
         gameObject.transform.position = transformPosition;
     }
 #endif
