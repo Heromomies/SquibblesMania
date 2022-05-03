@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class Meteorite : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class Meteorite : MonoBehaviour
 	
 	public bool stopRotating;
 	private GameObject _particleFireToDelete;
-	
+
 	private void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
@@ -41,7 +43,10 @@ public class Meteorite : MonoBehaviour
 		{
 			AudioManager.Instance.Play("Stun");
 
-			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
+			var player = other.gameObject.GetComponent<PlayerStateManager>();
+			player.vfxStun = PoolManager.Instance.SpawnObjectFromPool("StunVFX", other.transform.position + new Vector3(0, 1, 0), Quaternion.identity, other.transform);
+			
+			player.StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
 			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
