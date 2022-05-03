@@ -545,11 +545,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d7205f740c20b714385d97b4dd96ac70, type: 3}
   m_PrefabInstance: {fileID: 69376845}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &70098166 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 743634260763849805, guid: 775a29ad301f44c499567fd132175d7b, type: 3}
-  m_PrefabInstance: {fileID: 256843221}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &71067004
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2095,6 +2090,11 @@ PrefabInstance:
       objectReference: {fileID: 870472009}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+--- !u!20 &206503885 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3226517119791555221, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+  m_PrefabInstance: {fileID: 206503884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &219108986
 GameObject:
   m_ObjectHideFlags: 0
@@ -6081,10 +6081,6 @@ PrefabInstance:
       value: Miror Power
       objectReference: {fileID: 0}
     - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
-      propertyPath: mirrorRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9011353858242398368, guid: 51df05f9b36dd49438c5bab0f97c6103, type: 3}
       propertyPath: raycastPlayer
       value: 
       objectReference: {fileID: 142818256}
@@ -9925,7 +9921,7 @@ PrefabInstance:
     - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: smokeEffect
       value: 
-      objectReference: {fileID: 70098166}
+      objectReference: {fileID: 0}
     - target: {fileID: 8885060723732602606, guid: d606367cffa12c04d9aa8cd7ff5176e1, type: 3}
       propertyPath: bulletParent
       value: 
@@ -18032,6 +18028,10 @@ PrefabInstance:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8384577099579528956, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
 --- !u!114 &2088047725 stripped
@@ -18825,6 +18825,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1236012610}
     m_Modifications:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: _cam
+      value: 
+      objectReference: {fileID: 206503885}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: winT1
       value: 
       objectReference: {fileID: 456008694}
@@ -18842,7 +18846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.size
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: hats.Array.data[0]
@@ -18891,39 +18895,43 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0f1c578672ecaea43a50a0d0a56adda3, type: 2}
+      objectReference: {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
+      objectReference: {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
+      objectReference: {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: e6c0d378afdf67749bfeb48ba945ee89, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[4]
       value: 
-      objectReference: {fileID: 2100000, guid: fa18fcd846590fc42b93279062daaabb, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[5]
       value: 
-      objectReference: {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[6]
       value: 
-      objectReference: {fileID: 2100000, guid: 7070c00fb660edc45b875a97f5e4e212, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[7]
       value: 
-      objectReference: {fileID: 2100000, guid: f12c94f7986d92d469433c6ad39933ba, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: colors.Array.data[8]
       value: 
       objectReference: {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: cameraViewModeGesture
+      value: 
+      objectReference: {fileID: 1323351295}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: maxHeightBlocMovement
       value: 2
@@ -19255,7 +19263,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 1999417275}
+      objectReference: {fileID: 148929060}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 

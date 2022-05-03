@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public Renderer playerMesh;
     public int stunCount;
     public bool isPlayerStun;
+    public bool isPlayerHide;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
     

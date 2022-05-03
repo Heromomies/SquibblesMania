@@ -33,7 +33,6 @@ public class PlayerStateManager : Player
 	private void Start()
 	{
 		//Assign the player to a list for know on what block group is currently on
-		GameManager.Instance.DetectParentBelowPlayers();
 		playerMovementManager = PlayerMovementManager.Instance;
 	}
 
@@ -44,7 +43,7 @@ public class PlayerStateManager : Player
 		if (CurrentState != null)
 		{
 			CurrentState.UpdateState(this);
-			//GameManager.Instance.DetectParentBelowPlayers();
+			GameManager.Instance.DetectParentBelowPlayers();
 		}
 		
 	}

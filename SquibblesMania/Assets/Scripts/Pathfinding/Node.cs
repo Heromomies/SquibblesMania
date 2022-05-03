@@ -10,6 +10,14 @@ public class Node : MonoBehaviour
     public Transform previousBlock;
     public bool isActive = true;
 
+    public BlocState blocState;
+    
+    public enum BlocState
+    {
+        Normal = 0,
+        IceBreakable = 1
+    }
+    
     public List<GamePath> possiblePath = new List<GamePath>();
 
     [HideInInspector] public GroupBlockDetection groupBlockParent;

@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MirrorPower : MonoBehaviour, IManagePower
+public class MirorPower : MonoBehaviour, IManagePower
 {
 	[Header("POWER SETTINGS")] [Space] public LayerMask layerPlayer;
 	public LayerMask layerMaskInteractableAndPlayer;
@@ -228,8 +228,6 @@ public class MirrorPower : MonoBehaviour, IManagePower
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
-				Debug.Log("I'm here");
-				
 				ActiveParticle();
 			}
 		}
@@ -401,9 +399,9 @@ public class MirrorPower : MonoBehaviour, IManagePower
 						switch (distanceBetweenTwoPlayersWhenABlockIsBehind) // inverse distance for the dash, else the player repulsed don't follow the range  
 						{
 							case 1:
-								distanceBetweenTwoPlayersWhenABlockIsBehind = 3;
+								distanceBetweenTwoPlayersWhenABlockIsBehind = 2;
 								break;
-							case 3:
+							case 2:
 								distanceBetweenTwoPlayersWhenABlockIsBehind = 1;
 								break;
 						}
@@ -587,8 +585,6 @@ public class MirrorPower : MonoBehaviour, IManagePower
 				}
 			}
 
-			listObjectToSetActiveFalse.Clear();
-			
 			StartCoroutine(CoroutineDeactivateParticle());
 		}
 		else
@@ -611,8 +607,13 @@ public class MirrorPower : MonoBehaviour, IManagePower
 				g.gameObject.SetActive(false);
 			}
 			
-			listObjectToSetActiveFalse.Clear();
+			foreach (var g in listObjectToSetActiveFalse)
+			{
+				g.SetActive(false);
+			}
 			
+			listObjectToSetActiveFalse.Clear();
+
 			PowerManager.Instance.ActivateDeactivatePower(3, false);
 		}
 	}
