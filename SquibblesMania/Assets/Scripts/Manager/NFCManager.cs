@@ -16,19 +16,7 @@ public class NFCManager : MonoBehaviour
 	[Space] public NFC_DEVICE_ID[] antennaPlayerFour;
 
 	#endregion
-
-/*	#region UI SETTINGS
-
-	[Space] [Header("UI SETTINGS")] public ActionPlayerPreset[] actionPlayerPreset;
-
-	[Serializable]
-	public struct ActionPlayerPreset
-	{
-		public TextMeshProUGUI textTakeOffCard;
-	}
-
-	#endregion*/
-
+	
 	#region LIGHT SETTINGS
 
 	[Space] [Header("LIGHT SETTINGS")] public LIGHT_INDEX[] lightIndexesPlayerOne;
@@ -76,6 +64,11 @@ public class NFCManager : MonoBehaviour
 
 	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
 	{
+		if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
+		{
+			return;
+		}
+		
 		StopAllCoroutines();
 		NFCController.StopPolling();
 		

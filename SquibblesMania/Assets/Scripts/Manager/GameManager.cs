@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
     public GameObject winT1;
     public GameObject winT2;
 
+    [Space] [Header("MAP ZONE")] 
+    public List<GameObject> cleanList;
+    
     [Header("PLAYER CUSTOMIZATION")]
     public PlayerData playerData;
     public List<GameObject> hats = new List<GameObject>();
@@ -313,13 +316,10 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-         
             if (player.currentBlocPlayerOn.TryGetComponent(out Node currentPlayerNode))
             {
                 currentPlayerNode.isActive = true;
                 currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
-                
-                
             }
            
             Ray ray = new Ray(player.transform.position, -transform.up);

@@ -198,6 +198,8 @@ public class PlayerCardState : PlayerBaseState
 		{
 			UiManager.Instance.StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, true);
 			UiManager.Instance.buttonNextTurn.SetActive(true);
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
 		}
 		
 	}

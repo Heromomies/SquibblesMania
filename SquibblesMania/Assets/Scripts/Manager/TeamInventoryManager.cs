@@ -84,8 +84,8 @@ public class TeamInventoryManager : MonoBehaviour
 		
 		do
 		{
-			var randomBloc = Random.Range(0, VolcanoManager.Instance.cleanList.Count - 1);
-			var bloc = VolcanoManager.Instance.cleanList[randomBloc].transform;
+			var randomBloc = Random.Range(0, GameManager.Instance.cleanList.Count - 1);
+			var bloc = GameManager.Instance.cleanList[randomBloc].transform;
 			
 			if (!_isFull)
 			{
@@ -94,7 +94,7 @@ public class TeamInventoryManager : MonoBehaviour
 				break;
 			}
 		} 
-		while (!VolcanoManager.Instance.cleanList[Random.Range(0, VolcanoManager.Instance.cleanList.Count - 1)].transform.GetComponent<Node>().isActive);
+		while (!GameManager.Instance.cleanList[Random.Range(0, GameManager.Instance.cleanList.Count - 1)].transform.GetComponent<Node>().isActive);
 	}
 }
 

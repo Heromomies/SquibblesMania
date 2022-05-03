@@ -34,6 +34,8 @@ public class PlayerStateManager : Player
 	{
 		//Assign the player to a list for know on what block group is currently on
 		playerMovementManager = PlayerMovementManager.Instance;
+		
+		GameManager.Instance.DetectParentBelowPlayers();
 	}
 
 
@@ -43,7 +45,6 @@ public class PlayerStateManager : Player
 		if (CurrentState != null)
 		{
 			CurrentState.UpdateState(this);
-			GameManager.Instance.DetectParentBelowPlayers();
 		}
 		
 	}
