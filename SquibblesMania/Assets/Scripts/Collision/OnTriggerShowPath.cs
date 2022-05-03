@@ -7,12 +7,9 @@ public class OnTriggerShowPath : MonoBehaviour
 {
    private void OnTriggerEnter(Collider other)
    {
-      if (other.CompareTag("Ghost"))
+      
+      if (other.gameObject.GetComponent<PlayerStateManager>())
       {
-         //GameManager.Instance.currentPlayerTurn.playerActionPoint+=2;
-         PlayerMovementManager.Instance.UpdateActionPointTextPopUp(PlayerMovementManager.Instance.totalCurrentActionPoint+=2);
-         UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-         PlayerMovementManager.Instance.sphereList.Remove(gameObject);
          gameObject.SetActive(false);
       }
    }

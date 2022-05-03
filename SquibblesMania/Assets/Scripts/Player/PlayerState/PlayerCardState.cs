@@ -2,23 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PlayerCardState : PlayerBaseState
 {
+	private List<int> _number = new List<int> { 2, 6, 7, 8, 9, 10};
+	private int _maxNumberOfTheCard;
+	private char _charCardsStockage;
+	private char _cardNumber;
 	
-	private List<int> _number = new List<int> {1, 2, 6, 7, 8, 9, 10};
+	private CardEffect _cardEffect = new CardEffect();
+
+	private PlayerStateManager _currentPlayer;
+
 	//The state when player put card on Square one
 	public override void EnterState(PlayerStateManager player)
 	{
 		//Turn of player x
 		//Message player turn x "Put a card on the corresponding surface"
-	
-		if (player.isPlayerStun)
+		_currentPlayer = player;
+		if (player.isPlayerStun && player.stunCount > 0)
 		{
 			player.stunCount--;
 			PlayerIsStun(player);
-			
 		}
 
 		//If the current player is this player
@@ -29,84 +37,150 @@ public class PlayerCardState : PlayerBaseState
 			NFCController.OnTagRemoved = OnTagRemoveDetected;
 			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
 		}
-
 	}
-	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag)  // When the player put a card on the tablet
-	{
-		
-		if (GameManager.Instance.currentPlayerTurn.CurrentState == GameManager.Instance.currentPlayerTurn.PlayerCardState && !NFCManager.Instance.clicked)
-		{
-			
-			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
 
+	private void OnNewTagDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When the player put a card on the tablet
+	{
+		if (!NFCManager.Instance.newCardDetected)
+		{
+			NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
+			NFCManager.Instance.newCardDetected = true;
+			
+			if (nfcTag.Data.Contains("1"))
+			{
+				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+			}
+			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
+				AudioManager.Instance.Play("CardTrue");
+
 				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 				{
-					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true); break;
-					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true); break;
-					case 'G': PowerManager.Instance.ActivateDeactivatePower(2, true); break;
-					case 'Y': PowerManager.Instance.ActivateDeactivatePower(3, true); break;
+					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true);
+						ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
+						break;
+					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true);
+						ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
+						break;
+					case 'Y': PowerManager.Instance.ActivateDeactivatePower(2, true);
+						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
+						break;
+					case 'G': PowerManager.Instance.ActivateDeactivatePower(3, true);
+						ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
+						break;
 				}
 			}
-			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
+			else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
-				NFCManager.Instance.clicked = true;
+				AudioManager.Instance.Play("CardTrue");
+
+				_maxNumberOfTheCard = NFCManager.Instance.charCards[0] - '0';
+
 				NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 				GameManager.Instance.currentPlayerTurn.playerActionPoint = NFCManager.Instance.numberOfTheCard;
+
+				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
+				{
+					case 'B': ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer); break;
+					case 'R': ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer); break;
+					case 'Y': ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer); break;
+					case 'G': ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer); break;
+				}
 				
-				UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn
-					.PlayerActionPointCardState);
+				GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
 			}
 
 			foreach (var n in _number)
 			{
 				if (nfcTag.Data.Contains(n.ToString()))
 				{
+					AudioManager.Instance.Play("CardFalse");
 					Camera.main.DOShakePosition(1, 0.3f);
+					ChangeColorLight(LIGHT_COLOR.COLOR_BLACK, _currentPlayer);
 				}
 			}
 			
-			
-			UiManager.Instance.buttonNextTurn.SetActive(false);
-			NFCManager.Instance.hasRemovedCard = false; 
-
-		}
-		else
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(false);
+			_cardNumber = nfcTag.Data[0];
+			_charCardsStockage = nfcTag.Data[1];
 		}
 	}
-	
+
+	void ChangeColorLight(LIGHT_COLOR lightColor, PlayerStateManager currentPlayer)
+	{
+		switch (NFCManager.Instance.indexPlayer)
+		{
+			case 0:
+				LightController.Colorize(NFCManager.Instance.lightIndexesPlayerOne, lightColor, false);
+				if (!currentPlayer.currentCardEffect)
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[0], lightColor);
+				break;
+			case 1:
+				LightController.Colorize(NFCManager.Instance.lightIndexesPlayerTwo, lightColor, false);
+				if (!currentPlayer.currentCardEffect)
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[1], lightColor);
+				break;
+			case 2:
+				LightController.Colorize(NFCManager.Instance.lightIndexesPlayerThree, lightColor, false);
+				if (!currentPlayer.currentCardEffect)
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[2], lightColor);
+				break;
+			case 3:
+				LightController.Colorize(NFCManager.Instance.lightIndexesPlayerFour, lightColor, false);
+				if (!currentPlayer.currentCardEffect)
+					currentPlayer.currentCardEffect = _cardEffect.SetActiveCardEffect(UiManager.Instance.parentSpawnCardUiVFX[3], lightColor);
+				break;
+		}
+	}
+
 	private void OnTagRemoveDetected(NFC_DEVICE_ID device, NFCTag nfcTag) // When a card is removed
 	{
-		
-		if(GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
+		if (nfcTag.Data[0] == _cardNumber && nfcTag.Data[1] == _charCardsStockage)
 		{
-			NFCManager.Instance.SetActivePlayerActionButton(0,false);
-			NFCManager.Instance.SetActivePlayerActionButton(1,false);
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
+			if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
 			{
-				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-				case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-				case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
-				case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
+				if (GameManager.Instance.currentPlayerTurn.playerActionPoint == _maxNumberOfTheCard && NFCManager.Instance.newCardDetected &&
+				    !NFCManager.Instance.displacementActivated)
+				{
+					PlayerMovementManager.Instance.ResetDisplacement();
+				}
+				else
+				{
+					NFCController.StopPolling();
+				}
 			}
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-			NFCController.StopPolling();
-		} 
-		
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !NFCManager.Instance.clicked)
-		{
-			NFCManager.Instance.SetActivePlayerActionButton(0,false);
-			NFCManager.Instance.SetActivePlayerActionButton(1,false);
+
+			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
+			{
+				if (NFCManager.Instance.newCardDetected && !NFCManager.Instance.powerActivated)
+				{
+					foreach (var power in PowerManager.Instance.powers)
+					{
+						if (power.activeSelf)
+							power.GetComponent<IManagePower>().ClearPower();
+					}
+
+					GameManager.Instance.DecreaseVariable();
+				}
+				else
+				{
+					NFCController.StopPolling();
+				}
+			}
+			
+			ChangeColorLight(LIGHT_COLOR.COLOR_WHITE, _currentPlayer);
+			NFCManager.Instance.newCardDetected = false;
+			
+			if (_currentPlayer.currentCardEffect != null)
+			{
+				_currentPlayer.currentCardEffect.SetActive(false);
+				_currentPlayer.currentCardEffect = null;
+			}
+			_charCardsStockage = '0';
 		}
-		
-		NFCManager.Instance.hasRemovedCard = true;
 	}
-	
+
 	void PlayerIsStun(PlayerStateManager player)
 	{
 		player.indicatorPlayer.SetActive(false);
@@ -115,50 +189,39 @@ public class PlayerCardState : PlayerBaseState
 		{
 			player.isPlayerStun = false;
 			player.psStun.SetActive(false);
+			player.indicatorPlayer.SetActive(true);
+			NFCController.OnNewTag = OnNewTagDetected;
+			NFCController.OnTagRemoved = OnTagRemoveDetected;
+			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
 		}
-
-		switch (player.playerNumber)
+		else
 		{
-			case 0:
-				GameManager.Instance.ChangePlayerTurn(1);
-
-				break;
-			case 1:
-				GameManager.Instance.ChangePlayerTurn(2);
-
-				break;
-			case 2:
-				GameManager.Instance.ChangePlayerTurn(3);
-
-				break;
-			case 3:
-				GameManager.Instance.ChangePlayerTurn(0);
-				break;
+			UiManager.Instance.StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, true);
+			UiManager.Instance.buttonNextTurn.SetActive(true);
 		}
+		
 	}
 
 	public override void UpdateState(PlayerStateManager player)
 	{
-		
-		if (NFCManager.Instance.hasRemovedCard && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && NFCManager.Instance.clicked)
-		{
-			
-			switch (GameManager.Instance.actualCamPreset.presetNumber)
-			{
-				case 1: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-				case 2: NFCManager.Instance.actionPlayerPreset[0].textTakeOffCard.gameObject.SetActive(false); break;
-				case 3: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
-				case 4: NFCManager.Instance.actionPlayerPreset[1].textTakeOffCard.gameObject.SetActive(false); break;
-			}
-			NFCManager.Instance.clicked = false;
-			NFCManager.Instance.hasRemovedCard = false;
-		} 
-		
-		
 	}
 
 	public override void ExitState(PlayerStateManager player)
 	{
-	
+		if (player.isPlayerStun)
+		{
+			
+			player.indicatorPlayer.SetActive(false);
+		
+			//Switch to next player of another team to play
+			switch (player.playerNumber)
+			{
+				case 0: GameManager.Instance.ChangePlayerTurn(1); break;
+				case 1: GameManager.Instance.ChangePlayerTurn(2); break;
+				case 2: GameManager.Instance.ChangePlayerTurn(3); break;
+				case 3: GameManager.Instance.ChangePlayerTurn(0); break;
+			}
+		}
+		
 	}
 }

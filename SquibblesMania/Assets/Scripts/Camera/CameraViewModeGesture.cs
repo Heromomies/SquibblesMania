@@ -10,303 +10,321 @@ using TouchPhase = DigitalRubyShared.TouchPhase;
 public class CameraViewModeGesture : MonoBehaviour
 {
     private Camera _cam;
-    private LongPressGestureRecognizer _longPressViewModeGesture = new LongPressGestureRecognizer();
-    private SwipeGestureRecognizer _swipeViewModeGesture = new SwipeGestureRecognizer();
     private Transform _mapTarget;
 
-    [Header("SWIPE SETTINGS")] [Range(1, 10), SerializeField]
-    private int swipeTouchCount = 1;
-    [Range(0.0f, 10.0f), SerializeField] private float swipeThresholdSeconds;
-    [Range(0.0f, 1.0f), SerializeField] private float minimumDistanceUnits = 0.2f;
-    [Range(0.0f, 1.0f), SerializeField] private float minimumDurationSeconds;
-    
-    [Header("UI VIEW MODE SETTINGS")]
-    public UIViewMode actualUiViewMode;
+    [Header("UI VIEW MODE SETTINGS")] public UIViewMode actualUiViewMode;
     public List<UIViewMode> uiViewModeList;
-    [Header("CAM SETTINGS")]
-    [Space(10f)]
-    [SerializeField] private float camIconAngleZCameraTopView;
+
+    [Header("CAM SETTINGS")] [Space(10f)] [SerializeField]
+    private float camIconAngleZCameraTopView;
     [SerializeField] private float camIconAngleZCameraBaseView;
     [SerializeField] private float camIconAngleZCameraLowerView;
-    [Space(10f)]
-    [SerializeField] private float angleToAdWhenGoUp;
-    [SerializeField] private float angleToAddWhenGoDown;
-  
+    [Space(10f)] [SerializeField] private float maxAngle;
+    [SerializeField] private float minAngle;
+
     [Serializable]
     public struct UIViewMode
     {
         public List<Image> uiCircleSelection;
         public Transform uiCamIcon;
-        public Transform uiCursorSelection;
         public Transform parentUiCamViewMode;
     }
+    
 
-    private WaitForSeconds _timeInSecondsForSwitchViewMode = new WaitForSeconds(0.3f);
+    private WaitForSeconds _timeInSecondsForSwitchViewMode = new WaitForSeconds(1.1f);
 
-    [Header("CURSOR SETTINGS")] [SerializeField]
-    private bool isCursorSelected;
-    [SerializeField] private float scaleCursorAmount = 1.2f;
-    [Space(10f)] [SerializeField] private float cursorAngleZ;
-    [SerializeField] private Vector2 cursorOffsetPos;
-    private Transform _currentCircleTransform;
-    private List<RaycastResult> _raycast = new List<RaycastResult>();
-    private RaycastHit _hit;
-    [SerializeField] private GraphicRaycaster canvasGraphicRaycaster;
+    [SerializeField] private float timeRotateSpeedInSeconds = 1f;
+    [SerializeField] private Image currentUiCircleSelection;
+    private int _indexUiCircleSelection;
 
-    private void Awake()
+
+  
+    public List<SavedCamViewModeGesture> savedCamViewModeGestures = new List<SavedCamViewModeGesture>();
+
+    
+    [Serializable]
+    public struct SavedCamViewModeGesture
+    {
+        public int lastIndexUiCircleSelection;
+        public float lastCamIconAngleView;
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        Setup();
+    }
+
+    private void Reset()
+    {
+        Setup();
+    }
+
+    private void Setup()
     {
         _cam = Camera.main;
+    }
+#endif
+
+    private void Start()
+    {
         _mapTarget = GameObject.FindGameObjectWithTag("Map").transform;
     }
 
-    private void OnEnable()
+    public void ChangeViewMode(int indexUiCircleSelection)
     {
-        //Set up the new swipe gesture 
-        _swipeViewModeGesture = new SwipeGestureRecognizer();
-        _swipeViewModeGesture.StateUpdated += SwipeViewModeGestureOnStateUpdated;
-        _swipeViewModeGesture.DirectionThreshold = 0;
-        _swipeViewModeGesture.MinimumNumberOfTouchesToTrack =
-            _swipeViewModeGesture.MaximumNumberOfTouchesToTrack = swipeTouchCount;
-        _swipeViewModeGesture.ThresholdSeconds = swipeThresholdSeconds;
-        _swipeViewModeGesture.MinimumDistanceUnits = minimumDistanceUnits;
-        _swipeViewModeGesture.EndMode = SwipeGestureRecognizerEndMode.EndContinusously;
-        _swipeViewModeGesture.AllowSimultaneousExecution(_longPressViewModeGesture);
-        FingersScript.Instance.AddGesture(_swipeViewModeGesture);
-
-
-        //Set up the new long press gesture 
-        _longPressViewModeGesture = new LongPressGestureRecognizer();
-        _longPressViewModeGesture.PlatformSpecificView = actualUiViewMode.uiCursorSelection;
-        _longPressViewModeGesture.StateUpdated += LongPressViewModeGestureOnStateUpdated;
-        _longPressViewModeGesture.ThresholdUnits = 0.0f;
-        _longPressViewModeGesture.MinimumDurationSeconds = minimumDurationSeconds;
-        FingersScript.Instance.AddGesture(_longPressViewModeGesture);
-    }
-
-    private void OnDisable()
-    {
-        if (FingersScript.HasInstance)
+        if (indexUiCircleSelection != _indexUiCircleSelection)
         {
-            FingersScript.Instance.RemoveGesture(_longPressViewModeGesture);
-            FingersScript.Instance.RemoveGesture(_swipeViewModeGesture);
-        }
-    }
-
-    private void SwipeViewModeGestureOnStateUpdated(GestureRecognizer gesture)
-    {
-        SwipeGestureRecognizer swipeGestureRecognizer = gesture as SwipeGestureRecognizer;
-        if (gesture.State == GestureRecognizerState.Ended && isCursorSelected)
-        {
-            var cursorEulerAngles = actualUiViewMode.uiCursorSelection.eulerAngles;
-            var camIconEulerAngles = actualUiViewMode.uiCamIcon.transform.eulerAngles;
-
-            if (!_currentCircleTransform)
+            CameraButtonManager.Instance.isCamRotateButtonPressed = false;
+            AudioManager.Instance.Play("Button");
+            foreach (var image in actualUiViewMode.uiCircleSelection)
             {
-                _currentCircleTransform = actualUiViewMode.uiCircleSelection[1].transform;
+                var imageColor = image.color;
+                imageColor.a = 0f;
+                image.color = imageColor;
+                image.gameObject.SetActive(false);
             }
 
-            if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+            actualUiViewMode.uiCircleSelection[indexUiCircleSelection].gameObject.SetActive(true);
+            var uiCircleColor = actualUiViewMode.uiCircleSelection[indexUiCircleSelection].color;
+            uiCircleColor.a = 1f;
+            
+            switch (indexUiCircleSelection)
             {
-                switch (swipeGestureRecognizer.EndDirection)
-                {
-                    case SwipeGestureRecognizerDirection.Down:
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[2].transform)
-                            break;
+                case 0:
+                    if (currentUiCircleSelection == actualUiViewMode.uiCircleSelection[2])
+                    {
+                        StartCoroutine(StartMovementViewModeStateCoroutine(indexUiCircleSelection, uiCircleColor, maxAngle, camIconAngleZCameraLowerView));
+                    }
 
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[1].transform, new Vector2(-cursorOffsetPos.x, 0),
-                                cursorEulerAngles, camIconEulerAngles, angleToAdWhenGoUp, camIconAngleZCameraBaseView));
-                        }
-                        else
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[2].transform, new Vector2(-cursorOffsetPos.y, 0), cursorEulerAngles,
-                                camIconEulerAngles, angleToAddWhenGoDown, camIconAngleZCameraLowerView));
-                        }
-
-                        break;
-                    case SwipeGestureRecognizerDirection.Up:
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
-                            break;
-
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[1].transform)
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[0].transform,
-                                new Vector2(0, cursorOffsetPos.y), cursorEulerAngles, camIconEulerAngles, -angleToAdWhenGoUp, camIconAngleZCameraTopView, -cursorAngleZ));
-                        }
-                        else
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[1].transform,
-                                new Vector2(-cursorOffsetPos.x, 0), cursorEulerAngles, camIconEulerAngles, -angleToAddWhenGoDown,camIconAngleZCameraBaseView));
-                        }
-
-                        break;
-                }
-            }
-            else
-            {
-                switch (swipeGestureRecognizer.EndDirection)
-                {
-                    case SwipeGestureRecognizerDirection.Down:
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
-                            break;
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[1].transform)
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[0].transform, new Vector2(0, -cursorOffsetPos.y), cursorEulerAngles,
-                                camIconEulerAngles, -angleToAdWhenGoUp, camIconAngleZCameraTopView + 180f, cursorAngleZ));
-                        }
-                        else
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[1].transform, new Vector2(cursorOffsetPos.x, 0), cursorEulerAngles,
-                                camIconEulerAngles, -angleToAddWhenGoDown, camIconAngleZCameraBaseView + 180f, cursorAngleZ+90));
-                        }
-
-                        break;
-
-                    case SwipeGestureRecognizerDirection.Up:
-
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[2].transform)
-                            break;
-                        if (_currentCircleTransform == actualUiViewMode.uiCircleSelection[0].transform)
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[1].transform, new Vector2(cursorOffsetPos.x, 0), cursorEulerAngles,
-                                camIconEulerAngles, angleToAdWhenGoUp, camIconAngleZCameraBaseView + 180f,cursorAngleZ+90));
-                        }
-                        else
-                        {
-                            StartCoroutine(StartMovementViewModeStateCoroutine(
-                                actualUiViewMode.uiCircleSelection[2].transform, new Vector2(cursorOffsetPos.y, 0), cursorEulerAngles,
-                                camIconEulerAngles, angleToAddWhenGoDown, camIconAngleZCameraLowerView + 180f, cursorAngleZ+90));
-                        }
-
-                        break;
-                }
-            }
-        }
-    }
-
-
-    private void LongPressViewModeGestureOnStateUpdated(GestureRecognizer gesture)
-    {
-        if (gesture.State == GestureRecognizerState.Began)
-        {
-            //Set up the new Pointer Event
-            PointerEventData pointerData = new PointerEventData(EventSystem.current);
-            List<RaycastResult> results = new List<RaycastResult>();
-
-            //Raycast using the Graphics Raycaster and mouse click position
-            pointerData.position = Input.mousePosition;
-            canvasGraphicRaycaster.Raycast(pointerData, results);
-
-            foreach (RaycastResult result in results)
-            {
-                if (result.gameObject.transform == actualUiViewMode.uiCursorSelection)
-                {
-                    actualUiViewMode.uiCursorSelection = result.gameObject.transform;
-                    isCursorSelected = true;
+                    if (currentUiCircleSelection == actualUiViewMode.uiCircleSelection[1])
+                    {
+                        StartCoroutine(StartMovementViewModeStateCoroutine(indexUiCircleSelection, uiCircleColor, minAngle, camIconAngleZCameraLowerView));
+                    }
                     break;
-                }
+                
+                case 1:
+                    if (currentUiCircleSelection == actualUiViewMode.uiCircleSelection[0])
+                    {
+                        StartCoroutine(StartMovementViewModeStateCoroutine(indexUiCircleSelection, uiCircleColor, -minAngle,camIconAngleZCameraBaseView));
+                    }
+
+                    if (currentUiCircleSelection == actualUiViewMode.uiCircleSelection[2])
+                    {
+                        StartCoroutine(StartMovementViewModeStateCoroutine(indexUiCircleSelection, uiCircleColor,
+                            minAngle, camIconAngleZCameraBaseView));
+                    }
+
+                    break;
+
+                case 2:
+                    if (currentUiCircleSelection == actualUiViewMode.uiCircleSelection[0])
+                    {
+                        StartCoroutine(StartMovementViewModeStateCoroutine(indexUiCircleSelection, uiCircleColor, -maxAngle, camIconAngleZCameraTopView));
+                    }
+
+                    if (currentUiCircleSelection == actualUiViewMode.uiCircleSelection[1])
+                    {
+                        StartCoroutine(StartMovementViewModeStateCoroutine(indexUiCircleSelection, uiCircleColor, -minAngle, camIconAngleZCameraTopView));
+                    }
+                    break;
             }
-
-            if (isCursorSelected)
-            {
-                actualUiViewMode.uiCursorSelection.transform.localScale = Vector3.one * scaleCursorAmount;
-            }
-
-            _raycast.Clear();
-        }
-
-        else if (gesture.State == GestureRecognizerState.Ended)
-        {
-            ClearStartState();
-            gesture.Reset();
         }
     }
 
-    private IEnumerator StartMovementViewModeStateCoroutine(Transform uiCircleRectTransform, Vector2 offset,
-        Vector3 cursorEulerAngles, Vector3 camIconEulerAngles, float angleToAddCamRotate, float camIconAngleZ = 0f,
-        float cursorAngleZ = 0f)
+    private IEnumerator StartMovementViewModeStateCoroutine(int indexUiCircleSelection, Color uiCircleColor, float angleRotation, float camIconAngleZ)
     {
-        if (_currentCircleTransform)
-        {
-            _currentCircleTransform.gameObject.SetActive(false);
-        }
-
-        _currentCircleTransform = uiCircleRectTransform;
-        uiCircleRectTransform.gameObject.SetActive(true);
-        cursorEulerAngles.z = cursorAngleZ;
-        actualUiViewMode.uiCursorSelection.eulerAngles = cursorEulerAngles;
-        actualUiViewMode.uiCursorSelection.transform.position = uiCircleRectTransform.position + (Vector3)offset;
-        camIconEulerAngles.z = camIconAngleZ;
-        actualUiViewMode.uiCamIcon.eulerAngles = camIconEulerAngles;
-        isCursorSelected = false;
-        StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleToAddCamRotate);
+        CheckIndexCamButtonManager(indexUiCircleSelection);
+        actualUiViewMode.uiCircleSelection[indexUiCircleSelection].color = uiCircleColor;
+        SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZ);
+        StartCoroutine(StartRotateCam(GameManager.Instance.actualCamPreset.presetNumber, angleRotation));
+        
+        _indexUiCircleSelection = indexUiCircleSelection;
+        currentUiCircleSelection = actualUiViewMode.uiCircleSelection[indexUiCircleSelection];
         yield return _timeInSecondsForSwitchViewMode;
-        isCursorSelected = true;
+        foreach (var image in actualUiViewMode.uiCircleSelection)
+        {
+            image.gameObject.SetActive(true);
+        }
     }
 
-    private void StartRotateCam(int presetCamNumber, float angleRotation)
+    void CheckIndexCamButtonManager(int indexUiCircleSelection)
     {
-        if (presetCamNumber <= 2)
+        if (indexUiCircleSelection >= 2)
         {
-            _cam.transform.RotateAround(_mapTarget.position, _cam.transform.right, -angleRotation);
+            foreach (var button in CameraButtonManager.Instance.actualUiCamPreset.buttonsCamRotate)
+            {
+                var eventTriggerButton = button.gameObject.GetComponent<EventTrigger>();
+                if (button.interactable)
+                {
+                    button.interactable = false;
+                    eventTriggerButton.enabled = false;
+                }
+                    
+            }
         }
         else
         {
-            _cam.transform.RotateAround(_mapTarget.position, _cam.transform.right, angleRotation);
+            foreach (var button in CameraButtonManager.Instance.actualUiCamPreset.buttonsCamRotate)
+            {
+                var eventTriggerButton = button.gameObject.GetComponent<EventTrigger>();
+                if (!button.interactable)
+                {
+                    button.interactable = true;
+                    eventTriggerButton.enabled = true;
+                }
+            }
         }
     }
-    /// <summary>
-/// When player release the touch of the long press method of the cursor
-/// </summary>
-    private void ClearStartState()
+
+    private IEnumerator StartRotateCam(int presetCamNumber, float angleRotation)
     {
-        isCursorSelected = false;
-        if (actualUiViewMode.uiCursorSelection != null)
+        var timeSinceStarted = 0f;
+        var startEulerAnglesX = transform.eulerAngles.x;
+        var camTransform = _cam.transform;
+
+        if (presetCamNumber <= 2)
         {
-            actualUiViewMode.uiCursorSelection.localScale = Vector3.one;
+            while (timeSinceStarted <= timeRotateSpeedInSeconds)
+            {
+                timeSinceStarted += Time.deltaTime;
+                _cam.transform.RotateAround(_mapTarget.transform.position, _cam.transform.right,
+                    -angleRotation * Time.deltaTime / timeRotateSpeedInSeconds);
+                yield return null;
+            }
+
+            // We forced the value to applied to the y value of cam euler angles
+            var camEulerAngles = _cam.transform.eulerAngles;
+            camEulerAngles.x = startEulerAnglesX + -angleRotation;
+            camTransform.eulerAngles = camEulerAngles;
         }
-        
+        else
+        {
+            while (timeSinceStarted <= timeRotateSpeedInSeconds)
+            {
+                timeSinceStarted += Time.deltaTime;
+                _cam.transform.RotateAround(_mapTarget.transform.position, _cam.transform.right,
+                    angleRotation * Time.deltaTime / timeRotateSpeedInSeconds);
+                yield return null;
+            }
+
+            // We forced the value to applied to the y value of cam euler angles
+            var camEulerAngles = _cam.transform.eulerAngles;
+            camEulerAngles.x = startEulerAnglesX - angleRotation;
+            camTransform.eulerAngles = camEulerAngles;
+        }
     }
+
     /// <summary>
     /// When player switch we Setup the cam to its base view 
     /// </summary>
-    public void SetUpCameraBaseViewMode()
+    public void SetUpCameraViewMode(bool isFirstTurn, int index)
     {
         int actualCamPresetNumber = GameManager.Instance.actualCamPreset.presetNumber;
-
-        if (actualCamPresetNumber <= 2)
+        if (isFirstTurn)
         {
-            SetObjectStateUiViewModeItem(uiViewModeList[0]);
+            if (actualCamPresetNumber <= 2)
+            {
+                SetObjectStateUiViewModeItem(uiViewModeList[0], index);
+            }
+            else
+            {
+                 SetObjectStateUiViewModeItem(uiViewModeList[1], index);
+            }
+          
         }
         else
         {
-            SetObjectStateUiViewModeItem(uiViewModeList[1]);
+            if (actualCamPresetNumber <= 2)
+            {
+                SetObjectStateUiViewModeItem(uiViewModeList[0], savedCamViewModeGestures[index].lastIndexUiCircleSelection);
+            }
+            else
+            {
+                SetObjectStateUiViewModeItem(uiViewModeList[1], savedCamViewModeGestures[index].lastIndexUiCircleSelection);
+            }
         }
+        
+      
 
-        _longPressViewModeGesture.PlatformSpecificView = actualUiViewMode.uiCursorSelection;
-        _currentCircleTransform = null;
+      
     }
 
     /// <summary>
     /// //Set up the ui game objects of the desiredUi view mode
     /// </summary>
     /// <param name="desiredUIViewMode"></param>
-    private void SetObjectStateUiViewModeItem(UIViewMode desiredUIViewMode)
+    private void SetObjectStateUiViewModeItem(UIViewMode desiredUIViewMode, int indexCircleSelection)
     {
         foreach (var uiViewMode in uiViewModeList)
         {
             uiViewMode.parentUiCamViewMode.gameObject.SetActive(false);
         }
-
+        
+        
         desiredUIViewMode.parentUiCamViewMode.gameObject.SetActive(true);
         actualUiViewMode = desiredUIViewMode;
+        
+        CheckIndexCamButtonManager(indexCircleSelection);
+        switch (indexCircleSelection)
+        {
+            case 0:
+                SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZCameraLowerView);
+                break;
+            case 1:
+                SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZCameraBaseView);
+                break;
+            case 2:
+                SetCamIconEulerAngles(actualUiViewMode.uiCamIcon.eulerAngles, camIconAngleZCameraTopView);
+                break;
+        }
+        
+        if (currentUiCircleSelection != null)
+        {
+           UiCircleSelectionColor(currentUiCircleSelection.color, 0);
+        }
+
+        ResetUICirclesSelectionColor(actualUiViewMode.uiCircleSelection, 0);
+        currentUiCircleSelection = actualUiViewMode.uiCircleSelection[indexCircleSelection];
+        UiCircleSelectionColor(currentUiCircleSelection.color, 1);
+        _indexUiCircleSelection = indexCircleSelection;
     }
+
+    void UiCircleSelectionColor(Color color, float alphaValue)
+    {
+        color.a = alphaValue;
+        currentUiCircleSelection.color = color;
+    }
+
+    void ResetUICirclesSelectionColor(List<Image> images, float alphaValue)
+    {
+        foreach (var img in images)
+        {
+            Color color = img.color;
+            color.a = alphaValue;
+            img.color = color;
+        }
+    }
+
+   private void SetCamIconEulerAngles(Vector3 camEulerAngles, float desiredAngle)
+    {
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+        {
+            camEulerAngles.z = desiredAngle;
+            actualUiViewMode.uiCamIcon.eulerAngles = camEulerAngles;
+        }
+        else
+        {
+            camEulerAngles.z = desiredAngle + 180f;
+            actualUiViewMode.uiCamIcon.eulerAngles = camEulerAngles;
+        }
+    }
+
+   public void SavePreviousViewModeGesture(int countTurn)
+   {
+       var savedCamViewModeGesture = savedCamViewModeGestures[countTurn];
+       savedCamViewModeGesture.lastCamIconAngleView = actualUiViewMode.uiCamIcon.eulerAngles.z;
+       savedCamViewModeGesture.lastIndexUiCircleSelection = _indexUiCircleSelection;
+       savedCamViewModeGestures[countTurn] = savedCamViewModeGesture;
+   }
 }

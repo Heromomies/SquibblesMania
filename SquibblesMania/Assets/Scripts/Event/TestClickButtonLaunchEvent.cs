@@ -6,16 +6,23 @@ using UnityEngine;
 public class TestClickButtonLaunchEvent : MonoBehaviour
 {
    public List<GameObject> eventToTest;
-   public GameObject powerToTest;
-   private void Update()
+  
+   #region Singleton
+
+   private static TestClickButtonLaunchEvent clickButton;
+
+   public static TestClickButtonLaunchEvent Instance => clickButton;
+
+   // Start is called before the first frame update
+
+   private void Awake()
    {
-      if (Input.GetKeyDown(KeyCode.E))
-      {
-         powerToTest.SetActive(true);
-      }
+      clickButton = this;
    }
 
-   public void OnClicked()
+   #endregion
+
+   public void LaunchEvent()
    {
       foreach (var eventTested in eventToTest)
       {
@@ -29,4 +36,23 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
          }
       }
    }
+   
+   private void Update()
+   {
+      if (Input.GetKeyDown(KeyCode.E))
+      {
+         foreach (var eventTested in eventToTest)
+         {
+            if (!eventTested.activeInHierarchy)
+            {
+               eventTested.SetActive(true);
+            }
+            else
+            {
+               eventTested.SetActive(false);
+            }
+         }
+      }
+   }
+   
 }

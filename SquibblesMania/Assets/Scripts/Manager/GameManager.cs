@@ -20,90 +20,119 @@ public class GameManager : MonoBehaviour
     public PlayerStateManager currentPlayerTurn;
   
     public int turnCount;
-    [Header("CAMERA PARAMETERS")] private Camera _cam;
-    private CameraViewModeGesture _cameraViewModeGesture;
+    [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
+    [SerializeField] private CameraViewModeGesture cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
     [Header("CAMERA ROTATIONS")]
-    private int _count;
+    public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-    
+
+    [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
     {
         public int presetNumber;
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
-        public GameObject playerUiButtons;
         public GameObject buttonNextTurn;
-        public TextMeshProUGUI actionPointText;
     }
 
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
-    public GameObject crown;
-    public float heightCrownSpawn;
     public ConditionVictory conditionVictory;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
     [HideInInspector] public int cycleCount;
+    public GameObject winT1;
+    public GameObject winT2;
+
+    [Header("PLAYER CUSTOMIZATION")]
+    public PlayerData playerData;
+    public List<GameObject> hats = new List<GameObject>();
+    public List<Material> colors = new List<Material>();
 
     private void Awake()
     {
-        _gameManager = this;
-        _cam = Camera.main;
         Application.targetFrameRate = 30;
-        
+        _gameManager = this;
     }
 
 
     // Start is called before the first frame update
-    void Start()
+  private void Start()
     {
         for (int i = 0; i < allBlocks.Count; i++)
         {
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
         }
-        _cameraViewModeGesture = _cam.gameObject.GetComponent<CameraViewModeGesture>();
+        
         SpawnPlayers();
         StartGame();
     }
 
-    void SpawnPlayers()
+#if UNITY_EDITOR
+
+    private void OnValidate()
+    {
+        Setup();
+    }
+
+    private void Reset()
+    {
+        Setup();
+    }
+
+    private void Setup()
+    {
+        _cam = Camera.main;
+        if (_cam != null) cameraViewModeGesture = _cam.GetComponent<CameraViewModeGesture>();
+    }
+#endif
+
+  private void SpawnPlayers()
     {
         for (int i = 0; i < playersSpawnPoints.Length; i++)
         {
             //Spawn player at specific location
-            Vector3 spawnPos = playersSpawnPoints[i].gameObject.GetComponent<Node>().GetWalkPoint() + new Vector3(0, 0.5f, 0);
-
-            PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
-            player.currentBlockPlayerOn = playersSpawnPoints[i].transform;
-            player.gameObject.name = "Player " + (i + 1);
-            player.playerNumber = i;
-
-            players.Add(player);
+            if (playersSpawnPoints[i].gameObject.TryGetComponent(out Node playerNodeSpawnPoint))
+            {
+                Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
+                PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+                player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
+                player.gameObject.name = "Player " + (i + 1);
+                player.playerNumber = i;
+                players.Add(player);
+            }
         }
         SetUpPlayers();
       
     }
 
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Color color, Material playerCustomMat)
+  {
+      player.playerTeam = playerTeam;
+      player.gameObject.GetComponentInChildren<Renderer>().material.color = color;
+      player.indicatorPlayer.SetActive(false);
+      player.playerMesh.material = playerCustomMat;
+  }
+  
     void SetUpPlayers()
     {
-        players[0].playerTeam = Player.PlayerTeam.TeamOne;
-        players[0].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
-        players[0].indicatorPlayer.SetActive(false);
-        players[1].playerTeam = Player.PlayerTeam.TeamTwo;
-        players[1].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
-        players[1].indicatorPlayer.SetActive(false);
-        players[2].playerTeam = Player.PlayerTeam.TeamOne;
-        players[2].gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
-        players[2].indicatorPlayer.SetActive(false);
-        players[3].playerTeam = Player.PlayerTeam.TeamTwo;
-        players[3].gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
-        players[3].indicatorPlayer.SetActive(false);
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red, colors[playerData.P1colorID] );
+        Instantiate(hats[playerData.P1hatID], players[0].hat.transform.position, players[0].hat.transform.rotation).transform.parent = players[0].hat.transform;
+        
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P2colorID]);
+        Instantiate(hats[playerData.P2hatID], players[1].hat.transform.position, players[1].hat.transform.rotation).transform.parent = players[1].hat.transform; ;
+
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red,colors[playerData.P3colorID] );
+        Instantiate(hats[playerData.P3hatID], players[2].hat.transform.position, players[2].hat.transform.rotation).transform.parent = players[2].hat.transform; ;
+        
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P4colorID]);
+        Instantiate(hats[playerData.P4hatID], players[3].hat.transform.position, players[3].hat.transform.rotation).transform.parent = players[3].hat.transform;
     }
 
     void StartGame()
@@ -115,43 +144,83 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
 
-        CamConfig(_count);
+        CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
 
+    public void SetUpPlayerMaterial(PlayerStateManager player, int playerNumber)
+    {
+        switch (playerNumber)
+        {
+            case 0 : player.playerMesh.material = colors[playerData.P1colorID]; break;
+            case 1 : player.playerMesh.material = colors[playerData.P2colorID]; break;
+            case 2 : player.playerMesh.material = colors[playerData.P3colorID]; break;
+            case 3 : player.playerMesh.material = colors[playerData.P4colorID]; break; 
+        }
+    }
+    
     void CamConfig(int countTurn)
     {
-        if (actualCamPreset.presetNumber > 0)
+        if (currentPlayerTurn.canSwitch)
         {
-            actualCamPreset.playerUiButtons.SetActive(false);
-            actualCamPreset.buttonNextTurn.SetActive(false);
-        }
+            if (actualCamPreset.presetNumber > 0)
+            {
+                actualCamPreset.buttonNextTurn.SetActive(false);
+            }
+            
+          
+            Transform cameraTransform = _cam.transform;
+            Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
+            
+            //Smooth Transition
+            cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
+            cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
+        
+            actualCamPreset = camPreSets[countTurn];
+            
+            //UI SWITCH
+            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
+            CameraButtonManager.Instance.SetUpUiCamPreset();
+            
+            //Register Previous Cam View Mode
+            if (turnCount <= 4)
+            {
+                cameraViewModeGesture.SetUpCameraViewMode(true, 1);
+            }
+            else
+            {
+                cameraViewModeGesture.SetUpCameraViewMode(false, count);
+            }
 
-
-        Transform cameraTransform = _cam.transform;
-        Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-        
-        //Smooth Transition
-        cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
-        cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
-        
-        actualCamPreset = camPreSets[countTurn];
-        
-        //UI SWITCH
-        UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn, actualCamPreset.actionPointText);
-        actualCamPreset.playerUiButtons.SetActive(true);
-        CameraButtonManager.Instance.SetUpUiCamPreset();
-        _cameraViewModeGesture.SetUpCameraBaseViewMode();
-        _count++;
-        if (_count >= camPreSets.Count)
-        {
-            _count = 0;
+            count = (count + 1) % camPreSets.Count; 
+            currentPlayerTurn.canSwitch = false;
         }
+    }
+
+    private void SavePreviousCamRotY(int indexCam)
+    {
+        Vector3 camEulerAngles = _cam.transform.eulerAngles;
+        Vector3 camPos = _cam.transform.position;
+        
+        CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
+
+        previousCamPreSets.camRot = camEulerAngles;
+        previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
+        previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
+        previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
+
+        previousCamPreSetsList[indexCam] = previousCamPreSets;
+        
+        camPreSets[indexCam] = previousCamPreSetsList[indexCam];
     }
 
     private void IncreaseDemiCycle()
     {
-        EventManager.Instance.CyclePassed();
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Volcano)
+        {
+            VolcanoManager.Instance.CyclePassed();
+        }
+
         PowerManager.Instance.CyclePassed();
     }
 
@@ -163,35 +232,121 @@ public class GameManager : MonoBehaviour
             cycleCount++;
         }
 
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
+        {
+            if (playerNumberTurn == players[3].playerNumber)
+            {
+                MountainManager.Instance.ChangeCycle();
+            }
+        }
+        
         turnCount++;
-
+        if (currentPlayerTurn.currentCardEffect)
+        {
+            currentPlayerTurn.currentCardEffect.SetActive(false);
+            currentPlayerTurn.currentCardEffect = null;
+        }
+       
+        SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
+        cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
+        CamConfig(count);
+        
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
 
         NFCManager.Instance.PlayerChangeTurn();
-        CamConfig(_count);
-      
+
+        if (UiManager.Instance.textActionPointPopUp)
+        {
+            UiManager.Instance.textActionPointPopUp.SetActive(false);
+            UiManager.Instance.textActionPointPopUp = null;
+        }
+
+        if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
+        {
+            winT2.SetActive(false);
+            winT1.SetActive(true);
+        }
+        else
+        {
+            winT1.SetActive(false);
+            winT2.SetActive(true);
+        }
     }
 
+    public void DecreaseVariable()
+    {
+        turnCount--;
+
+        if(turnCount <= 0)
+            turnCount=0;
+
+        if (count != 0)
+        {
+            currentPlayerTurn = players[count -1];
+        }
+        else if (count == 0)
+        {
+            currentPlayerTurn = players[3];
+        }
+        
+        
+        currentPlayerTurn.StartState();
+    }    
+    
     public void ShowEndZone()
     {
         if (isConditionVictory && !_isEndZoneShowed)
         {
             int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
-            GameObject endZone = Instantiate(conditionVictory.endZone,
-                conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
+            GameObject endZone = Instantiate(conditionVictory.endZone, conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
-
             isConditionVictory = false;
             _isEndZoneShowed = true;
+        }
+
+    }
+
+    public void DetectParentBelowPlayers()
+    {
+        foreach (var player in players)
+        {
+            if (player.TryGetComponent(out Node currentPlayerNode))
+            {
+                currentPlayerNode.isActive = true;
+                currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+            }
+            
+            Ray ray = new Ray(player.transform.position, -transform.up);
+            RaycastHit hit;
+            
+            if (Physics.Raycast(ray, out hit, 1.1f))
+            {
+                if (hit.collider.gameObject.TryGetComponent(out Node node))
+                {
+                    player.currentBlocPlayerOn = hit.transform;
+                }
+            }
+            
+            player.currentBlocPlayerOn.GetComponent<Node>().isActive = false;
+            
+            GroupBlockDetection groupBlockDetection = player.currentBlocPlayerOn.transform.GetComponentInParent<GroupBlockDetection>();
+            if (!groupBlockDetection.playersOnGroupBlock.Contains(player.transform))
+            {
+                groupBlockDetection.playersOnGroupBlock.Add(player.transform);
+            }
+        }
+        
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain && turnCount != 1)
+        {
+            MountainManager.Instance.wind.CheckIfPlayersAreHide();
         }
     }
 
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
-        Debug.Log("Player Win");
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-        Time.timeScale = 0f;
+     
         UiManager.Instance.WinSetUp(playerTeam);
     }
 

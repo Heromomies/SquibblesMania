@@ -19,7 +19,6 @@ public class Sound : MonoBehaviour
 
     public bool loop;
 
-    public AudioMixerGroup group;
-    [Range(1, 15)] public float maxDist = 1.5f;
-
+    public bool canPlay;
+    public bool isEffect;
 }

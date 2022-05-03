@@ -12,10 +12,14 @@ public class Player : MonoBehaviour
     public GameObject playerPref;
     public PlayerTeam playerTeam;
     public GameObject indicatorPlayer;
+    public GameObject hat;
+    public Renderer playerMesh;
     
     public int stunCount;
     public bool isPlayerStun;
-
+    public bool isPlayerHide;
+    public bool canSwitch = true;
+    public GameObject currentCardEffect;
     public enum PlayerTeam
     {
         TeamOne,

@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3657713127491441783
 Transform:
   m_ObjectHideFlags: 0
@@ -43,13 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96fde585af2fe14191560ef219d52ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 4
-  layer:
-    serializedVersion: 2
-    m_Bits: 8
-  colliders: []
+  speedBloc: 5
+  volcanoTransform: {fileID: 0}
   conditionsDangerousnessEarthQuake:
+  - numberOfBlocsTouched: 1
+  - numberOfBlocsTouched: 2
+  - numberOfBlocsTouched: 3
   - numberOfBlocsTouched: 4
-  - numberOfBlocsTouched: 8
-  - numberOfBlocsTouched: 12
-  - numberOfBlocsTouched: 16

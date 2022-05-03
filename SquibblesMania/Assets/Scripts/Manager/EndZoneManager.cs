@@ -2,18 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EndZoneManager : MonoBehaviour
 {
     public List<Transform> playerInEndZone;
-    public Color baseColor, colorTo;
 
     public List<Transform> blocksChild = new List<Transform>();
     private static EndZoneManager _endZoneManager;
 
     public static EndZoneManager Instance => _endZoneManager;
 
-
+    [SerializeField] private GameObject planeEndZone;
+    [SerializeField] private Vector3 indicatorOffsetPos;
+    [SerializeField] private GameObject endZoneIndicator;
     private void Awake()
     {
         _endZoneManager = this;
@@ -29,12 +31,27 @@ public class EndZoneManager : MonoBehaviour
 
         //Remove this object from the list
         blocksChild.RemoveAt(blocksChild.Count - 1);
+        SpawnEndZone();
     }
 
+   
     public void PlayersIsOnEndZone()
     {
         GroupBlockDetection parent = blocksChild[0].parent.GetComponent<GroupBlockDetection>();
         playerInEndZone = parent.playersOnGroupBlock;
+    }
+
+    private void SpawnEndZone()
+    {
+        int randomIndexSpawn = Random.Range(0, blocksChild.Count);
+        Vector3 indicatorSpawnPos = blocksChild[randomIndexSpawn].transform.position + indicatorOffsetPos;
+        Instantiate(endZoneIndicator, indicatorSpawnPos, Quaternion.identity, gameObject.transform.parent);
+
+        for (int i = 0; i < blocksChild.Count; i++)
+        {
+            Vector3 planeEndZonePos = blocksChild[i].transform.position + new Vector3(0f, 1.03f, 0f);
+            Instantiate(planeEndZone, planeEndZonePos, Quaternion.identity, blocksChild[i]);
+        }
     }
 
     public void CheckPlayersTeam() // Check the players team
@@ -43,7 +60,7 @@ public class EndZoneManager : MonoBehaviour
         {
             int playerCountTeamOne = 0;
             int playerCountTeamTwo = 0;
-
+            
             foreach (Transform player in playerInEndZone)
             {
                 PlayerStateManager playerStateManager = player.GetComponent<PlayerStateManager>();
@@ -68,17 +85,12 @@ public class EndZoneManager : MonoBehaviour
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
                         if (inventoryTeamTwo.boatObject.Count == 3)
                         {
-                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
+                            GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
                         }
                     }
                 }
             }
         }
     }
-
-    // Update is called once per frame
-    void Update() // Pulsing bloc
-    {
-        PulsingBloc.PulsingEmissiveColorSquareBlocList(baseColor, colorTo, blocksChild, 0.4f);
-    }
+    
 }

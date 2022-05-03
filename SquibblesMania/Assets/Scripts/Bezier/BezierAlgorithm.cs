@@ -7,9 +7,11 @@ public class BezierAlgorithm : MonoBehaviour
 	private GameObject _go;
 	private List<Vector3> _points;
 	private float _f;
+	private bool _canJump;
 	private bool _canMove;
 
 	private float _timeLeft;
+	private AnimationCurve _animationCurve;
 	private static BezierAlgorithm _instance = null;
      
 	// Game Instance Singleton
@@ -64,27 +66,32 @@ public class BezierAlgorithm : MonoBehaviour
 		return allPoints[0];
 	}
 
-	public void ObjectToMoveWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f)
+	public void ObjectJumpWithBezierCurve(GameObject objectToMove, List<Vector3> pointsList, float f, AnimationCurve curve)
 	{
 		_go = objectToMove;
 		_points = pointsList;
 		_f = f;
-
-		_canMove = true;
+		_animationCurve = curve;
+		
+		_canJump = true;
 	}
-
+	
 	private void Update()
 	{
-		if (_canMove)
+		if (_canJump)
 		{
 			_timeLeft += _f;
 			if (_timeLeft < 1)
 			{
-				_go.transform.position = Curve(_points, _timeLeft);
+				_go.transform.position = Curve(_points, _animationCurve.Evaluate(_timeLeft));
 			}
 			else
 			{
-				_canMove = false;
+				_canJump = false;
+				_go = null;
+				_points.Clear();
+				_f = 0f;
+				_timeLeft = 0f;
 			}
 		}
 	}
@@ -92,29 +99,29 @@ public class BezierAlgorithm : MonoBehaviour
 	// Example code to visualize the trajectory
 	// The "m_curvePoints" variable is a List<Vector3> that holds the curve's control points.
 	
-	/*private void OnDrawGizmos()
+	private void OnDrawGizmos()
 	{
-		if (curvePoints == null)
+		if (_points == null)
 		{
 			return;
 		}
-		else if (curvePoints.Count == 0)
+		else if (_points.Count == 0)
 		{
 			return;
 		}
 
 		const float delta = 0.01f;
-		var previous = curvePoints[0];
+		var previous = _points[0];
 
 		for (float t = delta; t <= 1.0f; t += delta)
 		{
-			var point = Curve(curvePoints, t);
+			var point = Curve(_points, t);
 			
 			Gizmos.color = Color.magenta;
 			Gizmos.DrawLine(previous, point);
 
 			previous = point;
 		}
-	}*/
+	}
 	
 }

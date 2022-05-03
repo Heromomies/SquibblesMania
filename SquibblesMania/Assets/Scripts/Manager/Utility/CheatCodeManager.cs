@@ -4,28 +4,29 @@ using UnityEngine;
 
 public class CheatCodeManager : MonoBehaviour
 {
-
     [SerializeField] private int actionPointToAdd;
 
-    [SerializeField] private bool isActivated = true;
-   
 
-    // Update is called once per frame
+#if UNITY_EDITOR
     void Update()
     {
-        if (isActivated)
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                //Add action point and switch to action point state the current player
-                GameManager.Instance.currentPlayerTurn.playerActionPoint = actionPointToAdd;
-                UiManager.Instance.SetUpCurrentActionPointOfCurrentPlayer(GameManager.Instance.currentPlayerTurn.playerActionPoint);
-                GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
-            }
+            //Add action point and switch to action point state the current player
+            GameManager.Instance.currentPlayerTurn.playerActionPoint = actionPointToAdd;
+            GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
         }
-        
-       
+
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Instance.turnCount++;
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
+        }
     }
-    
-    
+#endif
 }

@@ -26,33 +26,6 @@ MonoBehaviour:
       - "Soy el men\xFA principal, lo juro"
       Flags: 000000
       Languages_Touch: []
-    - Term: TEST_1
-      TermType: 0
-      Description: 
-      Languages:
-      - I'm a poor guy
-      - Je ne suis qu'un pauvre gars
-      - Soy un tipo pobre
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEST_2
-      TermType: 0
-      Description: 
-      Languages:
-      - I'm a rich guy
-      - Je suis une personne riche
-      - Soy un tipo rico
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEST_ON_SCENE_CHANGED
-      TermType: 0
-      Description: 
-      Languages:
-      - I just changed the scene
-      - "Je viens juste de changer de sc\xE8ne"
-      - Acabo de cambiar la escena
-      Flags: 000000
-      Languages_Touch: []
     - Term: TEXT_ActionPointText
       TermType: 0
       Description: 
@@ -80,69 +53,6 @@ MonoBehaviour:
       - Pausa
       Flags: 000000
       Languages_Touch: []
-    - Term: TEXT_ButtonSeeCondition
-      TermType: 0
-      Description: 
-      Languages:
-      - See Condition
-      - Voir conditions
-      - "Ver Condici\xF3n"
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEXT_RemoveCardFromConsole
-      TermType: 0
-      Description: 
-      Languages:
-      - Remove the card from the console
-      - Enlever la carte de la console
-      - Retire la tarjeta de la consola
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEXT_TeamOne
-      TermType: 0
-      Description: 
-      Languages:
-      - Team One
-      - Equipe Une
-      - Equipo Uno
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEXT_TeamTwo
-      TermType: 0
-      Description: 
-      Languages:
-      - Team Two
-      - Equipe Deux
-      - Equipo Dos
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEXT_ObjectGreen
-      TermType: 0
-      Description: 
-      Languages:
-      - Green
-      - Vert
-      - Verde
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEXT_ObjectBlue
-      TermType: 0
-      Description: 
-      Languages:
-      - Blue
-      - Bleu
-      - Azur
-      Flags: 000000
-      Languages_Touch: []
-    - Term: TEXT_ObjectYellow
-      TermType: 0
-      Description: 
-      Languages:
-      - Yellow
-      - Jaune
-      - Amarillo
-      Flags: 000000
-      Languages_Touch: []
     - Term: TEXT_MirorPower
       TermType: 0
       Description: 
@@ -150,6 +60,227 @@ MonoBehaviour:
       - Select a player
       - "S\xE9lectionner un joueur"
       - Seleccionar jugador
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_RedPower
+      TermType: 0
+      Description: 
+      Languages:
+      - 'RED : Swipe in the wanted direction, range of 3'
+      - "RED : Swipez dans la direction que vous voulez, 3 de port\xE9e"
+      - "RED : deslice en la direcci\xF3n que desee, rango de 3"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_BluePower
+      TermType: 0
+      Description: 
+      Languages:
+      - 'BLUE : Click on the player you want to swap positions with'
+      - "BLUE : Cliquez sur le joueur avec qui vous voulez \xE9changer de position"
+      - 'BLUE : haga clic en el jugador con el que desea intercambiar posiciones'
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_GreenPower
+      TermType: 0
+      Description: 
+      Languages:
+      - 'GREEN : Select a player, then swipe in the desired direction, 2 range, the
+        selected player will go in the opposite direction'
+      - "GREEN : S\xE9lectionnez un joueur, puis swipez dans la direction voulue,
+        2 de port\xE9e, le joueur s\xE9lectionn\xE9 ira dans la direction oppos\xE9e"
+      - "GREEN : seleccione un jugador, luego deslice en la direcci\xF3n deseada,
+        2 rango, el jugador seleccionado ir\xE1 en la direcci\xF3n opuesta"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_YellowPower
+      TermType: 0
+      Description: 
+      Languages:
+      - 'YELLOW : An area appears around you, click on a block and jump to it'
+      - "YELLOW : Une zone s'affiche autour de vous, cliquez sur un bloc et sautez
+        jusqu'\xE0 lui"
+      - "YELLOW : aparece un \xE1rea a tu alrededor, haz clic en un bloque y salta
+        hacia \xE9l."
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_NoPlayerAround
+      TermType: 0
+      Description: 
+      Languages:
+      - There is no player selectable
+      - "Aucun joueur ne peut \xEAtre s\xE9lectionn\xE9"
+      - "Ning\xFAn jugador puede cambiar de lugar contigo"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_MainMusic
+      TermType: 0
+      Description: 
+      Languages:
+      - Main Music
+      - Musique principale
+      - Musica principal
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_ToggleMusic
+      TermType: 0
+      Description: 
+      Languages:
+      - Music
+      - Musique
+      - Musica principal
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_ToggleEffect
+      TermType: 0
+      Description: 
+      Languages:
+      - SFX
+      - Effets sonores
+      - Efectos de sonido
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_TeamOneWins
+      TermType: 0
+      Description: 
+      Languages:
+      - Team One Wins
+      - "L'\xE9quipe une gagne"
+      - El equipo uno gana
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_TeamTwoWins
+      TermType: 0
+      Description: 
+      Languages:
+      - Team Two Wins
+      - "L'\xE9quipe deux gagne"
+      - El equipo dos gana
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_Restart
+      TermType: 0
+      Description: 
+      Languages:
+      - Restart
+      - Rejouer
+      - "Repetici\xF3n"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_Menu
+      TermType: 0
+      Description: 
+      Languages:
+      - Menu
+      - Menu
+      - "Men\xFA"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_Play
+      TermType: 0
+      Description: 
+      Languages:
+      - Play
+      - Jouer
+      - Jugador
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_Tuto
+      TermType: 0
+      Description: 
+      Languages:
+      - Tutorial
+      - Tutoriel
+      - Tutorial
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_Quit
+      TermType: 0
+      Description: 
+      Languages:
+      - Quit
+      - Quitter
+      - Abandonar
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_MapTitle
+      TermType: 0
+      Description: 
+      Languages:
+      - Map
+      - Carte
+      - Mapa
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_Back
+      TermType: 0
+      Description: 
+      Languages:
+      - Back
+      - Retour
+      - Devolver
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_VolcanicMap
+      TermType: 0
+      Description: 
+      Languages:
+      - Volcanic Island
+      - "\xCEle Volcanique"
+      - "Isla volc\xE1nica"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_SnowMap
+      TermType: 0
+      Description: 
+      Languages:
+      - Snowy Mountain
+      - "Montagne enneig\xE9e"
+      - "Monta\xF1a Nevada"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_TempleMap
+      TermType: 0
+      Description: 
+      Languages:
+      - Lost Temple
+      - Temple Perdu
+      - Templo Perdido
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_OceanicMap
+      TermType: 0
+      Description: 
+      Languages:
+      - Underwater Exploration
+      - Exploration Sous-Marine
+      - "Exploraci\xF3n Submarina"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_CustomizationTitle
+      TermType: 0
+      Description: 
+      Languages:
+      - Player Customization
+      - Personnalisation du joueur
+      - "Personalizaci\xF3n del jugador"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_PlayerStun
+      TermType: 0
+      Description: 
+      Languages:
+      - Your player is stun
+      - "Votre joueur est \xE9tourdi"
+      - "Su jugador est\xE1 mareado"
+      Flags: 000000
+      Languages_Touch: []
+    - Term: TEXT_WindIsComing
+      TermType: 0
+      Description: 
+      Languages:
+      - Wind is coming
+      - Le vent arrive
+      - El viento viene
       Flags: 000000
       Languages_Touch: []
     CaseInsensitiveTerms: 0
@@ -170,7 +301,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbx3JDRjbNCG4urLe3rmx6qpm8ne3bG1R9LmFtPS4QQBLeWSAqIqqDCEfgbAyrPS3GMG/exec
     Google_SpreadsheetKey: 1ea76u5f4aJOigCqwFc8Dnn_WMbXBZl8pMDrG-SppTOs
     Google_SpreadsheetName: I2Loc SquibblesMania Localization
-    Google_LastUpdatedVersion: 1647339059103
+    Google_LastUpdatedVersion: 1651477024871
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

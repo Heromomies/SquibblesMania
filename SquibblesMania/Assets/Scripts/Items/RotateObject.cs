@@ -8,7 +8,6 @@ public class RotateObject : MonoBehaviour
     private Transform _target;
     public float speed;
 
-
     private void Start()
     {
         _target = CameraButtonManager.Instance.target;

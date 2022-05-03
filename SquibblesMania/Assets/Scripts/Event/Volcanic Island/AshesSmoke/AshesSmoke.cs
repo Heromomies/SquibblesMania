@@ -7,11 +7,15 @@ using Random = UnityEngine.Random;
 
 public class AshesSmoke : MonoBehaviour, IManageEvent
 {
-	[Header("EVENT SETTINGS")] 
-	public List<GameObject> parentBlocs; [Space]
-	public float heightSpawnParticle;[Space]
-
+	[Header("EVENT SETTINGS")]
+	public float heightSpawnParticle;
+	[Range(0.0f, 10.0f)] public float timeBeforeRainDisappear;
+	[Space]
 	public List<GameObject> childrenBlocs;
+
+	[Space] public Transform spawnRain;
+	
+	private GameObject _particleRain;
 	
 	[Header("CONDITIONS DANGEROUSNESS")]
 	public Conditions[] conditionsDangerousnessAshesSmoke;
@@ -24,31 +28,21 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
-		Shuffle(parentBlocs);
 		ShowEvent();
 	}
 
-	/// <summary>
-	/// To random a list easily
-	/// </summary>
-	void Shuffle<T>(List<T> inputList)
-	{
-		for (int i = 0; i < inputList.Count; i++)
-		{
-			T temp = inputList[i];
-			int random = Random.Range(1, inputList.Count);
-			inputList[i] = inputList[random];
-			inputList[random] = temp;
-		}
-	}
 	public void ShowEvent() // Show the event
 	{
-		childrenBlocs = EventManager.Instance.cleanList;
+		childrenBlocs = VolcanoManager.Instance.cleanList;
 
 		var rand = Random.Range(0, childrenBlocs.Count
-		                           - conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered);
+		                           - conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered);
 
-		for (int i = 0; i < conditionsDangerousnessAshesSmoke[EventManager.Instance.dangerousness].numberOfBlocsCovered; i++)
+		_particleRain = PoolManager.Instance.SpawnObjectFromPool("ParticleAshesRain", spawnRain.position, Quaternion.identity, null);
+		
+		AudioManager.Instance.Play("VolcanoSmoking");
+		
+		for (int i = 0; i < conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered; i++)
 		{
 			if (childrenBlocs[i + rand].CompareTag("BlackBlock"))
 			{
@@ -65,12 +59,13 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 			}
 		}
 
-		StartCoroutine(SetActiveFalseBullet());
+		StartCoroutine(SetActiveFalseGameObjectCoroutine());
 	}
 	
-	IEnumerator SetActiveFalseBullet()
+	IEnumerator SetActiveFalseGameObjectCoroutine()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(timeBeforeRainDisappear);
+		_particleRain.SetActive(false);
 		gameObject.SetActive(false);
 	}
 	public void LaunchEvent() // Launch the event

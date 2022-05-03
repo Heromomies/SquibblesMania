@@ -10,8 +10,9 @@ public class Meteorite : MonoBehaviour
 	private Rigidbody _rb;
 	private int _turn;
 	
-	private bool _stopRotating;
+	public bool stopRotating;
 	private GameObject _particleFireToDelete;
+	
 	private void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
@@ -21,12 +22,13 @@ public class Meteorite : MonoBehaviour
 	{
 		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + lifeParticle)
 		{
-			gameObject.GetComponentInParent<Node>().isActive = true;
+			_particleFireToDelete.GetComponentInParent<Node>().isActive = true;
 			_particleFireToDelete.gameObject.SetActive(false);
+			_particleFireToDelete.GetComponentInParent<Node>().gameObject.layer = 3;
 			gameObject.SetActive(false);
 		}
 
-		if (!_stopRotating)
+		if (!stopRotating)
 		{
 			var rotate = Random.Range(0.5f, 3f);
 			transform.Rotate(new Vector3(rotate,rotate,rotate) * (speedTurnAround * Time.deltaTime), Space.World);
@@ -35,49 +37,53 @@ public class Meteorite : MonoBehaviour
 
 	private void OnCollisionEnter(Collision other)
 	{
-		if (other.gameObject.CompareTag("BlackBlock"))
+		if (other.gameObject.CompareTag("Player"))
 		{
-			StartCoroutine(SetActiveFalseBullet(2f));
-			
-			other.gameObject.GetComponent<Node>().isActive = false;
-			transform.parent = other.transform;
-			_turn = GameManager.Instance.turnCount;
+			AudioManager.Instance.Play("Stun");
 
-			transform.rotation = new Quaternion(0,0,0,0);
-			_stopRotating = true;
-
-			var transformPlayer = transform.position;
-			
-			GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
-			Destroy(explosionPS, 2f);
-
-			var otherPosition = other.transform.position;
-			GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
-				new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, null);
-			_particleFireToDelete = firePS;
-			
-			_rb.constraints = RigidbodyConstraints.FreezeAll;
-			
-			transform.position = new Vector3(otherPosition.x, transformPlayer.y -0.1f, otherPosition.z);
-
-			transform.rotation = other.transform.rotation;
-		}
-		else if (other.gameObject.CompareTag("Player"))
-		{
-			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 1);
-			var otherPos = other.transform.position;
-			GameObject stunVFX = PoolManager.Instance.SpawnObjectFromPool("StunVFX",
-				new Vector3(otherPos.x, otherPos.y + 0.75f, otherPos.z), Quaternion.identity, null);
-
-			other.gameObject.GetComponent<PlayerStateManager>().psStun = stunVFX;
+			other.gameObject.GetComponent<PlayerStateManager>().StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
 			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
+		}
+		else
+		{
+			StartCoroutine(SetActiveFalseBullet(2f));
+
+			if (other.gameObject.GetComponent<Node>() != null)
+			{
+				other.gameObject.GetComponent<Node>().isActive = false;
+			
+				transform.parent = other.transform;
+				_turn = GameManager.Instance.turnCount;
+
+				AudioManager.Instance.Play("FireballEnd");
+			
+				transform.rotation = new Quaternion(0,0,0,0);
+				stopRotating = true;
+
+				var transformPlayer = transform.position;
+			
+				GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
+				Destroy(explosionPS, 2f);
+
+				var otherPosition = other.transform.position;
+				GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
+					new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, other.transform);
+				_particleFireToDelete = firePS;
+			
+				_rb.constraints = RigidbodyConstraints.FreezeAll;
+			
+				transform.position = new Vector3(otherPosition.x, transformPlayer.y -0.1f, otherPosition.z);
+
+				transform.rotation = other.transform.rotation;
+			}
 		}
 	}
 
 	IEnumerator SetActiveFalseBullet(float seconds)
 	{
 		yield return new WaitForSeconds(seconds);
-		gameObject.transform.position = Vector3.positiveInfinity;
+		gameObject.transform.position = new Vector3(1500,-1500, 1500);
+		gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 	}
 }
