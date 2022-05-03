@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,12 +14,14 @@ public class Player : MonoBehaviour
     public GameObject indicatorPlayer;
     public GameObject hat;
     public Renderer playerMesh;
-    
     public int stunCount;
     public bool isPlayerStun;
     public bool isPlayerHide;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
+    
+    [Header("RESPAWN PARAMETERS")] public Vector3 playerRespawnPoint;
+    
     [Header("ANIMATIONS")] public Animator playerAnimator;
     public enum PlayerTeam
     {

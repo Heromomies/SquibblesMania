@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
                 PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+                player.playerRespawnPoint = spawnPos;
                 player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
                 player.gameObject.name = "Player " + (i + 1);
                 player.playerNumber = i;
@@ -311,14 +312,15 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-            if (player.TryGetComponent(out Node currentPlayerNode))
+         
+            if (player.currentBlocPlayerOn.TryGetComponent(out Node currentPlayerNode))
             {
                 currentPlayerNode.isActive = true;
                 currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
                 
                 
             }
-            
+           
             Ray ray = new Ray(player.transform.position, -transform.up);
             RaycastHit hit;
             
