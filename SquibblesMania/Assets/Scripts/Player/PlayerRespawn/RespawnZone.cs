@@ -2,12 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-
-
-
- [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Collider))]
 public class RespawnZone : MonoBehaviour
 {
     #region UnityEditor
@@ -24,7 +19,7 @@ public class RespawnZone : MonoBehaviour
     void SetUp()
     {
         var transformPosition = transform.position;
-        transformPosition.y = FindObjectOfType<GameManager>().minHeightBlocMovement;
+        transformPosition.y = GameObject.Find("GameManager").GetComponent<GameManager>().minHeightBlocMovement;
         gameObject.transform.position = transformPosition;
     }
 #endif
