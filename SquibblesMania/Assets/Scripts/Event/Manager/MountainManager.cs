@@ -36,15 +36,29 @@ public class MountainManager : MonoBehaviour
     // Start is called before the first frame update
     public void ChangeCycle()
     {
-	    foreach (var snowGun in snowGuns)
+	    var boo = AreSnowGunsInactive();
+
+	    if (boo)
 	    {
-		    snowGun.SetActive(false);
-	    }
+		    foreach (var snowGun in snowGuns)
+		    {
+			    snowGun.SetActive(false);
+		    }
 	    
-	    var randomNumber = Random.Range(0, snowGuns.Count);
-	    snowGuns[randomNumber].SetActive(true);
+		    var randomNumber = Random.Range(0, snowGuns.Count);
+		    snowGuns[randomNumber].SetActive(true);
+	    }
     }
 
+    bool AreSnowGunsInactive(){
+	    foreach(var snow in snowGuns) {
+		    if(snow.activeSelf) {
+			    return false;
+		    }
+	    }
+	    return true;
+    }
+    
     public void ChangeTurn()
     {
 	    foreach (var p in powdersBlocs)
@@ -64,11 +78,13 @@ public class MountainManager : MonoBehaviour
 	    }
     }
 
-    private void Update()
-    {
-	    if (Input.GetKeyDown(KeyCode.L))
-	    {
-		    wind.gameObject.SetActive(true);
-	    }
-    }
+#if UNITY_EDITOR
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			wind.gameObject.SetActive(true);
+		}
+	}
+#endif
 }

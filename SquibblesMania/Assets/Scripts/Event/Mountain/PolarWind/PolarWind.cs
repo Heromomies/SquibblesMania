@@ -70,6 +70,8 @@ public class PolarWind : MonoBehaviour, IManageEvent
 				{
 					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, -_vectorRaycast[_directionChosen]);
 					distBetweenBlocAndPlayer = (int) distBetweenBlocAndPlayer;
+					
+					Debug.Log(distBetweenBlocAndPlayer);
 
 					players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen]) * distBetweenBlocAndPlayer), speedPlayer);
 				}
