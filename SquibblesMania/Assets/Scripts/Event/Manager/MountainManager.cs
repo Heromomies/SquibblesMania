@@ -14,6 +14,10 @@ public class MountainManager : MonoBehaviour
     public PolarWind wind;
     public int maxTurnBeforeWindApparition;
 
+    [Header("WIND")][Space (10)]
+    public GameObject snow;
+    public int maxTurnBeforeSnowAppear;
+    
     [Header("POWDERS BLOCS")] [Space (10)]
     public List<GroupBlockDetection> powdersBlocs;
     
@@ -79,6 +83,7 @@ public class MountainManager : MonoBehaviour
 	    }
 	    
 	    RandomActivateWind();
+	    RandomActivateSnow();
     }
 
     void RandomActivateWind()
@@ -92,6 +97,19 @@ public class MountainManager : MonoBehaviour
 		    }
 	    }   
     }
+    
+    void RandomActivateSnow()
+    {
+	    if (!snow.activeSelf)
+	    {
+		    var randomNumber = Random.Range(0, maxTurnBeforeSnowAppear);
+		    if (randomNumber == (int)maxTurnBeforeSnowAppear / 2)
+		    {
+			    snow.gameObject.SetActive(true);
+		    }
+	    }   
+    }
+    
     
 #if UNITY_EDITOR
 	private void Update()

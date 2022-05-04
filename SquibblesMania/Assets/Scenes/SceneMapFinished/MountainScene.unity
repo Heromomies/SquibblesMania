@@ -11390,13 +11390,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 134102369}
     m_Modifications:
     - target: {fileID: 5393736662201442234, guid: df3480303d74f3042be19fb7cb25439e, type: 3}
+      propertyPath: snow
+      value: 
+      objectReference: {fileID: 2138751432}
+    - target: {fileID: 5393736662201442234, guid: df3480303d74f3042be19fb7cb25439e, type: 3}
       propertyPath: wind
       value: 
       objectReference: {fileID: 990328587}
-    - target: {fileID: 5393736662201442234, guid: df3480303d74f3042be19fb7cb25439e, type: 3}
-      propertyPath: snowGuns.Array.size
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 5393736662201442234, guid: df3480303d74f3042be19fb7cb25439e, type: 3}
       propertyPath: snowGuns.Array.data[0]
       value: 
@@ -12594,6 +12594,10 @@ PrefabInstance:
     - target: {fileID: 2516037843010971261, guid: 91f5f9e9f3de44e43aa030e967ee5cb5, type: 3}
       propertyPath: m_Name
       value: Snow
+      objectReference: {fileID: 0}
+    - target: {fileID: 2516037843010971261, guid: 91f5f9e9f3de44e43aa030e967ee5cb5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91f5f9e9f3de44e43aa030e967ee5cb5, type: 3}
@@ -17491,3 +17495,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123286481}
   m_Mesh: {fileID: 2709882932678351358, guid: d7205f740c20b714385d97b4dd96ac70, type: 3}
+--- !u!1 &2138751432 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2516037843010971261, guid: 91f5f9e9f3de44e43aa030e967ee5cb5, type: 3}
+  m_PrefabInstance: {fileID: 1719547017}
+  m_PrefabAsset: {fileID: 0}
