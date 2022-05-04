@@ -45,13 +45,9 @@ public class TeamInventoryManager : MonoBehaviour
 				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 			inventory[0].objectAcquired += indexObject;
 
-			inventory[0].boatObject.Add(objectTransport[0]);
-
 			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
 			nbObjectiveT1++;
-
-			inventory[0].boatObject.Add(objectTransport[0]);
-
+			
 			Destroy(_balloonT1.gameObject.transform.GetChild(0).gameObject);
 		}
 
@@ -60,14 +56,10 @@ public class TeamInventoryManager : MonoBehaviour
 			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position,
 				inventory[1].spawnObject.rotation, inventory[1].spawnObject);
 			inventory[1].objectAcquired += indexObject;
-			
-			inventory[1].boatObject.Add(objectTransport[0]);
 
 			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
 			nbObjectiveT2++;
 
-			inventory[1].boatObject.Add(objectTransport[0]);
-			
 			Destroy(_balloonT2.gameObject.transform.GetChild(0).gameObject);
 		}
 
@@ -103,5 +95,4 @@ public class Inventory
 {
 	public Transform spawnObject;
 	public int objectAcquired;
-	[HideInInspector] public List<GameObject> boatObject;
 }
