@@ -38,10 +38,7 @@ public class PowerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("f"))
-        {
-            StartCoroutine(JumpAnim());
-        }
+        
 
     }
 
