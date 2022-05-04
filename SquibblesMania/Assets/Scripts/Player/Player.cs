@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public GameObject playerPref;
     public PlayerTeam playerTeam;
     public GameObject indicatorPlayer;
-    public GameObject hat;
+    public GameObject playerHat;
     public Renderer playerMesh;
     public int stunCount;
     public bool isPlayerStun;
