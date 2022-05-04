@@ -59,7 +59,9 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.powerActivated = false;
         if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
         {
-            GameManager.Instance.currentPlayerTurn.vfxStun.SetActive(false);
+            if( GameManager.Instance.currentPlayerTurn.vfxStun != null)
+            {GameManager.Instance.currentPlayerTurn.vfxStun.SetActive(false);}
+            
             StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, false);
         }
         

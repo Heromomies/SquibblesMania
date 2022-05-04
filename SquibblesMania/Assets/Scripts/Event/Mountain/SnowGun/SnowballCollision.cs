@@ -13,7 +13,7 @@ public class SnowballCollision : MonoBehaviour
         {
             var player = other.GetComponent<PlayerStateManager>();
             player.StunPlayer(player, 2);
-            Instantiate(breakableIce, other.transform.position + new Vector3(0,0.25f,0), Quaternion.identity);
+            player.vfxStun = Instantiate(breakableIce, other.transform.position + new Vector3(0, 0.25f, 0), Quaternion.identity, player.transform);
             gameObject.SetActive(false);
         }
     }
