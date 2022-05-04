@@ -29,6 +29,9 @@ public class DashPower : MonoBehaviour, IManagePower
 	private float _distV1, _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
 	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
+	private const string TagPlayer = "Player";
+	private const string Untagged = "Untagged";
+	
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -118,6 +121,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	//Update method of the long press gesture
 	public void DashDirection(int numberDirectionVector) // When we clicked on button
 	{
+		gameObject.tag = Untagged;
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
 
@@ -408,6 +412,8 @@ public class DashPower : MonoBehaviour, IManagePower
 		}
 		listObjectToSetActiveFalse.Clear();
 
+		gameObject.tag = TagPlayer;
+		
 		PowerManager.Instance.ActivateDeactivatePower(1, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 		
