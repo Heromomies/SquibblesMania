@@ -127,16 +127,16 @@ public class GameManager : MonoBehaviour
     void SetUpPlayers()
     {
         SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red, colors[playerData.P1colorID] );
-        Instantiate(hats[playerData.P1hatID], players[0].hat.transform.position, players[0].hat.transform.rotation).transform.parent = players[0].hat.transform;
+        Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
         
         SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P2colorID]);
-        Instantiate(hats[playerData.P2hatID], players[1].hat.transform.position, players[1].hat.transform.rotation).transform.parent = players[1].hat.transform; ;
+        Instantiate(hats[playerData.P2hatID], players[1].playerHat.transform.position, players[1].playerHat.transform.rotation).transform.parent = players[1].playerHat.transform; ;
 
         SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red,colors[playerData.P3colorID] );
-        Instantiate(hats[playerData.P3hatID], players[2].hat.transform.position, players[2].hat.transform.rotation).transform.parent = players[2].hat.transform; ;
+        Instantiate(hats[playerData.P3hatID], players[2].playerHat.transform.position, players[2].playerHat.transform.rotation).transform.parent = players[2].playerHat.transform; ;
         
         SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P4colorID]);
-        Instantiate(hats[playerData.P4hatID], players[3].hat.transform.position, players[3].hat.transform.rotation).transform.parent = players[3].hat.transform;
+        Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
     void StartGame()
