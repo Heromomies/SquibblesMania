@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
 		SceneManager.LoadScene(sceneIndex, LoadSceneMode.Single);
 	}
 
-    public void Return()
+    public void RotateUi()
     {
 	    AudioManager.Instance.Play("Button");
         panelPause.transform.rotation *= Quaternion.Euler(0, 0, 180);

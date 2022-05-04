@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
 
 
 
-    public GameManager uiMenuParent;
+    public GameObject uiMenuParent;
     // Start is called before the first frame update
 
     void Start()
