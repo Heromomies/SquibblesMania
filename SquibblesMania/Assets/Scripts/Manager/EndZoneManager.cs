@@ -6,7 +6,8 @@ using Random = UnityEngine.Random;
 
 public class EndZoneManager : MonoBehaviour
 {
-    public List<Transform> playerInEndZone;
+    [SerializeField]
+    private List<Transform> playerInEndZone;
 
     public List<Transform> blocksChild = new List<Transform>();
     private static EndZoneManager _endZoneManager;
@@ -57,6 +58,7 @@ public class EndZoneManager : MonoBehaviour
             
             foreach (Transform player in playerInEndZone)
             {
+                Debug.Log(playerCountTeamOne);
                 PlayerStateManager playerStateManager = player.GetComponent<PlayerStateManager>();
                 if (playerStateManager.playerTeam == Player.PlayerTeam.TeamOne)
                 {
@@ -64,7 +66,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamOne >= 2)
                     {
                         Inventory inventoryTeamOne = TeamInventoryManager.Instance.inventory[0];
-                        if (inventoryTeamOne.boatObject.Count == 3)
+                        if (inventoryTeamOne.objectAcquired == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
                         }
@@ -77,7 +79,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamTwo >= 2)
                     {
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
-                        if (inventoryTeamTwo.boatObject.Count == 3)
+                        if (inventoryTeamTwo.objectAcquired == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
                         }

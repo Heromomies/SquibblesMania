@@ -50,6 +50,11 @@ public class PlayerCardState : PlayerBaseState
 			{
 				TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
 			}
+		
+			if (nfcTag.Data.Contains(":"))
+			{
+				TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
+			}
 			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
 			{
