@@ -14,8 +14,6 @@ public class EndZoneManager : MonoBehaviour
     public static EndZoneManager Instance => _endZoneManager;
 
     [SerializeField] private GameObject planeEndZone;
-    [SerializeField] private Vector3 indicatorOffsetPos;
-    [SerializeField] private GameObject endZoneIndicator;
     private void Awake()
     {
         _endZoneManager = this;
@@ -43,10 +41,6 @@ public class EndZoneManager : MonoBehaviour
 
     private void SpawnEndZone()
     {
-        int randomIndexSpawn = Random.Range(0, blocksChild.Count);
-        Vector3 indicatorSpawnPos = blocksChild[randomIndexSpawn].transform.position + indicatorOffsetPos;
-        Instantiate(endZoneIndicator, indicatorSpawnPos, Quaternion.identity, gameObject.transform.parent);
-
         for (int i = 0; i < blocksChild.Count; i++)
         {
             Vector3 planeEndZonePos = blocksChild[i].transform.position + new Vector3(0f, 1.03f, 0f);
