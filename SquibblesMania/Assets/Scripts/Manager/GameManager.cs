@@ -167,22 +167,20 @@ public class GameManager : MonoBehaviour
     {
         if (currentPlayerTurn.canSwitch)
         {
+            
             if (actualCamPreset.presetNumber > 0)
             {
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
             
-            
-            Transform cameraTransform = _cam.transform;
-            Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
-
-            
-            //Smooth Transition
-            cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
-            cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
-        
             actualCamPreset = camPreSets[countTurn];
             
+            Transform cameraTransform = _cam.transform;
+            Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
+            
+            //Smooth Transition
+            cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
+            cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
