@@ -45,6 +45,11 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
+    private void Start()
+    {
+        PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
+    }
+
     public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer)
     {
         buttonNextTurn = buttonNextTurnPlayer;
@@ -57,10 +62,11 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        
         if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
         {
             GameManager.Instance.currentPlayerTurn.vfxStun.SetActive(false);
-            StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, false);
+            PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, false);
         }
         
         GameManager.Instance.currentPlayerTurn.canSwitch = true;
@@ -77,8 +83,11 @@ public class UiManager : MonoBehaviour
     }
 
 
-    public void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
+    private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
+        
+        buttonNextTurn.SetActive(setActiveGameObject);
+            
         if (actualCamPresetNumber <= 2)
         {
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
