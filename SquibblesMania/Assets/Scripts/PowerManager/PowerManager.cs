@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class PowerManager : MonoBehaviour
 {
 	public List<GameObject> powers;
-
+	[HideInInspector] public bool jumpOrSwapActivated;
+	
 	#region Singleton
 
 	private static PowerManager powerManager;
@@ -31,10 +32,10 @@ public class PowerManager : MonoBehaviour
 		}
 		switch (powerIndex)
 		{
-			case 0: powers[0].gameObject.SetActive(activePower); break;
-			case 1: powers[1].gameObject.SetActive(activePower); break;
-			case 2: powers[2].gameObject.SetActive(activePower); break;
-			case 3: powers[3].gameObject.SetActive(activePower); break;
+			case 0: powers[0].gameObject.SetActive(activePower); jumpOrSwapActivated = true; break;
+			case 1: powers[1].gameObject.SetActive(activePower); jumpOrSwapActivated = false; break;
+			case 2: powers[2].gameObject.SetActive(activePower); jumpOrSwapActivated = true; break;
+			case 3: powers[3].gameObject.SetActive(activePower); jumpOrSwapActivated = false; break;
 		}
 	}
 
@@ -46,19 +47,8 @@ public class PowerManager : MonoBehaviour
 	{
 		if (NFCManager.Instance.powerActivated)
 		{
-			StartCoroutine(CheckPlayerEndCoroutine());
+			jumpOrSwapActivated = false;
 			UiManager.Instance.buttonNextTurn.SetActive(true);
-		}
-	}
-
-	private IEnumerator CheckPlayerEndCoroutine()
-	{
-		yield return new WaitForSeconds(0.5f);
-		
-		if (EndZoneManager.Instance != null)
-		{
-			EndZoneManager.Instance.PlayersIsOnEndZone();
-			EndZoneManager.Instance.CheckPlayersTeam();
 		}
 	}
 }

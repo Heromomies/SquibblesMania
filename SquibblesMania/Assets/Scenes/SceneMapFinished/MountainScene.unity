@@ -1114,6 +1114,7 @@ Transform:
   - {fileID: 1016834430}
   - {fileID: 1993680888}
   - {fileID: 1109713136}
+  - {fileID: 565049686}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1813,10 +1814,6 @@ PrefabInstance:
     - target: {fileID: 6899493095702370955, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
       propertyPath: m_Name
       value: Dash Power
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
-      propertyPath: dashSpeed
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
       propertyPath: raycastPlayer
@@ -3992,6 +3989,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!1001 &565049685
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 134102369}
+    m_Modifications:
+    - target: {fileID: 3646140947235869745, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_Name
+      value: PlayerStateEventManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+--- !u!4 &565049686 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3646140947235869750, guid: 390154089250c844a8a826e2c6b4833e, type: 3}
+  m_PrefabInstance: {fileID: 565049685}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &567882950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10036,7 +10095,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
-      objectReference: {fileID: 2122400680}
+      objectReference: {fileID: 1750768646}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[2]
       value: 
