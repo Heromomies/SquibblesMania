@@ -29,7 +29,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
-	
+
 	void OnEnable()
 	{
 		_cam = Camera.main;

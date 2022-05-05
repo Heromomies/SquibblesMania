@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
     public GameObject winT1;
     public GameObject winT2;
 
+    [Space] [Header("MAP ZONE")] 
+    public List<GameObject> cleanList;
+    
     [Header("PLAYER CUSTOMIZATION")]
     public PlayerData playerData;
     public List<GameObject> hats = new List<GameObject>();
@@ -102,6 +105,7 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
                 PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
+                player.playerRespawnPoint = spawnPos;
                 player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
                 player.gameObject.name = "Player " + (i + 1);
                 player.playerNumber = i;
@@ -123,16 +127,16 @@ public class GameManager : MonoBehaviour
     void SetUpPlayers()
     {
         SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red, colors[playerData.P1colorID] );
-        Instantiate(hats[playerData.P1hatID], players[0].hat.transform.position, players[0].hat.transform.rotation).transform.parent = players[0].hat.transform;
+        Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
         
         SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P2colorID]);
-        Instantiate(hats[playerData.P2hatID], players[1].hat.transform.position, players[1].hat.transform.rotation).transform.parent = players[1].hat.transform; ;
+        Instantiate(hats[playerData.P2hatID], players[1].playerHat.transform.position, players[1].playerHat.transform.rotation).transform.parent = players[1].playerHat.transform; ;
 
         SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red,colors[playerData.P3colorID] );
-        Instantiate(hats[playerData.P3hatID], players[2].hat.transform.position, players[2].hat.transform.rotation).transform.parent = players[2].hat.transform; ;
+        Instantiate(hats[playerData.P3hatID], players[2].playerHat.transform.position, players[2].playerHat.transform.rotation).transform.parent = players[2].playerHat.transform; ;
         
         SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P4colorID]);
-        Instantiate(hats[playerData.P4hatID], players[3].hat.transform.position, players[3].hat.transform.rotation).transform.parent = players[3].hat.transform;
+        Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
     void StartGame()
@@ -143,7 +147,6 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-
         CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
@@ -168,15 +171,14 @@ public class GameManager : MonoBehaviour
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
             
-          
+            actualCamPreset = camPreSets[countTurn];
+            
             Transform cameraTransform = _cam.transform;
-            Quaternion target = Quaternion.Euler(camPreSets[countTurn].camRot);
+            Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
             
             //Smooth Transition
-            cameraTransform.DOMove(camPreSets[countTurn].camPos, smoothTransitionTime);
+            cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
-        
-            actualCamPreset = camPreSets[countTurn];
             
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
@@ -191,8 +193,8 @@ public class GameManager : MonoBehaviour
             {
                 cameraViewModeGesture.SetUpCameraViewMode(false, count);
             }
-
-            count = (count + 1) % camPreSets.Count; 
+            
+            //count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
         }
     }
@@ -238,17 +240,20 @@ public class GameManager : MonoBehaviour
             {
                 MountainManager.Instance.ChangeCycle();
             }
+            MountainManager.Instance.ChangeTurn();
         }
-        
+
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
             currentPlayerTurn.currentCardEffect.SetActive(false);
             currentPlayerTurn.currentCardEffect = null;
         }
-       
-        SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
-        cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
+        
+        
+        SavePreviousCamRotY(count);
+        cameraViewModeGesture.SavePreviousViewModeGesture(count);
+        count = (count + 1) % camPreSets.Count; 
         CamConfig(count);
         
         currentPlayerTurn = players[playerNumberTurn];
@@ -290,7 +295,6 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn = players[3];
         }
         
-        
         currentPlayerTurn.StartState();
     }    
     
@@ -311,12 +315,12 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-            if (player.TryGetComponent(out Node currentPlayerNode))
+            if (player.currentBlocPlayerOn.TryGetComponent(out Node currentPlayerNode))
             {
                 currentPlayerNode.isActive = true;
                 currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
             }
-            
+           
             Ray ray = new Ray(player.transform.position, -transform.up);
             RaycastHit hit;
             
@@ -337,7 +341,7 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain && turnCount != 1)
+        if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
         {
             MountainManager.Instance.wind.CheckIfPlayersAreHide();
         }

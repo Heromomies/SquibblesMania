@@ -33,7 +33,7 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	public void ShowEvent() // Show the event
 	{
-		childrenBlocs = VolcanoManager.Instance.cleanList;
+		childrenBlocs = GameManager.Instance.cleanList;
 
 		var rand = Random.Range(0, childrenBlocs.Count
 		                           - conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered);

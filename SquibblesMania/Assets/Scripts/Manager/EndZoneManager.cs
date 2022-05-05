@@ -6,7 +6,8 @@ using Random = UnityEngine.Random;
 
 public class EndZoneManager : MonoBehaviour
 {
-    public List<Transform> playerInEndZone;
+    [SerializeField]
+    private List<Transform> playerInEndZone;
 
     public List<Transform> blocksChild = new List<Transform>();
     private static EndZoneManager _endZoneManager;
@@ -14,8 +15,6 @@ public class EndZoneManager : MonoBehaviour
     public static EndZoneManager Instance => _endZoneManager;
 
     [SerializeField] private GameObject planeEndZone;
-    [SerializeField] private Vector3 indicatorOffsetPos;
-    [SerializeField] private GameObject endZoneIndicator;
     private void Awake()
     {
         _endZoneManager = this;
@@ -43,10 +42,6 @@ public class EndZoneManager : MonoBehaviour
 
     private void SpawnEndZone()
     {
-        int randomIndexSpawn = Random.Range(0, blocksChild.Count);
-        Vector3 indicatorSpawnPos = blocksChild[randomIndexSpawn].transform.position + indicatorOffsetPos;
-        Instantiate(endZoneIndicator, indicatorSpawnPos, Quaternion.identity, gameObject.transform.parent);
-
         for (int i = 0; i < blocksChild.Count; i++)
         {
             Vector3 planeEndZonePos = blocksChild[i].transform.position + new Vector3(0f, 1.03f, 0f);
@@ -63,6 +58,7 @@ public class EndZoneManager : MonoBehaviour
             
             foreach (Transform player in playerInEndZone)
             {
+                Debug.Log(playerCountTeamOne);
                 PlayerStateManager playerStateManager = player.GetComponent<PlayerStateManager>();
                 if (playerStateManager.playerTeam == Player.PlayerTeam.TeamOne)
                 {
@@ -70,7 +66,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamOne >= 2)
                     {
                         Inventory inventoryTeamOne = TeamInventoryManager.Instance.inventory[0];
-                        if (inventoryTeamOne.boatObject.Count == 3)
+                        if (inventoryTeamOne.objectAcquired == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamOne);
                         }
@@ -83,7 +79,7 @@ public class EndZoneManager : MonoBehaviour
                     if (playerCountTeamTwo >= 2)
                     {
                         Inventory inventoryTeamTwo = TeamInventoryManager.Instance.inventory[1];
-                        if (inventoryTeamTwo.boatObject.Count == 3)
+                        if (inventoryTeamTwo.objectAcquired == 3)
                         {
                             GameManager.Instance.PlayerTeamWin(Player.PlayerTeam.TeamTwo);
                         }

@@ -39,14 +39,14 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	public void ShowEvent() // Chose the bloc 
 	{
-		cubeOnMap = VolcanoManager.Instance.cleanList;
+		cubeOnMap = GameManager.Instance.cleanList;
 
 		smokeEffect.SetActive(false);
 		
 		for (int i = 0; i < conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
 			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite);
-			VolcanoManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
+			GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
 
 			RandomEvent(placeOfCube);
 		}

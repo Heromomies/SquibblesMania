@@ -55,6 +55,8 @@ MonoBehaviour:
   playerPref: {fileID: -3814758494985992804, guid: 4a7a68b86efee2d469957a5afe2130ad, type: 3}
   currentPlayerTurn: {fileID: 0}
   turnCount: 0
+  _cam: {fileID: 0}
+  cameraViewModeGesture: {fileID: 0}
   actualCamPreset:
     presetNumber: 0
     camPos: {x: 0, y: 0, z: 0}
@@ -81,20 +83,20 @@ MonoBehaviour:
   smoothTransitionTime: 1
   previousCamPreSetsList:
   - presetNumber: 1
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 30, y: 45, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 60, y: 45, z: 0}
     buttonNextTurn: {fileID: 0}
   - presetNumber: 3
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 150, y: 225, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 120, y: -135, z: 0}
     buttonNextTurn: {fileID: 0}
   - presetNumber: 2
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 30, y: 45, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 60, y: 45, z: 0}
     buttonNextTurn: {fileID: 0}
   - presetNumber: 4
-    camPos: {x: -2, y: 6, z: -10}
-    camRot: {x: 150, y: 225, z: 0}
+    camPos: {x: 1.1, y: 10.3, z: -6.8}
+    camRot: {x: 120, y: -135, z: 0}
     buttonNextTurn: {fileID: 0}
   isConditionVictory: 0
   conditionVictory:
@@ -125,6 +127,7 @@ MonoBehaviour:
   cycleCount: 0
   winT1: {fileID: 0}
   winT2: {fileID: 0}
+  cleanList: []
   playerData: {fileID: 11400000, guid: 37b2b51b7eead4042abb429527d65873, type: 2}
   hats:
   - {fileID: 244345663624797596, guid: a4ce1ef17b8960145a461e48f5d25c9b, type: 3}
@@ -138,15 +141,10 @@ MonoBehaviour:
   - {fileID: 6318948912455008619, guid: 76a6e41da4276fe41885c7f4a297be4e, type: 3}
   - {fileID: 7614042025106970765, guid: 773f1e972f8b3b24493103bdcbabbbbb, type: 3}
   colors:
-  - {fileID: 2100000, guid: 0f1c578672ecaea43a50a0d0a56adda3, type: 2}
-  - {fileID: 2100000, guid: 30403aa3ce217204199cc7dcf7001705, type: 2}
-  - {fileID: 2100000, guid: c0f9e39272142ca4b8edcdc9052d196c, type: 2}
-  - {fileID: 2100000, guid: e6c0d378afdf67749bfeb48ba945ee89, type: 2}
-  - {fileID: 2100000, guid: fa18fcd846590fc42b93279062daaabb, type: 2}
-  - {fileID: 2100000, guid: 28481857cb9364846b1da45bfbce6b7e, type: 2}
-  - {fileID: 2100000, guid: 7070c00fb660edc45b875a97f5e4e212, type: 2}
-  - {fileID: 2100000, guid: f12c94f7986d92d469433c6ad39933ba, type: 2}
-  - {fileID: 2100000, guid: 6ac4723e636e4f4409e214d123bc7a4c, type: 2}
+  - {fileID: 2100000, guid: 460c6ec769898ea43bb729978870d2e8, type: 2}
+  - {fileID: 2100000, guid: 44a6e7c3286b8e2428fe702556347263, type: 2}
+  - {fileID: 2100000, guid: e8b8c8501ac6ded4ab29ddce36ff13ef, type: 2}
+  - {fileID: 2100000, guid: 4d4ac0010814be34cade10ac966510d7, type: 2}
 --- !u!81 &5504695256977957373
 AudioListener:
   m_ObjectHideFlags: 0

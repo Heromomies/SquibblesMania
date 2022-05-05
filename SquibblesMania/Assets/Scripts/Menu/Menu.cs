@@ -13,6 +13,8 @@ public class Menu : MonoBehaviour
     public PlayerData playerData;
 
 
+
+    public GameObject uiMenuParent;
     // Start is called before the first frame update
 
     void Start()
@@ -52,5 +54,11 @@ public class Menu : MonoBehaviour
     {
         mapManager.SetActive(false);
         startManager.SetActive(true);
+    }
+
+    public void RotateStartMenuUi()
+    {
+        AudioManager.Instance.Play("Button");
+        uiMenuParent.transform.rotation *= Quaternion.Euler(0, 0, 180);
     }
 }

@@ -12,14 +12,19 @@ public class Player : MonoBehaviour
     public GameObject playerPref;
     public PlayerTeam playerTeam;
     public GameObject indicatorPlayer;
-    public GameObject hat;
+    public GameObject playerHat;
     public Renderer playerMesh;
-    
     public int stunCount;
     public bool isPlayerStun;
     public bool isPlayerHide;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
+
+    [HideInInspector] public GameObject vfxStun;
+    
+    [Header("RESPAWN PARAMETERS")] public Vector3 playerRespawnPoint;
+    
+    [Header("ANIMATIONS")] public Animator playerAnimator;
     public enum PlayerTeam
     {
         TeamOne,

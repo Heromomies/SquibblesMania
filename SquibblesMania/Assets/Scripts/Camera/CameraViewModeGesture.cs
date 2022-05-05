@@ -49,25 +49,9 @@ public class CameraViewModeGesture : MonoBehaviour
         public float lastCamIconAngleView;
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        Setup();
-    }
-
-    private void Reset()
-    {
-        Setup();
-    }
-
-    private void Setup()
-    {
-        _cam = Camera.main;
-    }
-#endif
-
     private void Start()
     {
+        _cam = Camera.main;
         _mapTarget = GameObject.FindGameObjectWithTag("Map").transform;
     }
 

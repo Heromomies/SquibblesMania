@@ -25,7 +25,6 @@ public class PlayerCardState : PlayerBaseState
 		_currentPlayer = player;
 		if (player.isPlayerStun && player.stunCount > 0)
 		{
-			player.stunCount--;
 			PlayerIsStun(player);
 		}
 
@@ -48,7 +47,12 @@ public class PlayerCardState : PlayerBaseState
 			
 			if (nfcTag.Data.Contains("1"))
 			{
-				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+				TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
+			}
+		
+			if (nfcTag.Data.Contains(":"))
+			{
+				TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
 			}
 			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
@@ -196,8 +200,10 @@ public class PlayerCardState : PlayerBaseState
 		}
 		else
 		{
-			UiManager.Instance.StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, true);
-			UiManager.Instance.buttonNextTurn.SetActive(true);
+			PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+			player.stunCount--;
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
 		}
 		
 	}

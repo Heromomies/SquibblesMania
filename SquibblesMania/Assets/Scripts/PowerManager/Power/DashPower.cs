@@ -8,7 +8,9 @@ using UnityEngine.EventSystems;
 
 public class DashPower : MonoBehaviour, IManagePower
 {
-	[Header("POWER SETTINGS")] public int dashRange;
+	[Header("POWER SETTINGS")] 
+	[Range(0,5)]public int dashRange;
+	[Range(0.0f,0.5f)]public float dashSpeed;
 	public LayerMask layerPlayerInteractable;
 	public LayerMask layerInteractable;
 	public LayerMask layerShowPath;
@@ -29,6 +31,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	private float _distV1, _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
 	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
+
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -131,7 +134,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						position + _vectorRaycast[numberDirectionVector] * (distance - 1), 0.05f);
+						position + _vectorRaycast[numberDirectionVector] * (distance - 1), dashSpeed);
 					ActiveParticle();
 				}
 			}
@@ -181,13 +184,13 @@ public class DashPower : MonoBehaviour, IManagePower
 							case 2:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									position + _vectorRaycast[numberDirectionVector] *
-									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
+									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), dashSpeed);
 								ActiveParticle();
 								break;
 							case 3:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									position + _vectorRaycast[numberDirectionVector] *
-									(distanceBetweenTwoPlayers - 1), 0.05f);
+									(distanceBetweenTwoPlayers - 1), dashSpeed);
 								ActiveParticle();
 								break;
 						}
@@ -200,9 +203,9 @@ public class DashPower : MonoBehaviour, IManagePower
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
+						position + _vectorRaycast[numberDirectionVector] * dashRange, dashSpeed);
 					hit.collider.transform.DOMove(hit.collider.transform.position
-					                              + _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, 1f);
+					                              + _vectorRaycast[numberDirectionVector] * distanceBetweenTwoPlayers, dashSpeed);
 					
 					ActiveParticle();
 				}
@@ -210,7 +213,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					position + _vectorRaycast[numberDirectionVector] * dashRange, 0.1f);
+					position + _vectorRaycast[numberDirectionVector] * dashRange, dashSpeed);
 				
 				ActiveParticle();
 			}
@@ -218,7 +221,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				position + _vectorRaycast[numberDirectionVector] * dashRange, 0.05f);
+				position + _vectorRaycast[numberDirectionVector] * dashRange, dashSpeed);
 
 			ActiveParticle();
 		}
