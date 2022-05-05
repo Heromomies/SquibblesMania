@@ -24,6 +24,11 @@ public class PowerManager : MonoBehaviour
 
 	public void ActivateDeactivatePower(int powerIndex, bool activePower)
 	{
+		if (EndZoneManager.Instance != null)
+		{
+			EndZoneManager.Instance.CheckPlayersTeam();
+			EndZoneManager.Instance.PlayersIsOnEndZone();
+		}
 		switch (powerIndex)
 		{
 			case 0: powers[0].gameObject.SetActive(activePower); break;

@@ -14,7 +14,7 @@ public class FireJump : MonoBehaviour
 	
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Player"))
+		if (other.CompareTag("Player") && !NFCManager.Instance.powerActivated)
 		{
 			Jump(other.transform);
 		}

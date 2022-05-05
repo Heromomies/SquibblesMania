@@ -47,9 +47,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayDash = 3;
 	private float _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
-	private const string TagPlayer = "Player";
-	private const string Untagged = "Untagged";
-	
+
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
 	[Serializable]
@@ -241,8 +239,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	private void MirrorDirection(int directionIndex) // When we clicked on button
 	{
-		gameObject.tag = Untagged;
-		zombiePlayer.tag = Untagged;
 		var currentPlayer = GameManager.Instance.currentPlayerTurn;
 		var currentPlayerTransform = currentPlayer.transform;
 		var playerPos = currentPlayerTransform.position;
@@ -568,9 +564,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 	IEnumerator WaitBeforeDetectUnderZombie()
 	{
 		yield return _waitDetectBlocUnderZombie;
-
-		gameObject.tag = TagPlayer;
-		zombiePlayer.tag = TagPlayer;
 		
 		zombiePlayer = null;
 
