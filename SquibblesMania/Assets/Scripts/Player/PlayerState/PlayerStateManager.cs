@@ -36,6 +36,7 @@ public class PlayerStateManager : Player
 		playerMovementManager = PlayerMovementManager.Instance;
 		
 		GameManager.Instance.DetectParentBelowPlayers();
+		PlayerStateEventManager.Instance.ONPlayerStunTriggerEnter += StunPlayer;
 	}
 
 

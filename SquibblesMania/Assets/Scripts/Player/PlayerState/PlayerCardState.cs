@@ -25,7 +25,6 @@ public class PlayerCardState : PlayerBaseState
 		_currentPlayer = player;
 		if (player.isPlayerStun && player.stunCount > 0)
 		{
-			player.stunCount--;
 			PlayerIsStun(player);
 		}
 
@@ -201,8 +200,8 @@ public class PlayerCardState : PlayerBaseState
 		}
 		else
 		{
-			UiManager.Instance.StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, true);
-			UiManager.Instance.buttonNextTurn.SetActive(true);
+			PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+			player.stunCount--;
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
 		}

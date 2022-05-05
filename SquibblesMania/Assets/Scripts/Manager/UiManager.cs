@@ -45,6 +45,11 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
+    private void Start()
+    {
+        PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
+    }
+
     public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer)
     {
         buttonNextTurn = buttonNextTurnPlayer;
@@ -57,12 +62,10 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        
         if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
         {
-            if( GameManager.Instance.currentPlayerTurn.vfxStun != null)
-            {GameManager.Instance.currentPlayerTurn.vfxStun.SetActive(false);}
-            
-            StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, false);
+            PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, false);
         }
         
         GameManager.Instance.currentPlayerTurn.canSwitch = true;
@@ -79,17 +82,20 @@ public class UiManager : MonoBehaviour
     }
 
 
-    public void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
+    private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
+        
+        buttonNextTurn.SetActive(setActiveGameObject);
+            
         if (actualCamPresetNumber <= 2)
         {
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[1];
                         spriteArrow.gameObject.SetActive(setActiveGameObject); break;
-                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[0]; 
                         spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
@@ -99,9 +105,9 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
-                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }

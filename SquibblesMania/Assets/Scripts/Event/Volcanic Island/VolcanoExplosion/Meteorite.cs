@@ -46,8 +46,13 @@ public class Meteorite : MonoBehaviour
 			var player = other.gameObject.GetComponent<PlayerStateManager>();
 			player.vfxStun = PoolManager.Instance.SpawnObjectFromPool("StunVFX", other.transform.position + new Vector3(0, 1, 0), Quaternion.identity, other.transform);
 			
-			player.StunPlayer(other.gameObject.GetComponent<PlayerStateManager>(), 2);
+			PlayerStateEventManager.Instance.PlayerStunTriggerEnter(player, 2);
 			
+			if (GameManager.Instance.currentPlayerTurn.isPlayerStun) 
+			{ 
+				PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+			}
+
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
 		else
