@@ -147,7 +147,6 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-
         CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
@@ -173,10 +172,10 @@ public class GameManager : MonoBehaviour
             }
             
             actualCamPreset = camPreSets[countTurn];
-         
             
             Transform cameraTransform = _cam.transform;
             Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
+            
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
@@ -184,6 +183,7 @@ public class GameManager : MonoBehaviour
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
+            
             //Register Previous Cam View Mode
             if (turnCount <= 4)
             {
@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
                 cameraViewModeGesture.SetUpCameraViewMode(false, count);
             }
             
-            count = (count + 1) % camPreSets.Count; 
+            //count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
         }
     }
@@ -249,9 +249,11 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn.currentCardEffect.SetActive(false);
             currentPlayerTurn.currentCardEffect = null;
         }
-       
-        SavePreviousCamRotY((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count-1));
-        cameraViewModeGesture.SavePreviousViewModeGesture((int)Mathf.Repeat(count-1, previousCamPreSetsList.Count));
+        
+        
+        SavePreviousCamRotY(count);
+        cameraViewModeGesture.SavePreviousViewModeGesture(count);
+        count = (count + 1) % camPreSets.Count; 
         CamConfig(count);
         
         currentPlayerTurn = players[playerNumberTurn];
