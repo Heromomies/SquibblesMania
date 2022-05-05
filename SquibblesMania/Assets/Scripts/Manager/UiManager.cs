@@ -65,7 +65,6 @@ public class UiManager : MonoBehaviour
         
         if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
         {
-            GameManager.Instance.currentPlayerTurn.vfxStun.SetActive(false);
             PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, false);
         }
         
@@ -94,9 +93,9 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[1];
                         spriteArrow.gameObject.SetActive(setActiveGameObject); break;
-                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[0]; 
                         spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
@@ -106,9 +105,9 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
-                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
