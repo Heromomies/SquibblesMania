@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8381393293150420789}
   - component: {fileID: 8381393293150420778}
   - component: {fileID: 8381393293150420790}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BreakableIce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,8 +94,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.8, y: 6, z: 0.8}
+  m_Center: {x: 0, y: 3, z: 0}
 --- !u!114 &8381393293150420790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,8 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a878e9df19e6641870e4fc0ba3b2ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  node: {fileID: 0}
   shaderReplaceObject: {fileID: 4914717304206586177, guid: 92a840392a1ffc442904b9dcc75d01bd, type: 3}
-  minTurnBeforeRespawn: 1
-  maxTurnBeforeRespawn: 2
+  minTurnBeforeRespawn: 4
+  maxTurnBeforeRespawn: 8
   checkCondition: 0
