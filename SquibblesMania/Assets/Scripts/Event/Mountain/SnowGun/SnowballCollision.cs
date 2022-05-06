@@ -15,7 +15,7 @@ public class SnowballCollision : MonoBehaviour
            
             PlayerStateEventManager.Instance.PlayerStunTriggerEnter(player, 1);
             
-            player.psStun = Instantiate(breakableIce, other.transform.position + new Vector3(0, 0.25f, 0), Quaternion.identity, player.transform);
+            player.vfxStun = Instantiate(breakableIce, other.transform.position + new Vector3(0, 0.25f, 0), Quaternion.identity, player.transform);
             gameObject.SetActive(false);
         }
     }

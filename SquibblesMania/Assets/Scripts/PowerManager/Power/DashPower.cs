@@ -126,11 +126,11 @@ public class DashPower : MonoBehaviour, IManagePower
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[numberDirectionVector], out var hit, dashRange)) // launch the raycast
 		{
-			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
+			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 				distance = (int) distance;
-
+				
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
@@ -222,7 +222,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
 				position + _vectorRaycast[numberDirectionVector] * dashRange, dashSpeed);
-
+			
 			ActiveParticle();
 		}
 
@@ -385,13 +385,16 @@ public class DashPower : MonoBehaviour, IManagePower
 
 	void SpawnShaderOnPathDash(Transform objectToChange, float position)
 	{
-		var objPos = objectToChange.position;
-		var objRot = objectToChange.localPosition;
+		if (objectToChange != null)
+		{
+			var objPos = objectToChange.position;
+			var objRot = objectToChange.localPosition;
 
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower",
-			new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
+			GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ShaderPlanePower",
+				new Vector3(objPos.x, objPos.y + 1.02f, objPos.z), Quaternion.Euler(objRot.x, position, objRot.z), null);
 
-		listObjectToSetActiveFalse.Add(obj);
+			listObjectToSetActiveFalse.Add(obj);
+		}
 	}
 
 	#endregion
