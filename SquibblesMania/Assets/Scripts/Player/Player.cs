@@ -20,8 +20,6 @@ public class Player : MonoBehaviour
     public bool canSwitch = true;
     public GameObject currentCardEffect;
 
-    [HideInInspector] public GameObject vfxStun;
-    
     [Header("RESPAWN PARAMETERS")] public Vector3 playerRespawnPoint;
     
     [Header("ANIMATIONS")] public Animator playerAnimator;

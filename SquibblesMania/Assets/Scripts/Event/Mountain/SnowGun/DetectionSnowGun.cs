@@ -27,6 +27,7 @@ public class DetectionSnowGun : MonoBehaviour
       if (other.CompareTag("Player"))
       {
          snowGun.canClick = false;
+         animator.SetBool("isTrigger", false);
          snowGun.animatorSnowGun.SetBool("onHatche", false);
       }
    }
