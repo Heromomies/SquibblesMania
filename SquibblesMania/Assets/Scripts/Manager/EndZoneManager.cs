@@ -58,7 +58,7 @@ public class EndZoneManager : MonoBehaviour
             
             foreach (Transform player in playerInEndZone)
             {
-                Debug.Log(playerCountTeamOne);
+             
                 PlayerStateManager playerStateManager = player.GetComponent<PlayerStateManager>();
                 if (playerStateManager.playerTeam == Player.PlayerTeam.TeamOne)
                 {

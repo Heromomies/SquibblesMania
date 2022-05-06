@@ -62,14 +62,17 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
         
-        if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
+        if (currentPlayer.isPlayerStun)
         {
             PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, false);
+            currentPlayer.stunCount--;
+            currentPlayer.stunCount = (int)Mathf.Clamp( currentPlayer.stunCount, 0, Mathf.Infinity);
         }
         
-        GameManager.Instance.currentPlayerTurn.canSwitch = true;
-        GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
+        currentPlayer.canSwitch = true;
+        currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
 
     }
 

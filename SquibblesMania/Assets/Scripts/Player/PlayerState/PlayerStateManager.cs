@@ -24,8 +24,6 @@ public class PlayerStateManager : Player
 	public List<Transform> nextBlockPath;
 	
 	public PlayerMovementManager playerMovementManager;
-	
-	public GameObject psStun;
 
 
 	private WaitForSeconds _waitForSecondsPlayerRespawn = new WaitForSeconds(0.5f);
