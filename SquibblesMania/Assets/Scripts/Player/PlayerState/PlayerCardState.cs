@@ -192,16 +192,13 @@ public class PlayerCardState : PlayerBaseState
 		if (player.stunCount <= 0)
 		{
 			player.isPlayerStun = false;
-			player.psStun.SetActive(false);
+			player.vfxStun.SetActive(false);
 			player.indicatorPlayer.SetActive(true);
-			NFCController.OnNewTag = OnNewTagDetected;
-			NFCController.OnTagRemoved = OnTagRemoveDetected;
-			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
+			NFCManager.Instance.PlayerChangeTurn();
 		}
 		else
 		{
 			PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
-			player.stunCount--;
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
 		}
@@ -216,9 +213,13 @@ public class PlayerCardState : PlayerBaseState
 	{
 		if (player.isPlayerStun)
 		{
+			if (player.stunCount <= 0)
+			{
+				player.isPlayerStun = false;
+				player.vfxStun.SetActive(false);
+			}
 			
 			player.indicatorPlayer.SetActive(false);
-		
 			//Switch to next player of another team to play
 			switch (player.playerNumber)
 			{

@@ -194,7 +194,6 @@ public class GameManager : MonoBehaviour
                 cameraViewModeGesture.SetUpCameraViewMode(false, count);
             }
             
-            //count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
         }
     }
