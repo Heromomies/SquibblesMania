@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3539542778933655620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.43, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -46,10 +46,15 @@ MonoBehaviour:
   snowPrefab: {fileID: 1812055748362360789, guid: 1700756de5227d144a5bb37cefb40a06, type: 3}
   speed: 0.04
   ySpawn: 5
+  radius: 7
+  yRotation: 0
   hatchDetectPlayerNearSnowGun: {fileID: 4006827709582687106, guid: 62a5e04692ba9d74dad1e2dd97ced780, type: 3}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  layerInteractable:
+    serializedVersion: 2
+    m_Bits: 0
   curve:
     serializedVersion: 2
     m_Curve:

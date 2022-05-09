@@ -48,13 +48,12 @@ public class CameraViewModeGesture : MonoBehaviour
         public int lastIndexUiCircleSelection;
         public float lastCamIconAngleView;
     }
-    
-    private void Awake()
+
+    private void Start()
     {
         _cam = Camera.main;
         _mapTarget = GameObject.FindGameObjectWithTag("Map").transform;
     }
-
 
     public void ChangeViewMode(int indexUiCircleSelection)
     {

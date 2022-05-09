@@ -23,9 +23,8 @@ public class PlayerCardState : PlayerBaseState
 		//Turn of player x
 		//Message player turn x "Put a card on the corresponding surface"
 		_currentPlayer = player;
-		if (player.isPlayerStun)
+		if (player.isPlayerStun && player.stunCount > 0)
 		{
-			player.stunCount--;
 			PlayerIsStun(player);
 		}
 
@@ -48,7 +47,12 @@ public class PlayerCardState : PlayerBaseState
 			
 			if (nfcTag.Data.Contains("1"))
 			{
-				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+				TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
+			}
+		
+			if (nfcTag.Data.Contains(":"))
+			{
+				TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
 			}
 			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
@@ -188,7 +192,15 @@ public class PlayerCardState : PlayerBaseState
 		if (player.stunCount <= 0)
 		{
 			player.isPlayerStun = false;
-			player.psStun.SetActive(false);
+			player.vfxStun.SetActive(false);
+			player.indicatorPlayer.SetActive(true);
+			NFCManager.Instance.PlayerChangeTurn();
+		}
+		else
+		{
+			PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
 		}
 		
 	}
@@ -199,5 +211,24 @@ public class PlayerCardState : PlayerBaseState
 
 	public override void ExitState(PlayerStateManager player)
 	{
+		if (player.isPlayerStun)
+		{
+			if (player.stunCount <= 0)
+			{
+				player.isPlayerStun = false;
+				player.vfxStun.SetActive(false);
+			}
+			
+			player.indicatorPlayer.SetActive(false);
+			//Switch to next player of another team to play
+			switch (player.playerNumber)
+			{
+				case 0: GameManager.Instance.ChangePlayerTurn(1); break;
+				case 1: GameManager.Instance.ChangePlayerTurn(2); break;
+				case 2: GameManager.Instance.ChangePlayerTurn(3); break;
+				case 3: GameManager.Instance.ChangePlayerTurn(0); break;
+			}
+		}
+		
 	}
 }

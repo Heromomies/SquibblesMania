@@ -1,30 +1,29 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using Random = UnityEngine.Random;
 
 public class VolcanoExplosion : MonoBehaviour, IManageEvent
 {
-	[Header("PARTICLE SYSTEM")]
-	public GameObject particleSystemExplosion;
+	[Header("PARTICLE SYSTEM")] public GameObject particleSystemExplosion;
+	[Space] public List<GameObject> cubeOnMap;
+	public List<GameObject> cubeTouched;
+	public GameObject smokeEffect;
+	
 	[Space]
-	 public List<GameObject> cubeOnMap;
-	 public List<GameObject> cubeTouched;
-	 [Header("BULLET AND SPAWN")]
+	[Header("BULLET AND SPAWN")] 
+	public GameObject volcanoGameObject;
 	public Transform volcanoTransform;
 	public Transform bulletParent;
-	
-	[Space]
-	[Header("BULLET SETTINGS")]
-	[Range(0.0f, 3.0f)] public float speed;
+
+	[Space] [Header("BULLET SETTINGS")] [Range(0.0f, 3.0f)]
+	public float speed;
+
 	[Range(0.0f, 1.0f)] public float repeatRate;
 
-	private int _turn;
+	private Animator _animVolcano;
 	
-	[Header("CONDITIONS DANGEROUSNESS")]
-	public Conditions[] conditionsDangerousness;
+	[Header("CONDITIONS DANGEROUSNESS")] public Conditions[] conditionsDangerousness;
 
 	[Serializable]
 	public struct Conditions
@@ -34,33 +33,36 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private void OnEnable()
 	{
+		_animVolcano = volcanoGameObject.GetComponent<Animator>();
 		ShowEvent();
 	}
 
 	public void ShowEvent() // Chose the bloc 
 	{
-		cubeOnMap = VolcanoManager.Instance.cleanList;
+		cubeOnMap = GameManager.Instance.cleanList;
+
+		smokeEffect.SetActive(false);
 		
 		for (int i = 0; i < conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
 			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite);
-			VolcanoManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
-			
+			GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
+
 			RandomEvent(placeOfCube);
 		}
-		
+
 		LaunchEvent();
-		
 	}
 
 	public void LaunchEvent() // Launch the bullet's function
 	{
 		GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
 			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);
-		
+
 		Destroy(ps, 5f);
-		
-		InvokeRepeating(nameof(LaunchBullet), 0.2f, repeatRate);
+
+		_animVolcano.enabled = true;
+		InvokeRepeating(nameof(LaunchBullet), 0.5f, repeatRate);
 	}
 
 	#region Highlight Cubes Who Will Be Touched
@@ -80,10 +82,9 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 				}
 			}
 		}
-		
-	
+
+
 		cubeTouched.Add(cubeOnMap[placeOfCube]);
-		_turn = GameManager.Instance.turnCount;
 	}
 
 	#endregion
@@ -93,35 +94,34 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	void LaunchBullet() // Launch the bullets 
 	{
 		cubeTouched[0].layer = 7;
-
+		
 		var positionVol = volcanoTransform.position;
 		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
 			speed); // Add the velocity to make an effect of parabola for the bullets
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
-		
+
 		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
+		PoolManager.Instance.SpawnObjectFromPool("ParticleLavaProjection", positionVol, Quaternion.identity, bulletParent);
 		obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		obj.GetComponent<Rigidbody>().velocity = vo;
 
 		obj.GetComponent<Meteorite>().stopRotating = false;
-		
+
 		AudioManager.Instance.Play("FireballStart");
-		
+
 		cubeTouched.Remove(cubeTouched[0]);
-	}
-
-	#endregion
-
-	void Update()
-	{
+		
 		if (cubeTouched.Count <= 0)
 		{
+			_animVolcano.enabled = false;
 			CancelInvoke();
-			_turn = 0;
+			smokeEffect.SetActive(true);
 			gameObject.SetActive(false);
 		}
 	}
 
+	#endregion
+	
 	#region CalculateVelocity
 
 	Vector3 CalculateVelocity(Vector3 target, Vector3 origin, float velocity) // Function to make a parabola

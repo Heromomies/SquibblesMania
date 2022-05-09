@@ -8,12 +8,12 @@ public class PlayerStateManager : Player
 {
 	public PlayerBaseState CurrentState;
 
-	public PlayerActionPointCardState PlayerActionPointCardState = new PlayerActionPointCardState();
-	public PlayerCardState PlayerCardState = new PlayerCardState();
-	public PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
+	public readonly PlayerActionPointCardState PlayerActionPointCardState = new PlayerActionPointCardState();
+	private readonly PlayerCardState _playerCardState = new PlayerCardState();
+	public readonly PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
 
-	[Header("PLAYER BLOCKS VIEW")] public Transform currentBlockPlayerOn;
-	public Transform currentTouchBlock;
+	[Header("PLAYER BLOCKS VIEW")] public Transform currentBlocPlayerOn;
+	public Transform currentTouchBloc;
 	public List<Transform> finalPathFinding = new List<Transform>();
 	public bool walking;
 	public float timeMoveSpeed;
@@ -24,18 +24,17 @@ public class PlayerStateManager : Player
 	public List<Transform> nextBlockPath;
 	
 	public PlayerMovementManager playerMovementManager;
-	
-	public GameObject psStun;
 
+
+	private WaitForSeconds _waitForSecondsPlayerRespawn = new WaitForSeconds(0.5f);
+	
 	private void Start()
 	{
-		DetectBlockBelowPlayer();
-		Node currentNodePlayerOn = currentBlockPlayerOn.GetComponent<Node>();
 		//Assign the player to a list for know on what block group is currently on
-		GroupBlockDetection groupBlockDetection = currentNodePlayerOn.groupBlockParent;
-		groupBlockDetection.playersOnGroupBlock.Add(gameObject.transform);
-		currentNodePlayerOn.isActive = false;
 		playerMovementManager = PlayerMovementManager.Instance;
+		
+		GameManager.Instance.DetectParentBelowPlayers();
+		PlayerStateEventManager.Instance.ONPlayerStunTriggerEnter += StunPlayer;
 	}
 
 
@@ -45,14 +44,14 @@ public class PlayerStateManager : Player
 		if (CurrentState != null)
 		{
 			CurrentState.UpdateState(this);
-			DetectBlockBelowPlayer();
 		}
+		
 	}
 
 	public void StartState()
 	{
 		//Start the player turn in the player card state
-		CurrentState = PlayerCardState;
+		CurrentState = _playerCardState;
 		CurrentState.EnterState(this);
 	}
 
@@ -83,6 +82,40 @@ public class PlayerStateManager : Player
 		}
 	}
 
+	public IEnumerator PlayerRespawnUpdateBlocBelow(PlayerStateManager player)
+	{
+		yield return _waitForSecondsPlayerRespawn;
+		if (player.currentBlocPlayerOn.TryGetComponent(out Node currentPlayerNode))
+		{
+			currentPlayerNode.isActive = true;
+			currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+		}
+           
+		Ray ray = new Ray(player.transform.position, -transform.up);
+		RaycastHit hit;
+            
+		if (Physics.Raycast(ray, out hit, 1.1f))
+		{
+			if (hit.collider.gameObject.TryGetComponent(out Node node))
+			{
+				player.currentBlocPlayerOn = hit.transform;
+			}
+		}
+            
+		player.currentBlocPlayerOn.GetComponent<Node>().isActive = false;
+            
+		GroupBlockDetection groupBlockDetection = player.currentBlocPlayerOn.transform.GetComponentInParent<GroupBlockDetection>();
+		if (!groupBlockDetection.playersOnGroupBlock.Contains(player.transform))
+		{
+			groupBlockDetection.playersOnGroupBlock.Add(player.transform);
+		}
+		if (player.isPlayerInActionCardState)
+		{
+			player.CurrentState.EnterState(player);
+		}
+	}
+	
+	
 	public void SwitchState(PlayerBaseState state)
 	{
 		if (CurrentState != null)
@@ -95,33 +128,6 @@ public class PlayerStateManager : Player
 		}
 	}
 
-	public void DetectBlockBelowPlayer()
-	{
-		Ray ray = new Ray(transform.position, -transform.up);
-		RaycastHit hit;
-
-		if (Physics.Raycast(ray, out hit, 1.1f))
-		{
-			if (hit.collider.gameObject.GetComponent<Node>() != null)
-			{
-				currentBlockPlayerOn = hit.transform;
-			}
-		}
-	}
-	
-	public void RemoveParentBelowPlayer(Transform playerToCheck)
-	{
-		playerToCheck.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().isActive = true;
-		
-		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(playerToCheck);
-	}
-	
-	public void DetectParentBelowPlayer(Transform playerToCheck)
-	{
-		playerToCheck.GetComponent<PlayerStateManager>().currentBlockPlayerOn.GetComponent<Node>().isActive = false;
-		currentBlockPlayerOn.transform.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Add(playerToCheck);
-	}
-	
 	public void StunPlayer(PlayerStateManager player, int stunTurnCount)
 	{
 		player.isPlayerStun = true;

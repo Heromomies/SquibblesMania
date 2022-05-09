@@ -7,73 +7,36 @@ using UnityEngine.UI;
 
 public class CharacterCustomization : MonoBehaviour
 {
-    [SerializeField] private Image bodycolor;
+    
     [SerializeField] private Image hat;
 
-
-    public List<Material> colors = new List<Material>();
-    public List<string> hex = new List<string>();
-
-    public int colorID;
+    
     public int hatID;
 
     [SerializeField] private Sprite[] hats;
+
+    public GameObject otherPlayer;
+    
 
 
     void Start()
     {
 
-        for (int i = 0; i < colors.Count; i++)
-        {
-            hex.Add(ColorUtility.ToHtmlStringRGB(colors[i].color));
-        }
+        
 
-        SetItem("colors");
         SetItem("hats");
 
         
     }
 
-    private void Update()
-    {
 
-        
-    }
-
-
-    public void SelectColor(bool isForward)
-    {
-        if (isForward)
-        {
-            if (colorID == colors.Count - 1)
-            {
-                colorID = 0;
-            }
-            else
-            {
-                colorID++;
-            }
-        }
-        else
-        {
-            if (colorID == 0)
-            {
-                colorID = colors.Count - 1;
-            }
-            else
-            {
-                colorID--;
-            }
-        }
-
-        SetItem("colors");
-    }
+    
 
     public void SelectHat(bool isForward)
     {
         if (isForward)
         {
-            if (hatID == hats.Length - 1)
+            if (hatID == hats.Length - 1 || otherPlayer.GetComponent<CharacterCustomization>().hatID == hats.Length - 1 && hatID == hats.Length - 2)
             {
                 hatID = 0;
             }
@@ -81,14 +44,26 @@ public class CharacterCustomization : MonoBehaviour
             {
                 hatID++;
             }
+
+            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
+            {
+                hatID++;
+            }
+
+            
         }
         else
         {
-            if (hatID == 0)
+            if (hatID == 0 || otherPlayer.GetComponent<CharacterCustomization>().hatID == 0 && hatID == 1)
             {
                 hatID = hats.Length - 1;
             }
             else
+            {
+                hatID--;
+            }
+
+            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
             {
                 hatID--;
             }
@@ -105,16 +80,7 @@ public class CharacterCustomization : MonoBehaviour
               hat.GetComponent<Image>().sprite = hats[hatID];
                
                 break;
-            case "colors":
-                if (ColorUtility.TryParseHtmlString("#" + hex[colorID], out Color color))
-                {
-                    bodycolor.GetComponent<Image>().color = color;
-                    //hat.GetComponent<Image>().color = color;
-                    
-
-                }
-
-                break;
+           
 
                 
                 

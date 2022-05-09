@@ -11,7 +11,11 @@ public class SnowballCollision : MonoBehaviour
     {
         if (other.CompareTag("Player") && other.name != GameManager.Instance.currentPlayerTurn.name)
         {
-            Instantiate(breakableIce, other.transform.position + new Vector3(0,0.25f,0), Quaternion.identity);
+            var player = other.GetComponent<PlayerStateManager>();
+           
+            PlayerStateEventManager.Instance.PlayerStunTriggerEnter(player, 1);
+            
+            player.vfxStun = Instantiate(breakableIce, other.transform.position + new Vector3(0, 0.25f, 0), Quaternion.identity, player.transform);
             gameObject.SetActive(false);
         }
     }

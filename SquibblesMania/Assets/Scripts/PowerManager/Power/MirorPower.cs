@@ -24,9 +24,10 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	public Transform baseSpawnRaycastTransform;
 	public Transform raycastPlayer;
-	[Space] [Range(1, 10)]
-	public int mirorRange;
-
+	[Space] [Range(1, 10)] public int mirrorRange;
+	[Range(0.0f, 1f)] public float mirrorPlayerSpeed;
+	[Range(0.0f, 1f)] public float mirrorZombieSpeed;
+	
 	[Header("MATERIAL SETTINGS")] 
 	[Space] 
 	public Material selectableMat;
@@ -104,13 +105,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 					raycastPlayer.position = baseSpawnRaycastTransform.position;
-				
-					var currentPlayer = GameManager.Instance.currentPlayerTurn;
-					currentPlayer.RemoveParentBelowPlayer(currentPlayer.transform);
-					
-					var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-					zombieStateManager.RemoveParentBelowPlayer(zombieStateManager.transform);
-					
+
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
 						var rot = 0f;
@@ -234,8 +229,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
-				Debug.Log("I'm here");
-				
 				ActiveParticle();
 			}
 		}
@@ -252,7 +245,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		var playerPos = currentPlayerTransform.position;
 		transform.position = playerPos;
 
-		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, mirorRange)) // launch the raycast
+		if (Physics.Raycast(transform.position, _vectorRaycast[directionIndex], out var hit, mirrorRange)) // launch the raycast
 		{
 			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
@@ -262,7 +255,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						playerPos + _vectorRaycast[directionIndex] * (distance - 1), 0.05f);
+						playerPos + _vectorRaycast[directionIndex] * (distance - 1), mirrorPlayerSpeed);
 				}
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
@@ -311,38 +304,38 @@ public class MirorPower : MonoBehaviour, IManagePower
 							case 2:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									playerPos + _vectorRaycast[directionIndex] *
-									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
+									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), mirrorPlayerSpeed);
 								break;
 							case 3:
 								GameManager.Instance.currentPlayerTurn.transform.DOMove(
 									playerPos + _vectorRaycast[directionIndex] *
-									(distanceBetweenTwoPlayers - 1), 0.05f);
+									(distanceBetweenTwoPlayers - 1), mirrorPlayerSpeed);
 								break;
 						}
 
 						//In any case, the player repulsed will stop his course before the bloc who stop him
 						hit.collider.transform.DOMove(hit.collider.transform.position
-						                              + _vectorRaycast[directionIndex] * (distanceBetweenBlockAndPlayerTouched - 1), 1f);
+						                              + _vectorRaycast[directionIndex] * (distanceBetweenBlockAndPlayerTouched - 1), mirrorPlayerSpeed);
 					}
 				}
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.05f);
+						playerPos + _vectorRaycast[directionIndex] * mirrorRange, mirrorPlayerSpeed);
 					hit.collider.transform.DOMove(hit.collider.transform.position
-					                              + _vectorRaycast[directionIndex] * distanceBetweenTwoPlayers, 1f);
+					                              + _vectorRaycast[directionIndex] * distanceBetweenTwoPlayers, mirrorPlayerSpeed);
 				}
 			}
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.1f);
+					playerPos + _vectorRaycast[directionIndex] * mirrorRange, mirrorPlayerSpeed);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				playerPos + _vectorRaycast[directionIndex] * mirorRange, 0.05f);
+				playerPos + _vectorRaycast[directionIndex] * mirrorRange, mirrorPlayerSpeed);
 		}
 
 		AudioManager.Instance.Play("PowerMirorEnd");
@@ -360,7 +353,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		var positionZombiePlayer = zombiePlayer.transform.position;
 		transform.position = positionZombiePlayer;
 
-		if (Physics.Raycast(transform.position, -_vectorRaycast[directionZombieIndex], out var hitZombie, mirorRange)) // launch the raycast
+		if (Physics.Raycast(transform.position, -_vectorRaycast[directionZombieIndex], out var hitZombie, mirrorRange)) // launch the raycast
 		{
 			if (hitZombie.collider.gameObject.layer == 3 || hitZombie.collider.gameObject.layer == 0)
 			{
@@ -370,7 +363,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (distance <= 3.5f)
 				{
 					zombiePlayer.transform.DOMove(
-						positionZombiePlayer - _vectorRaycast[directionZombieIndex] * (distance - 1), 0.05f);
+						positionZombiePlayer - _vectorRaycast[directionZombieIndex] * (distance - 1), mirrorZombieSpeed);
 				}
 			}
 			else if (hitZombie.collider.gameObject.layer == 6) // When the raycast touch another player
@@ -407,9 +400,9 @@ public class MirorPower : MonoBehaviour, IManagePower
 						switch (distanceBetweenTwoPlayersWhenABlockIsBehind) // inverse distance for the dash, else the player repulsed don't follow the range  
 						{
 							case 1:
-								distanceBetweenTwoPlayersWhenABlockIsBehind = 3;
+								distanceBetweenTwoPlayersWhenABlockIsBehind = 2;
 								break;
-							case 3:
+							case 2:
 								distanceBetweenTwoPlayersWhenABlockIsBehind = 1;
 								break;
 						}
@@ -419,38 +412,38 @@ public class MirorPower : MonoBehaviour, IManagePower
 							case 2:
 								zombiePlayer.transform.DOMove(
 									positionZombiePlayer - _vectorRaycast[directionZombieIndex] *
-									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), 0.05f);
+									(distanceBetweenTwoPlayers + distanceBetweenBlockAndPlayerTouched - 2), mirrorZombieSpeed);
 								break;
 							case 3:
 								zombiePlayer.transform.DOMove(
 									positionZombiePlayer - _vectorRaycast[directionZombieIndex] *
-									(distanceBetweenTwoPlayers - 1), 0.05f);
+									(distanceBetweenTwoPlayers - 1), mirrorZombieSpeed);
 								break;
 						}
 
 						//In any case, the player repulsed will stop his course before the bloc who stop him
 						hitZombie.collider.transform.DOMove(hitZombie.collider.transform.position
-						                                    - _vectorRaycast[directionZombieIndex] * (distanceBetweenBlockAndPlayerTouched - 1), 1f);
+						                                    - _vectorRaycast[directionZombieIndex] * (distanceBetweenBlockAndPlayerTouched - 1), mirrorZombieSpeed);
 					}
 				}
 				else // If the player repulsed don't have any bloc behind him, the player who dash just dash and repulse from 1 the player
 				{
 					zombiePlayer.transform.DOMove(
-						positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.05f);
+						positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirrorRange, mirrorZombieSpeed);
 					hitZombie.collider.transform.DOMove(hitZombie.collider.transform.position
-					                                    - _vectorRaycast[directionZombieIndex] * distanceBetweenTwoPlayers, 1f);
+					                                    - _vectorRaycast[directionZombieIndex] * distanceBetweenTwoPlayers, mirrorZombieSpeed);
 				}
 			}
 			else if (hitZombie.collider.gameObject.layer == 0)
 			{
 				zombiePlayer.transform.DOMove(
-					positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.1f);
+					positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirrorRange, mirrorZombieSpeed);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			zombiePlayer.transform.DOMove(
-				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirorRange, 0.05f);
+				positionZombiePlayer - _vectorRaycast[directionZombieIndex] * mirrorRange, mirrorZombieSpeed);
 		}
 
 		AudioManager.Instance.Play("PowerMirorEnd");
@@ -476,7 +469,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		{
 			if (players[i].name != GameManager.Instance.currentPlayerTurn.name && players.Length > 1)
 			{
-				players[i].GetComponent<PlayerStateManager>().meshRenderer.GetComponent<Renderer>().material = selectableMat;
+				players[i].GetComponent<PlayerStateManager>().playerMesh.GetComponent<Renderer>().material = selectableMat;
 			}
 		}
 
@@ -572,20 +565,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 	IEnumerator WaitBeforeDetectUnderZombie()
 	{
 		yield return _waitDetectBlocUnderZombie;
-
-		PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
-		currentPlayer.DetectBlockBelowPlayer();
-		currentPlayer.DetectParentBelowPlayer(currentPlayer.transform);
-		
-		if (zombiePlayer != null)
-		{
-			var zombieStateManager = zombiePlayer.GetComponent<PlayerStateManager>();
-			zombieStateManager.DetectBlockBelowPlayer();
-			zombieStateManager.DetectParentBelowPlayer(zombieStateManager.transform);
-		}
 		
 		zombiePlayer = null;
 
+		GameManager.Instance.DetectParentBelowPlayers();
+		
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
 	}
@@ -598,7 +582,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				foreach (var p in players)
 				{
-					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 				}
 			}
 
@@ -610,7 +594,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				foreach (var p in players)
 				{
-					GameManager.Instance.SetUpMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 				}
 			}
 			
@@ -624,8 +608,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 				g.gameObject.SetActive(false);
 			}
 			
-			listObjectToSetActiveFalse.Clear();
+			foreach (var g in listObjectToSetActiveFalse)
+			{
+				g.SetActive(false);
+			}
 			
+			listObjectToSetActiveFalse.Clear();
+
 			PowerManager.Instance.ActivateDeactivatePower(3, false);
 		}
 	}

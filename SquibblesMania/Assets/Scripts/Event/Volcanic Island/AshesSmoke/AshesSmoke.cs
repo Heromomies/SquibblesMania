@@ -8,9 +8,14 @@ using Random = UnityEngine.Random;
 public class AshesSmoke : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT SETTINGS")]
-	public float heightSpawnParticle;[Space]
-
+	public float heightSpawnParticle;
+	[Range(0.0f, 10.0f)] public float timeBeforeRainDisappear;
+	[Space]
 	public List<GameObject> childrenBlocs;
+
+	[Space] public Transform spawnRain;
+	
+	private GameObject _particleRain;
 	
 	[Header("CONDITIONS DANGEROUSNESS")]
 	public Conditions[] conditionsDangerousnessAshesSmoke;
@@ -28,11 +33,13 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 
 	public void ShowEvent() // Show the event
 	{
-		childrenBlocs = VolcanoManager.Instance.cleanList;
+		childrenBlocs = GameManager.Instance.cleanList;
 
 		var rand = Random.Range(0, childrenBlocs.Count
 		                           - conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered);
 
+		_particleRain = PoolManager.Instance.SpawnObjectFromPool("ParticleAshesRain", spawnRain.position, Quaternion.identity, null);
+		
 		AudioManager.Instance.Play("VolcanoSmoking");
 		
 		for (int i = 0; i < conditionsDangerousnessAshesSmoke[VolcanoManager.Instance.dangerousness].numberOfBlocsCovered; i++)
@@ -57,7 +64,8 @@ public class AshesSmoke : MonoBehaviour, IManageEvent
 	
 	IEnumerator SetActiveFalseGameObjectCoroutine()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(timeBeforeRainDisappear);
+		_particleRain.SetActive(false);
 		gameObject.SetActive(false);
 	}
 	public void LaunchEvent() // Launch the event

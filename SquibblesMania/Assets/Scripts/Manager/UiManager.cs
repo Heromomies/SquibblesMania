@@ -14,6 +14,7 @@ public class UiManager : MonoBehaviour
     //Manager for simple button Ui
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
+    [HideInInspector]
     public GameObject buttonNextTurn;
    
     
@@ -28,11 +29,25 @@ public class UiManager : MonoBehaviour
     public GameObject textActionPointPopUp;
     public int totalCurrentActionPoint;
     [SerializeField] private Vector3 offsetText;
-
     public Camera uiCam;
+
+    [Header("STUN TEXT PARAMETERS")]
+    [SerializeField] private UiPlayerStun[] uiPlayerStuns;
+    
+    [Serializable]
+    public struct UiPlayerStun
+    {
+        public GameObject playerStunTextParent;
+        public Transform[] arrowSprite;
+    }
     private void Awake()
     {
         _uiManager = this;
+    }
+
+    private void Start()
+    {
+        PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
     public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer)
@@ -43,13 +58,21 @@ public class UiManager : MonoBehaviour
     public void ButtonNextTurn()
     {
         AudioManager.Instance.Play("ButtonNextTurn");
-        
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
-        GameManager.Instance.currentPlayerTurn.canSwitch = true;
-        GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
+        PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+        
+        if (currentPlayer.isPlayerStun)
+        {
+            PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, false);
+            currentPlayer.stunCount--;
+            currentPlayer.stunCount = (int)Mathf.Clamp( currentPlayer.stunCount, 0, Mathf.Infinity);
+        }
+        
+        currentPlayer.canSwitch = true;
+        currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
 
     }
 
@@ -57,21 +80,39 @@ public class UiManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        
         textTeamOne.SetActive(false);
         textTeamTwo.SetActive(false);
     }
 
 
-    public void StunTextPopUp(int actualCamPresetNumber)
+    private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
+        
+        buttonNextTurn.SetActive(setActiveGameObject);
+            
         if (actualCamPresetNumber <= 2)
         {
-            //TODO Set active du Stun text Team 1
+            uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
+            Transform spriteArrow;
+            switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+            {
+                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[1];
+                        spriteArrow.gameObject.SetActive(setActiveGameObject); break;
+                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[0]; 
+                        spriteArrow.gameObject.SetActive(setActiveGameObject); break;
+            }
         }
         else
         {
-            //TODO Set active du Stun text Team 2
+            uiPlayerStuns[1].playerStunTextParent.SetActive(setActiveGameObject);
+            Transform spriteArrow;
+            switch (GameManager.Instance.currentPlayerTurn.playerNumber)
+            {
+                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
+                    spriteArrow.gameObject.SetActive(setActiveGameObject); break;
+                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
+                    spriteArrow.gameObject.SetActive(setActiveGameObject); break;
+            }
         }
     }
     

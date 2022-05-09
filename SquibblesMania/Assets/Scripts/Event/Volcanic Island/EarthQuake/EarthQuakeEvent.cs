@@ -10,6 +10,8 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT SETTINGS")]
 	[Range(0f, 10f)] public float speedBloc;
+
+	public Transform volcanoTransform;
 	
 	[Space]
 	[Header("CONDITIONS DANGEROUSNESS")]
@@ -21,9 +23,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	{
 		public int numberOfBlocsTouched;
 	}
-
-	private float _playerHeight = 2.5f;
-
+	
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -61,7 +61,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 						if (blocParent[randomNumber].transform.position.y < blocHeight)
 						{
-							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, blocHeight + _playerHeight, blocParentPlayerPos.z);
+							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, col.y + blocParentPlayerPos.y + 1f, blocParentPlayerPos.z);
 							blocParentPlayer[j].transform.DOMove(blocParentPlayerPos, speedBloc); 
 						}
 					}
@@ -75,11 +75,16 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			}
 		}
 		
+		GameManager.Instance.DetectParentBelowPlayers();
+		
 		StartCoroutine(SetActiveFalseBullet());
 	}
 	IEnumerator SetActiveFalseBullet()
 	{
+		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ParticleLavaProjection", volcanoTransform.position, Quaternion.Euler(-90,0,0), null);
+
 		yield return new WaitForSeconds(1f);
+		obj.SetActive(false);
 		gameObject.SetActive(false);
 	}
 	public void LaunchEvent()

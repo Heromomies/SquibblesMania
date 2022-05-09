@@ -45,14 +45,10 @@ public class TeamInventoryManager : MonoBehaviour
 				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 			inventory[0].objectAcquired += indexObject;
 
-			inventory[0].boatObject.Add(objectTransport[0]);
-
 			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
 			nbObjectiveT1++;
-
-			inventory[0].boatObject.Add(objectTransport[0]);
-
-			Destroy(_balloonT1.gameObject.transform.GetChild(0 ).gameObject);
+			
+			Destroy(_balloonT1.gameObject.transform.GetChild(0).gameObject);
 		}
 
 		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].objectAcquired < 3)
@@ -60,12 +56,11 @@ public class TeamInventoryManager : MonoBehaviour
 			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position,
 				inventory[1].spawnObject.rotation, inventory[1].spawnObject);
 			inventory[1].objectAcquired += indexObject;
-			inventory[1].boatObject.Add(objectTransport[0]);
 
 			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
 			nbObjectiveT2++;
 
-			Destroy(_balloonT2.gameObject.transform.GetChild(inventory[1].objectAcquired - 1).gameObject);
+			Destroy(_balloonT2.gameObject.transform.GetChild(0).gameObject);
 		}
 
 		if (inventory[0].objectAcquired == 3 || inventory[1].objectAcquired == 3)
@@ -76,17 +71,22 @@ public class TeamInventoryManager : MonoBehaviour
 
 		if (inventory[0].objectAcquired == 3 && inventory[1].objectAcquired == 3)
 		{
-			Debug.Log("I'm here");
 			_isFull = true;
 		}
-
-		var randomBloc = Random.Range(0, VolcanoManager.Instance.cleanList.Count - 1);
-		var bloc = VolcanoManager.Instance.cleanList[randomBloc].transform;
-
-		if (bloc.GetComponent<Node>().isActive && !_isFull)
+		
+		do
 		{
-			Instantiate(objectToSpawn, new Vector3(bloc.position.x, bloc.position.y + 1f, bloc.position.z), Quaternion.identity, bloc);
-		}
+			var randomBloc = Random.Range(0, GameManager.Instance.cleanList.Count - 1);
+			var bloc = GameManager.Instance.cleanList[randomBloc].transform;
+			
+			if (!_isFull)
+			{
+				var blocPos = bloc.position;
+				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
+				break;
+			}
+		} 
+		while (!GameManager.Instance.cleanList[Random.Range(0, GameManager.Instance.cleanList.Count - 1)].transform.GetComponent<Node>().isActive);
 	}
 }
 
@@ -95,5 +95,4 @@ public class Inventory
 {
 	public Transform spawnObject;
 	public int objectAcquired;
-	[HideInInspector] public List<GameObject> boatObject;
 }
