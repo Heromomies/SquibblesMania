@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
     [HideInInspector] public GameObject vfxStun;
     
-    [Header("RESPAWN PARAMETERS")] public Vector3 playerRespawnPoint;
+    [Header("RESPAWN PARAMETERS")] public Transform playerRespawnPoint;
     
     [Header("ANIMATIONS")] public Animator playerAnimator;
     public enum PlayerTeam

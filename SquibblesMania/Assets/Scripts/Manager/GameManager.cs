@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
                 PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
-                player.playerRespawnPoint = spawnPos;
+                player.playerRespawnPoint = playerNodeSpawnPoint.gameObject.transform;
                 player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
                 player.gameObject.name = "Player " + (i + 1);
                 player.playerNumber = i;
