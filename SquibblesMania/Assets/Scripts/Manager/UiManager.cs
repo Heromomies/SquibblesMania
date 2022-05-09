@@ -65,6 +65,7 @@ public class UiManager : MonoBehaviour
         PowerManager.Instance.isPlayerInJumpOrSwap = false;
         
         PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+        CameraButtonManager.Instance.isCamRotateButtonPressed = false;
         
         if (currentPlayer.isPlayerStun)
         {
