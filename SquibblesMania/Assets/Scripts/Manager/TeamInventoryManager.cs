@@ -25,6 +25,8 @@ public class TeamInventoryManager : MonoBehaviour
 	public int nbObjectiveT2 = 0;
 
 	public Sprite green;
+
+	private GameObject _lastObj;
 	// Start is called before the first frame update
 
 	 void Start()
@@ -76,8 +78,16 @@ public class TeamInventoryManager : MonoBehaviour
 		
 		do
 		{
+			if(_lastObj != null)
+				GameManager.Instance.cleanList.Add(_lastObj);
+			
 			var randomBloc = Random.Range(0, GameManager.Instance.cleanList.Count - 1);
 			var bloc = GameManager.Instance.cleanList[randomBloc].transform;
+
+			_lastObj = bloc.gameObject;
+
+			if(_lastObj != null)
+				GameManager.Instance.cleanList.Remove(_lastObj);
 			
 			if (!_isFull)
 			{
@@ -86,7 +96,8 @@ public class TeamInventoryManager : MonoBehaviour
 				break;
 			}
 		} 
-		while (!GameManager.Instance.cleanList[Random.Range(0, GameManager.Instance.cleanList.Count - 1)].transform.GetComponent<Node>().isActive);
+		while
+		(!GameManager.Instance.cleanList[Random.Range(0, GameManager.Instance.cleanList.Count  - 1)].transform.GetComponent<Node>().isActive);
 	}
 }
 
