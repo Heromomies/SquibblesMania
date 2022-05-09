@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public bool isUsingCardPower;
     public GameObject playerPref;
     public PlayerTeam playerTeam;
+    [Header("CUSTOMIZATIONS PARAMETERS")]
     public GameObject indicatorPlayer;
     public GameObject playerHat;
     public Renderer playerMesh;
@@ -19,9 +20,9 @@ public class Player : MonoBehaviour
     public bool isPlayerHide;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
-
+        
     [HideInInspector] public GameObject vfxStun;
-    
+    public Rigidbody playerRigidbody;
     [Header("RESPAWN PARAMETERS")] public Transform playerRespawnPoint;
     
     [Header("ANIMATIONS")] public Animator playerAnimator;
