@@ -62,6 +62,8 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        PowerManager.Instance.isPlayerInJumpOrSwap = false;
+        
         PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
         
         if (currentPlayer.isPlayerStun)

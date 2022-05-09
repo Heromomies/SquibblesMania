@@ -30,9 +30,12 @@ public class BreakableIce : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && !PowerManager.Instance.jumpOrSwapActivated)
+        if (!PowerManager.Instance.isPlayerInJumpOrSwap)
         {
-            BlocModification();
+            if (other.CompareTag("Player"))
+            {
+                BlocModification();
+            }
         }
     }
     

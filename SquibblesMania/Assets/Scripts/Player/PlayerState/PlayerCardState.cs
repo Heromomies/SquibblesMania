@@ -165,6 +165,7 @@ public class PlayerCardState : PlayerBaseState
 							power.GetComponent<IManagePower>().ClearPower();
 					}
 
+					PowerManager.Instance.isPlayerInJumpOrSwap = false;
 					GameManager.Instance.DecreaseVariable();
 				}
 				else
