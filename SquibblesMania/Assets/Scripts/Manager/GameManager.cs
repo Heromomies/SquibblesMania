@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
                 PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
-                player.playerRespawnPoint = spawnPos;
+                player.playerRespawnPoint = playerNodeSpawnPoint.gameObject.transform;
                 player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
                 player.gameObject.name = "Player " + (i + 1);
                 player.playerNumber = i;
@@ -194,7 +194,6 @@ public class GameManager : MonoBehaviour
                 cameraViewModeGesture.SetUpCameraViewMode(false, count);
             }
             
-            //count = (count + 1) % camPreSets.Count; 
             currentPlayerTurn.canSwitch = false;
         }
     }
@@ -286,15 +285,6 @@ public class GameManager : MonoBehaviour
         if(turnCount <= 0)
             turnCount=0;
 
-        if (count != 0)
-        {
-            currentPlayerTurn = players[count -1];
-        }
-        else if (count == 0)
-        {
-            currentPlayerTurn = players[3];
-        }
-        
         currentPlayerTurn.StartState();
     }    
     

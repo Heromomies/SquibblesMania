@@ -13,6 +13,7 @@ public class BreakableIce : MonoBehaviour
     
     private GameObject _nodeGo;
     private MeshRenderer _nodeMeshRenderer;
+    private Collider _nodeCollider;
     private int _turn;
     private int _randomNumber;
     [HideInInspector] public bool checkCondition;
@@ -22,15 +23,19 @@ public class BreakableIce : MonoBehaviour
         _node = GetComponentInParent<Node>();
         _nodeGo = _node.gameObject;
         _nodeMeshRenderer = _nodeGo.GetComponent<MeshRenderer>();
+        _nodeCollider = _nodeGo.GetComponent<Collider>();
         shaderReplaceObject = Instantiate(shaderReplaceObject, _nodeGo.transform.position, Quaternion.identity, _nodeGo.transform);
         shaderReplaceObject.SetActive(false);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && !PowerManager.Instance.jumpOrSwapActivated)
+        if (!PowerManager.Instance.isPlayerInJumpOrSwap)
         {
-            BlocModification();
+            if (other.CompareTag("Player"))
+            {
+                BlocModification();
+            }
         }
     }
     
@@ -54,6 +59,7 @@ public class BreakableIce : MonoBehaviour
         checkCondition = true;
         _node.isActive = false;
         _nodeMeshRenderer.enabled = false;
+        _nodeCollider.enabled = false;
         RespawnIce();
     }
     
@@ -63,5 +69,6 @@ public class BreakableIce : MonoBehaviour
         checkCondition = false;
         _node.isActive = true;
         _nodeMeshRenderer.enabled = true;
+        _nodeCollider.enabled = true;
     }
 }

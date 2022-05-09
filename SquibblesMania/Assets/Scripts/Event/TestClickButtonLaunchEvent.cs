@@ -24,8 +24,6 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
 
    public void LaunchEvent()
    {
-      
-    
       foreach (var eventTested in eventToTest)
       {
          if (!eventTested.activeInHierarchy)

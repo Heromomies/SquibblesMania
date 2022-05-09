@@ -93,6 +93,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			hideParticle.Clear();			
 			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
+			gameObject.SetActive(false);
 		}
 	}
 	

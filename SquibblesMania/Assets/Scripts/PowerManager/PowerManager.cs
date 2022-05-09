@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PowerManager : MonoBehaviour
 {
 	public List<GameObject> powers;
-	[HideInInspector] public bool jumpOrSwapActivated;
+	public bool isPlayerInJumpOrSwap;
 	
 	#region Singleton
 
@@ -32,10 +32,10 @@ public class PowerManager : MonoBehaviour
 		}
 		switch (powerIndex)
 		{
-			case 0: powers[0].gameObject.SetActive(activePower); jumpOrSwapActivated = true; break;
-			case 1: powers[1].gameObject.SetActive(activePower); jumpOrSwapActivated = false; break;
-			case 2: powers[2].gameObject.SetActive(activePower); jumpOrSwapActivated = true; break;
-			case 3: powers[3].gameObject.SetActive(activePower); jumpOrSwapActivated = false; break;
+			case 0: powers[0].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = true; break;
+			case 1: powers[1].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
+			case 2: powers[2].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = true; break;
+			case 3: powers[3].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
 		}
 	}
 
@@ -47,7 +47,6 @@ public class PowerManager : MonoBehaviour
 	{
 		if (NFCManager.Instance.powerActivated)
 		{
-			jumpOrSwapActivated = false;
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 		}
 	}
