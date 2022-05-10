@@ -58,7 +58,8 @@ public class GameManager : MonoBehaviour
     public PlayerData playerData;
     public List<GameObject> hats = new List<GameObject>();
     public List<Material> colors = new List<Material>();
-
+    public GameObject spawnPointSpriteParent;
+    public List<Color> playerColors = new List<Color>();
     private void Awake()
     {
         Application.targetFrameRate = 30;
@@ -119,26 +120,60 @@ public class GameManager : MonoBehaviour
       
     }
 
-  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Color color, Material playerCustomMat)
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat)
   {
-      player.playerTeam = playerTeam;
-      player.gameObject.GetComponentInChildren<Renderer>().material.color = color;
-      player.indicatorPlayer.SetActive(false);
-      player.playerMesh.material = playerCustomMat;
+      
+      if (player.playerRespawnPoint.TryGetComponent(out Node playerNodeSpawnPoint))
+      {
+          player.playerTeam = playerTeam;
+          SetSpriteSpawnPlayerPoint(player, playerNodeSpawnPoint, playerCustomMat);
+          player.indicatorPlayerRenderer.gameObject.SetActive(false);
+          player.playerMesh.material = playerCustomMat;
+      }
+
+  }
+
+  private void SetSpriteSpawnPlayerPoint(PlayerStateManager player,Node playerNodeSpawnPoint, Material playerCustomMat)
+  {
+      //TODO Couleurs list a update directement dans le playerData quand on selectionne sa team
+      Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint();
+          
+      GameObject spriteSpawnPoint = Instantiate(spawnPointSpriteParent, spawnPos + spawnPointSpriteParent.transform.position, spawnPointSpriteParent.transform.rotation, playerNodeSpawnPoint.gameObject.transform);
+      SpriteRenderer playerSprite = null;
+      
+      if (spriteSpawnPoint.transform.GetChild(0).TryGetComponent(out SpriteRenderer sprite))
+      {
+          playerSprite = sprite;
+      }
+
+      if (playerSprite != null)
+      {
+          switch (playerCustomMat.name)
+          {
+              case "M_blue_player": player.indicatorPlayerRenderer.material.color = playerColors[0]; 
+                  playerSprite.color = playerColors[0]; break;
+              case "M_red_player": player.indicatorPlayerRenderer.material.color = playerColors[2]; 
+                  playerSprite.color = playerColors[2]; break;
+              case "M_yellow_player": player.indicatorPlayerRenderer.material.color = playerColors[3]; 
+                  playerSprite.color = playerColors[3]; break;
+              case "M_green_player": player.indicatorPlayerRenderer.material.color = playerColors[1];  
+                  playerSprite.color = playerColors[1]; break;
+          }
+      }
   }
   
     void SetUpPlayers()
     {
-        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red, colors[playerData.P1colorID] );
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID] );
         Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
         
-        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P2colorID]);
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, colors[playerData.P2colorID]);
         Instantiate(hats[playerData.P2hatID], players[1].playerHat.transform.position, players[1].playerHat.transform.rotation).transform.parent = players[1].playerHat.transform; ;
 
-        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red,colors[playerData.P3colorID] );
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, colors[playerData.P3colorID] );
         Instantiate(hats[playerData.P3hatID], players[2].playerHat.transform.position, players[2].playerHat.transform.rotation).transform.parent = players[2].playerHat.transform; ;
         
-        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P4colorID]);
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, colors[playerData.P4colorID]);
         Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
