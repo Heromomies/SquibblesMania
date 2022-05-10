@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,8 +21,9 @@ public class FireJump : MonoBehaviour
 
 	void Jump(Transform objectToMove)
 	{
-		// ReSharper disable once Unity.PreferNonAllocApi
 		var position = transform.position;
+		
+		// ReSharper disable once Unity.PreferNonAllocApi
 		var collidersMin = Physics.OverlapSphere(position, radiusMin, layerInteractable); // Detect bloc around the object
 		// ReSharper disable once Unity.PreferNonAllocApi
 		var collidersMax = Physics.OverlapSphere(position, radiusMax, layerInteractable); // Detect bloc around the object
