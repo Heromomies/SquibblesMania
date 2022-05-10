@@ -6,6 +6,7 @@ using DigitalRubyShared;
 using I2.Loc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -65,6 +66,7 @@ public class UiManager : MonoBehaviour
         PowerManager.Instance.isPlayerInJumpOrSwap = false;
         
         PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+        CameraButtonManager.Instance.isCamRotateButtonPressed = false;
         
         if (currentPlayer.isPlayerStun)
         {
@@ -121,6 +123,11 @@ public class UiManager : MonoBehaviour
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
+        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
+        {
+            depthOfField.active = true;
+        }
+        
         if (playerTeam == Player.PlayerTeam.TeamOne)
         {
             textTeamOne.SetActive(true);

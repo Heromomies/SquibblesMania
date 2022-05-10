@@ -42,6 +42,7 @@ public class CameraButtonManager : MonoBehaviour
     {
         isCamRotateButtonPressed = value;
     }
+    
 
     private void LateUpdate()
     {

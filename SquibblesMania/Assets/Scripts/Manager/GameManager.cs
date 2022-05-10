@@ -4,6 +4,7 @@ using DG.Tweening;
 using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
+    public Volume volume;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
     [HideInInspector] public int cycleCount;
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
     {
         Application.targetFrameRate = 30;
         _gameManager = this;
+        volume.profile.Reset();
     }
 
 
