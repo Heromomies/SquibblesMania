@@ -39,8 +39,6 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		
 		_turnCount = GameManager.Instance.turnCount;
 
-		Debug.Log(_turnCount);
-
 		_directionChosen = Random.Range(0, _vectorRaycast.Count);
 		
 		_windGo = PoolManager.Instance.SpawnObjectFromPool("ParticleWind", spawnWind.position, Quaternion.identity, null);
