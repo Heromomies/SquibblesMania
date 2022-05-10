@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     public Volume volume;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocks;
-    [HideInInspector] public int cycleCount;
     public GameObject winT1;
     public GameObject winT2;
 
@@ -268,7 +267,6 @@ public class GameManager : MonoBehaviour
         if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
         {
             IncreaseDemiCycle();
-            cycleCount++;
         }
 
         if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
@@ -323,15 +321,6 @@ public class GameManager : MonoBehaviour
         if(turnCount <= 0)
             turnCount=0;
 
-        if (count != 0)
-        {
-            currentPlayerTurn = players[count -1];
-        }
-        else if (count == 0)
-        {
-            currentPlayerTurn = players[3];
-        }
-        
         currentPlayerTurn.StartState();
     }    
     

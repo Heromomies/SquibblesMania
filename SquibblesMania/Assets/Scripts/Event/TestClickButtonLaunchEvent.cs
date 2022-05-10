@@ -24,8 +24,6 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
 
    public void LaunchEvent()
    {
-      
-    
       foreach (var eventTested in eventToTest)
       {
          if (!eventTested.activeInHierarchy)
@@ -61,6 +59,11 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
                eventTested.SetActive(false);
             }
          }
+      }
+
+      if (Input.GetKeyDown(KeyCode.C))
+      {
+         VolcanoManager.Instance.CyclePassed();
       }
    }
    

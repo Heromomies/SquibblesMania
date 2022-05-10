@@ -17,8 +17,7 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public GameObject buttonNextTurn;
-   
-    
+
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     public static UiManager Instance => _uiManager;
@@ -34,6 +33,10 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
+    
+    [Header("CAMERA BUTTONS")]
+    public List<Button> buttonsCameraManager;
+    
     
     [Serializable]
     public struct UiPlayerStun
@@ -63,6 +66,8 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        PowerManager.Instance.isPlayerInJumpOrSwap = false;
+        
         PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
         CameraButtonManager.Instance.isCamRotateButtonPressed = false;
         
