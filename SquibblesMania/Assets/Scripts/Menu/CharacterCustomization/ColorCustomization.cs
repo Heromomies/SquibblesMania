@@ -68,7 +68,7 @@ public class ColorCustomization : MonoBehaviour
         {
             case "colors":
                 
-              bodycolor.GetComponent<Image>().sprite = colors[colorID];
+              bodycolor.sprite = colors[colorID];
                   
             break;
         }

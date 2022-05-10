@@ -19,7 +19,7 @@ public class PlayerPowerCardState : PlayerBaseState
 
     public override void ExitState(PlayerStateManager player)
     {
-        player.indicatorPlayer.SetActive(false);
+        player.indicatorPlayerRenderer.gameObject.SetActive(false);
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {

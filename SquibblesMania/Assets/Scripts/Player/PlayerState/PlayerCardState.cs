@@ -31,7 +31,7 @@ public class PlayerCardState : PlayerBaseState
 		//If the current player is this player
 		if (GameManager.Instance.currentPlayerTurn == player)
 		{
-			player.indicatorPlayer.SetActive(true);
+			player.indicatorPlayerRenderer.gameObject.SetActive(true);
 			NFCController.OnNewTag = OnNewTagDetected;
 			NFCController.OnTagRemoved = OnTagRemoveDetected;
 			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
@@ -188,13 +188,13 @@ public class PlayerCardState : PlayerBaseState
 
 	void PlayerIsStun(PlayerStateManager player)
 	{
-		player.indicatorPlayer.SetActive(false);
+		player.indicatorPlayerRenderer.gameObject.SetActive(false);
 		//If the stunCount is less than zero player is now not stun
 		if (player.stunCount <= 0)
 		{
 			player.isPlayerStun = false;
 			player.vfxStun.SetActive(false);
-			player.indicatorPlayer.SetActive(true);
+			player.indicatorPlayerRenderer.gameObject.SetActive(true);
 			NFCManager.Instance.PlayerChangeTurn();
 		}
 		else
@@ -220,7 +220,7 @@ public class PlayerCardState : PlayerBaseState
 				player.vfxStun.SetActive(false);
 			}
 			
-			player.indicatorPlayer.SetActive(false);
+			player.indicatorPlayerRenderer.gameObject.SetActive(false);
 			//Switch to next player of another team to play
 			switch (player.playerNumber)
 			{
