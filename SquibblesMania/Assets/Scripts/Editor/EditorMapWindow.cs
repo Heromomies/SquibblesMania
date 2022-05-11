@@ -375,7 +375,7 @@ public class EditorMapWindow : EditorWindow
 
         //Destroys remaining block parent with no childs
         GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
-
+        GameObject[] parentsNone = GameObject.FindGameObjectsWithTag("BlackBlock");
         if (!mapParent)
         {
             mapParent = new GameObject("MapParent")
@@ -388,13 +388,24 @@ public class EditorMapWindow : EditorWindow
             mapParent.tag = "Map";
         }
 
+        for (int i = 0; i < parentsNone.Length; i++)
+        {
+            parentsNone[i].transform.parent = mapParent.transform;
+            parentsNone[i].transform.gameObject.AddComponent<GroupBlockDetection>();
+        }
         for (int i = 0; i < parents.Length; i++)
         {
             parents[i].transform.parent = mapParent.transform;
             parents[i].transform.gameObject.AddComponent<GroupBlockDetection>();
         }
 
-
+        foreach (var parentNone in parentsNone)
+        {
+            if (parentNone.transform.childCount <= 0)
+            {
+                DestroyImmediate(parentNone);
+            }
+        }
         foreach (var parent in parents)
         {
             if (parent.transform.childCount <= 0)
@@ -498,11 +509,9 @@ public class EditorMapWindow : EditorWindow
             else if (block.CompareTag("Untagged"))
             {
                 block.transform.parent = blockParent.transform;
-                if (blockParent.name != blockParent.name + " None")
-                {
-                    blockParent.name = blockParent.name + " None";
-                }
+                if (blockParent.name != blockParent.name + " None") blockParent.name = blockParent.name + " None";
                 blockParent.layer = 0;
+                blockParent.tag = "BlackBlock";
             }
         }
         allObjectsCreatedOnScene.Add(blockParent);
