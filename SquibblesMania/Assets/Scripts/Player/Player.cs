@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     public bool isUsingCardPower;
     public GameObject playerPref;
     public PlayerTeam playerTeam;
-    public GameObject indicatorPlayer;
+    [Header("CUSTOMIZATIONS PARAMETERS")]
+    public Renderer indicatorPlayerRenderer;
     public GameObject playerHat;
     public Renderer playerMesh;
     public int stunCount;
@@ -19,10 +20,10 @@ public class Player : MonoBehaviour
     public bool isPlayerHide;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
-
+        
     [HideInInspector] public GameObject vfxStun;
-    
-    [Header("RESPAWN PARAMETERS")] public Vector3 playerRespawnPoint;
+    public Rigidbody playerRigidbody;
+    [Header("RESPAWN PARAMETERS")] public Transform playerRespawnPoint;
     
     [Header("ANIMATIONS")] public Animator playerAnimator;
     public enum PlayerTeam

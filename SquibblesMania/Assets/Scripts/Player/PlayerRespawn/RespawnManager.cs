@@ -16,9 +16,9 @@ public class RespawnManager : MonoBehaviour
 
     public void RespawnPlayer(PlayerStateManager player)
     {
-        player.transform.position = player.playerRespawnPoint + offsetRespawnPos;
+        player.transform.position = player.playerRespawnPoint.position + offsetRespawnPos;
+        player.playerRigidbody.velocity = Vector3.zero;
         Physics.SyncTransforms();
-
         if (player.isPlayerInActionCardState)
         {
             StartCoroutine(player.PlayerRespawnUpdateBlocBelow(player)); 

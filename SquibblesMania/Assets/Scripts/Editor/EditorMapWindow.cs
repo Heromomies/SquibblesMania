@@ -441,7 +441,7 @@ public class EditorMapWindow : EditorWindow
         {
             foreach (var parent in parents)
             {
-                gameManager.allBlocks.Add(parent);
+                gameManager.allBlocParents.Add(parent);
             }
 
             Node[] nodeBlocs = FindObjectsOfType<Node>();
@@ -493,6 +493,7 @@ public class EditorMapWindow : EditorWindow
             {
                 block.transform.parent = blockParent.transform;
                 blockParent.layer = 3;
+                blockParent.tag = "BlockParent";
             } 
             else if (block.CompareTag("Untagged"))
             {
@@ -504,8 +505,6 @@ public class EditorMapWindow : EditorWindow
                 blockParent.layer = 0;
             }
         }
-
-        blockParent.tag = "BlockParent";
         allObjectsCreatedOnScene.Add(blockParent);
     }
 

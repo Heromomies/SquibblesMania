@@ -44,7 +44,7 @@ public class Meteorite : MonoBehaviour
 			AudioManager.Instance.Play("Stun");
 
 			var player = other.gameObject.GetComponent<PlayerStateManager>();
-			PoolManager.Instance.SpawnObjectFromPool("StunVFX", other.transform.position + new Vector3(0, 1, 0), Quaternion.identity, other.transform);
+			player.vfxStun = PoolManager.Instance.SpawnObjectFromPool("StunVFX", other.transform.position + new Vector3(0, 1, 0), Quaternion.identity, other.transform);
 			
 			PlayerStateEventManager.Instance.PlayerStunTriggerEnter(player, 1);
 			

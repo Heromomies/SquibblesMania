@@ -6,6 +6,7 @@ using DigitalRubyShared;
 using I2.Loc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -16,8 +17,7 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public GameObject buttonNextTurn;
-   
-    
+
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     public static UiManager Instance => _uiManager;
@@ -33,6 +33,10 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
+    
+    [Header("CAMERA BUTTONS")]
+    public List<Button> buttonsCameraManager;
+    
     
     [Serializable]
     public struct UiPlayerStun
@@ -62,7 +66,10 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
+        PowerManager.Instance.isPlayerInJumpOrSwap = false;
+        
         PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+        CameraButtonManager.Instance.isCamRotateButtonPressed = false;
         
         if (currentPlayer.isPlayerStun)
         {
@@ -119,6 +126,11 @@ public class UiManager : MonoBehaviour
     public void WinSetUp(Player.PlayerTeam playerTeam)
     {
         winPanel.SetActive(true);
+        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
+        {
+            depthOfField.active = true;
+        }
+        
         if (playerTeam == Player.PlayerTeam.TeamOne)
         {
             textTeamOne.SetActive(true);

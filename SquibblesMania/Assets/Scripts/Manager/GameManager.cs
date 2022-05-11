@@ -4,6 +4,7 @@ using DG.Tweening;
 using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -43,9 +44,9 @@ public class GameManager : MonoBehaviour
 
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
+    public Volume volume;
     private bool _isEndZoneShowed;
-    public List<GameObject> allBlocks;
-    [HideInInspector] public int cycleCount;
+    public List<GameObject> allBlocParents;
     public GameObject winT1;
     public GameObject winT2;
 
@@ -56,21 +57,23 @@ public class GameManager : MonoBehaviour
     public PlayerData playerData;
     public List<GameObject> hats = new List<GameObject>();
     public List<Material> colors = new List<Material>();
-
+    public GameObject spawnPointSpriteParent;
+    public List<Color> playerColors = new List<Color>();
     private void Awake()
     {
         Application.targetFrameRate = 30;
         _gameManager = this;
+        volume.profile.Reset();
     }
 
 
     // Start is called before the first frame update
   private void Start()
     {
-        for (int i = 0; i < allBlocks.Count; i++)
+        for (int i = 0; i < allBlocParents.Count; i++)
         {
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
-            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
+            allBlocParents[i].transform.position = new Vector3(allBlocParents[i].transform.position.x, randomLocation, allBlocParents[i].transform.position.z);
         }
         
         SpawnPlayers();
@@ -105,7 +108,7 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
                 PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
-                player.playerRespawnPoint = spawnPos;
+                player.playerRespawnPoint = playerNodeSpawnPoint.gameObject.transform;
                 player.currentBlocPlayerOn = playersSpawnPoints[i].transform;
                 player.gameObject.name = "Player " + (i + 1);
                 player.playerNumber = i;
@@ -116,26 +119,60 @@ public class GameManager : MonoBehaviour
       
     }
 
-  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Color color, Material playerCustomMat)
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat)
   {
-      player.playerTeam = playerTeam;
-      player.gameObject.GetComponentInChildren<Renderer>().material.color = color;
-      player.indicatorPlayer.SetActive(false);
-      player.playerMesh.material = playerCustomMat;
+      
+      if (player.playerRespawnPoint.TryGetComponent(out Node playerNodeSpawnPoint))
+      {
+          player.playerTeam = playerTeam;
+          SetSpriteSpawnPlayerPoint(player, playerNodeSpawnPoint, playerCustomMat);
+          player.indicatorPlayerRenderer.gameObject.SetActive(false);
+          player.playerMesh.material = playerCustomMat;
+      }
+
+  }
+
+  private void SetSpriteSpawnPlayerPoint(PlayerStateManager player,Node playerNodeSpawnPoint, Material playerCustomMat)
+  {
+      //TODO Couleurs list a update directement dans le playerData quand on selectionne sa team
+      Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint();
+          
+      GameObject spriteSpawnPoint = Instantiate(spawnPointSpriteParent, spawnPos + spawnPointSpriteParent.transform.position, spawnPointSpriteParent.transform.rotation, playerNodeSpawnPoint.gameObject.transform);
+      SpriteRenderer playerSprite = null;
+      
+      if (spriteSpawnPoint.transform.GetChild(0).TryGetComponent(out SpriteRenderer sprite))
+      {
+          playerSprite = sprite;
+      }
+
+      if (playerSprite != null)
+      {
+          switch (playerCustomMat.name)
+          {
+              case "M_blue_player": player.indicatorPlayerRenderer.material.color = playerColors[0]; 
+                  playerSprite.color = playerColors[0]; break;
+              case "M_red_player": player.indicatorPlayerRenderer.material.color = playerColors[2]; 
+                  playerSprite.color = playerColors[2]; break;
+              case "M_yellow_player": player.indicatorPlayerRenderer.material.color = playerColors[3]; 
+                  playerSprite.color = playerColors[3]; break;
+              case "M_green_player": player.indicatorPlayerRenderer.material.color = playerColors[1];  
+                  playerSprite.color = playerColors[1]; break;
+          }
+      }
   }
   
     void SetUpPlayers()
     {
-        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, Color.red, colors[playerData.P1colorID] );
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID] );
         Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
         
-        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P2colorID]);
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, colors[playerData.P2colorID]);
         Instantiate(hats[playerData.P2hatID], players[1].playerHat.transform.position, players[1].playerHat.transform.rotation).transform.parent = players[1].playerHat.transform; ;
 
-        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, Color.red,colors[playerData.P3colorID] );
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, colors[playerData.P3colorID] );
         Instantiate(hats[playerData.P3hatID], players[2].playerHat.transform.position, players[2].playerHat.transform.rotation).transform.parent = players[2].playerHat.transform; ;
         
-        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, Color.blue, colors[playerData.P4colorID]);
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, colors[playerData.P4colorID]);
         Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
@@ -230,7 +267,6 @@ public class GameManager : MonoBehaviour
         if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
         {
             IncreaseDemiCycle();
-            cycleCount++;
         }
 
         if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
@@ -285,15 +321,6 @@ public class GameManager : MonoBehaviour
         if(turnCount <= 0)
             turnCount=0;
 
-        if (count != 0)
-        {
-            currentPlayerTurn = players[count -1];
-        }
-        else if (count == 0)
-        {
-            currentPlayerTurn = players[3];
-        }
-        
         currentPlayerTurn.StartState();
     }    
     
