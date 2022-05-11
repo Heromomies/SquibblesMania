@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     public ConditionVictory conditionVictory;
     public Volume volume;
     private bool _isEndZoneShowed;
-    public List<GameObject> allBlocks;
+    public List<GameObject> allBlocParents;
     public GameObject winT1;
     public GameObject winT2;
 
@@ -70,10 +70,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
   private void Start()
     {
-        for (int i = 0; i < allBlocks.Count; i++)
+        for (int i = 0; i < allBlocParents.Count; i++)
         {
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
-            allBlocks[i].transform.position = new Vector3(allBlocks[i].transform.position.x, randomLocation, allBlocks[i].transform.position.z);
+            allBlocParents[i].transform.position = new Vector3(allBlocParents[i].transform.position.x, randomLocation, allBlocParents[i].transform.position.z);
         }
         
         SpawnPlayers();

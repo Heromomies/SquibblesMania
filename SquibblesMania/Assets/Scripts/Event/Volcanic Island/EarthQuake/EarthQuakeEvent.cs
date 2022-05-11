@@ -31,7 +31,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 	public void ShowEvent()
 	{
-		var blocParent = GameManager.Instance.allBlocks;
+		var blocParent = GameManager.Instance.allBlocParents;
 		
 		AudioManager.Instance.Play("VolcanoShaking");
 		
