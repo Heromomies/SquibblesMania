@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public int maxHeightBlocMovement, minHeightBlocMovement;
 
     [Header("PLAYERS MANAGER PARAMETERS")] public List<PlayerStateManager> players;
-    public Transform[] playersSpawnPoints;
+    public List<Transform> playersSpawnPoints = new List<Transform>();
     public PlayerStateManager playerPref;
 
     public PlayerStateManager currentPlayerTurn;
@@ -70,6 +70,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
   private void Start()
     {
+        if (MapGeneratorManager.Instance != null)
+        {
+            MapGeneratorManager.Instance.SetupMap();
+        }
+        
         for (int i = 0; i < allBlocParents.Count; i++)
         {
             int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
@@ -101,7 +106,7 @@ public class GameManager : MonoBehaviour
 
   private void SpawnPlayers()
     {
-        for (int i = 0; i < playersSpawnPoints.Length; i++)
+        for (int i = 0; i < playersSpawnPoints.Count; i++)
         {
             //Spawn player at specific location
             if (playersSpawnPoints[i].gameObject.TryGetComponent(out Node playerNodeSpawnPoint))
@@ -328,7 +333,7 @@ public class GameManager : MonoBehaviour
     {
         if (isConditionVictory && !_isEndZoneShowed)
         {
-            int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Length);
+            int randomNumberEndSpawnPoint = Random.Range(0, conditionVictory.endZoneSpawnPoints.Count);
             GameObject endZone = Instantiate(conditionVictory.endZone, conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint]);
             endZone.transform.position = conditionVictory.endZoneSpawnPoints[randomNumberEndSpawnPoint].position;
             isConditionVictory = false;

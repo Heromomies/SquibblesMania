@@ -9,7 +9,7 @@ public class Node : MonoBehaviour
     public float blockSizeOffset = 0.5f;
     public Transform previousBlock;
     public bool isActive = true;
-
+    public bool isSpawnPoint;
     public BlocState blocState;
     
     public enum BlocState
