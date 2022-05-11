@@ -14,11 +14,6 @@ public class VolcanoManager : MonoBehaviour
 
 	public LevelOfDanger levelOfDanger;
 
-	[Space] [Header("VOLCANO FEEDBACK")] public float duration;
-	public float strength;
-	
-	private Camera _cam;
-	
 	public enum LevelOfDanger
 	{
 		LevelOne = 0,
@@ -37,7 +32,6 @@ public class VolcanoManager : MonoBehaviour
 	private void Awake()
 	{
 		_volcanoManager = this;
-		_cam = Camera.main;
 	}
 
 	#endregion
@@ -66,29 +60,9 @@ public class VolcanoManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-
-			foreach (var b in UiManager.Instance.buttonsCameraManager)
-			{
-				b.gameObject.SetActive(false);
-			}
-			
-			_cam.DOShakePosition(duration, strength, 90, 100);
-			_cam.DOShakeRotation(duration, strength, 90, 100);
-
-			StartCoroutine(ActivateButtons());
 		}
 	}
 
-	IEnumerator ActivateButtons()
-	{
-		yield return new WaitForSeconds(duration);
-		
-		foreach (var b in UiManager.Instance.buttonsCameraManager)
-		{
-			b.gameObject.SetActive(true);
-		}
-	}
-	
 	void LaunchEvent() // Launch the event
 	{
 		foreach (var eventsGo in events)

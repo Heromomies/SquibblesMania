@@ -44,10 +44,6 @@ public class AudioManager : MonoBehaviour
     
     private void Start()
     {
-        if (PlayerPrefs.HasKey("Sound"))
-        {
-            sliderMainSound.value = PlayerPrefs.GetFloat("Sound");
-        }
         
         //DontDestroyOnLoad(gameObject);
         foreach (Sound s in sounds)
@@ -65,6 +61,42 @@ public class AudioManager : MonoBehaviour
             Play(sound);
         }
 
+        
+        if (PlayerPrefs.HasKey("Sound"))
+        {
+            sliderMainSound.value = PlayerPrefs.GetFloat("Sound");
+        }
+        if (PlayerPrefs.HasKey("MainToggle"))
+        {
+            var a = PlayerPrefs.GetInt("MainToggle");
+
+            if (a == 0)
+            {
+                mainToggle.isOn = true;
+            }
+            else
+            {
+                mainToggle.isOn = false;
+            }
+           
+        }
+
+        if (PlayerPrefs.HasKey("SfxToggle"))
+        {
+            var a = PlayerPrefs.GetInt("SfxToggle");
+
+            if (a == 0)
+            {
+                effectToggle.isOn = true;
+            }
+            else
+            {
+                effectToggle.isOn = false;
+            }
+           
+        }
+        
+     
       
     }
     
@@ -107,10 +139,12 @@ public class AudioManager : MonoBehaviour
         if (mainToggle.isOn)
         {
             UnPause("MainSound");
+            PlayerPrefs.SetInt("MainToggle", 0);
         }
         else
         {
             Pause("MainSound");
+            PlayerPrefs.SetInt("MainToggle", 1);
         }
     }
     
@@ -123,6 +157,7 @@ public class AudioManager : MonoBehaviour
                 if(s.isEffect)
                     s.canPlay = true;
             }
+            PlayerPrefs.SetInt("SfxToggle", 0);
         }
         else
         {
@@ -131,6 +166,7 @@ public class AudioManager : MonoBehaviour
                 if(s.isEffect)
                     s.canPlay = false;
             }
+            PlayerPrefs.SetInt("SfxToggle", 1);
         }
     }
 

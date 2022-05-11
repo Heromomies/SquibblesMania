@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.16788375, g: 0.21073635, b: 0.28994125, a: 1}
+  m_IndirectSpecularColor: {r: 0.6460417, g: 0.48885226, b: 0.49097514, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9332,11 +9332,11 @@ PrefabInstance:
       objectReference: {fileID: 1268699740}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: maxHeightBlocMovement
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: minHeightBlocMovement
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: allBlocks.Array.data[0]
@@ -9925,7 +9925,7 @@ PrefabInstance:
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 2120657830}
+      objectReference: {fileID: 262905229}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: playersSpawnPoints.Array.data[1]
       value: 
@@ -16070,6 +16070,22 @@ PrefabInstance:
     - target: {fileID: 7843621775167499337, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ButtonNextTurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499362, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1993680889}
+    - target: {fileID: 7843621775167499362, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StopMainMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1993680889}
+    - target: {fileID: 7843621775167499363, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StopEffectMusic
       objectReference: {fileID: 0}
     - target: {fileID: 7843621775167499372, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_AnchorMax.y
