@@ -509,7 +509,7 @@ public class EditorMapWindow : EditorWindow
             else if (block.CompareTag("Untagged"))
             {
                 block.transform.parent = blockParent.transform;
-                if (blockParent.name != blockParent.name + " None") blockParent.name = blockParent.name + " None";
+                blockParent.name = "BlocParent_None";
                 blockParent.layer = 0;
                 blockParent.tag = "BlackBlock";
             }
