@@ -14,7 +14,7 @@ public class MountainManager : MonoBehaviour
     public PolarWind wind;
     public int maxTurnBeforeWindApparition;
 
-    [Header("WIND")][Space (10)]
+    [Header("SNOW")][Space (10)]
     public GameObject snow;
     public int maxTurnBeforeSnowAppear;
     
