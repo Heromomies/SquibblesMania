@@ -186,7 +186,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-        player.indicatorPlayer.SetActive(false);
+        player.indicatorPlayerRenderer.gameObject.SetActive(false);
 
         foreach (var obj in pathObjects)
         {

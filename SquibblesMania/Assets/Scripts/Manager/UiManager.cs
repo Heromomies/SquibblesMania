@@ -17,8 +17,7 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public GameObject buttonNextTurn;
-   
-    
+
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     public static UiManager Instance => _uiManager;
@@ -34,6 +33,10 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
+    
+    [Header("CAMERA BUTTONS")]
+    public List<Button> buttonsCameraManager;
+    
     
     [Serializable]
     public struct UiPlayerStun
@@ -77,7 +80,6 @@ public class UiManager : MonoBehaviour
         
         currentPlayer.canSwitch = true;
         currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
-
     }
 
     public void LoadScene(string sceneName)
@@ -91,7 +93,6 @@ public class UiManager : MonoBehaviour
 
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-        
         buttonNextTurn.SetActive(setActiveGameObject);
             
         if (actualCamPresetNumber <= 2)

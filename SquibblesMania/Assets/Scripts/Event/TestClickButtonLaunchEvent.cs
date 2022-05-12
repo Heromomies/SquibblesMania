@@ -60,6 +60,11 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
             }
          }
       }
+
+      if (Input.GetKeyDown(KeyCode.C))
+      {
+         VolcanoManager.Instance.CyclePassed();
+      }
    }
    
 }

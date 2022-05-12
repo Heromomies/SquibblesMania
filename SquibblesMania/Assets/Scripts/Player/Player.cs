@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public GameObject playerPref;
     public PlayerTeam playerTeam;
     [Header("CUSTOMIZATIONS PARAMETERS")]
-    public GameObject indicatorPlayer;
+    public Renderer indicatorPlayerRenderer;
     public GameObject playerHat;
     public Renderer playerMesh;
     public int stunCount;
