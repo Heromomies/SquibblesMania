@@ -33,7 +33,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private bool _isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
-	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.5f);
+	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.3f);
 	private readonly WaitForSeconds _timeInSecondsBetweenBlocSwipe = new WaitForSeconds(0.2f);
 	private readonly List<Transform> _nextBlocUpMeshPos = new List<Transform>();
 	private readonly List<Transform> _nextBlocDownMeshPos = new List<Transform>();
