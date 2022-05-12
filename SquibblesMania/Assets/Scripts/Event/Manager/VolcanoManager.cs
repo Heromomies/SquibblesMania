@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -13,7 +14,8 @@ public class VolcanoManager : MonoBehaviour
 	public int dangerousness;
 
 	public LevelOfDanger levelOfDanger;
-
+	public GameObject volcanoIsGoingToExplode;
+	
 	public enum LevelOfDanger
 	{
 		LevelOne = 0,
@@ -62,9 +64,19 @@ public class VolcanoManager : MonoBehaviour
 			}
 
 			GameManager.Instance.canDoShake = true;
+			StartCoroutine(FeedBackVolcano());
 		}
 	}
 
+	IEnumerator FeedBackVolcano()
+	{
+		volcanoIsGoingToExplode.SetActive(true);
+		
+		yield return new WaitForSeconds(GameManager.Instance.durationDoShake + 2);
+		
+		volcanoIsGoingToExplode.SetActive(false);
+	}
+	
 	void LaunchEvent() // Launch the event
 	{
 		foreach (var eventsGo in events)
