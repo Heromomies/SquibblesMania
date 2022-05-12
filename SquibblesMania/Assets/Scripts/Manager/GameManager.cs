@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
@@ -31,6 +32,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
 
+    public float durationDoShake, strength;
+    [HideInInspector] public bool canDoShake;
+    
     [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
@@ -70,10 +74,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
   private void Start()
     {
-        if (MapGeneratorManager.Instance != null)
+       /* if (MapGeneratorManager.Instance != null)
         {
             MapGeneratorManager.Instance.SetupMap();
-        }
+        }*/
         
         for (int i = 0; i < allBlocParents.Count; i++)
         {
@@ -189,7 +193,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-        CamConfig(count);
+        StartCoroutine(CamConfig(count));
         NFCManager.Instance.PlayerChangeTurn();
     }
 
@@ -204,24 +208,34 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    void CamConfig(int countTurn)
+    IEnumerator CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
+            if (canDoShake)
+            {
+                _cam.DOShakePosition(durationDoShake, strength, 90, 100);
+                _cam.DOShakeRotation(durationDoShake, strength, 90, 100);
+            
+                yield return new WaitForSeconds(durationDoShake);
+            
+                canDoShake = false;
+            }
+            
             if (actualCamPreset.presetNumber > 0)
             {
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
             
             actualCamPreset = camPreSets[countTurn];
-            
+
             Transform cameraTransform = _cam.transform;
             Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
-            
+
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
-            
+
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
@@ -294,7 +308,7 @@ public class GameManager : MonoBehaviour
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count; 
-        CamConfig(count);
+        StartCoroutine(CamConfig(count));
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();

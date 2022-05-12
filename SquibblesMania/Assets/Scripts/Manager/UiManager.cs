@@ -80,7 +80,6 @@ public class UiManager : MonoBehaviour
         
         currentPlayer.canSwitch = true;
         currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
-
     }
 
     public void LoadScene(string sceneName)
@@ -94,7 +93,6 @@ public class UiManager : MonoBehaviour
 
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-        
         buttonNextTurn.SetActive(setActiveGameObject);
             
         if (actualCamPresetNumber <= 2)
