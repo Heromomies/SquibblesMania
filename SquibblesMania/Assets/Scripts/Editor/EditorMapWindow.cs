@@ -47,7 +47,6 @@ public class EditorMapWindow : EditorWindow
 
     private static Theme theme;
     private static GameObject mapParent;
-    private static GameObject environementParent;
     private static List<ScriptableObjectTheme> scriptableObjectThemes = new List<ScriptableObjectTheme>();
     private static ScriptableColorMaterials scriptableColorMaterials;
 
@@ -152,34 +151,15 @@ public class EditorMapWindow : EditorWindow
         if (GUILayout.Button("Create plane"))
         {
             GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            plane.transform.position = new Vector3(12,-1,0);
+            plane.transform.position = new Vector3(0,-1,0);
             plane.transform.localScale = new Vector3((float)_planeMapSizeX/10, 1, (float)_planeMapSizeZ/10);
             planeGo = plane;
             allObjectsCreatedOnScene.Add(plane);
             isCreating = true;
-            SpawnMainObjectTheme(theme);
         }
     }
 
-    void SpawnMainObjectTheme(Theme theme)
-    {
-        if (!mainThemeObject)
-        {
-            DestroyImmediate(mainThemeObject);
-            switch (theme)
-            {
-                case Theme.Volcano:
-                    mainThemeObject = scriptableObjectThemes[0].mainThemeObject;
-                    mainThemeObject = Instantiate(mainThemeObject, Vector3.zero, Quaternion.identity);
-                    break;
-                case Theme.Mountain:
-                    mainThemeObject = scriptableObjectThemes[1].mainThemeObject;
-                    mainThemeObject = Instantiate(mainThemeObject, Vector3.zero, Quaternion.identity);
-                    break;
-            } 
-        }
-       
-    }
+   
 
     private static void LoadScriptableObject()
     {
@@ -347,7 +327,7 @@ public class EditorMapWindow : EditorWindow
 
                 allObjectsCreatedOnScene.Clear();
                 DestroyImmediate(mapParent);
-                DestroyImmediate(environementParent);
+             
                 OnDestroy();
                 ShowWindow();
             }
@@ -420,28 +400,11 @@ public class EditorMapWindow : EditorWindow
         DestroyImmediate(planeGo);
         ResetVars();
         SetupScriptsManager();
-        SetUpEnvironment();
-        
+
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         EditorUtility.SetDirty(this);
     }
-
-    void SetUpEnvironment()
-    {
-        if (!environementParent)
-        {
-            environementParent = new GameObject("Environement")
-            {
-                transform =
-                {
-                    position = Vector3.zero
-                }
-            };
-        }
-        
-        mainThemeObject.transform.parent = environementParent.transform;
-        environementParent.transform.parent = mapParent.transform;
-    }
+    
 
     void SetupScriptsManager()
     {
