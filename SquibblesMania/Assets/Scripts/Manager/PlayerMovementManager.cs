@@ -120,8 +120,9 @@ public class PlayerMovementManager : MonoBehaviour
 				
 				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask) && !isPlayerPreviewPath)
 				{
+				
 					var hitBlocParentPos = _hit.transform.parent.position;
-
+					
 					if (currentPlayer.nextBlockPath.Contains(_hit.transform) && currentPlayer.PlayerActionPointCardState.PathParentPosComparedToPlayerPos(hitBlocParentPos, currentPlayer.transform.position) && HitBlockEqualToCurrentBlockPlayerOn(_hit, currentPlayer))
 					{
 						currentPlayer.currentTouchBloc = _hit.collider.gameObject.transform;

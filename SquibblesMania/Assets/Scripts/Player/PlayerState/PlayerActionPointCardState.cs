@@ -15,7 +15,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     private List<Transform> previewPath = new List<Transform>();
 
 
-    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.6f);
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.7f);
 
 
     //The state when player use is card action point
@@ -176,7 +176,8 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public bool PathParentPosComparedToPlayerPos(Vector3 pathParentPos, Vector3 playerPos)
     {
-        return pathParentPos.y + 2.5f - playerPos.y > -0.1f && pathParentPos.y + 2.5f - playerPos.y < 0.1f;
+        
+        return pathParentPos.y + 1.5f - playerPos.y > -0.1f && pathParentPos.y + 1.5f - playerPos.y < 0.1f;
     }
 
     public override void UpdateState(PlayerStateManager player)

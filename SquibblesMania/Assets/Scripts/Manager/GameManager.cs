@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
   
     public int turnCount;
     [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
-    [SerializeField] private CameraViewModeGesture cameraViewModeGesture;
+    public CameraViewModeGesture cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
@@ -74,10 +74,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
   private void Start()
     {
-       /* if (MapGeneratorManager.Instance != null)
+        if (MapGeneratorManager.Instance != null)
         {
             MapGeneratorManager.Instance.SetupMap();
-        }*/
+        }
         
         for (int i = 0; i < allBlocParents.Count; i++)
         {
