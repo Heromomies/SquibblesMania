@@ -63,7 +63,7 @@ public class PowerAnimation : MonoBehaviour
            yield return new WaitForSeconds(2);
            dash.GetComponent<RectTransform>().anchoredPosition = new Vector3(-750f, 0f, 0f);
 
-           yield return null;
+           
         }
         else {
             dashTransform.rotation = Quaternion.Euler(0, 0, 180);
@@ -74,7 +74,7 @@ public class PowerAnimation : MonoBehaviour
             yield return new WaitForSeconds(2);
             
 
-            yield return null;
+            
         }
 
         
@@ -107,7 +107,6 @@ public class PowerAnimation : MonoBehaviour
             swap.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.blue;
             swap.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.red;
 
-            yield return null;
         }
         else
         {
@@ -132,7 +131,6 @@ public class PowerAnimation : MonoBehaviour
             swap.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.blue;
             swap.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.red;
 
-            yield return null;
         }
             
     }
@@ -162,8 +160,6 @@ public class PowerAnimation : MonoBehaviour
             LeanTween.move(mirrorTransform1, new Vector3(-750f, 0f, 0f), 0.3f);
             LeanTween.move(mirrorTransform2, new Vector3(750f, 0f, 0f), 0.3f);
 
-
-            yield return null;
         }
         else
         {
@@ -188,8 +184,6 @@ public class PowerAnimation : MonoBehaviour
             LeanTween.move(mirrorTransform1, new Vector3(-750f, 0f, 0f), 0.3f);
             LeanTween.move(mirrorTransform2, new Vector3(750f, 0f, 0f), 0.3f);
 
-
-            yield return null;
         }
     }
 
@@ -214,8 +208,6 @@ public class PowerAnimation : MonoBehaviour
 
             LeanTween.move(jumpTransform, new Vector3(750f, 0f, 0f), 0.3f);
 
-
-            yield return null;
         }
         else
         {
@@ -236,8 +228,6 @@ public class PowerAnimation : MonoBehaviour
 
             LeanTween.move(jumpTransform, new Vector3(-750f, 0f, 0f), 0.3f);
 
-           
-            yield return null;
         }
     }
 
