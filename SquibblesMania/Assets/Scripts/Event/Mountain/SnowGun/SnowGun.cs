@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DigitalRubyShared;
 using I2.Loc;
 using UnityEngine;
@@ -64,6 +65,18 @@ public class SnowGun : MonoBehaviour, IManageEvent
     {
         // ReSharper disable once Unity.PreferNonAllocApi
         var colliders = Physics.OverlapSphere(transform.position, radius, layerInteractable); // Detect bloc around the object
+
+        foreach (var c in colliders)
+        {
+            if (c.TryGetComponent(out Node node))
+            {
+                if (!node.isActive)
+                {
+                    colliders.ToList().Remove(c);
+                }
+            }
+        }
+        
         var randomNumber = Random.Range(0, colliders.Length);
         
         GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + new Vector3(0,1.05f, 0), Quaternion.identity, colliders[randomNumber].transform);
