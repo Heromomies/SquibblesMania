@@ -44,7 +44,6 @@ public class MountainManager : MonoBehaviour
 	    
 	    foreach (var g in  GameManager.Instance.allBlocParents)
 	    {
-		    Debug.Log("I'm here");
 		    var blockParentEventType = g.GetComponent<BlockParentEventType>().typeOfBloc;
 
 		    if (blockParentEventType == BlockParentEventType.TypeOfBloc.Powder)
@@ -62,8 +61,6 @@ public class MountainManager : MonoBehaviour
 			    }
 		    }
 	    }
-	    
-	    snowGuns[2].SetActive(true);
     }
 
 

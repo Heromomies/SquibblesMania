@@ -25,6 +25,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _turnNumberChosenToLaunchTheWind;
 	private int _turnCount;
 	private int _directionChosen;
+	private bool _isLaunched;
 	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
 	private void OnEnable()
 	{
@@ -62,7 +63,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 	public void LaunchEvent()
 	{
-		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
+		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_isLaunched)
 		{
 			var players = GameManager.Instance.players;
 
@@ -85,19 +86,30 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen] * distanceMovingPlayer, speedPlayer);
 				}
 			}
-
+			
 			for (int i = 0; i < hideParticle.Count; i++)
 			{
 				hideParticle[i].SetActive(false);
 			}
-
-			GameManager.Instance.DetectParentBelowPlayers();
 			
-			hideParticle.Clear();			
+			hideParticle.Clear();
+
+			_isLaunched = true;
+			
+			StartCoroutine(WaitBeforeCheckUnderPlayer());
+			
 			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
-			gameObject.SetActive(false);
 		}
+	}
+
+	IEnumerator WaitBeforeCheckUnderPlayer()
+	{
+		yield return new WaitForSeconds(speedPlayer + 0.5f);
+		
+		GameManager.Instance.DetectParentBelowPlayers();
+		_isLaunched = false;
+		gameObject.SetActive(false);
 	}
 	
 	public void CheckIfPlayersAreHide()
