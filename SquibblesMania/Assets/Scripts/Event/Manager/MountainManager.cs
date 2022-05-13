@@ -62,6 +62,8 @@ public class MountainManager : MonoBehaviour
 			    }
 		    }
 	    }
+	    
+	    snowGuns[2].SetActive(true);
     }
 
 
