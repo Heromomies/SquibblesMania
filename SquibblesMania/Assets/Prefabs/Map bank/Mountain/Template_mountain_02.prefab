@@ -239,7 +239,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 1
+  isSpawnPoint: 0
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 3841407222774956549}
@@ -260,6 +260,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4319513635092760710}
   - component: {fileID: 75974841165674574}
+  - component: {fileID: 8379061268981767203}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -298,6 +299,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &8379061268981767203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463084339532369510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &524536948983137431
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,7 +551,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 0
+  isSpawnPoint: 1
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 1188696777862836443}
@@ -556,6 +570,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3173640845948881547}
   - component: {fileID: 3702931799782549135}
+  - component: {fileID: 6216671491828340019}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -591,6 +606,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &6216671491828340019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822880662374972589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &855874162318629596
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,6 +629,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1203020927183409429}
   - component: {fileID: 4658636645211854506}
+  - component: {fileID: 6728038161575583998}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -636,6 +665,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &6728038161575583998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855874162318629596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &985051652525909652
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,6 +938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5167477059052619714}
   - component: {fileID: 3185840636799660074}
+  - component: {fileID: 7745731543485276171}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -932,6 +975,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &7745731543485276171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513241946219220901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &1650938401612322565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,6 +1876,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5107262494265675907}
   - component: {fileID: 316215710770866540}
+  - component: {fileID: 5656217038474107255}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -1858,6 +1915,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &5656217038474107255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2386793540773765084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &2441981763246723957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,6 +2064,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6051196134162481262}
   - component: {fileID: 8078118354690088218}
+  - component: {fileID: 2049461628438029917}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -2029,6 +2100,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &2049461628438029917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2500374467897235665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &2505212421921905244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2163,8 +2247,9 @@ GameObject:
   m_Component:
   - component: {fileID: 704006105654735984}
   - component: {fileID: 1097881932979132275}
+  - component: {fileID: 3192278175069847486}
   m_Layer: 3
-  m_Name: Block parent
+  m_Name: Block parent BI
   m_TagString: BlockParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2203,6 +2288,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &3192278175069847486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2671666776312868431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 2
 --- !u!1 &2816521944127705422
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,6 +2437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5024220215087824516}
   - component: {fileID: 240460825398294944}
+  - component: {fileID: 3726729422619357098}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -2375,6 +2474,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &3726729422619357098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3009644488745752100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &3080757933585063512
 GameObject:
   m_ObjectHideFlags: 0
@@ -2736,7 +2848,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 1
+  isSpawnPoint: 0
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 3447725469876200864}
@@ -2881,6 +2993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2992116563619636380}
   - component: {fileID: 4188150381012658181}
+  - component: {fileID: 6399313852849709290}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -2916,6 +3029,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &6399313852849709290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3233127492450004423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &3259026681466782721
 GameObject:
   m_ObjectHideFlags: 0
@@ -3052,6 +3178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3402907766044439390}
   - component: {fileID: 3235444758551338448}
+  - component: {fileID: 749643120350915911}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -3087,6 +3214,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &749643120350915911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3399845712730662961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &3448516778523741826
 GameObject:
   m_ObjectHideFlags: 0
@@ -3097,6 +3237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 186473982074534651}
   - component: {fileID: 3923386881996809735}
+  - component: {fileID: 178483879390525884}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -3138,6 +3279,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &178483879390525884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3448516778523741826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 1
 --- !u!1 &3462942389802756440
 GameObject:
   m_ObjectHideFlags: 0
@@ -3148,8 +3302,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5564296776787550171}
   - component: {fileID: 4878436805198614122}
+  - component: {fileID: 5897215140141906857}
   m_Layer: 3
-  m_Name: Block parent
+  m_Name: Block parent BI
   m_TagString: BlockParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3185,6 +3340,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &5897215140141906857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462942389802756440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 2
 --- !u!1 &3869618334884487608
 GameObject:
   m_ObjectHideFlags: 0
@@ -3676,7 +3844,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 0
+  isSpawnPoint: 1
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 4443857415016282871}
@@ -4069,6 +4237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2122650481784147341}
   - component: {fileID: 6270262667631808986}
+  - component: {fileID: 6377235509668728299}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -4104,6 +4273,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &6377235509668728299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224378730474681522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &4280437876607894006
 GameObject:
   m_ObjectHideFlags: 0
@@ -4992,8 +5174,9 @@ GameObject:
   m_Component:
   - component: {fileID: 650383715206568974}
   - component: {fileID: 2804096137946439811}
+  - component: {fileID: 4704652655407351575}
   m_Layer: 3
-  m_Name: Block parent
+  m_Name: Block parent P
   m_TagString: BlockParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5033,6 +5216,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &4704652655407351575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4998258784203340665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 1
 --- !u!1 &5247270511441036609
 GameObject:
   m_ObjectHideFlags: 0
@@ -5295,6 +5491,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5376598605425761650}
   - component: {fileID: 9101077826633583012}
+  - component: {fileID: 6001581431413594052}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -5330,6 +5527,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &6001581431413594052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5578126119064838130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &5726275938093740674
 GameObject:
   m_ObjectHideFlags: 0
@@ -5340,6 +5550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8378563525656183666}
   - component: {fileID: 7152624791580369170}
+  - component: {fileID: 5993756349023999736}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -5376,6 +5587,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &5993756349023999736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5726275938093740674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &5736627808690155114
 GameObject:
   m_ObjectHideFlags: 0
@@ -5512,6 +5736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7401118824972284556}
   - component: {fileID: 557510517004136610}
+  - component: {fileID: 8027345530987198912}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -5548,6 +5773,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &8027345530987198912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5900294249545185529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &5909130344238515171
 GameObject:
   m_ObjectHideFlags: 0
@@ -6184,6 +6422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1751301002259108841}
   - component: {fileID: 291457028149729004}
+  - component: {fileID: 5113739404400063717}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -6220,6 +6459,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &5113739404400063717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6275957561768971932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &6275976584065213870
 GameObject:
   m_ObjectHideFlags: 0
@@ -6626,7 +6878,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 8481430871731161455}
   m_Father: {fileID: 4319513635092760710}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7108,6 +7361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6981821825473665754}
   - component: {fileID: 1849232668530343389}
+  - component: {fileID: 1331362418083762481}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -7146,6 +7400,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &1331362418083762481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7025338735099046667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &7080709661291917967
 GameObject:
   m_ObjectHideFlags: 0
@@ -7156,6 +7423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5080330827089996131}
   - component: {fileID: 993351779238886482}
+  - component: {fileID: 4491519661016695517}
   m_Layer: 3
   m_Name: Block parent
   m_TagString: BlockParent
@@ -7192,6 +7460,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &4491519661016695517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080709661291917967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &7154926664394252712
 GameObject:
   m_ObjectHideFlags: 0
@@ -7305,7 +7586,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 1
+  isSpawnPoint: 0
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 3470009445659809845}
@@ -7574,8 +7855,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3932693327853333549}
   - component: {fileID: 5644020774043931147}
+  - component: {fileID: 7149879307307820405}
   m_Layer: 3
-  m_Name: Block parent
+  m_Name: Block parent BI
   m_TagString: BlockParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7611,6 +7893,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &7149879307307820405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7813309552819803553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 2
 --- !u!1 &7888080380894361607
 GameObject:
   m_ObjectHideFlags: 0
@@ -8121,8 +8416,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1112405127314118484}
   - component: {fileID: 1482248558833834257}
+  - component: {fileID: 3108533683585660112}
   m_Layer: 3
-  m_Name: Block parent
+  m_Name: Block parent BI
   m_TagString: BlockParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8161,6 +8457,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &3108533683585660112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8211692961412736523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 2
 --- !u!1 &8258344546135829511
 GameObject:
   m_ObjectHideFlags: 0
@@ -8453,7 +8762,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 1
+  isSpawnPoint: 0
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 460966839267980677}
@@ -8577,7 +8886,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 0
+  isSpawnPoint: 1
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 9004028564849930348}
@@ -8846,6 +9155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2529873796100245014}
   - component: {fileID: 7791266313499361209}
+  - component: {fileID: 3079746813769687384}
   m_Layer: 0
   m_Name: BlocParent_None
   m_TagString: BlackBlock
@@ -8881,6 +9191,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersOnGroupBlock: []
+--- !u!114 &3079746813769687384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852714482601521952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf596119d0152b04daae63314dea2c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfBloc: 0
 --- !u!1 &8938981528498662527
 GameObject:
   m_ObjectHideFlags: 0
@@ -8994,7 +9317,7 @@ MonoBehaviour:
   blockSizeOffset: 0.5
   previousBlock: {fileID: 0}
   isActive: 1
-  isSpawnPoint: 0
+  isSpawnPoint: 1
   blocState: 0
   possiblePath:
   - nextPath: {fileID: 4040087424205978274}
@@ -9129,3 +9452,65 @@ MonoBehaviour:
     isActive: 1
   groupBlockParent: {fileID: 0}
   colorBloc: 0
+--- !u!1001 &2052729543654943340
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2482893689979077440}
+    m_Modifications:
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622582973880197895, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+      propertyPath: m_Name
+      value: Item
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+--- !u!4 &8481430871731161455 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7622582973880197891, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+  m_PrefabInstance: {fileID: 2052729543654943340}
+  m_PrefabAsset: {fileID: 0}
