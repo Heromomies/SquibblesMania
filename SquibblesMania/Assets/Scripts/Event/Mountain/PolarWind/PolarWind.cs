@@ -90,6 +90,9 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			{
 				hideParticle[i].SetActive(false);
 			}
+
+			GameManager.Instance.DetectParentBelowPlayers();
+			
 			hideParticle.Clear();			
 			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
