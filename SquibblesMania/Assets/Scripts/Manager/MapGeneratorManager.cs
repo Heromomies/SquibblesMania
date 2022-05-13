@@ -15,7 +15,7 @@ public class MapGeneratorManager : MonoBehaviour
     [SerializeField] private int endZoneSpawnPointsCount = 5;
 
     private string _blocParentTag = "BlockParent";
-
+    private string _noneTag = "Untagged";
     private static MapGeneratorManager _mapGeneratorManager;
 
 
@@ -33,6 +33,8 @@ public class MapGeneratorManager : MonoBehaviour
         var indexMap = Random.Range(0, mapPrefabsList.Count);
         var map = Instantiate(mapPrefabsList[indexMap], mapSpawnPos, Quaternion.identity);
         SetUpBlocParents(map);
+        if (CameraButtonManager.Instance != null) CameraButtonManager.Instance.target = map.transform;
+        if (GameManager.Instance != null) GameManager.Instance.cameraViewModeGesture.mapTarget = map.transform;
     }
 
     /// <summary>
@@ -49,7 +51,10 @@ public class MapGeneratorManager : MonoBehaviour
                     GameManager.Instance.allBlocParents.Add(blocParent.gameObject);
             }
 
-            SetUpBlocChild(blocParent.gameObject);
+            if (!blocParent.CompareTag(_noneTag))
+            {
+                SetUpBlocChild(blocParent.gameObject);
+            }
         }
         SetUpEndZonePossibleSpawn(GameManager.Instance.allBlocParents);
     }
@@ -59,27 +64,34 @@ public class MapGeneratorManager : MonoBehaviour
 
         foreach (GameObject blocParent in allBlocParents)
         {
-            foreach (Transform blocChild in blocParent.transform)
+            bool isHasBlocChildSpawnPoint = false;
+            for (int i = 0; i < blocParent.transform.childCount; i++)
             {
-                if (blocChild.TryGetComponent(out Node blocChildNode))
+                if (blocParent.transform.GetChild(i).TryGetComponent(out Node blocChildNode))
                 {
                     if (blocChildNode.isSpawnPoint)
                     {
-                        return;
-                    }
-                    var randomIndex = Random.Range(0, 11);
-                    
-                    if (randomIndex >= 4)
-                    {
-                        if (GameManager.Instance.conditionVictory.endZoneSpawnPoints.Count < endZoneSpawnPointsCount)
-                            GameManager.Instance.conditionVictory.endZoneSpawnPoints.Add(blocParent.transform);
-
+                        i = blocParent.transform.childCount;
+                        isHasBlocChildSpawnPoint = true;
+                        break;
                     }
                 }
-                
+               
+            }
+
+            if (!isHasBlocChildSpawnPoint)
+            {
+                if (Random.value <= 0.7)// 70% chance rate
+                {
+                    if (GameManager.Instance.conditionVictory.endZoneSpawnPoints.Count < endZoneSpawnPointsCount)
+                    {
+                        if (!GameManager.Instance.conditionVictory.endZoneSpawnPoints.Contains(blocParent.transform) && blocParent.transform.childCount >= 2)
+                            GameManager.Instance.conditionVictory.endZoneSpawnPoints.Add(blocParent.transform);
+                    }
+                    
+                }
             }
             
-           
         }
     }
 /// <summary>

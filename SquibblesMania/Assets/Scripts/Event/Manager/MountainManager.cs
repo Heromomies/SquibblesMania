@@ -14,7 +14,7 @@ public class MountainManager : MonoBehaviour
     public PolarWind wind;
     public int maxTurnBeforeWindApparition;
 
-    [Header("WIND")][Space (10)]
+    [Header("SNOW")][Space (10)]
     public GameObject snow;
     public int maxTurnBeforeSnowAppear;
     
@@ -37,7 +37,36 @@ public class MountainManager : MonoBehaviour
     }
 
     #endregion
-    
+
+    private IEnumerator Start()
+    {
+	    yield return new WaitForSeconds(0.2f);
+	    
+	    foreach (var g in  GameManager.Instance.allBlocParents)
+	    {
+		    Debug.Log("I'm here");
+		    var blockParentEventType = g.GetComponent<BlockParentEventType>().typeOfBloc;
+
+		    if (blockParentEventType == BlockParentEventType.TypeOfBloc.Powder)
+		    {
+			     powdersBlocs.Add(g.GetComponent<GroupBlockDetection>()); 
+		    }
+		    else if (blockParentEventType == BlockParentEventType.TypeOfBloc.BreakableIce)
+		    {
+			    var j = g.GetComponentsInChildren<Node>();
+			    
+			    for (int i = 0; i < j.Length; i++)
+			    {
+				    GameObject bIce = PoolManager.Instance.SpawnObjectFromPool("BreakableIce", j[i].transform.position + new Vector3(0,1,0), Quaternion.identity, j[i].transform);
+				    breakableIce.Add(bIce.GetComponent<BreakableIce>());
+			    }
+		    }
+	    }
+	    
+	    snowGuns[2].SetActive(true);
+    }
+
+
     // Start is called before the first frame update
     public void ChangeCycle()
     {
