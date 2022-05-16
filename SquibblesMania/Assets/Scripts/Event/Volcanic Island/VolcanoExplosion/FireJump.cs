@@ -15,6 +15,7 @@ public class FireJump : MonoBehaviour
 	{
 		if (other.CompareTag("Player") && !NFCManager.Instance.powerActivated)
 		{
+			AudioManager.Instance.Play("PlayerBurn");
 			Jump(other.transform);
 		}
 	}

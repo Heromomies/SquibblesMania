@@ -27,7 +27,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _directionChosen;
 	private bool _isLaunched;
 	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
-	public GameObject[] particlePlayer = new GameObject[4];
+	[HideInInspector] public GameObject[] particlePlayer = new GameObject[4];
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -35,6 +35,8 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 	public void ShowEvent()
 	{
+		AudioManager.Instance.Play("SoftWindLoop");
+		
 		_turnNumberChosenToLaunchTheWind = Random.Range(turnMinBeforeActivate, turnMaxBeforeActivate);
 
 		windIsComing.gameObject.SetActive(true);
@@ -66,6 +68,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	{
 		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_isLaunched)
 		{
+			AudioManager.Instance.Play("SoftStrongWind");
 			var players = GameManager.Instance.players;
 
 			for (int i = 0; i < players.Count; i++)

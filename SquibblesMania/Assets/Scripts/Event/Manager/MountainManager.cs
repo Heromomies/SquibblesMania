@@ -97,6 +97,7 @@ public class MountainManager : MonoBehaviour
 		    if (p.playersOnGroupBlock.Count > 0 && p.gameObject.transform.position.y > GameManager.Instance.minHeightBlocMovement)
 		    {
 			    p.gameObject.transform.position += Vector3.down;
+			    AudioManager.Instance.Play("Snow");
 		    }
 	    }
 
