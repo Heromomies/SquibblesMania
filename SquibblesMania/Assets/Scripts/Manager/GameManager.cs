@@ -161,13 +161,19 @@ public class GameManager : MonoBehaviour
           switch (playerCustomMat.name)
           {
               case "M_blue_player": player.indicatorPlayerRenderer.material.color = playerColors[0]; 
-                  playerSprite.color = playerColors[0]; break;
+                  playerSprite.color = playerColors[0];
+                  player.playerColor = playerColors[0];
+                  break;
               case "M_red_player": player.indicatorPlayerRenderer.material.color = playerColors[2]; 
-                  playerSprite.color = playerColors[2]; break;
+                  playerSprite.color = playerColors[2]; 
+                  player.playerColor = playerColors[2];
+                  break;
               case "M_yellow_player": player.indicatorPlayerRenderer.material.color = playerColors[3]; 
-                  playerSprite.color = playerColors[3]; break;
+                  playerSprite.color = playerColors[3]; 
+                  player.playerColor = playerColors[3];break;
               case "M_green_player": player.indicatorPlayerRenderer.material.color = playerColors[1];  
-                  playerSprite.color = playerColors[1]; break;
+                  playerSprite.color = playerColors[1]; 
+                  player.playerColor = playerColors[1];break;
           }
       }
   }

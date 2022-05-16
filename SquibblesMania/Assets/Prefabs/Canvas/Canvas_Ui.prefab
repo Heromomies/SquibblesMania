@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 1270267785703698276}
   - component: {fileID: 2537323848952188520}
   - component: {fileID: 9112163935720013559}
+  - component: {fileID: 7185250968443314152}
   m_Layer: 5
   m_Name: Img_MapTheme
   m_TagString: Untagged
@@ -256,6 +257,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7185250968443314152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279955209306374639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07519c4788247ec4b993875af6e6f4ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSquipy:
+  - {fileID: -9044940087047226622, guid: d6e95c99da7ced841bdf6f362421cad2, type: 3}
+  - {fileID: -6966489487585567046, guid: d6e95c99da7ced841bdf6f362421cad2, type: 3}
+  - {fileID: 5583708099706835710, guid: d6e95c99da7ced841bdf6f362421cad2, type: 3}
+  - {fileID: 119471855410487464, guid: d6e95c99da7ced841bdf6f362421cad2, type: 3}
+  imgSquipy: {fileID: 9073355809747226461}
+  rectTransform: {fileID: 8825211620486150731}
 --- !u!1 &1875578716036998089
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,10 +520,10 @@ RectTransform:
   m_Father: {fileID: 1270267785703698276}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 184.4842, y: 184.4842}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -60, y: 139}
+  m_SizeDelta: {x: 234, y: 234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9148231991172934512
 CanvasRenderer:
@@ -533,9 +553,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -9044940087047226622, guid: d6e95c99da7ced841bdf6f362421cad2, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -592,8 +612,9 @@ GameObject:
   - component: {fileID: 2083805280801558474}
   - component: {fileID: 5011830219393090057}
   - component: {fileID: 1773914347411719605}
+  - component: {fileID: 8413111953384425893}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Img_SquipyWin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,6 +678,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8413111953384425893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3591184638093787143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07519c4788247ec4b993875af6e6f4ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSquipy:
+  - {fileID: 3302273018506617863, guid: fc34a5365f8f56f4e9a42a29ab9f93ff, type: 3}
+  - {fileID: 954963436607154304, guid: fc34a5365f8f56f4e9a42a29ab9f93ff, type: 3}
+  - {fileID: -4455476159343789129, guid: fc34a5365f8f56f4e9a42a29ab9f93ff, type: 3}
+  - {fileID: 6519960470705124959, guid: fc34a5365f8f56f4e9a42a29ab9f93ff, type: 3}
+  imgSquipy: {fileID: 6604081351692137258}
+  rectTransform: {fileID: 2700080392099306019}
 --- !u!1 &4082676421461619817
 GameObject:
   m_ObjectHideFlags: 0
@@ -11287,12 +11327,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7843621775167499390}
   m_Layer: 5
-  m_Name: WinPanel
+  m_Name: WinParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7843621775167499390
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11813,7 +11853,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 283.8827, y: 333.7651}
+  m_SizeDelta: {x: 234, y: 234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3343407762026075535
 CanvasRenderer:
@@ -11843,7 +11883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dd83e9c30317c4c4fb37d1e3ce506834, type: 3}
+  m_Sprite: {fileID: 3302273018506617863, guid: fc34a5365f8f56f4e9a42a29ab9f93ff, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
