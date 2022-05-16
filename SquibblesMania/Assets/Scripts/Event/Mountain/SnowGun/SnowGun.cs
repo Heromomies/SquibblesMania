@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DigitalRubyShared;
 using I2.Loc;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
@@ -23,7 +24,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
     
     public AnimationCurve curve;
     public GameObject snowGun;
-    
+
+    public GameObject shootPlayerTxt;
     
     
     [HideInInspector] public Animator animatorSnowGun;
@@ -82,6 +84,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
         GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + new Vector3(0,1.05f, 0), Quaternion.identity, colliders[randomNumber].transform);
         go.GetComponent<DetectionSnowGun>().snowGun = this;
             
+        shootPlayerTxt.SetActive(true);
+        
         _hatchesList.Add(go);
     }
 
@@ -124,11 +128,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
                     var childToMovePos = childToMove.position;
                     Vector3 targetPosition = new Vector3(posHitInfo.x,childToMovePos.y, posHitInfo.z ) ;
                     childToMove.LookAt(targetPosition) ;
-                    
-                    // Move the snow Gun smoothly but only on one frame 
-                    /*Vector3 lookDirection = posHitInfo - childToMovePos;
-                    lookDirection.Normalize();
-                    childToMove.rotation = Quaternion.Slerp(childToMove.rotation, Quaternion.LookRotation(lookDirection), speedRotationSnowGun * Time.deltaTime); */
                     
                     var snowEndLaunchSnowPos = childToMove.GetChild(0).GetChild(0).position;
 				
@@ -182,6 +181,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
     IEnumerator DelaySetActiveFalseObject(float delay)
     {
         yield return new WaitForSeconds(delay);
+        
+        shootPlayerTxt.SetActive(true);
         
         foreach (var h in _hatchesList)
         {

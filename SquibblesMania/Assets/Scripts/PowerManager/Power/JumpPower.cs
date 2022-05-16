@@ -202,6 +202,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		listObjectToSetActiveFalse.Clear();
 		
 		GameManager.Instance.DetectParentBelowPlayers();
+		GameManager.Instance.PlayerMoving();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();

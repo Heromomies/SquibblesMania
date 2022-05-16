@@ -392,12 +392,17 @@ public class GameManager : MonoBehaviour
             }
         }
         
+        
+    }
+
+    public void PlayerMoving()
+    {
         if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
         {
             MountainManager.Instance.wind.CheckIfPlayersAreHide();
         }
     }
-
+    
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());

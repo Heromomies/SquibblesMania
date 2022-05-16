@@ -481,7 +481,7 @@ public class PlayerMovementManager : MonoBehaviour
 			_touchPos = Vector3.zero;
 			_isBlocSelected = true;
 			hasStopMovingBloc = false;
-			
+			GameManager.Instance.PlayerMoving();
 		}
 		
 	}
