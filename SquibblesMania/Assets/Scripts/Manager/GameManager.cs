@@ -85,8 +85,6 @@ public class GameManager : MonoBehaviour
             allBlocParents[i].transform.position = new Vector3(allBlocParents[i].transform.position.x, randomLocation, allBlocParents[i].transform.position.z);
         }
         
-        AudioManager.Instance.Play("PlayerSpawn");
-        
         SpawnPlayers();
         StartGame();
     }
