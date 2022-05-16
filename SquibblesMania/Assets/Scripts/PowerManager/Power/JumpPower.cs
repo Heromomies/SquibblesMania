@@ -73,6 +73,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 
+				player.gameObject.layer = 0;
+				
 				var posHitInfo = hitInfo.transform.position;
 
 				var playerPos = tCurrentPlayerTurn.position;
@@ -114,7 +116,11 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(0.8f);
+		
+		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
+		
+		yield return new WaitForSeconds(1f);
 
 		AudioManager.Instance.Play("PowerJumpEnd");
 				
@@ -196,6 +202,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		listObjectToSetActiveFalse.Clear();
 		
 		GameManager.Instance.DetectParentBelowPlayers();
+		GameManager.Instance.PlayerMoving();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();

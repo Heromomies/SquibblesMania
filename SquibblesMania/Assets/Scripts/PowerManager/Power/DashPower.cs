@@ -413,11 +413,12 @@ public class DashPower : MonoBehaviour, IManagePower
 			g.SetActive(false);
 		}
 		listObjectToSetActiveFalse.Clear();
-
-		PowerManager.Instance.ActivateDeactivatePower(1, false);
-		PowerManager.Instance.ChangeTurnPlayer();
 		
 		GameManager.Instance.DetectParentBelowPlayers();
+		GameManager.Instance.PlayerMoving();
+		
+		PowerManager.Instance.ActivateDeactivatePower(1, false);
+		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
 	public void ClearPower() // Clear the power

@@ -413,6 +413,8 @@ public class PlayerActionPointCardState : PlayerBaseState
                 _actionPointText--;
             
                 yield return _timeBetweenPlayerMovement;
+                
+                GameManager.Instance.PlayerMoving();
             }
             
           

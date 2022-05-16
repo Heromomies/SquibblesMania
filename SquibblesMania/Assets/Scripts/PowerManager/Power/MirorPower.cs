@@ -579,6 +579,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		zombiePlayer = null;
 
 		GameManager.Instance.DetectParentBelowPlayers();
+		GameManager.Instance.DetectParentBelowPlayers();
 		
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
