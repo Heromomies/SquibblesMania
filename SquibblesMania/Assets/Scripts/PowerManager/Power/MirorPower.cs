@@ -48,6 +48,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayDash = 3;
 	private float _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
+	private GameObject _particleToDeactivateZombie;
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
@@ -98,13 +99,19 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (players.ToList().Contains(hitInfo.collider) && hitInfo.transform.name != GameManager.Instance.currentPlayerTurn.name)
 				{
 					zombiePlayer = hitInfo.collider.gameObject;
-
-					Transform child = zombiePlayer.transform.GetChild(1);
-					child.GetComponentInChildren<Renderer>().material.color = changeZombieMat.color;
-
+					_particleToDeactivateZombie = PoolManager.Instance.SpawnObjectFromPool("ZombieParticle", zombiePlayer.transform.position, Quaternion.identity, zombiePlayer.transform);
+					
 					var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 					baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 					raycastPlayer.position = baseSpawnRaycastTransform.position;
+
+					if(players.Length > 0)
+					{
+						foreach (var pl in players)
+						{
+							GameManager.Instance.SetUpPlayerMaterial(pl.GetComponent<PlayerStateManager>(), pl.GetComponent<PlayerStateManager>().playerNumber);
+						}
+					}
 
 					for (int i = 0; i < _vectorRaycast.Count; i++)
 					{
@@ -538,9 +545,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 	IEnumerator CoroutineDeactivateParticle()
 	{
 		yield return _waitParticles;
-		
-		if(_particleToDeactivate != null)
+
+		if (_particleToDeactivate != null)
+		{
 			_particleToDeactivate.SetActive(false);
+			_particleToDeactivateZombie.SetActive(false);
+		}
 
 		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
 		{
@@ -569,6 +579,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		zombiePlayer = null;
 
 		GameManager.Instance.DetectParentBelowPlayers();
+		GameManager.Instance.DetectParentBelowPlayers();
 		
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
 		PowerManager.Instance.ChangeTurnPlayer();
@@ -576,28 +587,20 @@ public class MirorPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower() // Clear the power
 	{
+		if(players.Length > 0)
+		{
+			foreach (var p in players)
+			{
+				GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
+			}
+		}
+		
 		if (NFCManager.Instance.powerActivated)
 		{
-			if(players.Length > 0)
-			{
-				foreach (var p in players)
-				{
-					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
-				}
-			}
-
 			StartCoroutine(CoroutineDeactivateParticle());
 		}
 		else
 		{
-			if(players.Length > 0)
-			{
-				foreach (var p in players)
-				{
-					GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
-				}
-			}
-			
 			for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
 			{
 				textWhenNoZombieAreSelected[i].gameObject.SetActive(false);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using DigitalRubyShared;
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
   
     public int turnCount;
     [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
-    [SerializeField] private CameraViewModeGesture cameraViewModeGesture;
+    public CameraViewModeGesture cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
     public List<CamPreSets> camPreSets;
@@ -31,6 +32,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
 
+    public float durationDoShake, strength;
+    [HideInInspector] public bool canDoShake;
+    
     [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
     public struct CamPreSets
@@ -155,13 +159,19 @@ public class GameManager : MonoBehaviour
           switch (playerCustomMat.name)
           {
               case "M_blue_player": player.indicatorPlayerRenderer.material.color = playerColors[0]; 
-                  playerSprite.color = playerColors[0]; break;
+                  playerSprite.color = playerColors[0];
+                  player.playerColor = playerColors[0];
+                  break;
               case "M_red_player": player.indicatorPlayerRenderer.material.color = playerColors[2]; 
-                  playerSprite.color = playerColors[2]; break;
+                  playerSprite.color = playerColors[2]; 
+                  player.playerColor = playerColors[2];
+                  break;
               case "M_yellow_player": player.indicatorPlayerRenderer.material.color = playerColors[3]; 
-                  playerSprite.color = playerColors[3]; break;
+                  playerSprite.color = playerColors[3]; 
+                  player.playerColor = playerColors[3];break;
               case "M_green_player": player.indicatorPlayerRenderer.material.color = playerColors[1];  
-                  playerSprite.color = playerColors[1]; break;
+                  playerSprite.color = playerColors[1]; 
+                  player.playerColor = playerColors[1];break;
           }
       }
   }
@@ -189,7 +199,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-        CamConfig(count);
+        StartCoroutine(CamConfig(count));
         NFCManager.Instance.PlayerChangeTurn();
     }
 
@@ -204,24 +214,34 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    void CamConfig(int countTurn)
+    IEnumerator CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
+            if (canDoShake)
+            {
+                _cam.DOShakePosition(durationDoShake, strength, 90, 100);
+                _cam.DOShakeRotation(durationDoShake, strength, 90, 100);
+            
+                yield return new WaitForSeconds(durationDoShake);
+            
+                canDoShake = false;
+            }
+            
             if (actualCamPreset.presetNumber > 0)
             {
                 actualCamPreset.buttonNextTurn.SetActive(false);
             }
             
             actualCamPreset = camPreSets[countTurn];
-            
+
             Transform cameraTransform = _cam.transform;
             Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
-            
+
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
-            
+
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
@@ -294,7 +314,7 @@ public class GameManager : MonoBehaviour
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count; 
-        CamConfig(count);
+        StartCoroutine(CamConfig(count));
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
@@ -372,12 +392,17 @@ public class GameManager : MonoBehaviour
             }
         }
         
+        
+    }
+
+    public void PlayerMoving()
+    {
         if (conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
         {
             MountainManager.Instance.wind.CheckIfPlayersAreHide();
         }
     }
-
+    
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());

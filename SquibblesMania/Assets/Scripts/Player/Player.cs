@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public bool isUsingCardPower;
     public GameObject playerPref;
     public PlayerTeam playerTeam;
+    public Color playerColor;
     [Header("CUSTOMIZATIONS PARAMETERS")]
     public Renderer indicatorPlayerRenderer;
     public GameObject playerHat;

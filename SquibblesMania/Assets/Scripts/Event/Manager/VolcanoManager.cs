@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -13,11 +14,7 @@ public class VolcanoManager : MonoBehaviour
 	public int dangerousness;
 
 	public LevelOfDanger levelOfDanger;
-
-	[Space] [Header("VOLCANO FEEDBACK")] public float duration;
-	public float strength;
-	
-	private Camera _cam;
+	public GameObject volcanoIsGoingToExplode;
 	
 	public enum LevelOfDanger
 	{
@@ -37,7 +34,6 @@ public class VolcanoManager : MonoBehaviour
 	private void Awake()
 	{
 		_volcanoManager = this;
-		_cam = Camera.main;
 	}
 
 	#endregion
@@ -67,26 +63,18 @@ public class VolcanoManager : MonoBehaviour
 					break;
 			}
 
-			foreach (var b in UiManager.Instance.buttonsCameraManager)
-			{
-				b.gameObject.SetActive(false);
-			}
-			
-			_cam.DOShakePosition(duration, strength, 90, 100);
-			_cam.DOShakeRotation(duration, strength, 90, 100);
-
-			StartCoroutine(ActivateButtons());
+			GameManager.Instance.canDoShake = true;
+			StartCoroutine(FeedBackVolcano());
 		}
 	}
 
-	IEnumerator ActivateButtons()
+	IEnumerator FeedBackVolcano()
 	{
-		yield return new WaitForSeconds(duration);
+		volcanoIsGoingToExplode.SetActive(true);
 		
-		foreach (var b in UiManager.Instance.buttonsCameraManager)
-		{
-			b.gameObject.SetActive(true);
-		}
+		yield return new WaitForSeconds(GameManager.Instance.durationDoShake + 2);
+		
+		volcanoIsGoingToExplode.SetActive(false);
 	}
 	
 	void LaunchEvent() // Launch the event

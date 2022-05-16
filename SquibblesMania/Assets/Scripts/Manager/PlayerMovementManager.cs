@@ -33,7 +33,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private bool _isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
-	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.5f);
+	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.3f);
 	private readonly WaitForSeconds _timeInSecondsBetweenBlocSwipe = new WaitForSeconds(0.2f);
 	private readonly List<Transform> _nextBlocUpMeshPos = new List<Transform>();
 	private readonly List<Transform> _nextBlocDownMeshPos = new List<Transform>();
@@ -120,8 +120,9 @@ public class PlayerMovementManager : MonoBehaviour
 				
 				if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask) && !isPlayerPreviewPath)
 				{
+				
 					var hitBlocParentPos = _hit.transform.parent.position;
-
+					
 					if (currentPlayer.nextBlockPath.Contains(_hit.transform) && currentPlayer.PlayerActionPointCardState.PathParentPosComparedToPlayerPos(hitBlocParentPos, currentPlayer.transform.position) && HitBlockEqualToCurrentBlockPlayerOn(_hit, currentPlayer))
 					{
 						currentPlayer.currentTouchBloc = _hit.collider.gameObject.transform;
@@ -480,7 +481,7 @@ public class PlayerMovementManager : MonoBehaviour
 			_touchPos = Vector3.zero;
 			_isBlocSelected = true;
 			hasStopMovingBloc = false;
-			
+			GameManager.Instance.PlayerMoving();
 		}
 		
 	}

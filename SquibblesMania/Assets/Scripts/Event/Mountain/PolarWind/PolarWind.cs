@@ -25,7 +25,9 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _turnNumberChosenToLaunchTheWind;
 	private int _turnCount;
 	private int _directionChosen;
+	private bool _isLaunched;
 	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
+	public GameObject[] particlePlayer = new GameObject[4];
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -62,7 +64,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 	public void LaunchEvent()
 	{
-		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
+		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_isLaunched)
 		{
 			var players = GameManager.Instance.players;
 
@@ -85,16 +87,30 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen] * distanceMovingPlayer, speedPlayer);
 				}
 			}
-
+			
 			for (int i = 0; i < hideParticle.Count; i++)
 			{
 				hideParticle[i].SetActive(false);
 			}
-			hideParticle.Clear();			
+			
+			hideParticle.Clear();
+
+			_isLaunched = true;
+			
+			StartCoroutine(WaitBeforeCheckUnderPlayer());
+			
 			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
-			gameObject.SetActive(false);
 		}
+	}
+
+	IEnumerator WaitBeforeCheckUnderPlayer()
+	{
+		yield return new WaitForSeconds(speedPlayer + 0.5f);
+		
+		GameManager.Instance.DetectParentBelowPlayers();
+		_isLaunched = false;
+		gameObject.SetActive(false);
 	}
 	
 	public void CheckIfPlayersAreHide()
@@ -107,17 +123,22 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			{
 				if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
 				{
-					if (!players[i].isPlayerHide)
-					{
-						GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
-						hideParticle.Add(vfx);
-					}
-
 					players[i].isPlayerHide = true;
 				}
 				else
 				{
 					players[i].isPlayerHide = false;
+				}
+				
+				if (!players[i].isPlayerHide)
+				{
+					GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
+					hideParticle.Add(vfx);
+					particlePlayer[i] = vfx;
+				}
+				else
+				{
+					particlePlayer[i] = null;
 				}
 			}
 		

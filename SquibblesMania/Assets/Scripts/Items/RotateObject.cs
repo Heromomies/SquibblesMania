@@ -8,14 +8,20 @@ public class RotateObject : MonoBehaviour
     private Transform _target;
     public float speed;
 
-    private void Start()
+    private bool _canTurn;
+    
+    private IEnumerator Start()
     {
+        yield return new WaitForSeconds(0.2f);
         _target = CameraButtonManager.Instance.target;
+
+        _canTurn = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.RotateAround(_target.position, Vector3.up, speed * Time.deltaTime);
+        if(_canTurn)
+         transform.RotateAround(_target.position, Vector3.up, speed * Time.deltaTime);
     }
 }
