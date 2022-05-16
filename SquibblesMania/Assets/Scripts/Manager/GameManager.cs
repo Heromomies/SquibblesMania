@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
             allBlocParents[i].transform.position = new Vector3(allBlocParents[i].transform.position.x, randomLocation, allBlocParents[i].transform.position.z);
         }
         
+        AudioManager.Instance.Play("PlayerSpawn");
+        
         SpawnPlayers();
         StartGame();
     }
@@ -115,8 +117,6 @@ public class GameManager : MonoBehaviour
             //Spawn player at specific location
             if (playersSpawnPoints[i].gameObject.TryGetComponent(out Node playerNodeSpawnPoint))
             {
-                AudioManager.Instance.Play("PlayerSpawn");
-                
                 Vector3 spawnPos = playerNodeSpawnPoint.GetWalkPoint() + new Vector3(0, 0.5f, 0);
                 PlayerStateManager player = Instantiate(playerPref, spawnPos, Quaternion.identity);
                 player.playerRespawnPoint = playerNodeSpawnPoint.gameObject.transform;

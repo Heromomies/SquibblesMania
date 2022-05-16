@@ -35,6 +35,8 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 	public void ShowEvent()
 	{
+		AudioManager.Instance.Play("SoftWindLoop");
+		
 		_turnNumberChosenToLaunchTheWind = Random.Range(turnMinBeforeActivate, turnMaxBeforeActivate);
 
 		windIsComing.gameObject.SetActive(true);
