@@ -20,6 +20,8 @@ public class UiManager : MonoBehaviour
 
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
+    [SerializeField] private GameObject playersUiGlobal;
+    [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
     public static UiManager Instance => _uiManager;
 
     [Header("CARD UI VFX")]
@@ -121,22 +123,41 @@ public class UiManager : MonoBehaviour
         }
     }
     
-    public void WinSetUp(Player.PlayerTeam playerTeam)
+    public void WinSetUp(Player.PlayerTeam currentPlayerTeam)
     {
         winPanel.SetActive(true);
+        playersUiGlobal.SetActive(false);
+
+        var currentPlayer = GameManager.Instance.currentPlayerTurn;
+        PlayerStateManager otherPlayer = null;
+        
+        foreach (var player in GameManager.Instance.players)
+        {
+            if (player.playerTeam != currentPlayerTeam) otherPlayer = player;
+        }
+        
         if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
         {
             depthOfField.active = true;
         }
-        
-        if (playerTeam == Player.PlayerTeam.TeamOne)
+
+        if (otherPlayer != null)
         {
-            textTeamOne.SetActive(true);
+            if (currentPlayerTeam == Player.PlayerTeam.TeamOne)
+            {
+                textTeamOne.SetActive(true);
+                winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
+                looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;
+            }
+            else
+            {
+                textTeamTwo.SetActive(true);
+                winPanel.transform.rotation *= Quaternion.Euler(0,0,180f);
+                winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
+                looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;
+            }
         }
-        else
-        {
-            textTeamTwo.SetActive(true);
-        }
+      
     }
     
     #region SpawnTextActionPoint
