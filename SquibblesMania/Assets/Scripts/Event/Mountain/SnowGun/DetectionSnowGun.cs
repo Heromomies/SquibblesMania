@@ -19,6 +19,9 @@ public class DetectionSnowGun : MonoBehaviour
          snowGun.canClick = true;
          animator.SetBool("isTrigger", true);
          snowGun.animatorSnowGun.SetBool("onHatche", true);
+         
+         snowGun.shootPlayerTxt.SetActive(true);
+         snowGun.goToAntennaTxt.SetActive(false);
       }
    }
 
@@ -29,6 +32,9 @@ public class DetectionSnowGun : MonoBehaviour
          snowGun.canClick = false;
          animator.SetBool("isTrigger", false);
          snowGun.animatorSnowGun.SetBool("onHatche", false);
+         
+         snowGun.shootPlayerTxt.SetActive(false);
+         snowGun.goToAntennaTxt.SetActive(true);
       }
    }
 }

@@ -725,9 +725,13 @@ PrefabInstance:
       value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
-      propertyPath: shootPlayerTxt
+      propertyPath: goToAntennaTxt
       value: 
       objectReference: {fileID: 367648876}
+    - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
+      propertyPath: shootPlayerTxt
+      value: 
+      objectReference: {fileID: 1222578832}
     - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
       propertyPath: layerInteractable.m_Bits
       value: 8
@@ -888,17 +892,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2268752161114517480, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
   m_PrefabInstance: {fileID: 2079719319}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &367648879 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4164375984025002197, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-  m_PrefabInstance: {fileID: 2079719319}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367648876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &368312368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,9 +1270,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 367648879}
-  mAlignment_RTL: 260
-  mAlignment_LTR: 257
+  mTarget: {fileID: 1222578833}
+  mAlignment_RTL: 514
+  mAlignment_LTR: 514
   mAlignmentWasRTL: 0
   mInitializeAlignment: 0
 --- !u!1001 &678717702
@@ -1356,9 +1349,13 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
-      propertyPath: shootPlayerTxt
+      propertyPath: goToAntennaTxt
       value: 
       objectReference: {fileID: 367648876}
+    - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
+      propertyPath: shootPlayerTxt
+      value: 
+      objectReference: {fileID: 1222578832}
     - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
       propertyPath: layerInteractable.m_Bits
       value: 8
@@ -2079,7 +2076,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1109120053275285029, guid: f92ae4e8184e9634796fb9951c38bef8, type: 3}
   m_PrefabInstance: {fileID: 903006597}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1506082327}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2b03910e9a196748b583585196a651a, type: 3}
@@ -2657,6 +2654,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpsText: {fileID: 2079719320}
   deltaTime: 0
+--- !u!1 &1222578832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8620874272790706600, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2079719319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1222578833 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8332277247645912014, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2079719319}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222578832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1268699737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3063,6 +3076,14 @@ PrefabInstance:
       propertyPath: volume
       value: 
       objectReference: {fileID: 1549641281}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: durationDoShake
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: hats.Array.size
       value: 10
@@ -4208,11 +4229,6 @@ Transform:
   m_Father: {fileID: 117494064}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1506082327 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1109120053275285030, guid: f92ae4e8184e9634796fb9951c38bef8, type: 3}
-  m_PrefabInstance: {fileID: 903006597}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1536393712
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5297,7 +5313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventToTest:
-  - {fileID: 1506082327}
+  - {fileID: 1993861409}
 --- !u!1001 &1993680887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5608,6 +5624,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2268752161114517480, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: m_Name
+      value: TextGoToAntenna
+      objectReference: {fileID: 0}
     - target: {fileID: 3692276956045322622, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_fontColor.b
       value: 1
@@ -5620,6 +5640,10 @@ PrefabInstance:
       propertyPath: m_fontColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4053909781624854846, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: mLocalizeTarget
+      value: 
+      objectReference: {fileID: 621753795}
     - target: {fileID: 4090090077153554183, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_fontColor.b
       value: 1
@@ -5631,6 +5655,10 @@ PrefabInstance:
     - target: {fileID: 4090090077153554183, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_fontColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6303471455085699373, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: mTerm
+      value: TEXT_GoToAntenna
       objectReference: {fileID: 0}
     - target: {fileID: 6303471455085699373, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: mLocalizeTarget
@@ -6737,9 +6765,13 @@ PrefabInstance:
       value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
-      propertyPath: shootPlayerTxt
+      propertyPath: goToAntennaTxt
       value: 
       objectReference: {fileID: 367648876}
+    - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
+      propertyPath: shootPlayerTxt
+      value: 
+      objectReference: {fileID: 1222578832}
     - target: {fileID: 3539542778933655618, guid: 976c9e997b3cf8841a5c33eda1932729, type: 3}
       propertyPath: layerInteractable.m_Bits
       value: 8
@@ -6878,9 +6910,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 1474698788}
     m_Modifications:
     - target: {fileID: 5471411410973634985, guid: e190a0bfe0e2c3d4e90ddf076b29a6fb, type: 3}
-      propertyPath: shootPlayerTxt
+      propertyPath: goToAntennaTxt
       value: 
       objectReference: {fileID: 367648876}
+    - target: {fileID: 5471411410973634985, guid: e190a0bfe0e2c3d4e90ddf076b29a6fb, type: 3}
+      propertyPath: shootPlayerTxt
+      value: 
+      objectReference: {fileID: 1222578832}
     - target: {fileID: 8858757316262464369, guid: e190a0bfe0e2c3d4e90ddf076b29a6fb, type: 3}
       propertyPath: m_Name
       value: SpawnSnowGun

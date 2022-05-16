@@ -25,6 +25,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public AnimationCurve curve;
     public GameObject snowGun;
 
+    public GameObject goToAntennaTxt;
     public GameObject shootPlayerTxt;
     
     
@@ -84,7 +85,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
         GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + new Vector3(0,1.05f, 0), Quaternion.identity, colliders[randomNumber].transform);
         go.GetComponent<DetectionSnowGun>().snowGun = this;
             
-        shootPlayerTxt.SetActive(true);
+        goToAntennaTxt.SetActive(true);
         
         _hatchesList.Add(go);
     }
@@ -182,7 +183,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     {
         yield return new WaitForSeconds(delay);
         
-        shootPlayerTxt.SetActive(true);
+        shootPlayerTxt.SetActive(false);
         
         foreach (var h in _hatchesList)
         {
