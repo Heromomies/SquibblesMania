@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 using Image = UnityEngine.UI.Image;
 
 public class SquipyAnimTween : MonoBehaviour
 {
 
+    public Sprite[] spriteSquipy;
     public Image imgSquipy;
-    // Start is called before the first frame update
+    [SerializeField] private RectTransform rectTransform;
     void Start()
     {
+        // Play a series of sprites on the window on repeat endlessly
+        LeanTween.play(rectTransform, spriteSquipy).setLoopPingPong();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         

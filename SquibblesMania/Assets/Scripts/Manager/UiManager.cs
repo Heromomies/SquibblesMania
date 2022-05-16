@@ -133,7 +133,12 @@ public class UiManager : MonoBehaviour
         
         foreach (var player in GameManager.Instance.players)
         {
-            if (player.playerTeam != currentPlayerTeam) otherPlayer = player;
+            if (player.playerTeam != currentPlayerTeam)
+            {
+                otherPlayer = player;
+                break;
+            }
+                
         }
         
         if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
