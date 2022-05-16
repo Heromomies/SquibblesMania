@@ -27,6 +27,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _directionChosen;
 	private bool _isLaunched;
 	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
+	public GameObject[] particlePlayer = new GameObject[4];
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -133,6 +134,11 @@ public class PolarWind : MonoBehaviour, IManageEvent
 				{
 					GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
 					hideParticle.Add(vfx);
+					particlePlayer[i] = vfx;
+				}
+				else
+				{
+					particlePlayer[i] = null;
 				}
 			}
 		

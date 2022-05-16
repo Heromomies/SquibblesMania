@@ -172,6 +172,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		if (_playerTwo != null && _playerOne != null)
 		{
 			GameManager.Instance.DetectParentBelowPlayers();
+			GameManager.Instance.PlayerMoving();
 		}
 		
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
