@@ -66,6 +66,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	{
 		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_isLaunched)
 		{
+			AudioManager.Instance.Play("SoftStrongWind");
 			var players = GameManager.Instance.players;
 
 			for (int i = 0; i < players.Count; i++)
