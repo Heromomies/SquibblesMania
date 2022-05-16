@@ -2,26 +2,71 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CinematicBars : MonoBehaviour
 {
     // Start is called before the first frame update
     private RectTransform topBar, bottomBar;
+    public Text mapTitle;
 
-    private void Awake()
+    Color32 startColor = new Color(255, 255, 255, 0);
+    Color32 endColor = new Color(255, 255, 255, 255);
+
+
+    public void Start()
     {
-        GameObject gameObject = new GameObject("topBar", typeof(Image));
-        gameObject.transform.SetParent(transform, false);
-        gameObject.GetComponent<Image>().color = Color.black;
-        topBar.anchorMin = new Vector2(0, 1);
-        topBar.anchorMax = new Vector2(1, 1);
-        topBar.sizeDelta = new Vector2(0, 300);
+        topBar = transform.GetChild(0).GetComponent<RectTransform>();
+        bottomBar = transform.GetChild(1).GetComponent<RectTransform>();
+    }
 
-        gameObject = new GameObject("bottomBar", typeof(Image));
-        gameObject.transform.SetParent(transform, false);
-        gameObject.GetComponent<Image>().color = Color.black;
-        bottomBar.anchorMin = new Vector2(0, 0);
-        bottomBar.anchorMax = new Vector2(1, 0);
-        bottomBar.sizeDelta = new Vector2(0, 300);
+    private void Update()
+    {
+        if (Input.GetKeyDown("g"))
+        {
+            StartCoroutine(ShowBar());
+        }
+
+        if (Input.GetKeyDown("v"))
+        {
+            StartCoroutine(HideBar());
+        }
+    }
+
+    IEnumerator ShowBar()
+    {
+        float t = 0;
+        
+        LeanTween.move(topBar, new Vector3(0f, 645f, 0f), 0.2f);
+        LeanTween.move(bottomBar, new Vector3(0f, -645f, 0f), 0.2f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        mapTitle.color = startColor;
+
+        while (mapTitle.color.a < 1.0f)
+        {
+
+            mapTitle.color = new Color(255, 255, 255, 0 + (Time.deltaTime / t));
+        }
+
+        yield return null;
+    }
+
+    IEnumerator HideBar()
+    {
+        float t = 0;
+
+        LeanTween.move(topBar, new Vector3(0f, 900f, 0f), 0.4f);
+        LeanTween.move(bottomBar, new Vector3(0f, -900f, 0f), 0.4f);
+
+        mapTitle.color = endColor;
+
+        while (mapTitle.color.a > 0.0f)
+        {
+            mapTitle.color = new Color(255, 255, 255, 255 - (Time.deltaTime / t));
+        }
+
+        yield return null;
     }
 }
