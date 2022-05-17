@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public static class LeanTweenExt
 {
+    public static LTDescr LeanAlphaTextMeshPro(this TextMeshProUGUI textMesh, float to, float time) { var _color = textMesh.color; var _tween = LeanTween.value (textMesh.gameObject, _color.a, to, time).setOnUpdate ((float _value) => { _color.a = _value; textMesh.color = _color; });return _tween; }
     //LeanTween.addListener
     //LeanTween.alpha
     public static LTDescr LeanAlpha(this GameObject gameObject, float to, float time) { return LeanTween.alpha(gameObject, to, time); }
