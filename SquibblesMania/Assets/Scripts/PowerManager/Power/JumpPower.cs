@@ -29,7 +29,10 @@ public class JumpPower : MonoBehaviour, IManagePower
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
-
+	private Transform _objectToMove, _objectToGo;
+	private float _speedLookAt = 3f;
+	private bool _canLook;
+	
 	void OnEnable()
 	{
 		_cam = Camera.main;
@@ -73,6 +76,10 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 
+				_objectToMove = tCurrentPlayerTurn;
+				_objectToGo = hitInfo.transform;
+				_canLook = true;
+				
 				player.gameObject.layer = 0;
 				
 				var posHitInfo = hitInfo.transform.position;
@@ -114,6 +121,17 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 	}
 
+	private void Update()
+	{
+		if (_canLook)
+		{
+			var lookPos = _objectToGo.position - _objectToMove.position;
+			lookPos.y = 0;
+			var rotation = Quaternion.LookRotation(lookPos);
+			_objectToMove.rotation = Quaternion.Slerp(_objectToMove.rotation, rotation, Time.deltaTime * _speedLookAt);
+		}
+	}
+	
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
 		yield return new WaitForSeconds(0.8f);
@@ -122,6 +140,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 		
 		yield return new WaitForSeconds(1f);
 
+		_canLook = false;
+		
 		AudioManager.Instance.Play("PowerJumpEnd");
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
