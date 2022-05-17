@@ -25,7 +25,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	public List<Collider> collidersFinished = new List<Collider>();
 
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
-	private GameObject _particleImpact, _particleImpulse;
+	private GameObject _particleImpact, _particleImpulse, _trailParticle;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
@@ -97,6 +97,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
+				
+				_trailParticle = PoolManager.Instance.SpawnObjectFromPool("ParticleTrailJump", _objectToMove.position + new Vector3(0,-0.75f,0), Quaternion.identity, _objectToMove);
 				BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
@@ -134,10 +136,10 @@ public class JumpPower : MonoBehaviour, IManagePower
 	
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
-		yield return new WaitForSeconds(0.8f);
+		yield return new WaitForSeconds(0.5f);
 		
 		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
-		
+
 		yield return new WaitForSeconds(1f);
 
 		_canLook = false;
@@ -145,6 +147,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 		AudioManager.Instance.Play("PowerJumpEnd");
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
+		
+		_trailParticle.SetActive(false);
 		
 		var hitPosition = hitInfoTransform.position;
 		
