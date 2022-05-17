@@ -20,20 +20,7 @@ public class CinematicBars : MonoBehaviour
         bottomBar = transform.GetChild(1).GetComponent<RectTransform>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown("g"))
-        {
-            StartCoroutine(ShowBar());
-        }
-
-        if (Input.GetKeyDown("v"))
-        {
-            StartCoroutine(HideBar());
-        }
-    }
-
-    IEnumerator ShowBar()
+    public IEnumerator ShowBar()
     {
         float t = 0;
         
@@ -50,10 +37,13 @@ public class CinematicBars : MonoBehaviour
             mapTitle.color = new Color(255, 255, 255, 0 + (Time.deltaTime / t));
         }
 
+        mapTitle.canvasRenderer.SetAlpha(0);
+        mapTitle.CrossFadeAlpha(1.0f, 2.0f, false);
+
         yield return null;
     }
 
-    IEnumerator HideBar()
+    public IEnumerator HideBar()
     {
         float t = 0;
 
@@ -62,10 +52,10 @@ public class CinematicBars : MonoBehaviour
 
         mapTitle.color = endColor;
 
-        while (mapTitle.color.a > 0.0f)
-        {
-            mapTitle.color = new Color(255, 255, 255, 255 - (Time.deltaTime / t));
-        }
+        mapTitle.canvasRenderer.SetAlpha(0);
+        mapTitle.CrossFadeAlpha(0f, 1.5f, false);
+
+
 
         yield return null;
     }
