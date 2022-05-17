@@ -128,6 +128,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 625567709493340109, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
   m_PrefabInstance: {fileID: 2079719319}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &26920559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7185250968443314152, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2079719319}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07519c4788247ec4b993875af6e6f4ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &33757837
 GameObject:
   m_ObjectHideFlags: 0
@@ -1884,6 +1895,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
+      propertyPath: playersUiGlobal
+      value: 
+      objectReference: {fileID: 2041513557}
+    - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
+      propertyPath: winSquipyAnimTween
+      value: 
+      objectReference: {fileID: 1255212258}
+    - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
+      propertyPath: looseSquipyAnimTween
+      value: 
+      objectReference: {fileID: 26920559}
+    - target: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
       propertyPath: parentSpawnCardUiVFX.Array.data[0]
       value: 
       objectReference: {fileID: 1439228968}
@@ -2739,6 +2762,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1255212258 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8413111953384425893, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2079719319}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07519c4788247ec4b993875af6e6f4ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1268699737
@@ -5592,6 +5626,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6197878100915322743, guid: fb0a15234a163a54a958deaf39d7b471, type: 3}
   m_PrefabInstance: {fileID: 2033030065}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2041513557 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7843621774859225856, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2079719319}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2079719319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5982,6 +6021,10 @@ PrefabInstance:
     - target: {fileID: 7843621773546471656, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_FloatArgument
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7843621773803105192, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 9.249023
       objectReference: {fileID: 0}
     - target: {fileID: 7843621773803105195, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -6405,11 +6448,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7843621775167499377, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.2508545
+      value: 3.2507324
       objectReference: {fileID: 0}
     - target: {fileID: 7843621775167499381, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.2508545
+      value: 3.2507324
       objectReference: {fileID: 0}
     - target: {fileID: 7843621775167499385, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_fontColor.b
