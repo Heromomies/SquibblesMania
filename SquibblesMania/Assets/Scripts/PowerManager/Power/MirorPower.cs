@@ -284,6 +284,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (Physics.Raycast(hit.transform.position, _vectorRaycast[directionIndex], out var hitPlayerTouched, distanceBetweenTwoPlayers,
 					layerMaskInteractableAndPlayer)) // If the player repulsed touch a block behind him
 				{
+					AudioManager.Instance.Play("PlayerHit");
+					
 					var distanceBetweenBlockAndPlayerTouched = Vector3.Distance(hit.transform.position,
 						hitPlayerTouched.transform.position);
 					distanceBetweenBlockAndPlayerTouched += 0.1f;
