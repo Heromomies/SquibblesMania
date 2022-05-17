@@ -78,6 +78,8 @@ public class MountainManager : MonoBehaviour
 	    
 		    var randomNumber = Random.Range(0, snowGuns.Count);
 		    snowGuns[randomNumber].SetActive(true);
+		    
+		    AudioManager.Instance.Play("CanonOpen");
 	    }
     }
 
@@ -97,6 +99,7 @@ public class MountainManager : MonoBehaviour
 		    if (p.playersOnGroupBlock.Count > 0 && p.gameObject.transform.position.y > GameManager.Instance.minHeightBlocMovement)
 		    {
 			    p.gameObject.transform.position += Vector3.down;
+			    AudioManager.Instance.Play("Snow");
 		    }
 	    }
 

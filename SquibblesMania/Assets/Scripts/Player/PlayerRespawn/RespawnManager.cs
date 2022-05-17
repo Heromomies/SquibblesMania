@@ -16,6 +16,7 @@ public class RespawnManager : MonoBehaviour
 
     public void RespawnPlayer(PlayerStateManager player)
     {
+        AudioManager.Instance.Play("PlayerSpawn");
         player.transform.position = player.playerRespawnPoint.position + offsetRespawnPos;
         player.playerRigidbody.velocity = Vector3.zero;
         Physics.SyncTransforms();

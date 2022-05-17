@@ -30,6 +30,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private float movementBlocAmount = 1f;
 
 	private Vector3 _blocParentCurrentlySelectedPos; 
+	[SerializeField]
 	private bool _isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
@@ -232,7 +233,7 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 			}
 			//If press is ended
-			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null)
+			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null )
 			{
 				//End of the drag
 				EndMovingBloc();
@@ -408,7 +409,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void BlocMovement(Vector3 touchPos)
 	{
 		var direction = touchPos.normalized;
-
+		
 		if (_isBlocSelected)
 		{
 			StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
@@ -449,6 +450,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 			if (yPos > 0.0f)
 			{
+				
 				if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 				{
 					AudioManager.Instance.Play("CardFalse");
@@ -463,6 +465,7 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 			else if (yPos < 0.0f)
 			{
+			
 				if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 				{
 					AudioManager.Instance.Play("CardFalse");
@@ -479,8 +482,8 @@ public class PlayerMovementManager : MonoBehaviour
 			yield return _timeInSecondsBetweenBlocMovement;
 			ResetPreviewPathObjects();
 			_touchPos = Vector3.zero;
-			_isBlocSelected = true;
 			hasStopMovingBloc = false;
+			_isBlocSelected = true;
 			GameManager.Instance.PlayerMoving();
 		}
 		
@@ -513,8 +516,12 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		switch (isPlayerUseActionPoint)
 		{
-			case true: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--); break;
-			case false: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint++); break;
+			case true: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--);
+				GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+				break;
+			case false: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint++); 
+				GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+				break;
 		}
 		
 		if (!hasStopMovingBloc && blockParentCurrentlySelected != null)

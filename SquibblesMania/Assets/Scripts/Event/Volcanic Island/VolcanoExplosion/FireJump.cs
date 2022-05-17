@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,10 +12,15 @@ public class FireJump : MonoBehaviour
 	public float speed;
 	public AnimationCurve animationCurve;
 	
+	private Transform _objectToMove, _objectToGo;
+	private float _speedLookAt = 3f;
+	private bool _canLook;
+	
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player") && !NFCManager.Instance.powerActivated)
 		{
+			AudioManager.Instance.Play("PlayerBurn");
 			Jump(other.transform);
 		}
 	}
@@ -34,13 +40,23 @@ public class FireJump : MonoBehaviour
 
 		foreach (var coll in collidersMax)
 		{
-			if (collidersFinished.Contains(coll))
+			if (TryGetComponent(out Node node))
 			{
-				collidersFinished.Remove(coll);
-			}
-			else
-			{
-				collidersFinished.Add(coll);
+				if (node.isActive)
+				{
+					if (collidersFinished.Contains(coll))
+					{
+						collidersFinished.Remove(coll);
+					}
+					else
+					{
+						collidersFinished.Add(coll);
+					}
+				}
+				else
+				{
+					collidersFinished.Remove(coll);
+				}
 			}
 		}
 
@@ -57,15 +73,36 @@ public class FireJump : MonoBehaviour
 		listPoint.Add(new Vector3(xSpawn, ySpawn, zSpawn));
 		listPoint.Add(collidersFinished[randomNumber].transform.position + new Vector3(0,1,0));
 
+		GameManager.Instance.currentPlayerTurn.playerAnimator.SetBool("isBurning", true);
+
+		_objectToMove = objectToMove;
+		_objectToGo = collidersFinished[randomNumber].transform;
+		_canLook = true;
+		
 		GameObject trail = PoolManager.Instance.SpawnObjectFromPool("TrailParticleFire", objectToMove.position, Quaternion.identity, objectToMove);
 		BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(objectToMove.gameObject, listPoint, speed, animationCurve);
 
 		StartCoroutine(WaitBeforeResetTrail(trail));
 	}
 
+	private void Update()
+	{
+		if (_canLook)
+		{
+			var lookPos = _objectToGo.position - _objectToMove.position;
+			lookPos.y = 0;
+			var rotation = Quaternion.LookRotation(lookPos);
+			_objectToMove.rotation = Quaternion.Slerp(_objectToMove.rotation, rotation, Time.deltaTime * _speedLookAt);
+		}
+	}
+
 	IEnumerator WaitBeforeResetTrail(GameObject trailToDeactivate)
 	{
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(1f);
+		
+		GameManager.Instance.currentPlayerTurn.playerAnimator.SetBool("isBurning", false);
+		_canLook = false;
+		yield return new WaitForSeconds(2f);
 	
 		trailToDeactivate.SetActive(false);
 	}

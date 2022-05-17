@@ -140,6 +140,8 @@ public class DashPower : MonoBehaviour, IManagePower
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
 			{
+				AudioManager.Instance.Play("PlayerHit");
+				
 				var distanceBetweenTwoPlayers = Vector3.Distance(position, hit.collider.transform.position);
 				distanceBetweenTwoPlayers += 0.1f;
 				distanceBetweenTwoPlayers = (int) distanceBetweenTwoPlayers; // check distance between two players

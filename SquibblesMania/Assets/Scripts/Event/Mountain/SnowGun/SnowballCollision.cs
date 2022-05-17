@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SnowballCollision : MonoBehaviour
 {
-    public GameObject breakableIce;
+    public GameObject iceStunPlayer;
     
     private void OnTriggerEnter(Collider other)
     {
@@ -18,7 +18,9 @@ public class SnowballCollision : MonoBehaviour
             { 
                 PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
             }
-            player.vfxStun = Instantiate(breakableIce, other.transform.position + new Vector3(0, 0.25f, 0), Quaternion.identity, player.transform);
+            player.vfxStun = Instantiate(iceStunPlayer, other.transform.position + new Vector3(0, 0.25f, 0), Quaternion.identity, player.transform);
+            AudioManager.Instance.Play("FreezeOn");
+            
             gameObject.SetActive(false);
         }
     }

@@ -194,6 +194,12 @@ public class PlayerCardState : PlayerBaseState
 		{
 			player.isPlayerStun = false;
 			player.vfxStun.SetActive(false);
+
+			if (GameManager.Instance.conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
+			{
+				AudioManager.Instance.Play("FreezeOff");
+			}
+			
 			player.indicatorPlayerRenderer.gameObject.SetActive(true);
 			NFCManager.Instance.PlayerChangeTurn();
 		}

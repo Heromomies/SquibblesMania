@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,26 +13,41 @@ public class Menu : MonoBehaviour
     public GameObject panelManager;
     public PlayerData playerData;
 
-
+    public TextMeshProUGUI textToPulse;
+    public GameObject panelLaunch;
 
     public GameObject uiMenuParent;
     // Start is called before the first frame update
 
     void Start()
     {
-        startManager.SetActive(true);
+        textToPulse.LeanAlphaTextMeshPro(0f, 1f).setFrom(1f).setLoopPingPong();
+
+        startManager.SetActive(false);
         mapManager.SetActive(false);
         characterManager.SetActive(false);
     }
+
+    public void LaunchGame()
+    {
+        AudioManager.Instance.Play("Button");
+        
+        panelLaunch.GetComponent<RectTransform>().LeanScale(new Vector3(0,0,0), 0.75f);
+        
+        startManager.SetActive(true);
+        //  panelLaunch.SetActive(false);
+    }
+    
     public void Play()
     {
+        AudioManager.Instance.Play("Button");
         startManager.SetActive(false);
         mapManager.SetActive(true);
     }
 
     public void MapPlay()
     {
-        
+        AudioManager.Instance.Play("Button");
         playerData.MapID = panelManager.GetComponent<PageSwiper>().currentPage;
         panelManager.transform.position = panelManager.GetComponent<PageSwiper>().panelLocation;
         mapManager.SetActive(false);
@@ -41,17 +57,20 @@ public class Menu : MonoBehaviour
     // Update is called once per frame
     public void QuitApp()
     {
+        AudioManager.Instance.Play("Button");
         Application.Quit();
     }
 
     public void BackMap()
     {
+        AudioManager.Instance.Play("Button");
         characterManager.SetActive(false);
         mapManager.SetActive(true);
     }
 
     public void BackMainMenu()
     {
+        AudioManager.Instance.Play("Button");
         mapManager.SetActive(false);
         startManager.SetActive(true);
     }

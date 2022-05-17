@@ -15,7 +15,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     private List<Transform> previewPath = new List<Transform>();
 
 
-    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.7f);
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.6f);
 
 
     //The state when player use is card action point
@@ -343,38 +343,8 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public IEnumerator BeginFollowPath(PlayerStateManager player)
     {
-        //Last index of the list finalPathfinding
-        var index = player.finalPathFinding.Count - 1;
-
-        var lastDirection = (player.finalPathFinding[index].transform.position - player.currentBlocPlayerOn.position).normalized;
-
-
         UiManager.Instance.SpawnTextActionPointPopUp(player.transform);
         _actionPointText = player.playerActionPoint;
-
-        for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
-        {
-            if (i < player.finalPathFinding.Count - 1)
-            {
-                var firstBloc = player.finalPathFinding[index];
-                var secondBloc = player.finalPathFinding[index - 1];
-                var blocDirection = (secondBloc.position - firstBloc.position).normalized;
-
-                //Si la dernière direction n'est pas égale a la direction actuel du bloc 1
-                if (lastDirection != blocDirection)
-                {
-                    lastDirection = blocDirection;
-                }
-                else
-                {
-                    player.finalPathFinding.Remove(firstBloc);
-                    _actionPointText--;
-                }
-
-                index--;
-            }
-        }
-
         yield return null;
         player.StartCoroutine(FollowPath(player));
     }
@@ -384,7 +354,6 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         
         //We remove the player from the list of block group which the player is currently on 
-
         if (player.currentBlocPlayerOn.TryGetComponent(out Node currentBlocNode))
         {
             GroupBlockDetection groupBlockDetection = currentBlocNode.groupBlockParent;
@@ -393,7 +362,6 @@ public class PlayerActionPointCardState : PlayerBaseState
 
       
         NFCManager.Instance.displacementActivated = true;
-        
         player.playerAnimator.SetBool("isMoving", player.walking);
         
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
@@ -406,8 +374,7 @@ public class PlayerActionPointCardState : PlayerBaseState
                 var movePos = walkPoint + new Vector3(0, 1, 0);
                 var direction = (movePos - player.transform.position).normalized;
                 var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-
-               
+                
                 player.transform.LeanMove(movePos, player.timeMoveSpeed);
                 player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
                 _actionPointText--;
