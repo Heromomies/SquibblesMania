@@ -12,7 +12,15 @@ public class InfoButton : MonoBehaviour
 
     public void Open()
     {
-        transform.LeanScale(Vector2.one, 0.3f);
+      
+        if (transform.localScale == new Vector3(1, 1, 0))
+        {
+            Close();
+        }
+        else
+        {
+            transform.LeanScale(Vector2.one, 0.3f);
+        }
     }
 
     public void Close()

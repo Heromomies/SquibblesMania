@@ -25,10 +25,13 @@ public class JumpPower : MonoBehaviour, IManagePower
 	public List<Collider> collidersFinished = new List<Collider>();
 
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
-	private GameObject _particleImpact, _particleImpulse;
+	private GameObject _particleImpact, _particleImpulse, _trailParticle;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
+	private Transform _objectToMove, _objectToGo;
+	private float _speedLookAt = 3f;
+	private bool _canLook;
 	
 	void OnEnable()
 	{
@@ -73,6 +76,12 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 
+				_objectToMove = tCurrentPlayerTurn;
+				_objectToGo = hitInfo.transform;
+				_canLook = true;
+				
+				player.gameObject.layer = 0;
+				
 				var posHitInfo = hitInfo.transform.position;
 
 				var playerPos = tCurrentPlayerTurn.position;
@@ -88,6 +97,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
+				
+				_trailParticle = PoolManager.Instance.SpawnObjectFromPool("ParticleTrailJump", _objectToMove.position + new Vector3(0,-0.75f,0), Quaternion.identity, _objectToMove);
 				BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
@@ -112,13 +123,32 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 	}
 
+	private void Update()
+	{
+		if (_canLook)
+		{
+			var lookPos = _objectToGo.position - _objectToMove.position;
+			lookPos.y = 0;
+			var rotation = Quaternion.LookRotation(lookPos);
+			_objectToMove.rotation = Quaternion.Slerp(_objectToMove.rotation, rotation, Time.deltaTime * _speedLookAt);
+		}
+	}
+	
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
 	{
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(0.5f);
+		
+		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
 
+		yield return new WaitForSeconds(1f);
+
+		_canLook = false;
+		
 		AudioManager.Instance.Play("PowerJumpEnd");
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
+		
+		_trailParticle.SetActive(false);
 		
 		var hitPosition = hitInfoTransform.position;
 		
@@ -196,6 +226,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		listObjectToSetActiveFalse.Clear();
 		
 		GameManager.Instance.DetectParentBelowPlayers();
+		GameManager.Instance.PlayerMoving();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
 		PowerManager.Instance.ChangeTurnPlayer();

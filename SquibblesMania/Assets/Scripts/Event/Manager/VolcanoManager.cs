@@ -1,17 +1,20 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class VolcanoManager : MonoBehaviour
 {
 	[Space] [Header("EVENTS")] public List<GameObject> events;
-	
-	[Space] [Header("MAP ZONE")] 
-	public List<GameObject> cleanList;
-	
+
 	public int dangerousness;
 
 	public LevelOfDanger levelOfDanger;
+	public GameObject volcanoIsGoingToExplode;
 	
 	public enum LevelOfDanger
 	{
@@ -20,8 +23,7 @@ public class VolcanoManager : MonoBehaviour
 		LevelThree = 2,
 		LevelFour = 3
 	}
-	
-	
+
 	#region Singleton
 
 	private static VolcanoManager _volcanoManager;
@@ -35,16 +37,16 @@ public class VolcanoManager : MonoBehaviour
 	}
 
 	#endregion
-	
+
 	public void CyclePassed() // When a cycle is make, random Number to know if the manager can launch the event
 	{
 		var randomNumber = Random.Range(0, 100);
-		if (randomNumber < 25 * GameManager.Instance.cycleCount)
+		
+		if (randomNumber < (25 * dangerousness))
 		{
 			LaunchEvent();
 			levelOfDanger = LevelOfDanger.LevelOne;
 			dangerousness = 0;
-			GameManager.Instance.cycleCount = 0;
 		}
 		else
 		{
@@ -60,9 +62,21 @@ public class VolcanoManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
+
+			GameManager.Instance.canDoShake = true;
+			StartCoroutine(FeedBackVolcano());
 		}
 	}
 
+	IEnumerator FeedBackVolcano()
+	{
+		volcanoIsGoingToExplode.SetActive(true);
+		
+		yield return new WaitForSeconds(GameManager.Instance.durationDoShake + 2);
+		
+		volcanoIsGoingToExplode.SetActive(false);
+	}
+	
 	void LaunchEvent() // Launch the event
 	{
 		foreach (var eventsGo in events)

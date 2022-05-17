@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
-using UnityEditor.Recorder.Input;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +12,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	[Range(0, 10)] public int turnMinBeforeActivate, turnMaxBeforeActivate;
 	[Range(0, 5)] public int distanceMovingPlayer;
 
-	[Range(0.0f, 1.0f)] public float speedPlayer;
+	[Range(0.0f, 3.0f)] public float speedPlayer;
 	
 	public Transform spawnWind;
 	
@@ -26,7 +25,9 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _turnNumberChosenToLaunchTheWind;
 	private int _turnCount;
 	private int _directionChosen;
-
+	private bool _isLaunched;
+	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
+	[HideInInspector] public GameObject[] particlePlayer = new GameObject[4];
 	private void OnEnable()
 	{
 		ShowEvent();
@@ -34,9 +35,12 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 	public void ShowEvent()
 	{
+		AudioManager.Instance.Play("SoftWindLoop");
+		
 		_turnNumberChosenToLaunchTheWind = Random.Range(turnMinBeforeActivate, turnMaxBeforeActivate);
 
 		windIsComing.gameObject.SetActive(true);
+		
 		_turnCount = GameManager.Instance.turnCount;
 
 		_directionChosen = Random.Range(0, _vectorRaycast.Count);
@@ -56,22 +60,30 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			case 3 : _windGo.transform.rotation = Quaternion.Euler(rot.x, 0, rot.z);
 				break;
 		}
+
+		CheckIfPlayersAreHide();
 	}
 
 	public void LaunchEvent()
 	{
-		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
+		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_isLaunched)
 		{
+			AudioManager.Instance.Play("SoftStrongWind");
 			var players = GameManager.Instance.players;
 
 			for (int i = 0; i < players.Count; i++)
 			{
-				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], distanceMovingPlayer, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
+				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
 				{
 					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, -_vectorRaycast[_directionChosen]);
 					distBetweenBlocAndPlayer = (int) distBetweenBlocAndPlayer;
 
-					players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen]) * distBetweenBlocAndPlayer), speedPlayer);
+					switch (distBetweenBlocAndPlayer)
+					{
+						case 0 : break;
+						case 1 : players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen])), speedPlayer);
+							break;
+					}
 				}
 				else if(!players[i].isPlayerHide)
 				{
@@ -79,31 +91,62 @@ public class PolarWind : MonoBehaviour, IManageEvent
 				}
 			}
 			
+			for (int i = 0; i < hideParticle.Count; i++)
+			{
+				hideParticle[i].SetActive(false);
+			}
+			
+			hideParticle.Clear();
+
+			_isLaunched = true;
+			
+			StartCoroutine(WaitBeforeCheckUnderPlayer());
+			
 			_windGo.SetActive(false);
 			windIsComing.gameObject.SetActive(false);
 		}
 	}
+
+	IEnumerator WaitBeforeCheckUnderPlayer()
+	{
+		yield return new WaitForSeconds(speedPlayer + 0.5f);
+		
+		GameManager.Instance.DetectParentBelowPlayers();
+		_isLaunched = false;
+		gameObject.SetActive(false);
+	}
 	
 	public void CheckIfPlayersAreHide()
 	{
-		var players = GameManager.Instance.players;
-
-		for (int i = 0; i < players.Count; i++)
+		if (gameObject.activeSelf)
 		{
-			if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
-			{
-				if(!players[i].isPlayerHide)
-					PoolManager.Instance.SpawnObjectFromPool("StunVFX", players[i].transform.position + new Vector3(0, 1, 0), Quaternion.identity, players[i].transform);
+			var players = GameManager.Instance.players;
 
-				players[i].isPlayerHide = true;
-			}
-			else
+			for (int i = 0; i < players.Count; i++)
 			{
-				players[i].isPlayerHide = false;
+				if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
+				{
+					players[i].isPlayerHide = true;
+				}
+				else
+				{
+					players[i].isPlayerHide = false;
+				}
+				
+				if (!players[i].isPlayerHide)
+				{
+					GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
+					hideParticle.Add(vfx);
+					particlePlayer[i] = vfx;
+				}
+				else
+				{
+					particlePlayer[i] = null;
+				}
 			}
-		}
 		
-		LaunchEvent();
+			LaunchEvent();
+		}
 	}
 
 #if UNITY_EDITOR

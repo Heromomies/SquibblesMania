@@ -25,14 +25,13 @@ public class PlayerCardState : PlayerBaseState
 		_currentPlayer = player;
 		if (player.isPlayerStun && player.stunCount > 0)
 		{
-			player.stunCount--;
 			PlayerIsStun(player);
 		}
 
 		//If the current player is this player
 		if (GameManager.Instance.currentPlayerTurn == player)
 		{
-			player.indicatorPlayer.SetActive(true);
+			player.indicatorPlayerRenderer.gameObject.SetActive(true);
 			NFCController.OnNewTag = OnNewTagDetected;
 			NFCController.OnTagRemoved = OnTagRemoveDetected;
 			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
@@ -48,7 +47,12 @@ public class PlayerCardState : PlayerBaseState
 			
 			if (nfcTag.Data.Contains("1"))
 			{
-				TestClickButtonLaunchEvent.Instance.LaunchEvent();
+				TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
+			}
+		
+			if (nfcTag.Data.Contains(":"))
+			{
+				TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
 			}
 			
 			if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
@@ -161,6 +165,7 @@ public class PlayerCardState : PlayerBaseState
 							power.GetComponent<IManagePower>().ClearPower();
 					}
 
+					PowerManager.Instance.isPlayerInJumpOrSwap = false;
 					GameManager.Instance.DecreaseVariable();
 				}
 				else
@@ -183,21 +188,26 @@ public class PlayerCardState : PlayerBaseState
 
 	void PlayerIsStun(PlayerStateManager player)
 	{
-		player.indicatorPlayer.SetActive(false);
+		player.indicatorPlayerRenderer.gameObject.SetActive(false);
 		//If the stunCount is less than zero player is now not stun
 		if (player.stunCount <= 0)
 		{
 			player.isPlayerStun = false;
-			player.psStun.SetActive(false);
-			player.indicatorPlayer.SetActive(true);
-			NFCController.OnNewTag = OnNewTagDetected;
-			NFCController.OnTagRemoved = OnTagRemoveDetected;
-			NFCController.StartPollingAsync(NFCManager.Instance.antennaPlayerOne);
+			player.vfxStun.SetActive(false);
+
+			if (GameManager.Instance.conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
+			{
+				AudioManager.Instance.Play("FreezeOff");
+			}
+			
+			player.indicatorPlayerRenderer.gameObject.SetActive(true);
+			NFCManager.Instance.PlayerChangeTurn();
 		}
 		else
 		{
-			UiManager.Instance.StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, true);
-			UiManager.Instance.buttonNextTurn.SetActive(true);
+			PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
 		}
 		
 	}
@@ -210,9 +220,13 @@ public class PlayerCardState : PlayerBaseState
 	{
 		if (player.isPlayerStun)
 		{
+			if (player.stunCount <= 0)
+			{
+				player.isPlayerStun = false;
+				player.vfxStun.SetActive(false);
+			}
 			
-			player.indicatorPlayer.SetActive(false);
-		
+			player.indicatorPlayerRenderer.gameObject.SetActive(false);
 			//Switch to next player of another team to play
 			switch (player.playerNumber)
 			{

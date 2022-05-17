@@ -1,24 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DigitalRubyShared;
 using I2.Loc;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class SnowGun : MonoBehaviour, IManageEvent
 {
     public GameObject snowPrefab;
 
     [Range(0.0f, 0.1f)] public float speed;
-    [Range(0.0f, 10.0f)] public float speedRotationSnowGun;
+    //[Range(0.0f, 10.0f)] public float speedRotationSnowGun;
     [Range(0.0f, 10.0f)] public float ySpawn;
+    [Range(0.0f, 10.0f)] public float radius;
+    [Range(0.0f, 360.0f)] public float yRotation;
     public GameObject hatchDetectPlayerNearSnowGun;
     public LayerMask playerLayerMask;
+    public LayerMask layerInteractable;
     
     public AnimationCurve curve;
-
     public GameObject snowGun;
 
+    public GameObject goToAntennaTxt;
+    public GameObject shootPlayerTxt;
+    
+    
     [HideInInspector] public Animator animatorSnowGun;
     [HideInInspector] public List<Vector3> listPoint = new List<Vector3>();
     private List<GameObject> _hatchesList = new List<GameObject>();
@@ -39,9 +49,10 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
         var t = transform;
         var position = t.position;
-        snowGun = Instantiate(snowGun, position + new Vector3(0,position.y + 0.02f,0), Quaternion.identity, t);
+        var snowGunRotation = snowGun.transform.rotation;
+        snowGun = Instantiate(snowGun, position + new Vector3(0,position.y + 0.02f,0), Quaternion.Euler(snowGunRotation.x, yRotation, snowGunRotation.z), t);
 
-        t.GetComponentInParent<Node>().isActive = false;
+        // t.GetComponentInParent<Node>().isActive = false;
         
         animatorSnowGun = snowGun.GetComponent<Animator>();
         
@@ -55,17 +66,40 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     public void ShowEvent()
     {
-        var hatchPossiblePath = GetComponentInParent<Node>().possiblePath;
-        
-        for (int i = 0; i < hatchPossiblePath.Count; i++)
+        // ReSharper disable once Unity.PreferNonAllocApi
+        var colliders = Physics.OverlapSphere(transform.position, radius, layerInteractable); // Detect bloc around the object
+
+        foreach (var c in colliders)
         {
-            GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, hatchPossiblePath[i].nextPath.transform.position + new Vector3(0,1.05f, 0), Quaternion.identity, hatchPossiblePath[i].nextPath.transform);
-            go.GetComponent<DetectionSnowGun>().snowGun = this;
-            
-            _hatchesList.Add(go);
+            if (c.TryGetComponent(out Node node))
+            {
+                if (!node.isActive)
+                {
+                    colliders.ToList().Remove(c);
+                }
+            }
         }
+        
+        var randomNumber = Random.Range(0, colliders.Length);
+        
+        GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + new Vector3(0,1.05f, 0), Quaternion.identity, colliders[randomNumber].transform);
+        go.GetComponent<DetectionSnowGun>().snowGun = this;
+            
+        goToAntennaTxt.SetActive(true);
+        
+        _hatchesList.Add(go);
     }
 
+#if UNITY_EDITOR
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, radius);
+    }
+
+#endif
+    
     public void LaunchEvent() 
     {
     }
@@ -95,11 +129,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
                     var childToMovePos = childToMove.position;
                     Vector3 targetPosition = new Vector3(posHitInfo.x,childToMovePos.y, posHitInfo.z ) ;
                     childToMove.LookAt(targetPosition) ;
-                    
-                    // Move the snow Gun smoothly but only on one frame 
-                    /*Vector3 lookDirection = posHitInfo - childToMovePos;
-                    lookDirection.Normalize();
-                    childToMove.rotation = Quaternion.Slerp(childToMove.rotation, Quaternion.LookRotation(lookDirection), speedRotationSnowGun * Time.deltaTime); */
                     
                     var snowEndLaunchSnowPos = childToMove.GetChild(0).GetChild(0).position;
 				
@@ -154,14 +183,14 @@ public class SnowGun : MonoBehaviour, IManageEvent
     {
         yield return new WaitForSeconds(delay);
         
+        shootPlayerTxt.SetActive(false);
+        
         foreach (var h in _hatchesList)
         {
             h.SetActive(false);
         }
         _hatchesList.Clear();
-        
-        gameObject.GetComponentInParent<Node>().isActive = false;
-        
+
         snowGun.SetActive(false);
         gameObject.SetActive(false);
     }

@@ -10,7 +10,7 @@ using TouchPhase = DigitalRubyShared.TouchPhase;
 public class CameraViewModeGesture : MonoBehaviour
 {
     private Camera _cam;
-    private Transform _mapTarget;
+    public Transform mapTarget;
 
     [Header("UI VIEW MODE SETTINGS")] public UIViewMode actualUiViewMode;
     public List<UIViewMode> uiViewModeList;
@@ -49,26 +49,9 @@ public class CameraViewModeGesture : MonoBehaviour
         public float lastCamIconAngleView;
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        Setup();
-    }
-
-    private void Reset()
-    {
-        Setup();
-    }
-
-    private void Setup()
-    {
-        _cam = Camera.main;
-    }
-#endif
-
     private void Start()
     {
-        _mapTarget = GameObject.FindGameObjectWithTag("Map").transform;
+        _cam = Camera.main;
     }
 
     public void ChangeViewMode(int indexUiCircleSelection)
@@ -188,7 +171,7 @@ public class CameraViewModeGesture : MonoBehaviour
             while (timeSinceStarted <= timeRotateSpeedInSeconds)
             {
                 timeSinceStarted += Time.deltaTime;
-                _cam.transform.RotateAround(_mapTarget.transform.position, _cam.transform.right,
+                _cam.transform.RotateAround(mapTarget.transform.position, _cam.transform.right,
                     -angleRotation * Time.deltaTime / timeRotateSpeedInSeconds);
                 yield return null;
             }
@@ -203,7 +186,7 @@ public class CameraViewModeGesture : MonoBehaviour
             while (timeSinceStarted <= timeRotateSpeedInSeconds)
             {
                 timeSinceStarted += Time.deltaTime;
-                _cam.transform.RotateAround(_mapTarget.transform.position, _cam.transform.right,
+                _cam.transform.RotateAround(mapTarget.transform.position, _cam.transform.right,
                     angleRotation * Time.deltaTime / timeRotateSpeedInSeconds);
                 yield return null;
             }

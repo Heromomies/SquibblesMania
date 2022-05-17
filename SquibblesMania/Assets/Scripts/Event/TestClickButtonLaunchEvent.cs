@@ -36,6 +36,13 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
          }
       }
    }
+
+   public void LaunchMeteoriteOnPlayer()
+   {
+      var secondPlayer = GameManager.Instance.players[1];
+      var posSp = secondPlayer.transform.position;
+      PoolManager.Instance.SpawnObjectFromPool("Meteorite", new Vector3(posSp.x, posSp.y + 3f, posSp.z), Quaternion.identity, null);
+   }
    
    private void Update()
    {
@@ -52,6 +59,11 @@ public class TestClickButtonLaunchEvent : MonoBehaviour
                eventTested.SetActive(false);
             }
          }
+      }
+
+      if (Input.GetKeyDown(KeyCode.C))
+      {
+         VolcanoManager.Instance.CyclePassed();
       }
    }
    

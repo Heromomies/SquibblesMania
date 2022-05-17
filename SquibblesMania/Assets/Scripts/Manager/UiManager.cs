@@ -6,6 +6,7 @@ using DigitalRubyShared;
 using I2.Loc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -16,10 +17,11 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public GameObject buttonNextTurn;
-   
-    
+
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
+    [SerializeField] private GameObject playersUiGlobal;
+    [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
     public static UiManager Instance => _uiManager;
 
     [Header("CARD UI VFX")]
@@ -34,6 +36,10 @@ public class UiManager : MonoBehaviour
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
     
+    [Header("CAMERA BUTTONS")]
+    public List<Button> buttonsCameraManager;
+    
+    
     [Serializable]
     public struct UiPlayerStun
     {
@@ -43,6 +49,11 @@ public class UiManager : MonoBehaviour
     private void Awake()
     {
         _uiManager = this;
+    }
+
+    private void Start()
+    {
+        PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
     public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer)
@@ -57,14 +68,20 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.displacementActivated = false;
         NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
-        if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
+        PowerManager.Instance.isPlayerInJumpOrSwap = false;
+        
+        PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+        CameraButtonManager.Instance.isCamRotateButtonPressed = false;
+        
+        if (currentPlayer.isPlayerStun)
         {
-            StunTextPopUp(GameManager.Instance.actualCamPreset.presetNumber, false);
+            PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, false);
+            currentPlayer.stunCount--;
+            currentPlayer.stunCount = (int)Mathf.Clamp( currentPlayer.stunCount, 0, Mathf.Infinity);
         }
         
-        GameManager.Instance.currentPlayerTurn.canSwitch = true;
-        GameManager.Instance.currentPlayerTurn.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
-
+        currentPlayer.canSwitch = true;
+        currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
     }
 
     public void LoadScene(string sceneName)
@@ -76,17 +93,19 @@ public class UiManager : MonoBehaviour
     }
 
 
-    public void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
+    private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
+        buttonNextTurn.SetActive(setActiveGameObject);
+            
         if (actualCamPresetNumber <= 2)
         {
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                case 0: spriteArrow = uiPlayerStuns[0].arrowSprite[1];
                         spriteArrow.gameObject.SetActive(setActiveGameObject); break;
-                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                case 2: spriteArrow = uiPlayerStuns[0].arrowSprite[0]; 
                         spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
@@ -96,25 +115,54 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
-                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber]; 
+                case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
-                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[GameManager.Instance.currentPlayerTurn.playerNumber];
+                case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
     }
     
-    public void WinSetUp(Player.PlayerTeam playerTeam)
+    public void WinSetUp(Player.PlayerTeam currentPlayerTeam)
     {
         winPanel.SetActive(true);
-        if (playerTeam == Player.PlayerTeam.TeamOne)
+        playersUiGlobal.SetActive(false);
+
+        var currentPlayer = GameManager.Instance.currentPlayerTurn;
+        PlayerStateManager otherPlayer = null;
+        
+        foreach (var player in GameManager.Instance.players)
         {
-            textTeamOne.SetActive(true);
+            if (player.playerTeam != currentPlayerTeam)
+            {
+                otherPlayer = player;
+                break;
+            }
+                
         }
-        else
+        
+        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
         {
-            textTeamTwo.SetActive(true);
+            depthOfField.active = true;
         }
+
+        if (otherPlayer != null)
+        {
+            if (currentPlayerTeam == Player.PlayerTeam.TeamOne)
+            {
+                textTeamOne.SetActive(true);
+                winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
+                looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;
+            }
+            else
+            {
+                textTeamTwo.SetActive(true);
+                winPanel.transform.rotation *= Quaternion.Euler(0,0,180f);
+                winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
+                looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;
+            }
+        }
+      
     }
     
     #region SpawnTextActionPoint

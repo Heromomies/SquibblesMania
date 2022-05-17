@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class PowerManager : MonoBehaviour
 {
 	public List<GameObject> powers;
-
+	public bool isPlayerInJumpOrSwap;
+	
 	#region Singleton
 
 	private static PowerManager powerManager;
@@ -24,12 +25,17 @@ public class PowerManager : MonoBehaviour
 
 	public void ActivateDeactivatePower(int powerIndex, bool activePower)
 	{
+		if (EndZoneManager.Instance != null)
+		{
+			EndZoneManager.Instance.CheckPlayersTeam();
+			EndZoneManager.Instance.PlayersIsOnEndZone();
+		}
 		switch (powerIndex)
 		{
-			case 0: powers[0].gameObject.SetActive(activePower); break;
-			case 1: powers[1].gameObject.SetActive(activePower); break;
-			case 2: powers[2].gameObject.SetActive(activePower); break;
-			case 3: powers[3].gameObject.SetActive(activePower); break;
+			case 0: powers[0].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = true; break;
+			case 1: powers[1].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
+			case 2: powers[2].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = true; break;
+			case 3: powers[3].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
 		}
 	}
 
@@ -41,19 +47,7 @@ public class PowerManager : MonoBehaviour
 	{
 		if (NFCManager.Instance.powerActivated)
 		{
-			StartCoroutine(CheckPlayerEndCoroutine());
 			UiManager.Instance.buttonNextTurn.SetActive(true);
-		}
-	}
-
-	private IEnumerator CheckPlayerEndCoroutine()
-	{
-		yield return new WaitForSeconds(0.5f);
-		
-		if (EndZoneManager.Instance != null)
-		{
-			EndZoneManager.Instance.PlayersIsOnEndZone();
-			EndZoneManager.Instance.CheckPlayersTeam();
 		}
 	}
 }

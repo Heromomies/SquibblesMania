@@ -33,7 +33,13 @@ public class EditorMapWindow : EditorWindow
     private static List<GameObject> currentBlocObjectsCreated = new List<GameObject>();
     private static List<GameObject> removedBlocObjectsList = new List<GameObject>();
     private static List<GameObject> allObjectsCreatedOnScene = new List<GameObject>();
-    private static Vector2 planeMapSize;
+
+   
+    private static int _planeMapSizeX;
+
+    private static int _planeMapSizeZ;
+    
+   
 
     private static Colors colors;
     private static Node currentBlocNode;
@@ -41,8 +47,6 @@ public class EditorMapWindow : EditorWindow
 
     private static Theme theme;
     private static GameObject mapParent;
-    private static Material[] materials = new Material[5];
-
     private static List<ScriptableObjectTheme> scriptableObjectThemes = new List<ScriptableObjectTheme>();
     private static ScriptableColorMaterials scriptableColorMaterials;
 
@@ -85,8 +89,7 @@ public class EditorMapWindow : EditorWindow
                 currentBlocObjectsCreated.Add(spawnObj);
                 removedBlocObjectsList.Add(spawnObj);
                 allObjectsCreatedOnScene.Add(spawnObj);
-                Vector3 targetPos = SnapOffset(hitInfo.point,
-                    new Vector3(spawnObj.transform.position.x + 0.5f, spawnObj.transform.position.y,
+                Vector3 targetPos = SnapOffset(hitInfo.point, new Vector3(spawnObj.transform.position.x + 0.5f, spawnObj.transform.position.y,
                         spawnObj.transform.position.z + 0.5f));
                 spawnObj.transform.position = targetPos;
             }
@@ -102,7 +105,6 @@ public class EditorMapWindow : EditorWindow
         if (e.type == EventType.MouseDown && e.button == 0 && onMapEditor)
         {
             //Spawn bloc on plane
-
             SpawnObjectOnPlane(e);
         }
 
@@ -142,39 +144,22 @@ public class EditorMapWindow : EditorWindow
         EditorGUILayout.Space(20);
         GUILayout.Label("Create a plane on the scene to place blocs, you can choose it's size");
         EditorGUILayout.Space(10);
-        planeMapSize = EditorGUILayout.Vector2Field("Size map (Y axis correspond at Z axis)", planeMapSize);
+        _planeMapSizeX = EditorGUILayout.IntSlider("Size map X", _planeMapSizeX, 1,100);
+        _planeMapSizeZ = EditorGUILayout.IntSlider("Size map Z", _planeMapSizeZ, 1,100);
         EditorGUILayout.Space(20);
-        if (GUILayout.Button("Create plane") && planeMapSize.x >= 1 && planeMapSize.y >= 1)
+        
+        if (GUILayout.Button("Create plane"))
         {
             GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            plane.transform.position = new Vector3(12,0,0);
-            plane.transform.localScale = new Vector3(planeMapSize.x / 10, 1, planeMapSize.y / 10);
+            plane.transform.position = new Vector3(0,-1,0);
+            plane.transform.localScale = new Vector3((float)_planeMapSizeX/10, 1, (float)_planeMapSizeZ/10);
             planeGo = plane;
             allObjectsCreatedOnScene.Add(plane);
             isCreating = true;
-            SpawnMainObjectTheme(theme);
         }
     }
 
-    void SpawnMainObjectTheme(Theme theme)
-    {
-        if (!mainThemeObject)
-        {
-            DestroyImmediate(mainThemeObject);
-            switch (theme)
-            {
-                case Theme.Volcano:
-                    mainThemeObject = scriptableObjectThemes[0].mainThemeObject;
-                    mainThemeObject = Instantiate(mainThemeObject, Vector3.zero, Quaternion.identity);
-                    break;
-                case Theme.Mountain:
-                    mainThemeObject = scriptableObjectThemes[1].mainThemeObject;
-                    mainThemeObject = Instantiate(mainThemeObject, Vector3.zero, Quaternion.identity);
-                    break;
-            } 
-        }
-       
-    }
+   
 
     private static void LoadScriptableObject()
     {
@@ -210,7 +195,20 @@ public class EditorMapWindow : EditorWindow
             {
                 DestroyImmediate(removedBlocObjectsList[removedBlocObjectsList.Count - 1]);
                 removedBlocObjectsList.Remove(removedBlocObjectsList[removedBlocObjectsList.Count - 1]);
+                currentBlocObjectsCreated.Remove(removedBlocObjectsList[removedBlocObjectsList.Count - 1]);
             }
+
+            if (isBlocSelected)
+            {
+                if (GUILayout.Button("Remove selected bloc"))
+                {
+                    DestroyImmediate(currentBlocSelected);
+                    removedBlocObjectsList.Remove(currentBlocSelected);
+                    currentBlocObjectsCreated.Remove(currentBlocSelected);
+                }
+            }
+
+            
         }
     }
 
@@ -312,14 +310,6 @@ public class EditorMapWindow : EditorWindow
             EditorGUILayout.Space(20);
             if (GUILayout.Button("Create map"))
             {
-                foreach (var block in removedBlocObjectsList)
-                {
-                    if (block.GetComponent<Node>())
-                    {
-                        block.GetComponent<Node>().SetUpPossiblePath();
-                    }
-                }
-
                 CreateMap();
             }
         }
@@ -337,6 +327,7 @@ public class EditorMapWindow : EditorWindow
 
                 allObjectsCreatedOnScene.Clear();
                 DestroyImmediate(mapParent);
+             
                 OnDestroy();
                 ShowWindow();
             }
@@ -347,6 +338,13 @@ public class EditorMapWindow : EditorWindow
 
     private void CreateMap()
     {
+        foreach (var block in removedBlocObjectsList)
+        {
+            if (block.GetComponent<Node>())
+            {
+                block.GetComponent<Node>().SetUpPossiblePath();
+            }
+        }
         
         foreach (var currentBloc in currentBlocObjectsCreated.ToList())
         {
@@ -357,7 +355,7 @@ public class EditorMapWindow : EditorWindow
 
         //Destroys remaining block parent with no childs
         GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
-
+        GameObject[] parentsNone = GameObject.FindGameObjectsWithTag("BlackBlock");
         if (!mapParent)
         {
             mapParent = new GameObject("MapParent")
@@ -370,12 +368,24 @@ public class EditorMapWindow : EditorWindow
             mapParent.tag = "Map";
         }
 
+        for (int i = 0; i < parentsNone.Length; i++)
+        {
+            parentsNone[i].transform.parent = mapParent.transform;
+            parentsNone[i].transform.gameObject.AddComponent<GroupBlockDetection>();
+        }
         for (int i = 0; i < parents.Length; i++)
         {
             parents[i].transform.parent = mapParent.transform;
+            parents[i].transform.gameObject.AddComponent<GroupBlockDetection>();
         }
 
-
+        foreach (var parentNone in parentsNone)
+        {
+            if (parentNone.transform.childCount <= 0)
+            {
+                DestroyImmediate(parentNone);
+            }
+        }
         foreach (var parent in parents)
         {
             if (parent.transform.childCount <= 0)
@@ -390,53 +400,29 @@ public class EditorMapWindow : EditorWindow
         DestroyImmediate(planeGo);
         ResetVars();
         SetupScriptsManager();
-        SetUpEnvironment();
-        
+
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         EditorUtility.SetDirty(this);
     }
-
-    void SetUpEnvironment()
-    {
-        GameObject environmentParent = new GameObject("Environement")
-        {
-            transform =
-            {
-                position = Vector3.zero
-            }
-        };
-
-
-        Node[] nodeBloc = FindObjectsOfType<Node>();
-        foreach (Node bloc in nodeBloc)
-        {
-            if (bloc.CompareTag("Untagged"))
-            {
-                bloc.transform.parent = environmentParent.transform;
-            }
-        }
-
-        mainThemeObject.transform.parent = environmentParent.transform;
-        environmentParent.transform.parent = mapParent.transform;
-    }
+    
 
     void SetupScriptsManager()
     {
         GameObject[] parents = GameObject.FindGameObjectsWithTag("BlockParent");
         GameManager gameManager = FindObjectOfType<GameManager>();
-        VolcanoManager volcanoManager = FindObjectOfType<VolcanoManager>();
+        
         if (gameManager != null)
         {
             foreach (var parent in parents)
             {
-                gameManager.allBlocks.Add(parent);
+                gameManager.allBlocParents.Add(parent);
             }
 
             Node[] nodeBlocs = FindObjectsOfType<Node>();
 
             foreach (var bloc in nodeBlocs)
             {
-                volcanoManager.cleanList.Add(bloc.gameObject);
+                gameManager.cleanList.Add(bloc.gameObject);
             }
         }
         
@@ -480,11 +466,17 @@ public class EditorMapWindow : EditorWindow
             if (block.CompareTag("Platform"))
             {
                 block.transform.parent = blockParent.transform;
+                blockParent.layer = 3;
+                blockParent.tag = "BlockParent";
+            } 
+            else if (block.CompareTag("Untagged"))
+            {
+                block.transform.parent = blockParent.transform;
+                blockParent.name = "BlocParent_None";
+                blockParent.layer = 0;
+                blockParent.tag = "BlackBlock";
             }
         }
-
-        blockParent.tag = "BlockParent";
-        blockParent.layer = 3;
         allObjectsCreatedOnScene.Add(blockParent);
     }
 

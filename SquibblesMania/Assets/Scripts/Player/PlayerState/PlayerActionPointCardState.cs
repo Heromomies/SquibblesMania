@@ -15,7 +15,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     private List<Transform> previewPath = new List<Transform>();
 
 
-    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.6f);
+    private WaitForSeconds _timeBetweenPlayerMovement = new WaitForSeconds(0.7f);
 
 
     //The state when player use is card action point
@@ -23,6 +23,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     {
         player.isPlayerInActionCardState = true;
         player.nextBlockPath.Clear();
+        SetFalsePathObjects();
         ResetPreviewPath(player);
         player.currentBlocPlayerOn.GetComponent<Node>().isActive = true;
         PreviewPath(player.playerActionPoint, player);
@@ -175,7 +176,8 @@ public class PlayerActionPointCardState : PlayerBaseState
 
     public bool PathParentPosComparedToPlayerPos(Vector3 pathParentPos, Vector3 playerPos)
     {
-        return pathParentPos.y + 2.5f - playerPos.y > -0.1f && pathParentPos.y + 2.5f - playerPos.y < 0.1f;
+        
+        return pathParentPos.y + 1.5f - playerPos.y > -0.1f && pathParentPos.y + 1.5f - playerPos.y < 0.1f;
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -185,7 +187,7 @@ public class PlayerActionPointCardState : PlayerBaseState
     public override void ExitState(PlayerStateManager player)
     {
         player.isPlayerInActionCardState = false;
-        player.indicatorPlayer.SetActive(false);
+        player.indicatorPlayerRenderer.gameObject.SetActive(false);
 
         foreach (var obj in pathObjects)
         {
@@ -299,10 +301,6 @@ public class PlayerActionPointCardState : PlayerBaseState
                 block = blocNode.previousBlock;
             }
             
-            /* if (block.GetComponent<Node>().previousBlock != null)
-            {
-                block = block.GetComponent<Node>().previousBlock;
-            }*/
             else
             {
                 return;
@@ -392,10 +390,11 @@ public class PlayerActionPointCardState : PlayerBaseState
             GroupBlockDetection groupBlockDetection = currentBlocNode.groupBlockParent;
             groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
         }
-       
 
+      
         NFCManager.Instance.displacementActivated = true;
         
+        player.playerAnimator.SetBool("isMoving", player.walking);
         
         for (int i = player.finalPathFinding.Count - 1; i > 0; i--)
         {
@@ -408,12 +407,14 @@ public class PlayerActionPointCardState : PlayerBaseState
                 var direction = (movePos - player.transform.position).normalized;
                 var targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
-                player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
+               
                 player.transform.LeanMove(movePos, player.timeMoveSpeed);
-            
+                player.transform.DORotateQuaternion(Quaternion.Euler(0, targetAngle, 0), player.timeRotateSpeed);
                 _actionPointText--;
             
                 yield return _timeBetweenPlayerMovement;
+                
+                GameManager.Instance.PlayerMoving();
             }
             
           
@@ -476,7 +477,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         player.finalPathFinding.Clear();
         player.walking = false;
-
+        player.playerAnimator.SetBool("isMoving", player.walking);
         if (EndZoneManager.Instance != null)
         {
             EndZoneManager.Instance.CheckPlayersTeam();
