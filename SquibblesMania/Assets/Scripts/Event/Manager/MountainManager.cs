@@ -78,6 +78,8 @@ public class MountainManager : MonoBehaviour
 	    
 		    var randomNumber = Random.Range(0, snowGuns.Count);
 		    snowGuns[randomNumber].SetActive(true);
+		    
+		    AudioManager.Instance.Play("CanonOpen");
 	    }
     }
 

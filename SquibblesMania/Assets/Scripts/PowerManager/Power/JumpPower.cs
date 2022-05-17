@@ -79,9 +79,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 				_objectToMove = tCurrentPlayerTurn;
 				_objectToGo = hitInfo.transform;
 				_canLook = true;
-				
-				player.gameObject.layer = 0;
-				
+
 				var posHitInfo = hitInfo.transform.position;
 
 				var playerPos = tCurrentPlayerTurn.position;
@@ -108,6 +106,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 					player.currentBlocPlayerOn = hitInfoTwo.transform;
 					if (hitInfoTwo.collider.CompareTag("Platform"))
 					{
+						player.gameObject.layer = 0;
 						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
 					}
 					else
