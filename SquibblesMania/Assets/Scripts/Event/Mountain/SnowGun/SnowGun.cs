@@ -160,6 +160,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
         GameObject snowBullet = Instantiate(snowPrefab,  snowGun.transform.position, Quaternion.identity);
         BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(snowBullet, point, s, animCurve);
 
+        AudioManager.Instance.Play("CanonShot");
+        
         ClearGun();
     }
     
@@ -181,6 +183,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     IEnumerator DelaySetActiveFalseObject(float delay)
     {
+        AudioManager.Instance.Play("CanonOpen");
         yield return new WaitForSeconds(delay);
         
         shootPlayerTxt.SetActive(false);
@@ -190,7 +193,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
             h.SetActive(false);
         }
         _hatchesList.Clear();
-
+        
         snowGun.SetActive(false);
         gameObject.SetActive(false);
     }
