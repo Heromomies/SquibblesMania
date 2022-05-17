@@ -7,6 +7,7 @@ public class TestCamera : MonoBehaviour
     public GameObject target;
     private bool cinematic;
     public GameObject cinematicbars;
+    public GameObject CanvasUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,11 +31,13 @@ public class TestCamera : MonoBehaviour
 
     IEnumerator CameraMovement()
     {
+        CanvasUI.SetActive(false);
         StartCoroutine(cinematicbars.GetComponent<CinematicBars>().ShowBar());
         cinematic = true;
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7f);
 
+        CanvasUI.SetActive(true);
         StartCoroutine(cinematicbars.GetComponent<CinematicBars>().HideBar());
         cinematic = false;
     }
