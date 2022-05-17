@@ -28,12 +28,14 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private bool _isLaunched;
 	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
 	[HideInInspector] public GameObject[] particlePlayer = new GameObject[4];
+
+	private const float MoreTimeToCheckUnderPlayer = 0.5f;
 	private void OnEnable()
 	{
 		ShowEvent();
 	}
 
-	public void ShowEvent()
+	public void ShowEvent() // Show Event add Sound and change the direction of the wind
 	{
 		AudioManager.Instance.Play("SoftWindLoop");
 		
@@ -64,7 +66,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		CheckIfPlayersAreHide();
 	}
 
-	public void LaunchEvent()
+	public void LaunchEvent() // Launch the event, check if player are hide, if they don't, push them away
 	{
 		if (_turnCount + _turnNumberChosenToLaunchTheWind <= GameManager.Instance.turnCount && GameManager.Instance.currentPlayerTurn.playerActionPoint == 0 && !_isLaunched)
 		{
@@ -107,16 +109,16 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		}
 	}
 
-	IEnumerator WaitBeforeCheckUnderPlayer()
+	IEnumerator WaitBeforeCheckUnderPlayer() // Detect parent below player
 	{
-		yield return new WaitForSeconds(speedPlayer + 0.5f);
+		yield return new WaitForSeconds(speedPlayer + MoreTimeToCheckUnderPlayer);
 		
 		GameManager.Instance.DetectParentBelowPlayers();
 		_isLaunched = false;
 		gameObject.SetActive(false);
 	}
 	
-	public void CheckIfPlayersAreHide()
+	public void CheckIfPlayersAreHide() // Check if players are hide, every power used or movement made
 	{
 		if (gameObject.activeSelf)
 		{
