@@ -25,6 +25,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public AnimationCurve curve;
     public GameObject snowGun;
 
+    [Header("TEXT SETTINGS")]
     public GameObject goToAntennaTxt;
     public GameObject shootPlayerTxt;
     
@@ -36,6 +37,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public PanGestureRecognizer SwapTouchGesture { get; private set; }
     private Camera _cam;
     [HideInInspector] public bool canClick;
+    private static readonly Vector3 vectorSpawnAntenna = new Vector3(0, 1.05f, 0);
     
     private void OnEnable()
     {
@@ -64,7 +66,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
         _cam = Camera.main;
     }
 
-    public void ShowEvent()
+    public void ShowEvent() // Show Event, spawn antenna 
     {
         // ReSharper disable once Unity.PreferNonAllocApi
         var colliders = Physics.OverlapSphere(transform.position, radius, layerInteractable); // Detect bloc around the object
@@ -82,7 +84,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
         
         var randomNumber = Random.Range(0, colliders.Length);
         
-        GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + new Vector3(0,1.05f, 0), Quaternion.identity, colliders[randomNumber].transform);
+        GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + vectorSpawnAntenna, Quaternion.identity, colliders[randomNumber].transform);
         go.GetComponent<DetectionSnowGun>().snowGun = this;
             
         goToAntennaTxt.SetActive(true);
