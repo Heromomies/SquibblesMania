@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
             //Register Previous Cam View Mode
             if (turnCount <= 4)
             {
-                cameraViewModeGesture.SetUpCameraViewMode(true, 1);
+                cameraViewModeGesture.SetUpCameraViewMode(true, 0);
             }
             else
             {
