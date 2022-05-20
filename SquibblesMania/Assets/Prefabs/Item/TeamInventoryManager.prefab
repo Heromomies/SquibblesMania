@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8973617250078652131}
   - component: {fileID: 8973617250078652130}
   m_Layer: 0
-  m_Name: TeamInventory
+  m_Name: TeamInventoryManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,6 +50,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    uiImgTransport: {fileID: 0}
     uiWinConditionsList:
     - {fileID: 0}
     - {fileID: 0}
@@ -57,6 +58,7 @@ MonoBehaviour:
   - spawnObject: {fileID: 0}
     objectAcquired: 0
     imageConditions: []
+    uiImgTransport: {fileID: 0}
     uiWinConditionsList: []
   objectTransport:
   - {fileID: 3632781479816233305, guid: a03634cc765130b41b33da92f0c0b17d, type: 3}
@@ -65,3 +67,6 @@ MonoBehaviour:
   - {fileID: 2573843942207758871, guid: 5d2cf4b4eb0ea334e830f211d1d3d845, type: 3}
   - {fileID: 823573976988943803, guid: cd543ca0813054843a159d0bda6481d2, type: 3}
   objectToSpawn: {fileID: 7622582973880197895, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+  scaleSizeTween: {x: 0.5, y: 0.5, z: 0.5}
+  timeInSecondsScaleTween: 0.5
+  easeScaleType: 5

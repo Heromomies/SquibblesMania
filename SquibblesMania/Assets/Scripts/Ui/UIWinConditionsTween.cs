@@ -8,20 +8,26 @@ public class UIWinConditionsTween : MonoBehaviour
 {
 
     public Image itemParentUi;
-
-    [SerializeField] private float timeInSecondsColorTween = 0.7f;
-    public void OnEnable()
-    {
-      
-    }
-
+    
+    [SerializeField] private float timeInSecondsColorTween = 1f;
+    
+    public Color endZoneItemColor;
+    [SerializeField] private LeanTweenType easeType;
+    
+   
+   
     private void Start()
     {
-        LeanTween.value(itemParentUi.gameObject, SetColorCallBack, Color.white, Color.green, timeInSecondsColorTween).setLoopPingPong();
+        TweenColor();
     }
 
-    private void SetColorCallBack(Color color)
+    private void TweenColor()
     {
-        itemParentUi.color = color;
+        LeanTween.value(itemParentUi.gameObject, Color.white, endZoneItemColor, timeInSecondsColorTween).setOnUpdateColor((color) =>
+            { itemParentUi.color = color;
+            }).setEase(easeType).setOnComplete(TweenColor);
     }
+
+   
+    
 }
