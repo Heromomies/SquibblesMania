@@ -19,13 +19,7 @@ public class TeamInventoryManager : MonoBehaviour
 
 	public static TeamInventoryManager Instance => _teamInventoryManager;
 
-	[Header("Objective Display")] public GameObject winT1;
-	public GameObject winT2;
-	public int nbObjectiveT1 = 0;
-	public int nbObjectiveT2 = 0;
-
-	public Sprite green;
-
+	[Header("Objective Display")]
 	private GameObject _lastObj;
 	// Start is called before the first frame update
 
@@ -43,25 +37,19 @@ public class TeamInventoryManager : MonoBehaviour
 	{
 		if (playerTeam == Player.PlayerTeam.TeamOne && inventory[0].objectAcquired < 3)
 		{
-			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position,
-				inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+			//inventory[0].imageConditions[inventory[0].objectAcquired].color = Color.green;
+			inventory[0].uiWinConditionsList[inventory[0].objectAcquired].gameObject.SetActive(true);
 			inventory[0].objectAcquired += indexObject;
-
-			winT1.transform.GetChild(nbObjectiveT1).gameObject.GetComponent<Image>().sprite = green;
-			nbObjectiveT1++;
 			
 			Destroy(_balloonT1.gameObject.transform.GetChild(0).gameObject);
 		}
 
 		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].objectAcquired < 3)
 		{
-			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position,
-				inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+			inventory[1].imageConditions[inventory[1].objectAcquired].color = Color.green;
 			inventory[1].objectAcquired += indexObject;
-
-			winT2.transform.GetChild(nbObjectiveT2).gameObject.GetComponent<Image>().sprite = green;
-			nbObjectiveT2++;
-
 			Destroy(_balloonT2.gameObject.transform.GetChild(0).gameObject);
 		}
 
@@ -106,4 +94,6 @@ public class Inventory
 {
 	public Transform spawnObject;
 	public int objectAcquired;
+	public List<Image> imageConditions;
+	public List<UIWinConditionsTween> uiWinConditionsList;
 }
