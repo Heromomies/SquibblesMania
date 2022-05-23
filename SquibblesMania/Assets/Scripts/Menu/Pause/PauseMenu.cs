@@ -30,10 +30,18 @@ public class PauseMenu : MonoBehaviour
 		if (!panelPause.gameObject.activeSelf)
 		{
 			AnimMovePanelPauseXUi(panelPause,0);
+			if (GameManager.Instance)
+			{
+				foreach (var winGameObject in GameManager.Instance.winConditonsList) winGameObject.SetActive(false);
+			}
 		}
 		else
 		{
 			AnimMovePanelPauseXUi(panelPause, _panelPauseAnchorPos.x);
+			if (GameManager.Instance)
+			{
+				foreach (var winGameObject in GameManager.Instance.winConditonsList) winGameObject.SetActive(true);
+			}
 		}
 		AudioManager.Instance.Play("Button");
 	}

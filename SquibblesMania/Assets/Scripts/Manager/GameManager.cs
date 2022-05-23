@@ -51,9 +51,7 @@ public class GameManager : MonoBehaviour
     public Volume volume;
     private bool _isEndZoneShowed;
     public List<GameObject> allBlocParents;
-    public GameObject winT1;
-    public GameObject winT2;
-
+    public List<GameObject> winConditonsList = new List<GameObject>();
     [Space] [Header("MAP ZONE")] 
     public List<GameObject> cleanList;
     
@@ -325,17 +323,6 @@ public class GameManager : MonoBehaviour
         {
             UiManager.Instance.textActionPointPopUp.SetActive(false);
             UiManager.Instance.textActionPointPopUp = null;
-        }
-
-        if (playerNumberTurn == players[0].playerNumber || playerNumberTurn == players[2].playerNumber)
-        {
-            winT2.SetActive(false);
-            winT1.SetActive(true);
-        }
-        else
-        {
-            winT1.SetActive(false);
-            winT2.SetActive(true);
         }
     }
 
