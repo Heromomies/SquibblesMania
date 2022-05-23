@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,22 +7,33 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
 
-    public GameObject panelPause;
-
-
+ 
     [Header("ANIM UI PARAMETERS")] [Range(1f, 3f)] [SerializeField]
     private float scaleAmount = 1.2f;
 
     [SerializeField] private float animScaleUITimeInSeconds = 0.3f;
-	public void Pause()
+
+    private Vector3 _panelPauseAnchorPos;
+    [Header("ANIM UI PAUSE PANEL")]
+    public RectTransform panelPause;
+	[SerializeField]
+    private LeanTweenType easeTypePausePanel;
+
+    [SerializeField] private float animPanelPauseMoveUITimeInSeconds = 0.3f;
+    private void Start()
+    {
+	    _panelPauseAnchorPos = panelPause.anchoredPosition;
+    }
+
+    public void Pause()
 	{
-		if (!panelPause.activeSelf)
+		if (!panelPause.gameObject.activeSelf)
 		{
-			panelPause.SetActive(true);
+			AnimMovePanelPauseXUi(panelPause,0);
 		}
-		else 
+		else
 		{
-			panelPause.SetActive(false);
+			AnimMovePanelPauseXUi(panelPause, _panelPauseAnchorPos.x);
 		}
 		AudioManager.Instance.Play("Button");
 	}
@@ -41,7 +53,21 @@ public class PauseMenu : MonoBehaviour
         panelPause.transform.rotation *= Quaternion.Euler(0, 0, 180);
     }
 
-    
+    private void AnimMovePanelPauseXUi(RectTransform uiGameObject, float xValue)
+    {
+	    if (!panelPause.gameObject.activeSelf)
+	    {
+		    panelPause.gameObject.SetActive(true);
+		    LeanTween.moveX(uiGameObject, xValue, animPanelPauseMoveUITimeInSeconds).setEase(easeTypePausePanel);
+	    }
+	    else
+	    {
+		    LeanTween.moveX(uiGameObject, xValue, animPanelPauseMoveUITimeInSeconds).setEase(easeTypePausePanel).setOnComplete(SetPanelPauseStateFalse);
+	    }
+	   
+    }
+
+    private void SetPanelPauseStateFalse() => panelPause.gameObject.SetActive(false);
     /// <summary>
     /// Anim to scale up/down ui gameObject
     /// </summary>
