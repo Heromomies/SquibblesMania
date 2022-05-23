@@ -147,7 +147,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 		
-		_trailParticle.SetActive(false);
+		if(_trailParticle != null)
+			_trailParticle.SetActive(false);
 		
 		var hitPosition = hitInfoTransform.position;
 		
