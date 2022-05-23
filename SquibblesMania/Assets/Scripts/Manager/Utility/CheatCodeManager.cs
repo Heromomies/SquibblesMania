@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheatCodeManager : MonoBehaviour
-{
-    [SerializeField] private int actionPointToAdd;
+
 
 
 #if UNITY_EDITOR
+public class CheatCodeManager : MonoBehaviour
+{
+    [SerializeField] private int actionPointToAdd;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -28,5 +29,5 @@ public class CheatCodeManager : MonoBehaviour
             TeamInventoryManager.Instance.AddResourcesToInventory(1, GameManager.Instance.currentPlayerTurn.playerTeam);
         }
     }
-#endif
 }
+#endif
