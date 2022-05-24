@@ -551,8 +551,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 		if (_particleToDeactivate != null)
 		{
 			_particleToDeactivate.SetActive(false);
+		}
+
+		if (_particleToDeactivateZombie != null)
+		{
 			_particleToDeactivateZombie.SetActive(false);
 		}
+		
 
 		for (int i = 0; i < textWhenNoZombieAreSelected.Count; i++)
 		{
@@ -599,6 +604,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		
 		if (NFCManager.Instance.powerActivated)
 		{
+			GameManager.Instance.PlayerMoving();
 			StartCoroutine(CoroutineDeactivateParticle());
 		}
 		else
