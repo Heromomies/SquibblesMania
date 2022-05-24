@@ -107,7 +107,6 @@ public class MapGeneratorManager : MonoBehaviour
             {
                 GameManager.Instance.cleanList.Add(blocChild.gameObject);
             }
-
             SetUpPlayerSpawnPoints(blocChild);
         }
     }

@@ -283,7 +283,6 @@ public class PlayerMovementManager : MonoBehaviour
 	private void EndMovingBloc()
 	{
 		
-		GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
@@ -486,6 +485,10 @@ public class PlayerMovementManager : MonoBehaviour
 			_touchPos = Vector3.zero;
 			hasStopMovingBloc = false;
 			_isBlocSelected = true;
+			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && !blockParentCurrentlySelected)
+			{
+				EndMovingBloc();
+			}
 			GameManager.Instance.PlayerMoving();
 		}
 		
