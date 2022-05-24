@@ -8,10 +8,8 @@ using Random = UnityEngine.Random;
 public class TeamInventoryManager : MonoBehaviour
 {
 	[Header("Balloon")] public Inventory[] inventory;
-	public List<GameObject> objectTransport;
+	public List<Transform> objectTransport;
 	public GameObject objectToSpawn;
-	private GameObject _balloonT1;
-	private GameObject _balloonT2;
 
 	private bool _isFull;
 	[SerializeField] private int maxItemNumberAcquired = 3;
@@ -26,37 +24,39 @@ public class TeamInventoryManager : MonoBehaviour
 	[SerializeField] private Vector3 scaleSizeTween = new Vector3(1.3f, 1.3f, 1.3f);
 	[SerializeField] private float timeInSecondsScaleTween = 0.5f;
 	[SerializeField] private LeanTweenType easeScaleType;
-	// Start is called before the first frame update
-
-	 void Start()
-	 {
-	     _balloonT1 = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
-	     _balloonT2 = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
-	 }
-	void Awake()
+	
+	private	void Awake()
 	{
 		_teamInventoryManager = this;
 	}
+
+	private void Start()
+	 {
+		 inventory[0].balloonTransformParent = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+		 inventory[1].balloonTransformParent = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+	 }
+	
 
 	public void AddResourcesToInventory(int indexObject, Player.PlayerTeam playerTeam) // Add resources to the inventory
 	{
 		if (playerTeam == Player.PlayerTeam.TeamOne && inventory[0].objectAcquired < maxItemNumberAcquired)
 		{
-			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
+			Instantiate(objectTransport[inventory[0].objectAcquired], inventory[0].spawnObject.position, inventory[0].spawnObject.transform.rotation, inventory[0].balloonTransformParent);
 			inventory[0].uiWinConditionsList[inventory[0].objectAcquired].gameObject.SetActive(true);
 			inventory[0].objectAcquired += indexObject;
 			CheckPlayerTotalItemAcquired(inventory[0]);
-			Destroy(_balloonT1.gameObject.transform.GetChild(0).gameObject);
+			Destroy(inventory[0].balloonTransformParent.gameObject.transform.GetChild(0).gameObject);
 		}
 
 		if (playerTeam == Player.PlayerTeam.TeamTwo && inventory[1].objectAcquired < maxItemNumberAcquired)
 		{
-			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
+			//Add Offset to the ballon rotation
+			Quaternion rotOffset  = Quaternion.Euler(0,180f,0);
+			Instantiate(objectTransport[inventory[1].objectAcquired], inventory[1].spawnObject.position, inventory[1].spawnObject.transform.rotation * rotOffset, inventory[1].balloonTransformParent);
 			inventory[1].uiWinConditionsList[inventory[1].objectAcquired].gameObject.SetActive(true);
 			inventory[1].objectAcquired += indexObject;
 			CheckPlayerTotalItemAcquired(inventory[1]);
-		
-			Destroy(_balloonT2.gameObject.transform.GetChild(0).gameObject);
+			Destroy(inventory[1].balloonTransformParent.gameObject.transform.GetChild(0).gameObject);
 		}
 
 		if (inventory[0].objectAcquired == maxItemNumberAcquired || inventory[1].objectAcquired == maxItemNumberAcquired)
@@ -122,6 +122,7 @@ public class TeamInventoryManager : MonoBehaviour
 [Serializable]
 public class Inventory
 {
+	public Transform balloonTransformParent;
 	public Transform spawnObject;
 	public int objectAcquired;
 	public RectTransform uiImgTransport;

@@ -9,12 +9,12 @@ public class RotateObject : MonoBehaviour
     public float speed;
 
     private bool _canTurn;
-    
+    private static float waitForSecondStartRotate = 0.2f;
+    private WaitForSeconds _waitForSecondsRotate = new WaitForSeconds(waitForSecondStartRotate);
     private IEnumerator Start()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return _waitForSecondsRotate;
         _target = CameraButtonManager.Instance.target;
-
         _canTurn = true;
     }
 
