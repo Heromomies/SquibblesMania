@@ -45,8 +45,6 @@ public class CinematicBars : MonoBehaviour
 
     public IEnumerator HideBar()
     {
-        float t = 0;
-
         LeanTween.move(topBar, new Vector3(0f, 900f, 0f), 0.4f);
         LeanTween.move(bottomBar, new Vector3(0f, -900f, 0f), 0.4f);
 
@@ -54,8 +52,6 @@ public class CinematicBars : MonoBehaviour
 
         mapTitle.canvasRenderer.SetAlpha(0);
         mapTitle.CrossFadeAlpha(0f, 1.5f, false);
-
-
 
         yield return null;
     }
