@@ -31,8 +31,8 @@ public class Menu : MonoBehaviour
     public void LaunchGame()
     {
         AudioManager.Instance.Play("Button");
-        
-        panelLaunch.GetComponent<RectTransform>().LeanScale(new Vector3(0,0,0), 0.75f);
+
+        panelLaunch.SetActive(false);
         
         startManager.SetActive(true);
         //  panelLaunch.SetActive(false);
