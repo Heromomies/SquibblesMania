@@ -14,9 +14,11 @@ public class Menu : MonoBehaviour
     public PlayerData playerData;
 
     public TextMeshProUGUI textToPulse;
-    public GameObject panelLaunch;
+    public RectTransform panelLaunch;
 
     public GameObject uiMenuParent;
+
+    [SerializeField] private float timeInSecondsLeanAlpha = 0.7f;
     // Start is called before the first frame update
 
     void Start()
@@ -35,9 +37,8 @@ public class Menu : MonoBehaviour
         panelLaunch.SetActive(false);
         
         startManager.SetActive(true);
-        //  panelLaunch.SetActive(false);
+        
     }
-    
     public void Play()
     {
         AudioManager.Instance.Play("Button");
