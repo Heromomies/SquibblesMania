@@ -34,7 +34,7 @@ public class Menu : MonoBehaviour
     {
         AudioManager.Instance.Play("Button");
 
-        panelLaunch.SetActive(false);
+        panelLaunch.gameObject.SetActive(false);
         
         startManager.SetActive(true);
         
