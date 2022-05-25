@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -33,6 +34,12 @@ public class PauseMenu : MonoBehaviour
 			if (GameManager.Instance)
 			{
 				foreach (var winGameObject in GameManager.Instance.winConditonsList) winGameObject.SetActive(false);
+				    
+				if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
+				{
+					depthOfField.active = true;
+				}
+
 			}
 		}
 		else
@@ -41,6 +48,10 @@ public class PauseMenu : MonoBehaviour
 			if (GameManager.Instance)
 			{
 				foreach (var winGameObject in GameManager.Instance.winConditonsList) winGameObject.SetActive(true);
+				if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
+				{
+					depthOfField.active = false;
+				}
 			}
 		}
 		AudioManager.Instance.Play("Button");
