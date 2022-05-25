@@ -123,7 +123,11 @@ public class MountainManager : MonoBehaviour
 		    {
 			    wind.gameObject.SetActive(true);
 		    }
-	    }   
+	    }
+	    else
+	    {
+		    wind.LaunchEvent();
+	    }
     }
     
     void RandomActivateSnow() // Random function to activate snow

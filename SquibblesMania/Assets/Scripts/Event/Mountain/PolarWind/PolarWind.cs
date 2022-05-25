@@ -146,8 +146,6 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					particlePlayer[i] = null;
 				}
 			}
-		
-			LaunchEvent();
 		}
 	}
 
