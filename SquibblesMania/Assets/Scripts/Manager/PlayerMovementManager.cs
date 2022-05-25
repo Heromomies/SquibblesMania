@@ -184,7 +184,7 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		PlayerStateManager currentPlayerTurn = GameManager.Instance.currentPlayerTurn;
 		
-		if (currentPlayerTurn.playerActionPoint > 0 && !currentPlayerTurn.walking)
+		if (currentPlayerTurn.playerActionPoint >= 0 && !currentPlayerTurn.walking)
 		{
 			if (gesture.State == GestureRecognizerState.Began)
 			{
@@ -233,12 +233,13 @@ public class PlayerMovementManager : MonoBehaviour
 				}
 			}
 			//If press is ended
-			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null )
+			else if (gesture.State == GestureRecognizerState.Ended && blockParentCurrentlySelected != null)
 			{
 				//End of the drag
 				EndMovingBloc();
 				_canTouchBloc = true;
 			}
+		
 		}
 	}
 
@@ -281,7 +282,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void EndMovingBloc()
 	{
-		GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+		
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
@@ -289,7 +290,7 @@ public class PlayerMovementManager : MonoBehaviour
 		hasStopMovingBloc = false;
 		_blockCurrentlySelected = null;
 		blockParentCurrentlySelected = null;
-
+	
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
 			UiManager.Instance.buttonNextTurn.SetActive(true);
 
@@ -484,6 +485,10 @@ public class PlayerMovementManager : MonoBehaviour
 			_touchPos = Vector3.zero;
 			hasStopMovingBloc = false;
 			_isBlocSelected = true;
+			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && !blockParentCurrentlySelected)
+			{
+				EndMovingBloc();
+			}
 			GameManager.Instance.PlayerMoving();
 		}
 		

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8973617250078652128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8973617250078652131}
+  - component: {fileID: 8973617250078652130}
+  m_Layer: 0
+  m_Name: TeamInventoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8973617250078652131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8973617250078652128}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8973617250078652130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8973617250078652128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adb1602d1d9b6d24da8d67c52be9734c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory:
+  - balloonTransformParent: {fileID: 0}
+    spawnObject: {fileID: 0}
+    objectAcquired: 0
+    uiImgTransport: {fileID: 0}
+    uiWinConditionsList:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - balloonTransformParent: {fileID: 0}
+    spawnObject: {fileID: 0}
+    objectAcquired: 0
+    uiImgTransport: {fileID: 0}
+    uiWinConditionsList:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  objectTransport:
+  - {fileID: 7648603550917601303, guid: a03634cc765130b41b33da92f0c0b17d, type: 3}
+  - {fileID: 8780215354809652152, guid: 694aa4c196e9d8a448b3286d46cf0ddc, type: 3}
+  - {fileID: 8081922241731464723, guid: 84a5021cd86da884a9e5d3d73e3a7645, type: 3}
+  - {fileID: 5002702571757390903, guid: 5d2cf4b4eb0ea334e830f211d1d3d845, type: 3}
+  - {fileID: 4951373263265593571, guid: cd543ca0813054843a159d0bda6481d2, type: 3}
+  objectToSpawn: {fileID: 7622582973880197895, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
+  maxItemNumberAcquired: 3
+  scaleSizeTween: {x: 0.5, y: 0.5, z: 0.5}
+  timeInSecondsScaleTween: 0.5
+  easeScaleType: 5

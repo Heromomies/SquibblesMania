@@ -27,7 +27,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 	private int _directionChosen;
 	private bool _isLaunched;
 	[HideInInspector] public List<GameObject> hideParticle = new List<GameObject>();
-	[HideInInspector] public GameObject[] particlePlayer = new GameObject[4];
+	public GameObject[] particlePlayer = new GameObject[4];
 
 	private const float MoreTimeToCheckUnderPlayer = 0.5f;
 	private void OnEnable()

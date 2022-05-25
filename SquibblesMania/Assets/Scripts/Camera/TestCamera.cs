@@ -8,11 +8,6 @@ public class TestCamera : MonoBehaviour
     private bool cinematic;
     public GameObject cinematicbars;
     public GameObject CanvasUI;
-    // Start is called before the first frame update
-    void Start()
-    {
-  
-    }
 
     // Update is called once per frame
     void Update()

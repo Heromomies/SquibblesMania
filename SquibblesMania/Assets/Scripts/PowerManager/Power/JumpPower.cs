@@ -55,8 +55,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 			_particleImpulse.SetActive(false);
 			_particleImpulse = null;
 		}
-		
-		
+
 		DisplayPower();
 	}
 
@@ -95,8 +94,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
-				
 				_trailParticle = PoolManager.Instance.SpawnObjectFromPool("ParticleTrailJump", _objectToMove.position + new Vector3(0,-0.75f,0), Quaternion.identity, _objectToMove);
+
 				BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
@@ -138,16 +137,16 @@ public class JumpPower : MonoBehaviour, IManagePower
 		yield return new WaitForSeconds(0.5f);
 		
 		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
-
-		yield return new WaitForSeconds(1f);
-
 		_canLook = false;
 		
+		yield return new WaitForSeconds(1f);
+
 		AudioManager.Instance.Play("PowerJumpEnd");
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 		
-		_trailParticle.SetActive(false);
+		if(_trailParticle != null)
+			_trailParticle.SetActive(false);
 		
 		var hitPosition = hitInfoTransform.position;
 		
