@@ -17,18 +17,17 @@ public class SnowGun : MonoBehaviour, IManageEvent
     //[Range(0.0f, 10.0f)] public float speedRotationSnowGun;
     [Range(0.0f, 10.0f)] public float ySpawn;
     [Range(0.0f, 10.0f)] public float radius;
-    [Range(0.0f, 360.0f)] public float yRotation;
     public GameObject hatchDetectPlayerNearSnowGun;
     public LayerMask playerLayerMask;
     public LayerMask layerInteractable;
     
     public AnimationCurve curve;
-    public GameObject snowGun;
 
     [Header("TEXT SETTINGS")]
     public GameObject goToAntennaTxt;
     public GameObject shootPlayerTxt;
-    
+
+    public Collider[] col;
     
     [HideInInspector] public Animator animatorSnowGun;
     [HideInInspector] public List<Vector3> listPoint = new List<Vector3>();
@@ -48,15 +47,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
         SwapTouchGesture.AllowSimultaneousExecutionWithAllGestures();
 
         FingersScript.Instance.AddGesture(SwapTouchGesture);
-
-        var t = transform;
-        var position = t.position;
-        var snowGunRotation = snowGun.transform.rotation;
-        snowGun = Instantiate(snowGun, position + new Vector3(0,position.y + 0.02f,0), Quaternion.Euler(snowGunRotation.x, yRotation, snowGunRotation.z), t);
-
-        // t.GetComponentInParent<Node>().isActive = false;
         
-        animatorSnowGun = snowGun.GetComponent<Animator>();
+        animatorSnowGun = GetComponent<Animator>();
         
         ShowEvent();
     }
@@ -69,22 +61,22 @@ public class SnowGun : MonoBehaviour, IManageEvent
     public void ShowEvent() // Show Event, spawn antenna 
     {
         // ReSharper disable once Unity.PreferNonAllocApi
-        var colliders = Physics.OverlapSphere(transform.position, radius, layerInteractable); // Detect bloc around the object
+        col = Physics.OverlapSphere(transform.position, radius, layerInteractable); // Detect bloc around the object
 
-        foreach (var c in colliders)
+        foreach (var c in col)
         {
             if (c.TryGetComponent(out Node node))
             {
                 if (!node.isActive)
                 {
-                    colliders.ToList().Remove(c);
+                    col.ToList().Remove(c);
                 }
             }
         }
         
-        var randomNumber = Random.Range(0, colliders.Length);
-        
-        GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, colliders[randomNumber].transform.position + vectorSpawnAntenna, Quaternion.identity, colliders[randomNumber].transform);
+        var randomNumber = Random.Range(0, col.Length);
+
+        GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, col[randomNumber].transform.position + vectorSpawnAntenna, Quaternion.identity, col[randomNumber].transform);
         go.GetComponent<DetectionSnowGun>().snowGun = this;
             
         goToAntennaTxt.SetActive(true);
@@ -123,10 +115,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
                 if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
                 {
                     var posHitInfo = hitInfo.transform.position;
-
-                    snowGun.gameObject.SetActive(true);
-
-                    var childToMove = snowGun.transform.GetChild(1);
+                    
+                    var childToMove = transform.GetChild(1);
 
                     var childToMovePos = childToMove.position;
                     Vector3 targetPosition = new Vector3(posHitInfo.x,childToMovePos.y, posHitInfo.z ) ;
@@ -142,8 +132,9 @@ public class SnowGun : MonoBehaviour, IManageEvent
                     listPoint.Add(posHitInfo);
                     
                     animatorSnowGun.SetBool("isShooting", true);
-
+                    
                     StartCoroutine(DelayAnimationOut(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length, listPoint, speed, curve));
+
                     
                     canClick = false;
                 }
@@ -159,35 +150,38 @@ public class SnowGun : MonoBehaviour, IManageEvent
     {
         yield return new WaitForSeconds(delay * 0.8f);
 
-        GameObject snowBullet = Instantiate(snowPrefab,  snowGun.transform.position, Quaternion.identity);
+        GameObject snowBullet = Instantiate(snowPrefab, transform.position, Quaternion.identity);
         BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(snowBullet, point, s, animCurve);
+    }
 
+    void CanonShootSound()
+    {
         AudioManager.Instance.Play("CanonShot");
-        
-        ClearGun();
     }
     
     void ClearGun()
     {
         animatorSnowGun.SetBool("isShooting", false);
         animatorSnowGun.SetBool("canRemoveCannon", true);
-
-        StartCoroutine(DelayAnimationCanRemoveCannon(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length));
     }
 
-    IEnumerator DelayAnimationCanRemoveCannon(float delay)
+    void CanRemoveCannon()
     {
-        yield return new WaitForSeconds(delay * 2);
-
         animatorSnowGun.SetBool("onHatche", false);
-        StartCoroutine(DelaySetActiveFalseObject(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length));
     }
 
-    IEnumerator DelaySetActiveFalseObject(float delay)
+    void CanonActivation()
+    {
+        AudioManager.Instance.Play("CanonActivation");
+    }
+    
+    void CanonOpenOrClose()
     {
         AudioManager.Instance.Play("CanonOpen");
-        yield return new WaitForSeconds(delay);
-        
+    }
+    
+    void SetActiveFalseObject()
+    {
         shootPlayerTxt.SetActive(false);
         
         foreach (var h in _hatchesList)
@@ -196,7 +190,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
         }
         _hatchesList.Clear();
         
-        snowGun.SetActive(false);
         gameObject.SetActive(false);
     }
 }

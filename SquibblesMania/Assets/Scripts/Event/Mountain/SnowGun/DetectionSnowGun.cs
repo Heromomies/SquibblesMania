@@ -19,9 +19,7 @@ public class DetectionSnowGun : MonoBehaviour
          snowGun.canClick = true;
          animator.SetBool("isTrigger", true);
          snowGun.animatorSnowGun.SetBool("onHatche", true);
-         
-         AudioManager.Instance.Play("CanonOnOff");
-         
+
          snowGun.shootPlayerTxt.SetActive(true);
          snowGun.goToAntennaTxt.SetActive(false);
       }
