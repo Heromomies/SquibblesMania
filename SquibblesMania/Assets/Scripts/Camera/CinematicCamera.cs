@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestCamera : MonoBehaviour
+public class CinematicCamera : MonoBehaviour
 {
     public GameObject target;
     private bool cinematic;
@@ -22,6 +22,11 @@ public class TestCamera : MonoBehaviour
             transform.LookAt(target.transform);
             transform.Translate(Vector3.right * Time.deltaTime * 2);
         }
+    }
+
+    void Start()
+    {
+       
     }
 
     IEnumerator CameraMovement()
