@@ -83,28 +83,28 @@ public class DashPower : MonoBehaviour, IManagePower
 
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
-					DashDirection(2); // Right
+					DashDirection(2, hitInfoPos); // Right
 					quat = Quaternion.Euler(0,90f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
-					DashDirection(3); // Left
+					DashDirection(3, hitInfoPos); // Left
 					quat = Quaternion.Euler(0,-90f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
-					DashDirection(0); // Down
+					DashDirection(0, hitInfoPos); // Down
 					quat = Quaternion.Euler(0,180f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
-					DashDirection(1); // Up
+					DashDirection(1, hitInfoPos); // Up
 					quat = Quaternion.Euler(0,0f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
@@ -119,7 +119,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	#region Dash Direction
 
 	//Update method of the long press gesture
-	public void DashDirection(int numberDirectionVector) // When we clicked on button
+	public void DashDirection(int numberDirectionVector, Vector3 transformToGo) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -134,7 +134,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						position + _vectorRaycast[numberDirectionVector] * (distance - 1), dashSpeed);
+						transformToGo + new Vector3(0,0.5f,0), dashSpeed);
 					ActiveParticle();
 				}
 			}
@@ -215,7 +215,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					position + _vectorRaycast[numberDirectionVector] * dashRange, dashSpeed);
+					transformToGo + new Vector3(0,0.5f,0), dashSpeed);
 				
 				ActiveParticle();
 			}
@@ -223,7 +223,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				position + _vectorRaycast[numberDirectionVector] * dashRange, dashSpeed);
+				transformToGo + new Vector3(0,0.5f,0), dashSpeed);
 			
 			ActiveParticle();
 		}
