@@ -24,6 +24,15 @@ public class PowerAnimation : MonoBehaviour
     public GameObject jump;
     private RectTransform jumpTransform;
 
+    private static PowerAnimation _powerAnimation;
+
+    public static PowerAnimation Instance => _powerAnimation;
+    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        _powerAnimation = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +59,7 @@ public class PowerAnimation : MonoBehaviour
 
     }
 
-    IEnumerator DashAnim()
+    public IEnumerator DashAnim()
     {
        if(GameManager.Instance.actualCamPreset.presetNumber == 1 | GameManager.Instance.actualCamPreset.presetNumber == 2)
         {
@@ -81,7 +90,7 @@ public class PowerAnimation : MonoBehaviour
 
     }
 
-    IEnumerator SwapAnim()
+     public IEnumerator SwapAnim()
     {
 
         if (GameManager.Instance.actualCamPreset.presetNumber == 1 | GameManager.Instance.actualCamPreset.presetNumber == 2)
@@ -141,7 +150,7 @@ public class PowerAnimation : MonoBehaviour
             
     }
 
-    IEnumerator MirrorAnim()
+    public IEnumerator MirrorAnim()
     {
         if (GameManager.Instance.actualCamPreset.presetNumber == 1 | GameManager.Instance.actualCamPreset.presetNumber == 2)
         {
@@ -199,7 +208,7 @@ public class PowerAnimation : MonoBehaviour
         }
     }
 
-    IEnumerator JumpAnim()
+    public IEnumerator JumpAnim()
     {
         if (GameManager.Instance.actualCamPreset.presetNumber == 1 | GameManager.Instance.actualCamPreset.presetNumber == 2)
         {

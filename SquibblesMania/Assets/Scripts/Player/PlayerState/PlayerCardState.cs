@@ -12,6 +12,8 @@ public class PlayerCardState : PlayerBaseState
 	private int _maxNumberOfTheCard;
 	private char _charCardsStockage;
 	private char _cardNumber;
+
+    
 	
 	private CardEffect _cardEffect = new CardEffect();
 
@@ -63,16 +65,20 @@ public class PlayerCardState : PlayerBaseState
 				switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
 				{
 					case 'B': PowerManager.Instance.ActivateDeactivatePower(0, true);
+                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.SwapAnim());
 						ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
 						break;
 					case 'R': PowerManager.Instance.ActivateDeactivatePower(1, true);
-						ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
+                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.DashAnim());
+                        ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
 						break;
 					case 'Y': PowerManager.Instance.ActivateDeactivatePower(2, true);
-						ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
+                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.JumpAnim());
+                        ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
 						break;
 					case 'G': PowerManager.Instance.ActivateDeactivatePower(3, true);
-						ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
+                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.MirrorAnim());
+                        ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
 						break;
 				}
 			}
