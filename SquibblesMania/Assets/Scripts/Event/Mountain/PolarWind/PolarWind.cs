@@ -106,15 +106,16 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 			for (int i = 0; i < players.Count; i++)
 			{
-				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
+				if (Physics.Raycast(players[i].transform.position, -_vectorRaycast[_directionChosen], out var hit, hideRaycastDistance, layerBlocsWhichCanHide) && !players[i].isPlayerHide)
 				{
-					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, -_vectorRaycast[_directionChosen]);
+					var distBetweenBlocAndPlayer = Vector3.Distance(players[i].transform.position, hit.transform.position);
 					distBetweenBlocAndPlayer = (int) distBetweenBlocAndPlayer;
 
 					switch (distBetweenBlocAndPlayer)
 					{
 						case 0 : break;
-						case 1 : players[i].transform.DOMove(players[i].transform.position + ((-_vectorRaycast[_directionChosen])), speedPlayer);
+						case 1 : players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen], speedPlayer);
+						Debug.Log("I'm here");
 							break;
 					}
 				}
@@ -160,25 +161,24 @@ public class PolarWind : MonoBehaviour, IManageEvent
 				if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
 				{
 					players[i].isPlayerHide = true;
+					if (particlePlayer[i] != null)
+					{
+						particlePlayer[i].SetActive(false);
+						particlePlayer[i] = null;
+					}
 				}
 				else
 				{
 					players[i].isPlayerHide = false;
-				}
-				
-				if (!players[i].isPlayerHide)
-				{
+					
 					if (particlePlayer[i] == null)
 					{
 						GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
 						hideParticle.Add(vfx);
 						particlePlayer[i] = vfx;
+						
+						LaunchEvent();
 					}
-				}
-				else
-				{
-					Destroy(particlePlayer[i]);
-					particlePlayer[i] = null;
 				}
 			}
 		}
