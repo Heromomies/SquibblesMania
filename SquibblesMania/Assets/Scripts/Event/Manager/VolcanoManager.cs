@@ -15,7 +15,13 @@ public class VolcanoManager : MonoBehaviour
 
 	public LevelOfDanger levelOfDanger;
 	public GameObject volcanoIsGoingToExplode;
+	public static float timeInSecondsVolcanoExplosion = 2f;
 	
+	private WaitForSeconds waitForSecondsVolcanoExplosion = new WaitForSeconds(timeInSecondsVolcanoExplosion);
+
+
+	
+
 	public enum LevelOfDanger
 	{
 		LevelOne = 0,
@@ -71,8 +77,8 @@ public class VolcanoManager : MonoBehaviour
 	IEnumerator FeedBackVolcano()
 	{
 		volcanoIsGoingToExplode.SetActive(true);
-		
-		yield return new WaitForSeconds(GameManager.Instance.durationDoShake + 2);
+
+		yield return waitForSecondsVolcanoExplosion;
 		
 		volcanoIsGoingToExplode.SetActive(false);
 	}
