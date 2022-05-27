@@ -32,7 +32,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
 
-    public float durationDoShake, strength;
+
+    public static float durationDoShake;
+    public float strength;
+    public WaitForSeconds waitForSecondsShakeCoroutine = new WaitForSeconds(durationDoShake);
     [HideInInspector] public bool canDoShake;
     
     [SerializeField] private List<CamPreSets> previousCamPreSetsList;
@@ -221,7 +224,7 @@ public class GameManager : MonoBehaviour
                 _cam.DOShakePosition(durationDoShake, strength, 90, 100);
                 _cam.DOShakeRotation(durationDoShake, strength, 90, 100);
             
-                yield return new WaitForSeconds(durationDoShake);
+                yield return waitForSecondsShakeCoroutine;
             
                 canDoShake = false;
             }
