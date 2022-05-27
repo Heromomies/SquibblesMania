@@ -32,8 +32,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
 
-
-    public static float durationDoShake;
+    
+    public static float durationDoShake = 1.5f;
     public float strength;
     public WaitForSeconds waitForSecondsShakeCoroutine = new WaitForSeconds(durationDoShake);
     [HideInInspector] public bool canDoShake;

@@ -6,10 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public GameObject startManager;
+    [Header("LAUNCH GAME")] public GameObject startManager;
+    [SerializeField] private GameObject[] launchGameObjects;
+    
     public GameObject mapManager;
     public GameObject characterManager;
-
     public GameObject panelManager;
     public PlayerData playerData;
 
@@ -33,17 +34,18 @@ public class Menu : MonoBehaviour
     public void LaunchGame()
     {
         AudioManager.Instance.Play("Button");
-
         panelLaunch.gameObject.SetActive(false);
-        
         startManager.SetActive(true);
-        
+        foreach (var launchGameObject in launchGameObjects) launchGameObject.SetActive(true);
+
     }
+
     public void Play()
     {
         AudioManager.Instance.Play("Button");
         startManager.SetActive(false);
         mapManager.SetActive(true);
+
     }
 
     public void MapPlay()
@@ -81,4 +83,5 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         uiMenuParent.transform.rotation *= Quaternion.Euler(0, 0, 180);
     }
+
 }

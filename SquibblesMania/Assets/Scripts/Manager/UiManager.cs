@@ -35,11 +35,8 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
-    
-    [Header("CAMERA BUTTONS")]
-    public List<Button> buttonsCameraManager;
-    
-    
+
+
     [Serializable]
     public struct UiPlayerStun
     {

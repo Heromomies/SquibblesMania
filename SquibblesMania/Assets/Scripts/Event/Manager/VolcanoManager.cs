@@ -77,7 +77,6 @@ public class VolcanoManager : MonoBehaviour
 	IEnumerator FeedBackVolcano()
 	{
 		volcanoIsGoingToExplode.SetActive(true);
-
 		yield return waitForSecondsVolcanoExplosion;
 		
 		volcanoIsGoingToExplode.SetActive(false);
