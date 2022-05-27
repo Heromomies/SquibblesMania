@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,16 @@ public class TextPlayerStunTween : MonoBehaviour
     private RectTransform _rectTransformText;
     [SerializeField] private float tweenTimeInSeconds = 0.5f;
     [SerializeField] private float rotateAmount = -45f;
-    private void Awake()
+
+#if UNITY_EDITOR
+    private void OnValidate()
     {
         _rectTransformText = GetComponent<RectTransform>();
     }
 
-    void OnEnable()
+#endif
+    
+   private void OnEnable()
     {
         LeanTween.move(_rectTransformText, Vector3.down, tweenTimeInSeconds).setEasePunch();
         LeanTween.rotateZ(_rectTransformText.gameObject, rotateAmount, tweenTimeInSeconds).setEasePunch();

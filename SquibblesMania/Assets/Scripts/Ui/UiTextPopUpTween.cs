@@ -20,16 +20,16 @@ public class UiTextPopUpTween : MonoBehaviour
 
     private void OnEnable()
     {
-        SetBaseScale(Vector3.zero);
+        SetScale(Vector3.zero);
         LeanTween.scale(textRectTransform, _scaleDesired, timeInSecondsScaleAnim).setEase(scaleEaseType);
     }
 
     private void OnDisable()
     {
-        SetBaseScale(Vector3.zero);
+        SetScale(Vector3.zero);
     }
 
-    private void SetBaseScale(Vector3 scale)
+    private void SetScale(Vector3 scale)
     {
         textRectTransform.transform.localScale = scale;
     }
