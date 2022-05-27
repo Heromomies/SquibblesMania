@@ -99,34 +99,14 @@ public class TeamInventoryManager : MonoBehaviour
 			var secondColList = new List<Collider>();
 			var secondColArray = firstColList.ToArray();
 			
+			var finalList = new List<Collider>();
+			var finalArray = finalList.ToArray();
+			
 			if (inventory[1].objectAcquired < inventory[0].objectAcquired) // Team 1 is before Team 2
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[1].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[2].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
-
-				firstColList = firstColArray.ToList();
-				secondColList = secondColArray.ToList();
+				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
 				
-				foreach (var coll in secondColList)
-				{
-					if (firstColList.Contains(coll))
-					{
-						firstColList.Remove(coll);
-					}
-					else
-					{
-						firstColList.Add(coll);
-					}
-				}
-
-				firstColArray = firstColList.ToArray();
-				colliderFinished = firstColArray;
-			}
-			else if (inventory[0].objectAcquired < inventory[1].objectAcquired) // Team 2 is before Team 1
-			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[1].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[2].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
-
 				firstColList = firstColArray.ToList();
 				secondColList = secondColArray.ToList();
 				
@@ -136,31 +116,90 @@ public class TeamInventoryManager : MonoBehaviour
 					{
 						secondColList.Remove(coll);
 					}
-					else
-					{
-						secondColList.Add(coll);
-					}
 				}
 
 				secondColArray = secondColList.ToArray();
-				colliderFinished = secondColArray;
+				finalArray = secondColArray;
+				finalList = finalArray.ToList();
+
+				for (int i = 0; i < finalList.Count; i++)
+				{
+					if (finalList[i].TryGetComponent(out Node node))
+					{
+						if (!node.isActive)
+						{
+							finalList.Remove(finalList[i]);
+						}
+					}
+				}
+				
+				finalArray = finalList.ToArray();
+				colliderFinished = finalArray;
+			}
+			else if (inventory[0].objectAcquired < inventory[1].objectAcquired) // Team 2 is before Team 1
+			{
+				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+
+				firstColList = firstColArray.ToList();
+				secondColList = secondColArray.ToList();
+				foreach (var coll in secondColList)
+				{
+					if (firstColList.Contains(coll))
+					{
+						firstColList.Remove(coll);
+					}
+				}
+				
+				firstColArray = firstColList.ToArray();
+				finalArray = firstColArray;
+				finalList = finalArray.ToList();
+				
+				
+				for (int i = 0; i < finalList.Count; i++)
+				{
+					if (finalList[i].TryGetComponent(out Node node))
+					{
+						if (!node.isActive)
+						{
+							finalList.Remove(finalList[i]);
+						}
+					}
+				}
+				
+				finalArray = finalList.ToArray();
+				colliderFinished = finalArray;
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[1].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[2].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
-				colliderFinished = firstColArray.Concat(secondColArray).ToArray();
+				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				finalArray = firstColArray.Concat(secondColArray).ToArray();
+				
+				finalList = finalArray.ToList();
+				
+				for (int i = 0; i < finalList.Count; i++)
+				{
+					if (finalList[i].TryGetComponent(out Node node))
+					{
+						if (!node.isActive)
+						{
+							finalList.Remove(finalList[i]);
+						}
+					}
+				}
+
+				colliderFinished = finalList.ToArray();
 			}
 			
-			do
-			{
-				var randomBloc = Random.Range(0, colliderFinished.Length);
-				var bloc = colliderFinished[randomBloc].transform;
+			var randomBloc = Random.Range(0, colliderFinished.Length);
+			var bloc = colliderFinished[randomBloc].transform;
 				
-				var blocPos = bloc.position;
-				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
-			} 
-			while (!colliderFinished[Random.Range(0, colliderFinished.Length)].transform.GetComponent<Node>().isActive);
+			var blocPos = bloc.position;
+				
+			Debug.Log(colliderFinished[Random.Range(0, colliderFinished.Length)].transform.GetComponent<Node>().isActive);
+				
+			Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 		}
 		
 	}
