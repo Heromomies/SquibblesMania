@@ -196,9 +196,7 @@ public class TeamInventoryManager : MonoBehaviour
 			var bloc = colliderFinished[randomBloc].transform;
 				
 			var blocPos = bloc.position;
-				
-			Debug.Log(colliderFinished[Random.Range(0, colliderFinished.Length)].transform.GetComponent<Node>().isActive);
-				
+
 			Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 		}
 		
