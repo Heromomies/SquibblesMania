@@ -83,16 +83,16 @@ public class TeamInventoryManager : MonoBehaviour
 			_isFull = true;
 		}
 
-		var players = GameManager.Instance.players;
-		
-		for (int i = 0; i <  players.Count; i++)
-		{
-			// ReSharper disable once Unity.PreferNonAllocApi
-			colliderStruct[i].Collider = Physics.OverlapSphere(players[i].transform.position, radius, layerInteractable);
-		}
-		
 		if (!_isFull)
 		{
+			var players = GameManager.Instance.players;
+		
+			for (int i = 0; i <  players.Count; i++)
+			{
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStruct[i].Collider = Physics.OverlapSphere(players[i].transform.position, radius, layerInteractable);
+			}
+			
 			var firstColList = new List<Collider>();
 			var firstColArray = firstColList.ToArray();
 		
