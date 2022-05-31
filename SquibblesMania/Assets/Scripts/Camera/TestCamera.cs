@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class TestCamera : MonoBehaviour
 {
-    public GameObject target;
+
     private bool cinematic;
     public GameObject cinematicbars;
     public GameObject CanvasUI;
+    public Transform target;
 
     // Update is called once per frame
     void Update()
@@ -19,8 +20,9 @@ public class TestCamera : MonoBehaviour
 
         if(cinematic == true)
         {
-            transform.LookAt(target.transform);
+            transform.LookAt(target);
             transform.Translate(Vector3.right * Time.deltaTime * 2);
+            
         }
     }
 
@@ -35,5 +37,8 @@ public class TestCamera : MonoBehaviour
         CanvasUI.SetActive(true);
         StartCoroutine(cinematicbars.GetComponent<CinematicBars>().HideBar());
         cinematic = false;
+
+        transform.LookAt(CameraButtonManager.Instance.target);
+    
     }
 }
