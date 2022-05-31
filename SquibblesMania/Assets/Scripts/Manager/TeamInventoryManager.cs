@@ -202,7 +202,6 @@ public class TeamInventoryManager : MonoBehaviour
 
 			Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 		}
-		
 	}
 	
 	public static List<Collider> GetDonut(Vector3 pos, float innerRadius, float outerRadius, LayerMask layer)
@@ -213,24 +212,6 @@ public class TeamInventoryManager : MonoBehaviour
 			outer.Remove(C);
 		return outer;
 	}
-	
-#if UNITY_EDITOR
-	private void OnDrawGizmos()
-	{
-		var p = GameManager.Instance.players;
-		Gizmos.color = Color.red;
-		for (int i = 0; i < p.Count; i++)
-		{
-			Gizmos.DrawWireSphere(p[i].transform.position, radiusMin);
-		}
-		
-		Gizmos.color = Color.blue;
-		for (int i = 0; i < p.Count; i++)
-		{
-			Gizmos.DrawWireSphere(p[i].transform.position, radiusMax);
-		}
-	}
-#endif
 	
 	private void CheckPlayerTotalItemAcquired(Inventory playerInventory)
 	{
