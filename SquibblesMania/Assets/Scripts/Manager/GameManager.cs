@@ -31,12 +31,6 @@ public class GameManager : MonoBehaviour
     public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-
-    
-    public static float durationDoShake = 1.5f;
-    public float strength;
-    public WaitForSeconds waitForSecondsShakeCoroutine = new WaitForSeconds(durationDoShake);
-    [HideInInspector] public bool canDoShake;
     
     [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
@@ -200,7 +194,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-        StartCoroutine(CamConfig(count));
+        CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
 
@@ -215,20 +209,10 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    IEnumerator CamConfig(int countTurn)
+    void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
-            if (canDoShake)
-            {
-                _cam.DOShakePosition(durationDoShake, strength, 90, 100);
-                _cam.DOShakeRotation(durationDoShake, strength, 90, 100);
-            
-                yield return waitForSecondsShakeCoroutine;
-            
-                canDoShake = false;
-            }
-            
             if (actualCamPreset.presetNumber > 0)
             {
                 actualCamPreset.buttonNextTurn.SetActive(false);
@@ -315,7 +299,7 @@ public class GameManager : MonoBehaviour
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count; 
-        StartCoroutine(CamConfig(count));
+        CamConfig(count);
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();

@@ -68,8 +68,7 @@ public class VolcanoManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-
-			GameManager.Instance.canDoShake = true;
+			
 			StartCoroutine(FeedBackVolcano());
 		}
 	}
