@@ -6,6 +6,7 @@ using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour
         public int presetNumber;
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
-        public GameObject buttonNextTurn;
+        public Button buttonNextTurn;
     }
 
 
@@ -229,10 +230,6 @@ public class GameManager : MonoBehaviour
                 canDoShake = false;
             }
             
-            if (actualCamPreset.presetNumber > 0)
-            {
-                actualCamPreset.buttonNextTurn.SetActive(false);
-            }
             
             actualCamPreset = camPreSets[countTurn];
 
@@ -284,8 +281,7 @@ public class GameManager : MonoBehaviour
         {
             VolcanoManager.Instance.CyclePassed();
         }
-
-        PowerManager.Instance.CyclePassed();
+        
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)

@@ -176,7 +176,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 		}
 		
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
-		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
 	private void OnDisable()
