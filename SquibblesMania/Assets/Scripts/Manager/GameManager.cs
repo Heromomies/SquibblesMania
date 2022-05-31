@@ -32,12 +32,6 @@ public class GameManager : MonoBehaviour
     public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-
-    
-    public static float durationDoShake = 1.5f;
-    public float strength;
-    public WaitForSeconds waitForSecondsShakeCoroutine = new WaitForSeconds(durationDoShake);
-    [HideInInspector] public bool canDoShake;
     
     [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
@@ -201,7 +195,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-        StartCoroutine(CamConfig(count));
+        CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
 
@@ -216,20 +210,10 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    IEnumerator CamConfig(int countTurn)
+    void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
-            if (canDoShake)
-            {
-                _cam.DOShakePosition(durationDoShake, strength, 90, 100);
-                _cam.DOShakeRotation(durationDoShake, strength, 90, 100);
-            
-                yield return waitForSecondsShakeCoroutine;
-            
-                canDoShake = false;
-            }
-            
             
             actualCamPreset = camPreSets[countTurn];
 
@@ -298,8 +282,11 @@ public class GameManager : MonoBehaviour
                 MountainManager.Instance.ChangeCycle();
             }
             MountainManager.Instance.ChangeTurn();
+        } else if (conditionVictory.mapTheme == ConditionVictory.Theme.Volcano)
+        {
+            VolcanoManager.Instance.ChangeTurnVolcano();
         }
-
+        
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
@@ -311,7 +298,7 @@ public class GameManager : MonoBehaviour
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count; 
-        StartCoroutine(CamConfig(count));
+        CamConfig(count);
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();

@@ -11,6 +11,8 @@ public class VolcanoManager : MonoBehaviour
 {
 	[Space] [Header("EVENTS")] public List<GameObject> events;
 
+	public List<Meteorite> meteorites;
+	
 	public int dangerousness;
 
 	public LevelOfDanger levelOfDanger;
@@ -68,12 +70,20 @@ public class VolcanoManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-
-			GameManager.Instance.canDoShake = true;
+			
 			StartCoroutine(FeedBackVolcano());
 		}
 	}
 
+	public void ChangeTurnVolcano()
+	{
+		foreach (var m in meteorites)
+		{
+			m.ChangeTurn();
+		}
+	}
+	
+	
 	IEnumerator FeedBackVolcano()
 	{
 		volcanoIsGoingToExplode.SetActive(true);
