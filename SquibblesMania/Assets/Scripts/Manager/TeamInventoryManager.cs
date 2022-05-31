@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,6 @@ public class TeamInventoryManager : MonoBehaviour
 	[Range(0,10)] public float radiusMax;
 	public LayerMask layerInteractable;
 	public Collider[] colliderFinished;
-	public ColliderStruct[] colliderStructMin;
 	public ColliderStruct[] colliderStructMax;
 	
 	[System.Serializable]
@@ -91,10 +91,9 @@ public class TeamInventoryManager : MonoBehaviour
 		
 			for (int i = 0; i <  players.Count; i++)
 			{
-				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStructMax[i].Collider = Physics.OverlapSphere(players[i].transform.position, radiusMax, layerInteractable);
-				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStructMin[i].Collider = Physics.OverlapSphere(players[i].transform.position, radiusMin, layerInteractable);
+				var a = GetDonut(players[i].transform.position, radiusMin, radiusMax, layerInteractable);
+
+				colliderStructMax[i].Collider = a.ToArray();
 			}
 			
 			var firstColList = new List<Collider>();
@@ -113,12 +112,12 @@ public class TeamInventoryManager : MonoBehaviour
 				
 				firstColList = firstColArray.ToList();
 				secondColList = secondColArray.ToList();
-				
-				foreach (var coll in firstColList)
+
+				for (int i = 0; i < firstColList.Count; i++)
 				{
-					if (secondColList.Contains(coll))
+					if (secondColList.Contains(firstColList[i]))
 					{
-						secondColList.Remove(coll);
+						secondColList.Remove(firstColList[i]);
 					}
 				}
 
@@ -205,7 +204,34 @@ public class TeamInventoryManager : MonoBehaviour
 		}
 		
 	}
-
+	
+	public static List<Collider> GetDonut(Vector3 pos, float innerRadius, float outerRadius, LayerMask layer)
+	{
+		List<Collider> outer = new List<Collider>(Physics.OverlapSphere(pos,outerRadius, layer));
+		Collider[] inner = Physics.OverlapSphere(pos,innerRadius, layer);
+		foreach (Collider C in inner)
+			outer.Remove(C);
+		return outer;
+	}
+	
+#if UNITY_EDITOR
+	private void OnDrawGizmos()
+	{
+		var p = GameManager.Instance.players;
+		Gizmos.color = Color.red;
+		for (int i = 0; i < p.Count; i++)
+		{
+			Gizmos.DrawWireSphere(p[i].transform.position, radiusMin);
+		}
+		
+		Gizmos.color = Color.blue;
+		for (int i = 0; i < p.Count; i++)
+		{
+			Gizmos.DrawWireSphere(p[i].transform.position, radiusMax);
+		}
+	}
+#endif
+	
 	private void CheckPlayerTotalItemAcquired(Inventory playerInventory)
 	{
 		if (playerInventory.objectAcquired == maxItemNumberAcquired)
