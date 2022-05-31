@@ -41,6 +41,8 @@ public class PauseMenu : MonoBehaviour
 				}
 
 			}
+
+			SetPanelPauseStateTrue();
 		}
 		else
 		{
@@ -76,7 +78,6 @@ public class PauseMenu : MonoBehaviour
     {
 	    if (!panelPause.gameObject.activeSelf)
 	    {
-		    panelPause.gameObject.SetActive(true);
 		    LeanTween.moveX(uiGameObject, xValue, animPanelPauseMoveUITimeInSeconds).setEase(easeTypePausePanel);
 	    }
 	    else
@@ -85,7 +86,7 @@ public class PauseMenu : MonoBehaviour
 	    }
 	   
     }
-
+	private void SetPanelPauseStateTrue() => panelPause.gameObject.SetActive(true);
     private void SetPanelPauseStateFalse() => panelPause.gameObject.SetActive(false);
     /// <summary>
     /// Anim to scale up/down ui gameObject
