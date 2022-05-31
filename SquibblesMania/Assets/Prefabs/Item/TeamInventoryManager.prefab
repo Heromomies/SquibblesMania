@@ -68,12 +68,22 @@ MonoBehaviour:
   - {fileID: 4951373263265593571, guid: cd543ca0813054843a159d0bda6481d2, type: 3}
   objectToSpawn: {fileID: 7622582973880197895, guid: 1400fb12a930e7d4cbb50478a73b3470, type: 3}
   maxItemNumberAcquired: 3
-  radius: 7
+  radiusMin: 3
+  radiusMax: 5
   layerInteractable:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   colliderFinished: []
-  colliderStruct: []
+  colliderStructMin:
+  - Collider: []
+  - Collider: []
+  - Collider: []
+  - Collider: []
+  colliderStructMax:
+  - Collider: []
+  - Collider: []
+  - Collider: []
+  - Collider: []
   scaleSizeTween: {x: 0.5, y: 0.5, z: 0.5}
   timeInSecondsScaleTween: 0.5
   easeScaleType: 5

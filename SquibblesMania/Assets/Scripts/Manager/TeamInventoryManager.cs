@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,10 +20,11 @@ public class TeamInventoryManager : MonoBehaviour
 	public static TeamInventoryManager Instance => _teamInventoryManager;
 
 	[Header("CONTROL ALEATORY")]
-	public float radius;
+	[Range(0,10)] public float radiusMin;
+	[Range(0,10)] public float radiusMax;
 	public LayerMask layerInteractable;
 	public Collider[] colliderFinished;
-	public ColliderStruct[] colliderStruct;
+	public ColliderStruct[] colliderStructMax;
 	
 	[System.Serializable]
 	public struct ColliderStruct
@@ -83,16 +85,17 @@ public class TeamInventoryManager : MonoBehaviour
 			_isFull = true;
 		}
 
-		var players = GameManager.Instance.players;
-		
-		for (int i = 0; i <  players.Count; i++)
-		{
-			// ReSharper disable once Unity.PreferNonAllocApi
-			colliderStruct[i].Collider = Physics.OverlapSphere(players[i].transform.position, radius, layerInteractable);
-		}
-		
 		if (!_isFull)
 		{
+			var players = GameManager.Instance.players;
+		
+			for (int i = 0; i <  players.Count; i++)
+			{
+				var a = GetDonut(players[i].transform.position, radiusMin, radiusMax, layerInteractable);
+
+				colliderStructMax[i].Collider = a.ToArray();
+			}
+			
 			var firstColList = new List<Collider>();
 			var firstColArray = firstColList.ToArray();
 		
@@ -104,17 +107,17 @@ public class TeamInventoryManager : MonoBehaviour
 			
 			if (inventory[1].objectAcquired < inventory[0].objectAcquired) // Team 1 is before Team 2
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
 				
 				firstColList = firstColArray.ToList();
 				secondColList = secondColArray.ToList();
-				
-				foreach (var coll in firstColList)
+
+				for (int i = 0; i < firstColList.Count; i++)
 				{
-					if (secondColList.Contains(coll))
+					if (secondColList.Contains(firstColList[i]))
 					{
-						secondColList.Remove(coll);
+						secondColList.Remove(firstColList[i]);
 					}
 				}
 
@@ -138,8 +141,8 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[0].objectAcquired < inventory[1].objectAcquired) // Team 2 is before Team 1
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
 
 				firstColList = firstColArray.ToList();
 				secondColList = secondColArray.ToList();
@@ -172,8 +175,8 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
 				finalArray = firstColArray.Concat(secondColArray).ToArray();
 				
 				finalList = finalArray.ToList();
@@ -196,14 +199,20 @@ public class TeamInventoryManager : MonoBehaviour
 			var bloc = colliderFinished[randomBloc].transform;
 				
 			var blocPos = bloc.position;
-				
-			Debug.Log(colliderFinished[Random.Range(0, colliderFinished.Length)].transform.GetComponent<Node>().isActive);
-				
+
 			Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 		}
-		
 	}
-
+	
+	public static List<Collider> GetDonut(Vector3 pos, float innerRadius, float outerRadius, LayerMask layer)
+	{
+		List<Collider> outer = new List<Collider>(Physics.OverlapSphere(pos,outerRadius, layer));
+		Collider[] inner = Physics.OverlapSphere(pos,innerRadius, layer);
+		foreach (Collider C in inner)
+			outer.Remove(C);
+		return outer;
+	}
+	
 	private void CheckPlayerTotalItemAcquired(Inventory playerInventory)
 	{
 		if (playerInventory.objectAcquired == maxItemNumberAcquired)
