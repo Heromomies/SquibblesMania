@@ -10,7 +10,7 @@ public class StunPlayerEasily : MonoBehaviour
     {
 	    if (Input.GetKeyDown(KeyCode.T))
 	    {
-		    var secondPlayer = GameManager.Instance.players[1];
+		    var secondPlayer = GameManager.Instance.players[0];
 		    var posSp = secondPlayer.transform.position;
 		    PoolManager.Instance.SpawnObjectFromPool("Meteorite", new Vector3(posSp.x, posSp.y + 3f, posSp.z), Quaternion.identity, null);
 	    }
