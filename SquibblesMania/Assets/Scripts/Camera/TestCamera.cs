@@ -38,6 +38,7 @@ public class TestCamera : MonoBehaviour
         StartCoroutine(cinematicbars.GetComponent<CinematicBars>().HideBar());
         cinematic = false;
 
-        transform.LookAt(CameraButtonManager.Instance.target) ;
+        transform.LookAt(CameraButtonManager.Instance.target);
+    
     }
 }
