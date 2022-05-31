@@ -107,6 +107,15 @@ public class MapGeneratorManager : MonoBehaviour
             {
                 GameManager.Instance.cleanList.Add(blocChild.gameObject);
             }
+
+            if (TryGetComponent(out Node node))
+            {
+                if (node.isSpawnPoint)
+                {
+                    GameManager.Instance.cleanList.Remove(blocChild.gameObject);
+                }
+            }
+            
             SetUpPlayerSpawnPoints(blocChild);
         }
     }

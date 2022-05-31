@@ -286,8 +286,11 @@ public class GameManager : MonoBehaviour
                 MountainManager.Instance.ChangeCycle();
             }
             MountainManager.Instance.ChangeTurn();
+        } else if (conditionVictory.mapTheme == ConditionVictory.Theme.Volcano)
+        {
+            VolcanoManager.Instance.ChangeTurnVolcano();
         }
-
+        
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
