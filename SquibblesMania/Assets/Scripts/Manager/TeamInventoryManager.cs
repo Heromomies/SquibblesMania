@@ -19,10 +19,12 @@ public class TeamInventoryManager : MonoBehaviour
 	public static TeamInventoryManager Instance => _teamInventoryManager;
 
 	[Header("CONTROL ALEATORY")]
-	public float radius;
+	[Range(0,10)] public float radiusMin;
+	[Range(0,10)] public float radiusMax;
 	public LayerMask layerInteractable;
 	public Collider[] colliderFinished;
-	public ColliderStruct[] colliderStruct;
+	public ColliderStruct[] colliderStructMin;
+	public ColliderStruct[] colliderStructMax;
 	
 	[System.Serializable]
 	public struct ColliderStruct
@@ -90,7 +92,9 @@ public class TeamInventoryManager : MonoBehaviour
 			for (int i = 0; i <  players.Count; i++)
 			{
 				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStruct[i].Collider = Physics.OverlapSphere(players[i].transform.position, radius, layerInteractable);
+				colliderStructMax[i].Collider = Physics.OverlapSphere(players[i].transform.position, radiusMax, layerInteractable);
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMin[i].Collider = Physics.OverlapSphere(players[i].transform.position, radiusMin, layerInteractable);
 			}
 			
 			var firstColList = new List<Collider>();
@@ -104,8 +108,8 @@ public class TeamInventoryManager : MonoBehaviour
 			
 			if (inventory[1].objectAcquired < inventory[0].objectAcquired) // Team 1 is before Team 2
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
 				
 				firstColList = firstColArray.ToList();
 				secondColList = secondColArray.ToList();
@@ -138,8 +142,8 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[0].objectAcquired < inventory[1].objectAcquired) // Team 2 is before Team 1
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
 
 				firstColList = firstColArray.ToList();
 				secondColList = secondColArray.ToList();
@@ -172,8 +176,8 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				firstColArray = colliderStruct[0].Collider.Concat(colliderStruct[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStruct[1].Collider.Concat(colliderStruct[3].Collider).ToArray(); // Collider Team 2
+				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
+				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
 				finalArray = firstColArray.Concat(secondColArray).ToArray();
 				
 				finalList = finalArray.ToList();
