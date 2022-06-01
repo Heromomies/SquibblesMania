@@ -40,10 +40,9 @@ public class GameManager : MonoBehaviour
         public int presetNumber;
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
-        public Button buttonNextTurn;
+        public Slider sliderNextTurn;
     }
-
-
+    
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     public Volume volume;
@@ -59,16 +58,16 @@ public class GameManager : MonoBehaviour
     public List<Material> colors = new List<Material>();
     public GameObject spawnPointSpriteParent;
     public List<Color> playerColors = new List<Color>();
+    
     private void Awake()
     {
         Application.targetFrameRate = 30;
         _gameManager = this;
         volume.profile.Reset();
     }
-
-
+    
     // Start is called before the first frame update
-  private void Start()
+    private void Start()
     {
         if (MapGeneratorManager.Instance != null)
         {
@@ -126,7 +125,6 @@ public class GameManager : MonoBehaviour
 
   private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat)
   {
-      
       if (player.playerRespawnPoint.TryGetComponent(out Node playerNodeSpawnPoint))
       {
           player.playerTeam = playerTeam;
@@ -134,7 +132,6 @@ public class GameManager : MonoBehaviour
           player.indicatorPlayerRenderer.gameObject.SetActive(false);
           player.playerMesh.material = playerCustomMat;
       }
-
   }
 
   private void SetSpriteSpawnPlayerPoint(PlayerStateManager player,Node playerNodeSpawnPoint, Material playerCustomMat)
@@ -225,7 +222,7 @@ public class GameManager : MonoBehaviour
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
 
             //UI SWITCH
-            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
+            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
             
             //Register Previous Cam View Mode
@@ -252,7 +249,7 @@ public class GameManager : MonoBehaviour
         previousCamPreSets.camRot = camEulerAngles;
         previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
         previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
-        previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
+        previousCamPreSets.sliderNextTurn = camPreSets[indexCam].sliderNextTurn;
 
         previousCamPreSetsList[indexCam] = previousCamPreSets;
         

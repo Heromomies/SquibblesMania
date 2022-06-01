@@ -6,9 +6,11 @@ using DigitalRubyShared;
 using I2.Loc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
 {
@@ -18,7 +20,9 @@ public class UiManager : MonoBehaviour
     [HideInInspector]
     public Slider sliderNextTurn;
 
-    [Header("WIN PANEL")] public GameObject winPanel;
+    [Header("WIN PANEL")] 
+    public float valueBeforeValidateSlider;
+    public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
     [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
@@ -48,18 +52,62 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
+    public void BeginDragSlider(Image circleToMove)
+    {
+        circleToMove.color = Color.white;
+    }
+
+    public void OnPointerUp(Image circleToMove)
+    {
+        circleToMove.color = Color.black;
+    }
+    
+    public void MoveSliderDemiCircle(Image demiCircleOnTop)
+    {
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        {
+            demiCircleOnTop.color = Color.white;
+        }
+        else
+        {
+            demiCircleOnTop.color = Color.black;
+        }
+    }
+    
+    public void MoveSliderCircleToMove(Image circleToMove)
+    {
+        circleToMove.color = Color.white;
+    }
+    
+    public void EndDragSliderCircleToMove(Image circleToMove) // When we change the value of the slider
+    {
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        {
+            NextTurn();
+        }
+        
+        circleToMove.color = Color.black;
+        sliderNextTurn.value = 0f;
+    }
+    
+    public void EndDragSliderDemiCircle(Image demiCircleOnTop) // When we change the value of the slider
+    {
+        demiCircleOnTop.color = Color.black;
+    }
+    
     private void Start()
     {
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(Button buttonNextTurnPlayer)
+    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
     {
-        //sliderNextTurn = buttonNextTurnPlayer;
+        sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
     }
 
-    public void ButtonNextTurn()
+
+    public void NextTurn()
     {
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
