@@ -25,6 +25,8 @@ public class UiManager : MonoBehaviour
     public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
+    [SerializeField] private Image imagePanelEnd;
+    [SerializeField] private Sprite spritesWinPanel;
     [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
     public static UiManager Instance => _uiManager;
 
@@ -173,7 +175,8 @@ public class UiManager : MonoBehaviour
     {
         winPanel.SetActive(true);
         playersUiGlobal.SetActive(false);
-
+        imagePanelEnd.sprite = spritesWinPanel;
+        
         var currentPlayer = GameManager.Instance.currentPlayerTurn;
         PlayerStateManager otherPlayer = null;
         
