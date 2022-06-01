@@ -52,17 +52,47 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
-    public void BeginDragSlider()
+    public void BeginDragSlider(Image circleToMove)
     {
-        
+        circleToMove.color = Color.white;
+    }
+
+    public void OnPointerUp(Image circleToMove)
+    {
+        circleToMove.color = Color.black;
     }
     
-    public void EndDragSlider() // When we change the value of the slider
+    public void MoveSliderDemiCircle(Image demiCircleOnTop)
     {
         if (sliderNextTurn.value >= valueBeforeValidateSlider)
         {
-           NextTurn();
+            demiCircleOnTop.color = Color.white;
         }
+        else
+        {
+            demiCircleOnTop.color = Color.black;
+        }
+    }
+    
+    public void MoveSliderCircleToMove(Image circleToMove)
+    {
+        circleToMove.color = Color.white;
+    }
+    
+    public void EndDragSliderCircleToMove(Image circleToMove) // When we change the value of the slider
+    {
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        {
+            NextTurn();
+        }
+        
+        circleToMove.color = Color.black;
+        sliderNextTurn.value = 0f;
+    }
+    
+    public void EndDragSliderDemiCircle(Image demiCircleOnTop) // When we change the value of the slider
+    {
+        demiCircleOnTop.color = Color.black;
     }
     
     private void Start()
