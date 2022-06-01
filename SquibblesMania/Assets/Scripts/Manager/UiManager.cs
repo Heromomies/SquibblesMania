@@ -52,7 +52,7 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
-    public void BeginDragSlider(Image circleToMove)
+    public void OnPointerDown(Image circleToMove)
     {
         circleToMove.color = Color.white;
     }
