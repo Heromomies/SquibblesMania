@@ -23,7 +23,7 @@ public class PlayerCardState : PlayerBaseState
     public override void EnterState(PlayerStateManager player)
     {
         //Turn of player x
-        //Message player turn x "Put a card on the corresponding surface"
+        
         _currentPlayer = player;
         if (player.isPlayerStun && player.stunCount > 0)
         {
@@ -236,6 +236,18 @@ public class PlayerCardState : PlayerBaseState
                 player.vfxStun.SetActive(false);
             }
 
+            player.indicatorPlayerRenderer.gameObject.SetActive(false);
+            //Switch to next player of another team to play
+            switch (player.playerNumber)
+            {
+                case 0: GameManager.Instance.ChangePlayerTurn(1); break;
+                case 1: GameManager.Instance.ChangePlayerTurn(2); break;
+                case 2: GameManager.Instance.ChangePlayerTurn(3); break;
+                case 3: GameManager.Instance.ChangePlayerTurn(0); break;
+            }
+        }
+        else
+        {
             player.indicatorPlayerRenderer.gameObject.SetActive(false);
             //Switch to next player of another team to play
             switch (player.playerNumber)

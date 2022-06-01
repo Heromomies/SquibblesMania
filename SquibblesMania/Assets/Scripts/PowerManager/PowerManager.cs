@@ -38,16 +38,5 @@ public class PowerManager : MonoBehaviour
 			case 3: powers[3].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
 		}
 	}
-
-	public void CyclePassed()
-	{
-	}
-
-	public void ChangeTurnPlayer()
-	{
-		if (NFCManager.Instance.powerActivated)
-		{
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-		}
-	}
+	
 }

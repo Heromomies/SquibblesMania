@@ -589,7 +589,6 @@ public class MirorPower : MonoBehaviour, IManagePower
 		GameManager.Instance.DetectParentBelowPlayers();
 		
 		PowerManager.Instance.ActivateDeactivatePower(3, false);
-		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
 	public void ClearPower() // Clear the power

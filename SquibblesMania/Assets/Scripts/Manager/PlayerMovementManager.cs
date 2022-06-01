@@ -210,8 +210,10 @@ public class PlayerMovementManager : MonoBehaviour
 							{
 								isPlayerPreviewPath = false;
 								currentPlayerTurn.ResetPreviewPathFinding();
+								
 								if (!hasStopMovingBloc)
 								{
+									UiManager.Instance.sliderNextTurn.interactable = false;
 									AudioManager.Instance.Play("CubeIsSelected");
 									StartMovingBloc(currentPlayerTurn);
 								}
@@ -237,6 +239,7 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				//End of the drag
 				EndMovingBloc();
+				UiManager.Instance.sliderNextTurn.interactable = true;
 				_canTouchBloc = true;
 			}
 		
@@ -290,10 +293,6 @@ public class PlayerMovementManager : MonoBehaviour
 		hasStopMovingBloc = false;
 		_blockCurrentlySelected = null;
 		blockParentCurrentlySelected = null;
-	
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-
 		_lastDirectionBloc = Vector3.zero;
 	}
 
