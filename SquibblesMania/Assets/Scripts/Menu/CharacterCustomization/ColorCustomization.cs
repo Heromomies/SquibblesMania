@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class ColorCustomization : MonoBehaviour
 {
-    [SerializeField] private Image bodycolor;
+    [SerializeField] private Image teamBodyColor;
+    [SerializeField] private Image memberOne;
+    [SerializeField] private Image memberTwo;
 
     public int colorID;
 
@@ -68,9 +70,12 @@ public class ColorCustomization : MonoBehaviour
         {
             case "colors":
                 
-              bodycolor.sprite = colors[colorID];
-                  
-            break;
+
+              teamBodyColor.sprite = colors[colorID];
+              memberOne.sprite = colors[colorID];
+              memberTwo.sprite = colors[colorID];
+
+                break;
         }
 
     }
