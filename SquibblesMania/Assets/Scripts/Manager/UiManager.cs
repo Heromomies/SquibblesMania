@@ -20,7 +20,9 @@ public class UiManager : MonoBehaviour
     [HideInInspector]
     public Slider sliderNextTurn;
 
-    [Header("WIN PANEL")] public GameObject winPanel;
+    [Header("WIN PANEL")] 
+    public float valueBeforeValidateSlider;
+    public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
     [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
@@ -50,25 +52,22 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
-    private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
-    { 
-        value  = sliderNextTurn.value;
+    public void BeginDragSlider()
+    {
         
-        if (value >= 0.95f)
-        {
-            Debug.Log("YEPA BABY");
-        }
     }
     
-    public void OnPointerUp(PointerEventData eventData)
+    public void EndDragSlider() // When we change the value of the slider
     {
-        Debug.Log("Sliding finished");  
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        {
+           NextTurn();
+        }
     }
     
     private void Start()
     {
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
-        sliderNextTurn.onValueChanged.AddListener(HandleSliderMainValueChanged);
     }
 
     public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
@@ -78,7 +77,7 @@ public class UiManager : MonoBehaviour
     }
 
 
-    public void ButtonNextTurn()
+    public void NextTurn()
     {
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
