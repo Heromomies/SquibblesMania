@@ -15,7 +15,8 @@ public class CheatCodeManager : MonoBehaviour
         {
             //Add action point and switch to action point state the current player
             GameManager.Instance.currentPlayerTurn.playerActionPoint = actionPointToAdd;
-            GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState);
+            GameManager.Instance.currentPlayerTurn.CurrentState = GameManager.Instance.currentPlayerTurn.PlayerActionPointCardState;
+            GameManager.Instance.currentPlayerTurn.CurrentState.EnterState(GameManager.Instance.currentPlayerTurn);
         }
 
 
