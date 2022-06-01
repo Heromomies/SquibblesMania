@@ -6,9 +6,11 @@ using DigitalRubyShared;
 using I2.Loc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
 {
@@ -48,16 +50,33 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
+    private void HandleSliderMainValueChanged(float value) // When we change the value of the slider
+    { 
+        value  = sliderNextTurn.value;
+        
+        if (value >= 0.95f)
+        {
+            Debug.Log("YEPA BABY");
+        }
+    }
+    
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("Sliding finished");  
+    }
+    
     private void Start()
     {
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
+        sliderNextTurn.onValueChanged.AddListener(HandleSliderMainValueChanged);
     }
 
-    public void SwitchUiForPlayer(Button buttonNextTurnPlayer)
+    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
     {
-        //sliderNextTurn = buttonNextTurnPlayer;
+        sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
     }
+
 
     public void ButtonNextTurn()
     {
