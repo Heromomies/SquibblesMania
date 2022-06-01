@@ -213,7 +213,7 @@ public class PlayerMovementManager : MonoBehaviour
 								
 								if (!hasStopMovingBloc)
 								{
-									UiManager.Instance.buttonNextTurn.interactable = false;
+									UiManager.Instance.sliderNextTurn.interactable = false;
 									AudioManager.Instance.Play("CubeIsSelected");
 									StartMovingBloc(currentPlayerTurn);
 								}
@@ -239,7 +239,7 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				//End of the drag
 				EndMovingBloc();
-				UiManager.Instance.buttonNextTurn.interactable = true;
+				UiManager.Instance.sliderNextTurn.interactable = true;
 				_canTouchBloc = true;
 			}
 		

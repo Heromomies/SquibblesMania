@@ -16,7 +16,7 @@ public class UiManager : MonoBehaviour
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     [HideInInspector]
-    public Button buttonNextTurn;
+    public Slider sliderNextTurn;
 
     [Header("WIN PANEL")] public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
@@ -55,8 +55,8 @@ public class UiManager : MonoBehaviour
 
     public void SwitchUiForPlayer(Button buttonNextTurnPlayer)
     {
-        buttonNextTurn = buttonNextTurnPlayer;
-        buttonNextTurn.gameObject.SetActive(true);
+        //sliderNextTurn = buttonNextTurnPlayer;
+        sliderNextTurn.gameObject.SetActive(true);
     }
 
     public void ButtonNextTurn()
@@ -77,7 +77,7 @@ public class UiManager : MonoBehaviour
             currentPlayer.stunCount--;
             currentPlayer.stunCount = (int)Mathf.Clamp( currentPlayer.stunCount, 0, Mathf.Infinity);
         }
-        buttonNextTurn.gameObject.SetActive(false);
+        sliderNextTurn.gameObject.SetActive(false);
         currentPlayer.canSwitch = true;
         currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
        

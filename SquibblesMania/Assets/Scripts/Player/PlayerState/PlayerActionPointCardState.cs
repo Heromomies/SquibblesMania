@@ -362,7 +362,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
         }
 
-        UiManager.Instance.buttonNextTurn.interactable = false;
+        UiManager.Instance.sliderNextTurn.interactable = false;
       
         NFCManager.Instance.displacementActivated = true;
         player.playerAnimator.SetBool("isMoving", player.walking);
@@ -434,7 +434,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         var pMovementManager = player.playerMovementManager;
         pMovementManager.ghostPlayer.SetActive(false);
-        UiManager.Instance.buttonNextTurn.interactable = true;
+        UiManager.Instance.sliderNextTurn.interactable = true;
         //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
         foreach (Transform finalBloc in player.finalPathFinding)
         {
