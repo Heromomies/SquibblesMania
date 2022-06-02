@@ -31,11 +31,20 @@ public class PowerManager : MonoBehaviour
 			EndZoneManager.Instance.PlayersIsOnEndZone();
 		}
 		switch (powerIndex)
-		{
+		{	
 			case 0: powers[0].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = true; break;
 			case 1: powers[1].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
 			case 2: powers[2].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = true; break;
 			case 3: powers[3].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
+		}
+
+		if (activePower)
+		{
+			UiManager.Instance.sliderNextTurn.interactable = false;
+		}
+		else
+		{
+			UiManager.Instance.sliderNextTurn.interactable = true;
 		}
 	}
 	
