@@ -23,7 +23,7 @@ public class TeamInventoryManager : MonoBehaviour
 	[Range(0,10)] public float radiusMin;
 	[Range(0,10)] public float radiusMax;
 	public LayerMask layerInteractable;
-	public Collider[] colliderFinished;
+	public List<GameObject> colliderFinished;
 	public ColliderStruct[] colliderStructMax;
 	
 	[System.Serializable]
@@ -91,9 +91,8 @@ public class TeamInventoryManager : MonoBehaviour
 		
 			for (int i = 0; i <  players.Count; i++)
 			{
-				var a = GetDonut(players[i].transform.position, radiusMin, radiusMax, layerInteractable);
-
-				colliderStructMax[i].Collider = a.ToArray();
+				// ReSharper disable once Unity.PreferNonAllocApi
+				
 			}
 			
 			var firstColList = new List<Collider>();
@@ -104,113 +103,84 @@ public class TeamInventoryManager : MonoBehaviour
 			
 			var finalList = new List<Collider>();
 			var finalArray = finalList.ToArray();
+
+			var cleanList = GameManager.Instance.cleanList;
 			
 			if (inventory[1].objectAcquired < inventory[0].objectAcquired) // Team 1 is before Team 2
 			{
-				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[0].Collider = Physics.OverlapSphere(players[0].transform.position, radiusMax, layerInteractable);
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[2].Collider = Physics.OverlapSphere(players[2].transform.position, radiusMax, layerInteractable);
 				
-				firstColList = firstColArray.ToList();
-				secondColList = secondColArray.ToList();
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[1].Collider = Physics.OverlapSphere(players[1].transform.position, radiusMin, layerInteractable);
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[3].Collider = Physics.OverlapSphere(players[3].transform.position, radiusMin, layerInteractable);
 
-				for (int i = 0; i < firstColList.Count; i++)
+				for (int i = 0; i < players.Count; i++)
 				{
-					if (secondColList.Contains(firstColList[i]))
+					for (int j = 0; j < colliderStructMax[i].Collider.Length; j++)
 					{
-						secondColList.Remove(firstColList[i]);
-					}
-				}
-
-				secondColArray = secondColList.ToArray();
-				finalArray = secondColArray;
-				finalList = finalArray.ToList();
-
-				for (int i = 0; i < finalList.Count; i++)
-				{
-					if (finalList[i].TryGetComponent(out Node node))
-					{
-						if (!node.isActive)
+						if (cleanList.Contains(colliderStructMax[i].Collider[j].gameObject))
 						{
-							finalList.Remove(finalList[i]);
+							cleanList.Remove(colliderStructMax[i].Collider[j].gameObject);
 						}
 					}
 				}
 				
-				finalArray = finalList.ToArray();
-				colliderFinished = finalArray;
+				colliderFinished = cleanList;
 			}
-			else if (inventory[0].objectAcquired < inventory[1].objectAcquired) // Team 2 is before Team 1
+			else if (inventory[1].objectAcquired > inventory[0].objectAcquired) // Team 2 is before Team 1
 			{
-				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[1].Collider = Physics.OverlapSphere(players[1].transform.position, radiusMax, layerInteractable);
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[3].Collider = Physics.OverlapSphere(players[3].transform.position, radiusMax, layerInteractable);
 
-				firstColList = firstColArray.ToList();
-				secondColList = secondColArray.ToList();
-				foreach (var coll in secondColList)
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[0].Collider = Physics.OverlapSphere(players[0].transform.position, radiusMin, layerInteractable);
+				// ReSharper disable once Unity.PreferNonAllocApi
+				colliderStructMax[2].Collider = Physics.OverlapSphere(players[2].transform.position, radiusMin, layerInteractable);
+				
+				for (int i = 0; i < players.Count; i++)
 				{
-					if (firstColList.Contains(coll))
+					for (int j = 0; j < colliderStructMax[i].Collider.Length; j++)
 					{
-						firstColList.Remove(coll);
-					}
-				}
-				
-				firstColArray = firstColList.ToArray();
-				finalArray = firstColArray;
-				finalList = finalArray.ToList();
-				
-				
-				for (int i = 0; i < finalList.Count; i++)
-				{
-					if (finalList[i].TryGetComponent(out Node node))
-					{
-						if (!node.isActive)
+						if (cleanList.Contains(colliderStructMax[i].Collider[j].gameObject))
 						{
-							finalList.Remove(finalList[i]);
+							cleanList.Remove(colliderStructMax[i].Collider[j].gameObject);
 						}
 					}
 				}
 				
-				finalArray = finalList.ToArray();
-				colliderFinished = finalArray;
+				colliderFinished = cleanList;
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				firstColArray = colliderStructMax[0].Collider.Concat(colliderStructMax[2].Collider).ToArray(); // Collider Team 1
-				secondColArray = colliderStructMax[1].Collider.Concat(colliderStructMax[3].Collider).ToArray(); // Collider Team 2
-				finalArray = firstColArray.Concat(secondColArray).ToArray();
-				
-				finalList = finalArray.ToList();
-				
-				for (int i = 0; i < finalList.Count; i++)
-				{
-					if (finalList[i].TryGetComponent(out Node node))
-					{
-						if (!node.isActive)
-						{
-							finalList.Remove(finalList[i]);
-						}
-					}
-				}
-
-				colliderFinished = finalList.ToArray();
+				colliderFinished = cleanList;
 			}
-			
-			var randomBloc = Random.Range(0, colliderFinished.Length);
-			var bloc = colliderFinished[randomBloc].transform;
-				
-			var blocPos = bloc.position;
 
-			Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
+			if (colliderFinished.Count > 0)
+			{
+				var randomBloc = Random.Range(0, colliderFinished.Count);
+				var bloc = colliderFinished[randomBloc].transform;
+				
+				var blocPos = bloc.position;
+
+				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
+			}
+			else
+			{
+				colliderFinished = cleanList;
+				var randomBloc = Random.Range(0, colliderFinished.Count);
+				var bloc = colliderFinished[randomBloc].transform;
+				
+				var blocPos = bloc.position;
+
+				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
+			}
 		}
-	}
-	
-	public static List<Collider> GetDonut(Vector3 pos, float innerRadius, float outerRadius, LayerMask layer)
-	{
-		List<Collider> outer = new List<Collider>(Physics.OverlapSphere(pos,outerRadius, layer));
-		Collider[] inner = Physics.OverlapSphere(pos,innerRadius, layer);
-		foreach (Collider C in inner)
-			outer.Remove(C);
-		return outer;
 	}
 	
 	private void CheckPlayerTotalItemAcquired(Inventory playerInventory)
