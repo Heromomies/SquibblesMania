@@ -133,7 +133,6 @@ public class DashPower : MonoBehaviour, IManagePower
 				
 				if (distance <= 3.5f)
 				{
-					Debug.Log("i'm here");
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
 						transformToGo + new Vector3(0,0.5f,0), dashSpeed);
 					ActiveParticle();
