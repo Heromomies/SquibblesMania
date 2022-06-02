@@ -68,7 +68,7 @@ public class Menu : MonoBehaviour
     {
         AudioManager.Instance.Play("Button");
         characterManager.SetActive(false);
-        buttonRotateUi.gameObject.SetActive(false);
+        buttonRotateUi.gameObject.SetActive(true);
         mapManager.SetActive(true);
     }
 
