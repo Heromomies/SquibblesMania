@@ -17,10 +17,12 @@ public class PowerAnimation : MonoBehaviour
     [SerializeField] private TextMeshProUGUI swapText1;
     [SerializeField] private RectTransform swapTransform2;
     [SerializeField] private TextMeshProUGUI swapText2;
+
     [Header("MIRROR POWER ANIM PARAMETERS")]
-    public GameObject mirror;
-    private RectTransform mirrorTransform1;
-    private RectTransform mirrorTransform2;
+    [SerializeField] private RectTransform mirrorTransform1;
+    [SerializeField] private TextMeshProUGUI mirrorText1;
+    [SerializeField] private RectTransform mirrorTransform2;
+    [SerializeField] private TextMeshProUGUI mirrorText2;
 
     [Header("JUMP POWER ANIM PARAMETERS")]
     [SerializeField]
@@ -38,8 +40,7 @@ public class PowerAnimation : MonoBehaviour
 
     void Start()
     {
-        mirrorTransform1 = mirror.transform.GetChild(0).GetComponent<RectTransform>();
-        mirrorTransform2 = mirror.transform.GetChild(1).GetComponent<RectTransform>();
+
         
     }
 
@@ -136,8 +137,8 @@ public class PowerAnimation : MonoBehaviour
         if (GameManager.Instance.actualCamPreset.presetNumber == 1 |
             GameManager.Instance.actualCamPreset.presetNumber == 2)
         {
-            mirror.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.blue;
-            mirror.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.red;
+            mirrorText2.color = Color.blue;
+            mirrorText1.color = Color.red;
 
             mirrorTransform1.rotation = Quaternion.Euler(0, 0, 0);
             mirrorTransform2.rotation = Quaternion.Euler(0, 0, 0);
