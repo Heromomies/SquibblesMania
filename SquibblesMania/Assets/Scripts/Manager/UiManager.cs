@@ -62,6 +62,11 @@ public class UiManager : MonoBehaviour
     public void OnPointerUp(Image circleToMove)
     {
         circleToMove.color = Color.black;
+        
+        if (sliderNextTurn.value < valueBeforeValidateSlider)
+        {
+            sliderNextTurn.value = 0f;
+        }
     }
     
     public void MoveSliderDemiCircle(Image demiCircleOnTop)
