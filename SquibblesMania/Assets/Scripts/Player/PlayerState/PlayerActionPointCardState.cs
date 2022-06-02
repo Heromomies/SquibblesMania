@@ -195,7 +195,9 @@ public class PlayerActionPointCardState : PlayerBaseState
         }
 
         pathObjects.Clear();
-
+        
+        PlayerMovementManager.Instance.isPlayerPreviewPath = false;
+        player.ResetPreviewPathFinding();
         //Switch to next player of another team to play
         switch (player.playerNumber)
         {
@@ -360,6 +362,7 @@ public class PlayerActionPointCardState : PlayerBaseState
             groupBlockDetection.playersOnGroupBlock.Remove(player.gameObject.transform);
         }
 
+        UiManager.Instance.sliderNextTurn.interactable = false;
       
         NFCManager.Instance.displacementActivated = true;
         player.playerAnimator.SetBool("isMoving", player.walking);
@@ -431,7 +434,7 @@ public class PlayerActionPointCardState : PlayerBaseState
 
         var pMovementManager = player.playerMovementManager;
         pMovementManager.ghostPlayer.SetActive(false);
-
+        UiManager.Instance.sliderNextTurn.interactable = true;
         //Foreach block in our finalpathfinding we reset the previous blocks at the end of the loop
         foreach (Transform finalBloc in player.finalPathFinding)
         {
@@ -457,10 +460,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         {
             EnterState(player);
         }
-
-        if (player.playerActionPoint <= 0)
-        {
-            UiManager.Instance.buttonNextTurn.SetActive(true);
-        }
+        
     }
 }

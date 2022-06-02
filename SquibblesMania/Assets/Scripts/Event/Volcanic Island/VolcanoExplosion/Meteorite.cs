@@ -14,22 +14,38 @@ public class Meteorite : MonoBehaviour
 	
 	public bool stopRotating;
 	private GameObject _particleFireToDelete;
-
+	private const string UntaggedString = "Untagged";
+	private const string PlatformString = "Platform";
+	
+	
 	private void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
 	}
 
-	private void Update()
+	public void ChangeTurn()
 	{
 		if (_turn != 0 && GameManager.Instance.turnCount >= _turn + lifeParticle)
 		{
-			_particleFireToDelete.GetComponentInParent<Node>().isActive = true;
+			var node = _particleFireToDelete.GetComponentInParent<Node>();
+			node.isActive = true;
 			_particleFireToDelete.gameObject.SetActive(false);
-			_particleFireToDelete.GetComponentInParent<Node>().gameObject.layer = 3;
+			node.gameObject.layer = 3;
+			if (node.colorBloc == Node.ColorBloc.None)
+			{
+				node.gameObject.tag = UntaggedString;
+			}
+			else
+			{
+				node.gameObject.tag = PlatformString;
+			}
+			
 			gameObject.SetActive(false);
 		}
-
+	}
+	
+	private void Update()
+	{
 		if (!stopRotating)
 		{
 			var rotate = Random.Range(0.5f, 3f);
@@ -61,6 +77,8 @@ public class Meteorite : MonoBehaviour
 
 			if (other.gameObject.GetComponent<Node>() != null)
 			{
+				VolcanoManager.Instance.meteorites.Add(this);
+				
 				other.gameObject.GetComponent<Node>().isActive = false;
 			
 				transform.parent = other.transform;
@@ -74,8 +92,8 @@ public class Meteorite : MonoBehaviour
 				var transformPlayer = transform.position;
 			
 				GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
-				Destroy(explosionPS, 2f);
-
+				StartCoroutine(DeactivateParticle(2f, explosionPS));
+				
 				var otherPosition = other.transform.position;
 				GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
 					new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, other.transform);
@@ -90,6 +108,12 @@ public class Meteorite : MonoBehaviour
 		}
 	}
 
+	IEnumerator DeactivateParticle(float delay, GameObject goToDeactivate)
+	{
+		yield return new WaitForSeconds(delay);
+		goToDeactivate.SetActive(false);
+	}
+	
 	IEnumerator SetActiveFalseBullet(float seconds)
 	{
 		yield return new WaitForSeconds(seconds);

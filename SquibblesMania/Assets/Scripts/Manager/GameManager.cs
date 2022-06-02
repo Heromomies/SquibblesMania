@@ -6,6 +6,7 @@ using DigitalRubyShared;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -31,12 +32,6 @@ public class GameManager : MonoBehaviour
     public int count;
     [SerializeField] 
     private float smoothTransitionTime = 0.3f;
-
-    
-    public static float durationDoShake = 1.5f;
-    public float strength;
-    public WaitForSeconds waitForSecondsShakeCoroutine = new WaitForSeconds(durationDoShake);
-    [HideInInspector] public bool canDoShake;
     
     [SerializeField] private List<CamPreSets> previousCamPreSetsList;
     [Serializable]
@@ -45,10 +40,9 @@ public class GameManager : MonoBehaviour
         public int presetNumber;
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
-        public GameObject buttonNextTurn;
+        public Slider sliderNextTurn;
     }
-
-
+    
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
     public ConditionVictory conditionVictory;
     public Volume volume;
@@ -64,16 +58,16 @@ public class GameManager : MonoBehaviour
     public List<Material> colors = new List<Material>();
     public GameObject spawnPointSpriteParent;
     public List<Color> playerColors = new List<Color>();
+    
     private void Awake()
     {
         Application.targetFrameRate = 30;
         _gameManager = this;
         volume.profile.Reset();
     }
-
-
+    
     // Start is called before the first frame update
-  private void Start()
+    private void Start()
     {
         if (MapGeneratorManager.Instance != null)
         {
@@ -131,7 +125,6 @@ public class GameManager : MonoBehaviour
 
   private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat)
   {
-      
       if (player.playerRespawnPoint.TryGetComponent(out Node playerNodeSpawnPoint))
       {
           player.playerTeam = playerTeam;
@@ -139,7 +132,6 @@ public class GameManager : MonoBehaviour
           player.indicatorPlayerRenderer.gameObject.SetActive(false);
           player.playerMesh.material = playerCustomMat;
       }
-
   }
 
   private void SetSpriteSpawnPlayerPoint(PlayerStateManager player,Node playerNodeSpawnPoint, Material playerCustomMat)
@@ -200,7 +192,7 @@ public class GameManager : MonoBehaviour
         turnCount++;
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
-        StartCoroutine(CamConfig(count));
+        CamConfig(count);
         NFCManager.Instance.PlayerChangeTurn();
     }
 
@@ -215,24 +207,10 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    IEnumerator CamConfig(int countTurn)
+    void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
-            if (canDoShake)
-            {
-                _cam.DOShakePosition(durationDoShake, strength, 90, 100);
-                _cam.DOShakeRotation(durationDoShake, strength, 90, 100);
-            
-                yield return waitForSecondsShakeCoroutine;
-            
-                canDoShake = false;
-            }
-            
-            if (actualCamPreset.presetNumber > 0)
-            {
-                actualCamPreset.buttonNextTurn.SetActive(false);
-            }
             
             actualCamPreset = camPreSets[countTurn];
 
@@ -244,7 +222,7 @@ public class GameManager : MonoBehaviour
             cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
 
             //UI SWITCH
-            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.buttonNextTurn);
+            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
             
             //Register Previous Cam View Mode
@@ -271,7 +249,7 @@ public class GameManager : MonoBehaviour
         previousCamPreSets.camRot = camEulerAngles;
         previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
         previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
-        previousCamPreSets.buttonNextTurn = camPreSets[indexCam].buttonNextTurn;
+        previousCamPreSets.sliderNextTurn = camPreSets[indexCam].sliderNextTurn;
 
         previousCamPreSetsList[indexCam] = previousCamPreSets;
         
@@ -284,8 +262,7 @@ public class GameManager : MonoBehaviour
         {
             VolcanoManager.Instance.CyclePassed();
         }
-
-        PowerManager.Instance.CyclePassed();
+        
     }
 
     public void ChangePlayerTurn(int playerNumberTurn)
@@ -302,8 +279,11 @@ public class GameManager : MonoBehaviour
                 MountainManager.Instance.ChangeCycle();
             }
             MountainManager.Instance.ChangeTurn();
+        } else if (conditionVictory.mapTheme == ConditionVictory.Theme.Volcano)
+        {
+            VolcanoManager.Instance.ChangeTurnVolcano();
         }
-
+        
         turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
@@ -315,7 +295,7 @@ public class GameManager : MonoBehaviour
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count; 
-        StartCoroutine(CamConfig(count));
+        CamConfig(count);
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();

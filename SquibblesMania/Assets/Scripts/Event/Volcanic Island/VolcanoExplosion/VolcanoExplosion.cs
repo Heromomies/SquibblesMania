@@ -1,11 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class VolcanoExplosion : MonoBehaviour, IManageEvent
 {
-	[Header("PARTICLE SYSTEM")] public GameObject particleSystemExplosion;
+	[Header("PARTICLE SYSTEM")] public ParticleSystem particleSystemExplosion;
 	[Space] public List<GameObject> cubeOnMap;
 	public List<GameObject> cubeTouched;
 	public GameObject smokeEffect;
@@ -22,6 +23,8 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	[Range(0.0f, 1.0f)] public float repeatRate;
 
 	private Animator _animVolcano;
+	private const string BlackBoxString = "BlackBlock";
+	
 	
 	[Header("CONDITIONS DANGEROUSNESS")] public Conditions[] conditionsDangerousness;
 
@@ -46,9 +49,15 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
 			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite);
-			GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
-
-			RandomEvent(placeOfCube);
+			if (cubeOnMap[placeOfCube].layer != 7)
+			{
+				GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
+				RandomEvent(placeOfCube);
+			}
+			else
+			{
+				i--;
+			}
 		}
 
 		LaunchEvent();
@@ -56,15 +65,23 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	public void LaunchEvent() // Launch the bullet's function
 	{
-		GameObject ps = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
+		var psGo = Instantiate(particleSystemExplosion.gameObject, new Vector3(volcanoTransform.position.x,
 			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);
 
-		Destroy(ps, 5f);
+		particleSystemExplosion = psGo.GetComponent<ParticleSystem>();
+		StartCoroutine(DeactivateParticle(particleSystemExplosion.time, particleSystemExplosion.gameObject));
 
 		_animVolcano.enabled = true;
 		InvokeRepeating(nameof(LaunchBullet), 0.5f, repeatRate);
 	}
 
+	IEnumerator DeactivateParticle(float delay, GameObject goToDeactivate)
+	{
+		yield return new WaitForSeconds(delay);
+		goToDeactivate.SetActive(false);
+	}
+	
+	
 	#region Highlight Cubes Who Will Be Touched
 
 	private void RandomEvent(int placeOfCube) // Change the color of the block choose by the random
@@ -94,13 +111,14 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 	void LaunchBullet() // Launch the bullets 
 	{
 		cubeTouched[0].layer = 7;
+		cubeTouched[0].tag = BlackBoxString;
 		
 		var positionVol = volcanoTransform.position;
-		Vector3 vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
+		var vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
 			speed); // Add the velocity to make an effect of parabola for the bullets
 		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
 
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
+		var obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
 		PoolManager.Instance.SpawnObjectFromPool("ParticleLavaProjection", positionVol, Quaternion.identity, bulletParent);
 		obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		obj.GetComponent<Rigidbody>().velocity = vo;

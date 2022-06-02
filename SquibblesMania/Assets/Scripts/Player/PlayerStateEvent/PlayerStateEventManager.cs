@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PlayerStateEventManager : MonoBehaviour
 {
@@ -32,5 +34,7 @@ public class PlayerStateEventManager : MonoBehaviour
         {
             ONPlayerStunTriggerEnter(player, stunCount);
         }
+        NFCController.StopPolling();
+        LightController.ShutdownAllLights();
     }
 }
