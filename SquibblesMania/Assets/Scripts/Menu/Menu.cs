@@ -13,13 +13,13 @@ public class Menu : MonoBehaviour
     public GameObject mapManager;
     public GameObject characterManager;
     public GameObject panelManager;
+    [SerializeField] private Button buttonRotateUi;
     public PlayerData playerData;
 
     public TextMeshProUGUI textToPulse;
     public RectTransform panelLaunch;
 
     public GameObject uiMenuParent;
-    // Start is called before the first frame update
 
     void Start()
     {
@@ -54,7 +54,7 @@ public class Menu : MonoBehaviour
         panelManager.transform.position = panelManager.GetComponent<PageSwiper>().panelLocation;
         mapManager.SetActive(false);
         characterManager.SetActive(true);
-      
+        buttonRotateUi.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -68,6 +68,7 @@ public class Menu : MonoBehaviour
     {
         AudioManager.Instance.Play("Button");
         characterManager.SetActive(false);
+        buttonRotateUi.gameObject.SetActive(false);
         mapManager.SetActive(true);
     }
 
