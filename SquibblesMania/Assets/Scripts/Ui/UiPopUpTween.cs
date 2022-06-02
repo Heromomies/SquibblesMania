@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class UiPopUpTween : MonoBehaviour
 {
-    [SerializeField] private RectTransform textRectTransform;
+    [SerializeField] private RectTransform uiRectTransform;
     [SerializeField] private float timeInSecondsScaleAnim = 0.3f;
     [SerializeField] private LeanTweenType scaleEaseType;
     [SerializeField] private Vector3 scaleDesired;
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if (!textRectTransform)
+        if (!uiRectTransform)
         {
-            textRectTransform = GetComponent<RectTransform>();
+            uiRectTransform = GetComponent<RectTransform>();
         }
 
         if (scaleDesired == Vector3.zero)
         {
-            scaleDesired = textRectTransform.transform.localScale;
+            scaleDesired = uiRectTransform.transform.localScale;
         }
 
        
@@ -30,7 +30,7 @@ public class UiPopUpTween : MonoBehaviour
     private void OnEnable()
     {
         SetScale(Vector3.zero);
-        LeanTween.scale(textRectTransform, scaleDesired, timeInSecondsScaleAnim).setEase(scaleEaseType);
+        LeanTween.scale(uiRectTransform, scaleDesired, timeInSecondsScaleAnim).setEase(scaleEaseType);
     }
     
     private void OnDisable()
@@ -40,6 +40,6 @@ public class UiPopUpTween : MonoBehaviour
 
     private void SetScale(Vector3 scale)
     {
-        textRectTransform.transform.localScale = scale;
+        uiRectTransform.transform.localScale = scale;
     }
 }
