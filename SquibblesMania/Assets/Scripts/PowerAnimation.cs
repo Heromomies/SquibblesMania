@@ -194,7 +194,7 @@ public class PowerAnimation : MonoBehaviour
             jumpRectTransform.rotation = Quaternion.Euler(0, 0, 0);
 
             LeanTween.move(jumpRectTransform,
-                new Vector3(-Screen.currentResolution.height / 2f, Screen.currentResolution.height / 2f, 0f), 0.3f);
+                new Vector3(-Screen.currentResolution.height / 3, Screen.currentResolution.height / 3f, 0f), 0.3f);
 
             yield return new WaitForSeconds(0.2f);
 
@@ -203,7 +203,7 @@ public class PowerAnimation : MonoBehaviour
             yield return new WaitForSeconds(0.6f);
 
             LeanTween.move(jumpRectTransform,
-                new Vector3(Screen.currentResolution.height / 2f, Screen.currentResolution.height / 2f, 0f), 0.3f);
+                new Vector3(Screen.currentResolution.height / 3, Screen.currentResolution.height / 3, 0f), 0.3f);
 
             yield return new WaitForSeconds(0.2f);
 
