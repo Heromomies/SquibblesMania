@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
@@ -18,8 +19,6 @@ public class Menu : MonoBehaviour
     public RectTransform panelLaunch;
 
     public GameObject uiMenuParent;
-
-    [SerializeField] private float timeInSecondsLeanAlpha = 0.7f;
     // Start is called before the first frame update
 
     void Start()
@@ -55,6 +54,7 @@ public class Menu : MonoBehaviour
         panelManager.transform.position = panelManager.GetComponent<PageSwiper>().panelLocation;
         mapManager.SetActive(false);
         characterManager.SetActive(true);
+      
     }
 
     // Update is called once per frame
