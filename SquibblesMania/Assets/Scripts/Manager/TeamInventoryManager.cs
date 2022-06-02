@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.Utilities;
@@ -24,6 +25,7 @@ public class TeamInventoryManager : MonoBehaviour
 	[Range(0,10)] public float radiusMax;
 	public LayerMask layerInteractable;
 	public List<GameObject> colliderFinished;
+	public List<GameObject> colliderFinishedMax;
 	public ColliderStruct[] colliderStructMax;
 	
 	[System.Serializable]
@@ -31,10 +33,7 @@ public class TeamInventoryManager : MonoBehaviour
 	{
 		public Collider[] Collider;
 	}
-	
-	[Header("Objective Display")]
-	private GameObject _lastObj;
-	
+
 	[Header("SCALE ICON IMG TRANSPORT")]
 	[SerializeField] private Vector3 scaleSizeTween = new Vector3(1.3f, 1.3f, 1.3f);
 	[SerializeField] private float timeInSecondsScaleTween = 0.5f;
@@ -45,8 +44,12 @@ public class TeamInventoryManager : MonoBehaviour
 		_teamInventoryManager = this;
 	}
 
-	private void Start()
-	 {
+	private IEnumerator Start()
+	{
+		yield return new WaitForSeconds(0.2f);
+
+		colliderFinishedMax = GameManager.Instance.cleanList;
+		
 		 inventory[0].balloonTransformParent = Instantiate(objectTransport[3], inventory[0].spawnObject.position, inventory[0].spawnObject.rotation, inventory[0].spawnObject);
 		 inventory[1].balloonTransformParent = Instantiate(objectTransport[4], inventory[1].spawnObject.position, inventory[1].spawnObject.rotation, inventory[1].spawnObject);
 	 }
@@ -88,24 +91,8 @@ public class TeamInventoryManager : MonoBehaviour
 		if (!_isFull)
 		{
 			var players = GameManager.Instance.players;
-		
-			for (int i = 0; i <  players.Count; i++)
-			{
-				// ReSharper disable once Unity.PreferNonAllocApi
-				
-			}
-			
-			var firstColList = new List<Collider>();
-			var firstColArray = firstColList.ToArray();
-		
-			var secondColList = new List<Collider>();
-			var secondColArray = firstColList.ToArray();
-			
-			var finalList = new List<Collider>();
-			var finalArray = finalList.ToArray();
+			colliderFinished = new List<GameObject>(colliderFinishedMax);
 
-			var cleanList = GameManager.Instance.cleanList;
-			
 			if (inventory[1].objectAcquired < inventory[0].objectAcquired) // Team 1 is before Team 2
 			{
 				// ReSharper disable once Unity.PreferNonAllocApi
@@ -122,14 +109,12 @@ public class TeamInventoryManager : MonoBehaviour
 				{
 					for (int j = 0; j < colliderStructMax[i].Collider.Length; j++)
 					{
-						if (cleanList.Contains(colliderStructMax[i].Collider[j].gameObject))
+						if (colliderFinished.Contains(colliderStructMax[i].Collider[j].gameObject))
 						{
-							cleanList.Remove(colliderStructMax[i].Collider[j].gameObject);
+							colliderFinished.Remove(colliderStructMax[i].Collider[j].gameObject);
 						}
 					}
 				}
-				
-				colliderFinished = cleanList;
 			}
 			else if (inventory[1].objectAcquired > inventory[0].objectAcquired) // Team 2 is before Team 1
 			{
@@ -147,18 +132,16 @@ public class TeamInventoryManager : MonoBehaviour
 				{
 					for (int j = 0; j < colliderStructMax[i].Collider.Length; j++)
 					{
-						if (cleanList.Contains(colliderStructMax[i].Collider[j].gameObject))
+						if (colliderFinished.Contains(colliderStructMax[i].Collider[j].gameObject))
 						{
-							cleanList.Remove(colliderStructMax[i].Collider[j].gameObject);
+							colliderFinished.Remove(colliderStructMax[i].Collider[j].gameObject);
 						}
 					}
 				}
-				
-				colliderFinished = cleanList;
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				colliderFinished = cleanList;
+				
 			}
 
 			if (colliderFinished.Count > 0)
@@ -167,19 +150,21 @@ public class TeamInventoryManager : MonoBehaviour
 				var bloc = colliderFinished[randomBloc].transform;
 				
 				var blocPos = bloc.position;
-
+				
 				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 			}
 			else
 			{
-				colliderFinished = cleanList;
+				colliderFinished = GameManager.Instance.cleanList;
 				var randomBloc = Random.Range(0, colliderFinished.Count);
 				var bloc = colliderFinished[randomBloc].transform;
 				
 				var blocPos = bloc.position;
-
+				
 				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 			}
+
+			colliderFinishedMax = GameManager.Instance.cleanList;
 		}
 	}
 	
