@@ -286,6 +286,7 @@ public class CameraViewModeGesture : MonoBehaviour
             Color color = img.color;
             color.a = alphaValue;
             img.color = color;
+            img.gameObject.SetActive(true);
         }
     }
 
