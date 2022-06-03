@@ -199,8 +199,8 @@ public class PlayerCardState : PlayerBaseState
         if (player.stunCount <= 0)
         {
             player.isPlayerStun = false;
-            player.vfxStun.SetActive(false);
-
+            if (player.vfxStun != null) player.vfxStun.SetActive(false);
+            
             if (GameManager.Instance.conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
             {
                 AudioManager.Instance.Play("FreezeOff");
