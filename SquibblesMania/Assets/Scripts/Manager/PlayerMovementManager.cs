@@ -14,7 +14,7 @@ public class PlayerMovementManager : MonoBehaviour
 	[Header("TOUCH SETTINGS")] public LayerMask ghostLayerMask;
 	public LayerMask blocLayerMask;
 	[Range(0.0f, 1.0f)] public float longPressureDurationSeconds;
-	
+	[SerializeField] private float minimumMovementAmount = 0.5f;
 
 	[Header("PLAYER SETTINGS")] public GameObject ghostPlayer;
 	private Vector3 _touchPos;
@@ -342,17 +342,16 @@ public class PlayerMovementManager : MonoBehaviour
 				RoundYBlocPreviewMeshPos(blocPreviewUpMesh);
 				RoundYBlocPreviewMeshPos(blocPreviewDownMesh);
 
-
-				if (Mathf.RoundToInt(blocPreviewUpMesh.transform.position.y) > GameManager.Instance.maxHeightBlocMovement + 1)
+				if (Mathf.RoundToInt(blocPreviewUpMesh.transform.position.y) > GameManager.Instance.maxHeightBlocMovement)
 				{
 					blocPreviewUpMesh.SetActive(false);
 				}
-
-				if (Mathf.RoundToInt(blocPreviewDownMesh.transform.position.y) < GameManager.Instance.minHeightBlocMovement)
+				
+				if (Mathf.RoundToInt(blocPreviewDownMesh.transform.position.y) < GameManager.Instance.minHeightBlocMovement - 1)
 				{
 					blocPreviewDownMesh.SetActive(false);
 				}
-
+				
 				_nextBlocUpMeshPos.Add(blocPreviewUpMesh.transform);
 				_nextBlocDownMeshPos.Add(blocPreviewDownMesh.transform);
 			}
@@ -426,7 +425,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
 	{
-
+		
 		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlocDetection))
 		{
 			var blocParentNewPos = blockParentCurrentlySelected.transform.position;
