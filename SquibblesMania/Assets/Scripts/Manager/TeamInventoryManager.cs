@@ -141,21 +141,22 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				
+				colliderFinished = new List<GameObject>(GameManager.Instance.cleanList);
 			}
 
+			foreach (var coll in colliderFinished)
+			{
+				if (TryGetComponent(out Node node))
+				{
+					if (!node.isActive)
+					{
+						colliderFinished.Remove(coll);
+					}
+				}
+			}
+			
 			if (colliderFinished.Count > 0)
 			{
-				var randomBloc = Random.Range(0, colliderFinished.Count);
-				var bloc = colliderFinished[randomBloc].transform;
-				
-				var blocPos = bloc.position;
-				
-				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
-			}
-			else
-			{
-				colliderFinished = GameManager.Instance.cleanList;
 				var randomBloc = Random.Range(0, colliderFinished.Count);
 				var bloc = colliderFinished[randomBloc].transform;
 				

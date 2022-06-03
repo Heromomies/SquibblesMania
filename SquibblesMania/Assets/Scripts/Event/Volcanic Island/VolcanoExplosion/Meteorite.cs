@@ -8,7 +8,7 @@ public class Meteorite : MonoBehaviour
 {
 	public float speedTurnAround;
 	public int lifeParticle;
-	
+
 	private Rigidbody _rb;
 	private int _turn;
 	
@@ -16,6 +16,7 @@ public class Meteorite : MonoBehaviour
 	private GameObject _particleFireToDelete;
 	private const string UntaggedString = "Untagged";
 	private const string PlatformString = "Platform";
+	private const float DelayDeactivate = 0.5f;
 	
 	
 	private void Start()
@@ -39,16 +40,16 @@ public class Meteorite : MonoBehaviour
 			{
 				node.gameObject.tag = PlatformString;
 			}
-			
-			gameObject.SetActive(false);
+
+			StartCoroutine(DeactivateParticle(DelayDeactivate, gameObject));
 		}
 	}
-	
+
 	private void Update()
 	{
 		if (!stopRotating)
 		{
-			var rotate = Random.Range(0.5f, 3f);
+			var rotate = Random.Range(DelayDeactivate, 3f);
 			transform.Rotate(new Vector3(rotate,rotate,rotate) * (speedTurnAround * Time.deltaTime), Space.World);
 		}
 	}
@@ -118,6 +119,6 @@ public class Meteorite : MonoBehaviour
 	{
 		yield return new WaitForSeconds(seconds);
 		gameObject.transform.position = new Vector3(1500,-1500, 1500);
-		gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		_rb.constraints = RigidbodyConstraints.FreezeAll;
 	}
 }

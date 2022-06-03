@@ -37,6 +37,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     private Camera _cam;
     [HideInInspector] public bool canClick;
     private static readonly Vector3 vectorSpawnAntenna = new Vector3(0, 1.05f, 0);
+    private const string BreakableIce = "BreakableIce";
     
     private void OnEnable()
     {
@@ -70,6 +71,16 @@ public class SnowGun : MonoBehaviour, IManageEvent
                 if (!node.isActive)
                 {
                     col.ToList().Remove(c);
+                }
+            }
+            else
+            {
+                if(c.TryGetComponent(out GameObject p))
+                {
+                    if (p.name == BreakableIce)
+                    {
+                        col.ToList().Remove(c);
+                    }
                 }
             }
         }
