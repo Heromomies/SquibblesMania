@@ -613,6 +613,11 @@ public class MirorPower : MonoBehaviour, IManagePower
 				textWhenNoZombieAreSelected[i].gameObject.SetActive(false);
 			}
 
+			if (_particleToDeactivateZombie != null)
+			{
+				_particleToDeactivateZombie.SetActive(false);
+			}
+			
 			foreach (var g in textWhenThereAreNoZombieAround)
 			{
 				g.gameObject.SetActive(false);
