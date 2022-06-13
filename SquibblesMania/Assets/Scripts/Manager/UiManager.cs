@@ -42,6 +42,9 @@ public class UiManager : MonoBehaviour
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
 
+    private static float _timWaitForSecond = 9f;
+    
+    private WaitForSeconds _waitForSecondsJingle = new WaitForSeconds(_timWaitForSecond);
 
     [Serializable]
     public struct UiPlayerStun
@@ -175,9 +178,20 @@ public class UiManager : MonoBehaviour
             }
         }
     }
+
+    IEnumerator LaunchLoopJingle()
+    {
+        yield return _waitForSecondsJingle;
+        AudioManager.Instance.Play("Endgame_Loop");
+    }
     
     public void WinSetUp(Player.PlayerTeam currentPlayerTeam)
     {
+        AudioManager.Instance.Play("Endgame_Jingle");
+        AudioManager.Instance.Stop("MainSound");
+
+        StartCoroutine(LaunchLoopJingle());
+        
         winPanel.SetActive(true);
         playersUiGlobal.SetActive(false);
         imagePanelEnd.sprite = spritesWinPanel;
