@@ -14,7 +14,6 @@ public class PlayerMovementManager : MonoBehaviour
 	[Header("TOUCH SETTINGS")] public LayerMask ghostLayerMask;
 	public LayerMask blocLayerMask;
 	[Range(0.0f, 1.0f)] public float longPressureDurationSeconds;
-	[SerializeField] private float minimumMovementAmount = 0.5f;
 
 	[Header("PLAYER SETTINGS")] public GameObject ghostPlayer;
 	private Vector3 _touchPos;
@@ -29,6 +28,7 @@ public class PlayerMovementManager : MonoBehaviour
 	[Header("BLOC SETTINGS")] [SerializeField]
 	private float movementBlocAmount = 1f;
 
+	[SerializeField] private float minimalDistanceToMoveBloc = 50f;
 	private Vector3 _blocParentCurrentlySelectedPos; 
 	[SerializeField]
 	private bool _isBlocSelected;
@@ -229,7 +229,7 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				if (_isBlocSelected && _canTouchBloc && blockParentCurrentlySelected != null)
 				{
-					_touchPos = new Vector3(gesture.VelocityX, gesture.VelocityY, 0);
+					_touchPos = new Vector3(gesture.DeltaX, gesture.DeltaY, 0);
 					BlocMovement(_touchPos);
 					_isBlocSelected = false;
 				}
@@ -445,7 +445,7 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 
 
-			if (yPos > 0.0f)
+			if (yPos > minimalDistanceToMoveBloc)
 			{
 				
 				if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
@@ -460,7 +460,7 @@ public class PlayerMovementManager : MonoBehaviour
 					EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y >= 0, direction);
 				}
 			}
-			else if (yPos < 0.0f)
+			else if (yPos < -minimalDistanceToMoveBloc)
 			{
 				if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 				{
