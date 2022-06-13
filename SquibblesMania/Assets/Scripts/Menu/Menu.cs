@@ -20,7 +20,10 @@ public class Menu : MonoBehaviour
     public RectTransform panelLaunch;
 
     public GameObject uiMenuParent;
-
+    public Image imageMenuTitle;
+    
+    [SerializeField] private float titleScaleDownTime = 0.3f;
+    
     void Start()
     {
         textToPulse.LeanAlphaTextMeshPro(0f, 1f).setFrom(1f).setLoopPingPong();
@@ -44,7 +47,7 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         startManager.SetActive(false);
         mapManager.SetActive(true);
-
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
     }
 
     public void MapPlay()
@@ -77,6 +80,8 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         mapManager.SetActive(false);
         startManager.SetActive(true);
+        
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleDownTime);
     }
 
     public void RotateStartMenuUi()
