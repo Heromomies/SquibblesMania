@@ -48,8 +48,11 @@ public class PauseMenu : MonoBehaviour
 				}
 
 			}
-			
-			LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
+
+			if (imageMenuTitle != null)
+			{
+				LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
+			}
 			
 			SetPanelPauseStateTrue();
 		}
@@ -65,7 +68,11 @@ public class PauseMenu : MonoBehaviour
 				}
 			}
 			
-			LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
+			if (imageMenuTitle != null)
+			{
+				LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
+			}
+			
 		}
 		AudioManager.Instance.Play("Button");
 	}
