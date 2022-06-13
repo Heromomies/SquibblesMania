@@ -107,7 +107,6 @@ public class PlayerCardState : PlayerBaseState
                 if (nfcTag.Data.Contains(n.ToString()))
                 {
                     AudioManager.Instance.Play("CardFalse");
-                    Camera.main.DOShakePosition(1, 0.3f);
                     ChangeColorLight(LIGHT_COLOR.COLOR_BLACK, _currentPlayer);
                 }
             }

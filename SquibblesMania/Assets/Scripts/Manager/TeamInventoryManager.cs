@@ -141,31 +141,41 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[0].objectAcquired == inventory[1].objectAcquired) // Team 2 is equal to Team 1
 			{
-				
+				colliderFinished = new List<GameObject>(GameManager.Instance.cleanList);
 			}
-
+			
 			if (colliderFinished.Count > 0)
 			{
-				var randomBloc = Random.Range(0, colliderFinished.Count);
-				var bloc = colliderFinished[randomBloc].transform;
-				
-				var blocPos = bloc.position;
-				
-				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
-			}
-			else
-			{
-				colliderFinished = GameManager.Instance.cleanList;
-				var randomBloc = Random.Range(0, colliderFinished.Count);
-				var bloc = colliderFinished[randomBloc].transform;
-				
-				var blocPos = bloc.position;
-				
-				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
+				for (int i = 0; i < colliderFinished.Count; i++)
+				{
+					if (!colliderFinished[i].GetComponent<Node>().isActive)
+					{
+						colliderFinished.Remove(colliderFinished[i]);
+						
+						Debug.Log(colliderFinished.Count + " : for and Time : " + Time.frameCount);
+					}
+				}
+
+				StartCoroutine(SpawnObject());
 			}
 
 			colliderFinishedMax = GameManager.Instance.cleanList;
 		}
+	}
+
+	IEnumerator SpawnObject()
+	{
+		yield return new WaitForSeconds(0.2f);
+		
+		var randomBloc = Random.Range(0, colliderFinished.Count);
+		Debug.Log(colliderFinished.Count + " : end and Time : " + Time.frameCount);
+		var bloc = colliderFinished[randomBloc].transform;
+				
+		Debug.Log(colliderFinished[randomBloc].name);
+				
+		var blocPos = bloc.position;
+				
+		Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 	}
 	
 	private void CheckPlayerTotalItemAcquired(Inventory playerInventory)

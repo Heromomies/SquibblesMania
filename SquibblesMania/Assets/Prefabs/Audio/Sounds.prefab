@@ -816,6 +816,57 @@ MonoBehaviour:
   loop: 1
   canPlay: 1
   isEffect: 1
+--- !u!1 &2927225864989890641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7017690212134357018}
+  - component: {fileID: 6487889878686566968}
+  m_Layer: 0
+  m_Name: BGM_Endgame_Loop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7017690212134357018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927225864989890641}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 34
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6487889878686566968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927225864989890641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: Endgame_Loop
+  clip: {fileID: 8300000, guid: 02db01a261a4af843986b2036901ead1, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 1
+  canPlay: 1
+  isEffect: 1
 --- !u!1 &3006303674451224331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1335,6 +1386,8 @@ Transform:
   - {fileID: 5440920228598155997}
   - {fileID: 395601378647197199}
   - {fileID: 4849383458511389489}
+  - {fileID: 5730254747982644783}
+  - {fileID: 7017690212134357018}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1741,6 +1794,57 @@ MonoBehaviour:
   soundName: Snow
   clip: {fileID: 8300000, guid: b6bbabf0b1c937f488bf5f4a39ed1c81, type: 3}
   volume: 0.5
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &6689385914671673418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5730254747982644783}
+  - component: {fileID: 3560740893349490557}
+  m_Layer: 0
+  m_Name: BGM_Endgame_Jingle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5730254747982644783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689385914671673418}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 33
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3560740893349490557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689385914671673418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: Endgame_Jingle
+  clip: {fileID: 8300000, guid: d9089376a8266d54c9023c099a67f801, type: 3}
+  volume: 1
   pitch: 1
   source: {fileID: 0}
   loop: 0
