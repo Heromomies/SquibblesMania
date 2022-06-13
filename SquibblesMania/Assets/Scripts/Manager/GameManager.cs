@@ -291,11 +291,11 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn.currentCardEffect = null;
         }
         
-        
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count; 
         CamConfig(count);
+       
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
