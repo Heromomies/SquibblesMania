@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +22,12 @@ public class PauseMenu : MonoBehaviour
     private LeanTweenType easeTypePausePanel;
 
     [SerializeField] private float animPanelPauseMoveUITimeInSeconds = 0.3f;
+    
+    public Image imageMenuTitle;
+    
+    [SerializeField] private float titleScaleDownTime = 0.3f;
+    [SerializeField] private float titleScaleUpTime = 0.6f;
+    
     private void Start()
     {
 	    _panelPauseAnchorPos = panelPause.anchoredPosition;
@@ -41,7 +48,9 @@ public class PauseMenu : MonoBehaviour
 				}
 
 			}
-
+			
+			LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
+			
 			SetPanelPauseStateTrue();
 		}
 		else
@@ -55,6 +64,8 @@ public class PauseMenu : MonoBehaviour
 					depthOfField.active = false;
 				}
 			}
+			
+			LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
 		}
 		AudioManager.Instance.Play("Button");
 	}
