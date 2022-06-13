@@ -229,7 +229,7 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				if (_isBlocSelected && _canTouchBloc && blockParentCurrentlySelected != null)
 				{
-					_touchPos = new Vector3(gesture.DeltaX, gesture.DeltaY, 0);
+					_touchPos = new Vector3(gesture.VelocityX, gesture.VelocityY, 0);
 					BlocMovement(_touchPos);
 					_isBlocSelected = false;
 				}
@@ -285,7 +285,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void EndMovingBloc()
 	{
-		
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
@@ -408,7 +407,6 @@ public class PlayerMovementManager : MonoBehaviour
 	private void BlocMovement(Vector3 touchPos)
 	{
 		var direction = touchPos.normalized;
-		
 		if (_isBlocSelected)
 		{
 			StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
@@ -425,7 +423,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
 	{
-		
+		Debug.Log(yPos);
 		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlocDetection))
 		{
 			var blocParentNewPos = blockParentCurrentlySelected.transform.position;
@@ -464,7 +462,6 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 			else if (yPos < 0.0f)
 			{
-			
 				if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 				{
 					AudioManager.Instance.Play("CardFalse");

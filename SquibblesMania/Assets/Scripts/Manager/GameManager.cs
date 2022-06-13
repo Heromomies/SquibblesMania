@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         
         for (int i = 0; i < allBlocParents.Count; i++)
         {
-            int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
+            var randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocParents[i].transform.position = new Vector3(allBlocParents[i].transform.position.x, randomLocation, allBlocParents[i].transform.position.z);
         }
         
@@ -299,7 +299,7 @@ public class GameManager : MonoBehaviour
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
-
+        Debug.Log(currentPlayerTurn);
         NFCManager.Instance.PlayerChangeTurn();
 
         if (UiManager.Instance.textActionPointPopUp)
