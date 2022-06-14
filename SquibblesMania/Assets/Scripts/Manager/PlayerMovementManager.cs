@@ -423,7 +423,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
 	{
-		Debug.Log(yPos);
+		
 		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlocDetection))
 		{
 			var blocParentNewPos = blockParentCurrentlySelected.transform.position;
