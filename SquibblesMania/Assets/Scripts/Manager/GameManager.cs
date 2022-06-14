@@ -206,12 +206,10 @@ public class GameManager : MonoBehaviour
     {
         if (currentPlayerTurn.canSwitch)
         {
-            Debug.Log(actualCamPreset.camRot+  " old cam preset");
             actualCamPreset = camPreSets[countTurn];
            
             var cameraTransform = _cam.transform;
-           
-            Debug.Log(actualCamPreset.camRot+ " new cam preset");
+            
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
             cameraTransform.DORotate(actualCamPreset.camRot, smoothTransitionTime);
