@@ -66,14 +66,9 @@ public class GameManager : MonoBehaviour
         volume.profile.Reset();
     }
     
-    // Start is called before the first frame update
     private void Start()
     {
-        if (MapGeneratorManager.Instance != null)
-        {
-            MapGeneratorManager.Instance.SetupMap();
-        }
-        
+        if (MapGeneratorManager.Instance != null) MapGeneratorManager.Instance.SetupMap();
         for (int i = 0; i < allBlocParents.Count; i++)
         {
             var randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);

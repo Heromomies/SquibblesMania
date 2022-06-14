@@ -35,8 +35,12 @@ public class CameraButtonManager : MonoBehaviour
     {
         _cameraManager = this;
         _orbitCam = -Vector3.forward * radius;
-        CamRotation(Vector3.up, _orbitCam, transform.eulerAngles);
+        if (target!= null)
+        {
+            CamRotation(Vector3.up, _orbitCam, transform.eulerAngles);
+        }
     }
+      
 
     public void TogglePressed(bool value)
     {
