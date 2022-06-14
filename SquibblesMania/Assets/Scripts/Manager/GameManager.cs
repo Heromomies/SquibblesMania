@@ -214,8 +214,8 @@ public class GameManager : MonoBehaviour
             
             actualCamPreset = camPreSets[countTurn];
 
-            Transform cameraTransform = _cam.transform;
-            Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
+            var cameraTransform = _cam.transform;
+            var target = Quaternion.Euler(actualCamPreset.camRot);
 
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
@@ -241,10 +241,10 @@ public class GameManager : MonoBehaviour
 
     private void SavePreviousCamRotY(int indexCam)
     {
-        Vector3 camEulerAngles = _cam.transform.eulerAngles;
-        Vector3 camPos = _cam.transform.position;
+        var camEulerAngles = _cam.transform.eulerAngles;
+        var camPos = _cam.transform.position;
         
-        CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
+        var previousCamPreSets = previousCamPreSetsList[indexCam];
 
         previousCamPreSets.camRot = camEulerAngles;
         previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
