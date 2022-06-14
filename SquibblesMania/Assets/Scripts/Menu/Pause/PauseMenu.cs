@@ -27,9 +27,12 @@ public class PauseMenu : MonoBehaviour
     
     [SerializeField] private float titleScaleDownTime = 0.3f;
     [SerializeField] private float titleScaleUpTime = 0.6f;
+
+    private Menu _menu;
     
     private void Start()
     {
+	    _menu = GetComponent<Menu>();
 	    _panelPauseAnchorPos = panelPause.anchoredPosition;
     }
 
@@ -67,12 +70,21 @@ public class PauseMenu : MonoBehaviour
 					depthOfField.active = false;
 				}
 			}
-			
-			if (imageMenuTitle != null)
+
+			if (_menu != null)
 			{
-				LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
+				if (imageMenuTitle != null && !_menu.characterManager.activeSelf && !_menu.mapManager.activeSelf)
+				{
+					LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
+				}
 			}
-			
+			else
+			{
+				if (imageMenuTitle != null)
+				{
+					LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
+				}
+			}
 		}
 		AudioManager.Instance.Play("Button");
 	}

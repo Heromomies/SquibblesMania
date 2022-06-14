@@ -151,11 +151,25 @@ public class TeamInventoryManager : MonoBehaviour
 					if (!colliderFinished[i].GetComponent<Node>().isActive)
 					{
 						colliderFinished.Remove(colliderFinished[i]);
-						
-						Debug.Log(colliderFinished.Count + " : for and Time : " + Time.frameCount);
 					}
 				}
 
+				StartCoroutine(SpawnObject());
+			}
+			else
+			{
+				colliderFinished =  new List<GameObject>(colliderFinishedMax);
+				
+				for (int i = 0; i < colliderFinished.Count; i++)
+				{
+					if (!colliderFinished[i].GetComponent<Node>().isActive)
+					{
+						colliderFinished.Remove(colliderFinished[i]);
+					}
+				}
+
+				Debug.Log("zdçkozkdo");
+				
 				StartCoroutine(SpawnObject());
 			}
 

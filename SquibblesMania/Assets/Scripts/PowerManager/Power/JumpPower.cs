@@ -96,6 +96,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 				
 				_trailParticle = PoolManager.Instance.SpawnObjectFromPool("ParticleTrailJump", _objectToMove.position + new Vector3(0,-0.75f,0), Quaternion.identity, _objectToMove);
 
+				AudioManager.Instance.Play("PowerJumpEnd");
+				
 				BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
