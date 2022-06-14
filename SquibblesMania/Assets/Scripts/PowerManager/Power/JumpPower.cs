@@ -25,7 +25,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	public List<Collider> collidersFinished = new List<Collider>();
 
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
-	private GameObject _particleImpact, _particleImpulse, _trailParticle;
+	private GameObject _particleImpact, _particleImpulse, _trailParticle, _particleOnPutCard;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
@@ -79,7 +79,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 				_objectToGo = hitInfo.transform;
 				_canLook = true;
 
-				var posHitInfo = hitInfo.transform.position;
+				var posHitInfo = hitInfo.transform.position + new Vector3(0,0.5f,0); 
 
 				var playerPos = tCurrentPlayerTurn.position;
 				
@@ -102,17 +102,23 @@ public class JumpPower : MonoBehaviour, IManagePower
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
 
+				if (_particleOnPutCard != null)
+				{
+					_particleOnPutCard.SetActive(false);
+					_particleOnPutCard = null;
+				}
+				
 				if (Physics.Raycast(hitInfo.transform.position, Vector3.down, out var hitInfoTwo, Mathf.Infinity))
 				{
 					player.currentBlocPlayerOn = hitInfoTwo.transform;
+					player.gameObject.layer = 0;
 					if (hitInfoTwo.collider.CompareTag("Platform"))
 					{
-						player.gameObject.layer = 0;
-						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
+						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform, true));
 					}
 					else
 					{
-						ClearPower();
+						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform, false));
 					}
 				}
 			}
@@ -134,7 +140,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 	}
 	
-	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
+	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform, bool onPlatform)
 	{
 		yield return new WaitForSeconds(0.5f);
 		
@@ -149,15 +155,18 @@ public class JumpPower : MonoBehaviour, IManagePower
 		
 		if(_trailParticle != null)
 			_trailParticle.SetActive(false);
-		
-		var hitPosition = hitInfoTransform.position;
-		
-		if (hitPosition.y - 1 >= GameManager.Instance.minHeightBlocMovement)
+
+		if (onPlatform)
 		{
-			hitInfoTransform.DOMove(new Vector3(hitPosition.x,
-				hitPosition.y -1, hitPosition.z), speedBloc);
-		}
+			var hitPosition = hitInfoTransform.position;
 		
+			if (hitPosition.y - 1 >= GameManager.Instance.minHeightBlocMovement)
+			{
+				hitInfoTransform.DOMove(new Vector3(hitPosition.x,
+					hitPosition.y -1, hitPosition.z), speedBloc);
+			}
+		}
+
 		ClearPower();
 	}
 
@@ -167,6 +176,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = tPosPower;
 
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerJump", tPosPower + new Vector3(0,-0.45f,0), Quaternion.Euler(-90f,0,0), null);
+		
 		// ReSharper disable once Unity.PreferNonAllocApi
 		collidersMin = Physics.OverlapSphere(tPosPower, radiusMin, layerInteractable); // Detect bloc around the object
 		// ReSharper disable once Unity.PreferNonAllocApi
@@ -220,6 +231,12 @@ public class JumpPower : MonoBehaviour, IManagePower
 		for ( int i = 0; i < collidersMin.Length; i++)
 		{
 			collidersMin[i] = null;
+		}
+
+		if (_particleOnPutCard != null)
+		{
+			_particleOnPutCard.SetActive(false);
+			_particleOnPutCard = null;
 		}
 		
 		collidersFinished.Clear();

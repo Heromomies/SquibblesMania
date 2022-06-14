@@ -182,11 +182,8 @@ public class TeamInventoryManager : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 		
 		var randomBloc = Random.Range(0, colliderFinished.Count);
-		Debug.Log(colliderFinished.Count + " : end and Time : " + Time.frameCount);
 		var bloc = colliderFinished[randomBloc].transform;
-				
-		Debug.Log(colliderFinished[randomBloc].name);
-				
+		
 		var blocPos = bloc.position;
 				
 		Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
