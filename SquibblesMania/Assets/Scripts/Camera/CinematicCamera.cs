@@ -10,18 +10,19 @@ public class CinematicCamera : MonoBehaviour
     public CinematicBars cinematicbars;
     public List<GameObject> objectsToDeactivate;
     public float speedCam;
-    public GameObject parentCinematic;
+    public float radius = 10f;
     
-    private static float _timeCinematic = 5f;
-    private WaitForSeconds _timeBeforeStopCinematic = new WaitForSeconds(_timeCinematic);
+    [Header("CINEMATIC SETTINGS")]
+    public GameObject parentCinematic;
+    public float timeCinematic;
+    
     private CameraButtonManager _cameraButtonManager;
     private CameraViewModeGesture _cameraViewModeGesture;
     private Vector3 _orbitCam;
-    public float radius = 10f;
     
     private IEnumerator Start()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         _cameraButtonManager = GetComponent<CameraButtonManager>();
         _cameraViewModeGesture = GetComponent<CameraViewModeGesture>();
 
@@ -69,7 +70,7 @@ public class CinematicCamera : MonoBehaviour
         StartCoroutine(cinematicbars.ShowBar());
         _cinematic = true;
 
-        yield return _timeBeforeStopCinematic;
+        yield return new WaitForSeconds(timeCinematic);
 
         _cameraButtonManager.enabled = true;
         _cameraViewModeGesture.enabled = true;
