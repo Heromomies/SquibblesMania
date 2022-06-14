@@ -14,15 +14,28 @@ public class CinematicCamera : MonoBehaviour
     
     [Header("CINEMATIC SETTINGS")]
     public GameObject parentCinematic;
-    public float timeCinematic;
+    
+    
+    private static float timeCinematicInSeconds = 5f;
+    private WaitForSeconds cinematicDurationWaitForSeconds = new WaitForSeconds(timeCinematicInSeconds);
     
     private CameraButtonManager _cameraButtonManager;
     private CameraViewModeGesture _cameraViewModeGesture;
     private Vector3 _orbitCam;
+
     
-    private IEnumerator Start()
+    private static float cinematicDelayInSeconds = 0.2f;
+    private WaitForSeconds cinematicDelayWaitForSeconds = new WaitForSeconds(cinematicDelayInSeconds);
+    private void Awake()
     {
-        yield return new WaitForSeconds(0.2f);
+        _cinematic = this;
+        StartCoroutine(StartCinematicCoroutine());
+    }
+    
+    
+    private IEnumerator StartCinematicCoroutine()
+    {
+        yield return cinematicDelayWaitForSeconds;
         _cameraButtonManager = GetComponent<CameraButtonManager>();
         _cameraViewModeGesture = GetComponent<CameraViewModeGesture>();
 
@@ -34,8 +47,7 @@ public class CinematicCamera : MonoBehaviour
         StartCoroutine(CameraMovement());
     }
 
-
-    // Update is called once per frame
+    
     void Update()
     {
         if(_cinematic)
@@ -70,7 +82,7 @@ public class CinematicCamera : MonoBehaviour
         StartCoroutine(cinematicbars.ShowBar());
         _cinematic = true;
 
-        yield return new WaitForSeconds(timeCinematic);
+        yield return cinematicDurationWaitForSeconds;
 
         _cameraButtonManager.enabled = true;
         _cameraViewModeGesture.enabled = true;
@@ -85,6 +97,6 @@ public class CinematicCamera : MonoBehaviour
         StartCoroutine(cinematicbars.HideBar());
         _cinematic = false;
         parentCinematic.SetActive(false);
-        //transform.LookAt(CameraButtonManager.Instance.target);
+       
     }
 }
