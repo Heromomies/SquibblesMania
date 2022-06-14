@@ -130,4 +130,8 @@ public class PauseMenu : MonoBehaviour
     {
 	    LeanTween.scale(uiGameObject, Vector3.one, animScaleUITimeInSeconds);
     }
+    public void PlayButtonSound()
+    {
+	    AudioManager.Instance.Play("Button");
+    }
 }

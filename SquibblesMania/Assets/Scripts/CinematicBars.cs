@@ -6,10 +6,13 @@ using TMPro;
 
 public class CinematicBars : MonoBehaviour
 {
-    // Start is called before the first frame update
+  
     private RectTransform _topBar, _bottomBar;
     public TextMeshProUGUI mapTitle;
 
+
+    private static float waitTimerShowBar = 0.5f;
+    private WaitForSeconds _waitForSecondsShowBar = new WaitForSeconds(waitTimerShowBar);
     public void Start()
     {
         _topBar = transform.GetChild(0).GetComponent<RectTransform>();
@@ -18,12 +21,10 @@ public class CinematicBars : MonoBehaviour
 
     public IEnumerator ShowBar()
     {
-        var t = 0;
-        
         LeanTween.move(_topBar, new Vector3(0f, 645f, 0f), 0.2f);
         LeanTween.move(_bottomBar, new Vector3(0f, -645f, 0f), 0.2f);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return _waitForSecondsShowBar;
 
         mapTitle.gameObject.SetActive(true);
         mapTitle.LeanAlphaTextMeshPro(1f, 1f).setFrom(0f);

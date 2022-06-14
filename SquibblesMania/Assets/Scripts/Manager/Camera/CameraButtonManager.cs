@@ -73,9 +73,10 @@ public class CameraButtonManager : MonoBehaviour
 
     public void StartRotateCam(float rotateAmount)
     {
-        AudioManager.Instance.Play("Button");
         targetAngle = rotateAmount;
     }
+
+    
 
     public void SetUpUiCamPreset()
     {
