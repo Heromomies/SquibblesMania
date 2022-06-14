@@ -206,15 +206,13 @@ public class GameManager : MonoBehaviour
     {
         if (currentPlayerTurn.canSwitch)
         {
-            
             actualCamPreset = camPreSets[countTurn];
-
+           
             var cameraTransform = _cam.transform;
-            var target = Quaternion.Euler(actualCamPreset.camRot);
-
+            
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
-            cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
+            cameraTransform.DORotate(actualCamPreset.camRot, smoothTransitionTime);
 
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
@@ -288,9 +286,8 @@ public class GameManager : MonoBehaviour
         
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
-        count = (count + 1) % camPreSets.Count; 
+        count = (count + 1) % camPreSets.Count;
         CamConfig(count);
-       
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();

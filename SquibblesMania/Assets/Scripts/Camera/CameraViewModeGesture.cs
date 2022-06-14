@@ -204,8 +204,7 @@ public class CameraViewModeGesture : MonoBehaviour
     public void SetUpCameraViewMode(bool isFirstTurn, int index)
     {
         var actualCamPresetNumber = GameManager.Instance.actualCamPreset.presetNumber;
-        Debug.Log("Count turn " + index);
-      
+
         if (isFirstTurn)
         {
             if (actualCamPresetNumber <= 2)
@@ -220,7 +219,6 @@ public class CameraViewModeGesture : MonoBehaviour
         }
         else
         {
-            Debug.Log("Last index ui circle selection " +savedCamViewModeGestures[index].lastIndexUiCircleSelection);
             if (actualCamPresetNumber <= 2)
             {
                 SetObjectStateUiViewModeItem(uiViewModeList[0], savedCamViewModeGestures[index].lastIndexUiCircleSelection);
