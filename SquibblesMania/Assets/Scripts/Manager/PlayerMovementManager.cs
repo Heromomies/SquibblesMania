@@ -14,7 +14,6 @@ public class PlayerMovementManager : MonoBehaviour
 	[Header("TOUCH SETTINGS")] public LayerMask ghostLayerMask;
 	public LayerMask blocLayerMask;
 	[Range(0.0f, 1.0f)] public float longPressureDurationSeconds;
-	
 
 	[Header("PLAYER SETTINGS")] public GameObject ghostPlayer;
 	private Vector3 _touchPos;
@@ -29,7 +28,9 @@ public class PlayerMovementManager : MonoBehaviour
 	[Header("BLOC SETTINGS")] [SerializeField]
 	private float movementBlocAmount = 1f;
 
+	[SerializeField] private float minimalDistanceToMoveBloc = 50f;
 	private Vector3 _blocParentCurrentlySelectedPos; 
+	[SerializeField]
 	private bool _isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
@@ -183,7 +184,7 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		PlayerStateManager currentPlayerTurn = GameManager.Instance.currentPlayerTurn;
 		
-		if (currentPlayerTurn.playerActionPoint > 0 && !currentPlayerTurn.walking)
+		if (currentPlayerTurn.playerActionPoint >= 0 && !currentPlayerTurn.walking)
 		{
 			if (gesture.State == GestureRecognizerState.Began)
 			{
@@ -209,8 +210,10 @@ public class PlayerMovementManager : MonoBehaviour
 							{
 								isPlayerPreviewPath = false;
 								currentPlayerTurn.ResetPreviewPathFinding();
+								
 								if (!hasStopMovingBloc)
 								{
+									UiManager.Instance.sliderNextTurn.interactable = false;
 									AudioManager.Instance.Play("CubeIsSelected");
 									StartMovingBloc(currentPlayerTurn);
 								}
@@ -236,8 +239,10 @@ public class PlayerMovementManager : MonoBehaviour
 			{
 				//End of the drag
 				EndMovingBloc();
+				UiManager.Instance.sliderNextTurn.interactable = true;
 				_canTouchBloc = true;
 			}
+		
 		}
 	}
 
@@ -280,7 +285,6 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void EndMovingBloc()
 	{
-		GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
@@ -288,10 +292,6 @@ public class PlayerMovementManager : MonoBehaviour
 		hasStopMovingBloc = false;
 		_blockCurrentlySelected = null;
 		blockParentCurrentlySelected = null;
-
-		if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0)
-			UiManager.Instance.buttonNextTurn.SetActive(true);
-
 		_lastDirectionBloc = Vector3.zero;
 	}
 
@@ -341,17 +341,16 @@ public class PlayerMovementManager : MonoBehaviour
 				RoundYBlocPreviewMeshPos(blocPreviewUpMesh);
 				RoundYBlocPreviewMeshPos(blocPreviewDownMesh);
 
-
-				if (Mathf.RoundToInt(blocPreviewUpMesh.transform.position.y) > GameManager.Instance.maxHeightBlocMovement + 1)
+				if (Mathf.RoundToInt(blocPreviewUpMesh.transform.position.y) > GameManager.Instance.maxHeightBlocMovement)
 				{
 					blocPreviewUpMesh.SetActive(false);
 				}
-
-				if (Mathf.RoundToInt(blocPreviewDownMesh.transform.position.y) < GameManager.Instance.minHeightBlocMovement)
+				
+				if (Mathf.RoundToInt(blocPreviewDownMesh.transform.position.y) < GameManager.Instance.minHeightBlocMovement - 1)
 				{
 					blocPreviewDownMesh.SetActive(false);
 				}
-
+				
 				_nextBlocUpMeshPos.Add(blocPreviewUpMesh.transform);
 				_nextBlocDownMeshPos.Add(blocPreviewDownMesh.transform);
 			}
@@ -408,7 +407,6 @@ public class PlayerMovementManager : MonoBehaviour
 	private void BlocMovement(Vector3 touchPos)
 	{
 		var direction = touchPos.normalized;
-
 		if (_isBlocSelected)
 		{
 			StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
@@ -425,7 +423,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
 	{
-
+		Debug.Log(yPos);
 		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlocDetection))
 		{
 			var blocParentNewPos = blockParentCurrentlySelected.transform.position;
@@ -447,8 +445,9 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 
 
-			if (yPos > 0.0f)
+			if (yPos > minimalDistanceToMoveBloc)
 			{
+				
 				if (blocParentNewPos.y - GameManager.Instance.maxHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y > 0.0f)
 				{
 					AudioManager.Instance.Play("CardFalse");
@@ -461,7 +460,7 @@ public class PlayerMovementManager : MonoBehaviour
 					EndMoveBloc(blocParentNewPos.y - _blocParentCurrentlySelectedPos.y >= 0, direction);
 				}
 			}
-			else if (yPos < 0.0f)
+			else if (yPos < -minimalDistanceToMoveBloc)
 			{
 				if (blocParentNewPos.y - GameManager.Instance.minHeightBlocMovement == 0 || UiManager.Instance.totalCurrentActionPoint == 0 && _lastDirectionBloc.y < 0.0f)
 				{
@@ -479,8 +478,12 @@ public class PlayerMovementManager : MonoBehaviour
 			yield return _timeInSecondsBetweenBlocMovement;
 			ResetPreviewPathObjects();
 			_touchPos = Vector3.zero;
-			_isBlocSelected = true;
 			hasStopMovingBloc = false;
+			_isBlocSelected = true;
+			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && !blockParentCurrentlySelected)
+			{
+				EndMovingBloc();
+			}
 			GameManager.Instance.PlayerMoving();
 		}
 		
@@ -513,8 +516,12 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		switch (isPlayerUseActionPoint)
 		{
-			case true: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--); break;
-			case false: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint++); break;
+			case true: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint--);
+				GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+				break;
+			case false: UpdateActionPointTextPopUp(UiManager.Instance.totalCurrentActionPoint++); 
+				GameManager.Instance.currentPlayerTurn.playerActionPoint = UiManager.Instance.totalCurrentActionPoint;
+				break;
 		}
 		
 		if (!hasStopMovingBloc && blockParentCurrentlySelected != null)

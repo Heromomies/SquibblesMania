@@ -55,8 +55,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 			_particleImpulse.SetActive(false);
 			_particleImpulse = null;
 		}
-		
-		
+
 		DisplayPower();
 	}
 
@@ -79,9 +78,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 				_objectToMove = tCurrentPlayerTurn;
 				_objectToGo = hitInfo.transform;
 				_canLook = true;
-				
-				player.gameObject.layer = 0;
-				
+
 				var posHitInfo = hitInfo.transform.position;
 
 				var playerPos = tCurrentPlayerTurn.position;
@@ -97,8 +94,10 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
-				
 				_trailParticle = PoolManager.Instance.SpawnObjectFromPool("ParticleTrailJump", _objectToMove.position + new Vector3(0,-0.75f,0), Quaternion.identity, _objectToMove);
+
+				AudioManager.Instance.Play("PowerJumpEnd");
+				
 				BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
@@ -108,6 +107,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 					player.currentBlocPlayerOn = hitInfoTwo.transform;
 					if (hitInfoTwo.collider.CompareTag("Platform"))
 					{
+						player.gameObject.layer = 0;
 						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
 					}
 					else
@@ -139,16 +139,16 @@ public class JumpPower : MonoBehaviour, IManagePower
 		yield return new WaitForSeconds(0.5f);
 		
 		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
-
-		yield return new WaitForSeconds(1f);
-
 		_canLook = false;
 		
+		yield return new WaitForSeconds(1f);
+
 		AudioManager.Instance.Play("PowerJumpEnd");
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 		
-		_trailParticle.SetActive(false);
+		if(_trailParticle != null)
+			_trailParticle.SetActive(false);
 		
 		var hitPosition = hitInfoTransform.position;
 		
@@ -229,6 +229,5 @@ public class JumpPower : MonoBehaviour, IManagePower
 		GameManager.Instance.PlayerMoving();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
-		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

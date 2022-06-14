@@ -62,10 +62,8 @@ public class MountainManager : MonoBehaviour
 		    }
 	    }
     }
-
-
-    // Start is called before the first frame update
-    public void ChangeCycle()
+    
+    public void ChangeCycle() // Change a cycle
     {
 	    var boo = AreSnowGunsInactive();
 
@@ -78,10 +76,13 @@ public class MountainManager : MonoBehaviour
 	    
 		    var randomNumber = Random.Range(0, snowGuns.Count);
 		    snowGuns[randomNumber].SetActive(true);
+		    
+		    AudioManager.Instance.Play("CanonOpen");
 	    }
     }
 
-    bool AreSnowGunsInactive(){
+    bool AreSnowGunsInactive() // Check if one of the snow guns are active, if yes, don't spawn one
+    {
 	    foreach(var snow in snowGuns) {
 		    if(snow.activeSelf) {
 			    return false;
@@ -90,7 +91,7 @@ public class MountainManager : MonoBehaviour
 	    return true;
     }
     
-    public void ChangeTurn()
+    public void ChangeTurn() // Every time we change a turn
     {
 	    foreach (var p in powdersBlocs)
 	    {
@@ -113,7 +114,7 @@ public class MountainManager : MonoBehaviour
 	    RandomActivateSnow();
     }
 
-    void RandomActivateWind()
+    void RandomActivateWind() // Random function to activate wind
     {
 	    if (!wind.gameObject.activeSelf)
 	    {
@@ -122,10 +123,14 @@ public class MountainManager : MonoBehaviour
 		    {
 			    wind.gameObject.SetActive(true);
 		    }
-	    }   
+	    }
+	    else
+	    {
+		    wind.LaunchEvent();
+	    }
     }
     
-    void RandomActivateSnow()
+    void RandomActivateSnow() // Random function to activate snow
     {
 	    if (!snow.activeSelf)
 	    {

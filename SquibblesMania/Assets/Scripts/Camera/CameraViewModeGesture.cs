@@ -203,7 +203,9 @@ public class CameraViewModeGesture : MonoBehaviour
     /// </summary>
     public void SetUpCameraViewMode(bool isFirstTurn, int index)
     {
-        int actualCamPresetNumber = GameManager.Instance.actualCamPreset.presetNumber;
+        var actualCamPresetNumber = GameManager.Instance.actualCamPreset.presetNumber;
+        Debug.Log("Count turn " + index);
+      
         if (isFirstTurn)
         {
             if (actualCamPresetNumber <= 2)
@@ -218,6 +220,7 @@ public class CameraViewModeGesture : MonoBehaviour
         }
         else
         {
+            Debug.Log("Last index ui circle selection " +savedCamViewModeGestures[index].lastIndexUiCircleSelection);
             if (actualCamPresetNumber <= 2)
             {
                 SetObjectStateUiViewModeItem(uiViewModeList[0], savedCamViewModeGestures[index].lastIndexUiCircleSelection);
@@ -286,6 +289,7 @@ public class CameraViewModeGesture : MonoBehaviour
             Color color = img.color;
             color.a = alphaValue;
             img.color = color;
+            img.gameObject.SetActive(true);
         }
     }
 

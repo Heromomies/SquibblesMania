@@ -11,11 +11,19 @@ public class VolcanoManager : MonoBehaviour
 {
 	[Space] [Header("EVENTS")] public List<GameObject> events;
 
+	public List<Meteorite> meteorites;
+	
 	public int dangerousness;
 
 	public LevelOfDanger levelOfDanger;
 	public GameObject volcanoIsGoingToExplode;
+	public static float timeInSecondsVolcanoExplosion = 2f;
 	
+	private WaitForSeconds waitForSecondsVolcanoExplosion = new WaitForSeconds(timeInSecondsVolcanoExplosion);
+
+
+	
+
 	public enum LevelOfDanger
 	{
 		LevelOne = 0,
@@ -62,17 +70,25 @@ public class VolcanoManager : MonoBehaviour
 					dangerousness = 3;
 					break;
 			}
-
-			GameManager.Instance.canDoShake = true;
+			
 			StartCoroutine(FeedBackVolcano());
 		}
 	}
 
+	public void ChangeTurnVolcano()
+	{
+		foreach (var m in meteorites)
+		{
+			if(m.isActiveAndEnabled)
+				m.ChangeTurn();
+		}
+	}
+	
+	
 	IEnumerator FeedBackVolcano()
 	{
 		volcanoIsGoingToExplode.SetActive(true);
-		
-		yield return new WaitForSeconds(GameManager.Instance.durationDoShake + 2);
+		yield return waitForSecondsVolcanoExplosion;
 		
 		volcanoIsGoingToExplode.SetActive(false);
 	}

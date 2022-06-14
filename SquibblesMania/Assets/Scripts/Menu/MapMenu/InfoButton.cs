@@ -12,7 +12,7 @@ public class InfoButton : MonoBehaviour
 
     public void Open()
     {
-      
+        AudioManager.Instance.Play("Button");
         if (transform.localScale == new Vector3(1, 1, 0))
         {
             Close();
@@ -25,6 +25,7 @@ public class InfoButton : MonoBehaviour
 
     public void Close()
     {
+        AudioManager.Instance.Play("Button");
         transform.LeanScale(Vector2.zero, 0.8f).setEaseInBack(); 
     }
 }
