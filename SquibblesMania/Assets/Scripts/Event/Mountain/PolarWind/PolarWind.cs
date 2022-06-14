@@ -163,29 +163,10 @@ public class PolarWind : MonoBehaviour, IManageEvent
 
 					switch (players[i].playerNumber)
 					{
-						case 0 :
-							if (particlePlayer[0] != null)
-							{
-								particlePlayer[0].SetActive(false);
-								particlePlayer[0] = null;
-							}
-							break;
-						case 1 : 
-							if (particlePlayer[1] != null)
-							{
-								particlePlayer[1].SetActive(false);
-								particlePlayer[1] = null;
-							}break;
-						case 2 :if (particlePlayer[2] != null)
-						{
-							particlePlayer[2].SetActive(false);
-							particlePlayer[2] = null;
-						} break;
-						case 3 : if (particlePlayer[3] != null)
-						{
-							particlePlayer[3].SetActive(false);
-							particlePlayer[3] = null;
-						}break;
+						case 0 : SpawnVFX(0, players[0].transform, "ParticleHideWindIndicator"); break;
+						case 1 : SpawnVFX(1, players[1].transform, "ParticleHideWindIndicator"); break;
+						case 2 : SpawnVFX(2, players[2].transform, "ParticleHideWindIndicator"); break;
+						case 3 : SpawnVFX(3, players[3].transform, "ParticleHideWindIndicator"); break;
 					}
 				}
 				else
@@ -194,38 +175,10 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					
 					switch (players[i].playerNumber)
 					{
-						case 0 : 
-							if (particlePlayer[0] == null)
-							{
-								GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
-								hideParticle.Add(vfx);
-								particlePlayer[0] = vfx;
-							}
-							break;
-						case 1 : 
-							if (particlePlayer[1] == null)
-							{
-								GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
-								hideParticle.Add(vfx);
-								particlePlayer[1] = vfx;
-							}
-							break;
-						case 2 :
-							if (particlePlayer[2] == null)
-							{
-								GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
-								hideParticle.Add(vfx);
-								particlePlayer[2] = vfx;
-							}
-							break;
-						case 3 : 
-							if (particlePlayer[3] == null)
-							{
-								GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
-								hideParticle.Add(vfx);
-								particlePlayer[3] = vfx;
-							}
-							break;
+						case 0 : SpawnVFX(0, players[0].transform, "ParticleWindIndicator"); break;
+						case 1 : SpawnVFX(1, players[1].transform, "ParticleWindIndicator"); break;
+						case 2 : SpawnVFX(2, players[2].transform, "ParticleWindIndicator"); break;
+						case 3 : SpawnVFX(3, players[3].transform, "ParticleWindIndicator"); break;
 					}
 					
 					LaunchEvent();
@@ -234,6 +187,19 @@ public class PolarWind : MonoBehaviour, IManageEvent
 		}
 	}
 
+	void SpawnVFX(int numberPlayer, Transform player, string nameParticle)
+	{
+		if (particlePlayer[numberPlayer] != null)
+		{
+			particlePlayer[numberPlayer].SetActive(false);
+			particlePlayer[numberPlayer] = null;
+		}
+		
+		GameObject vfx = PoolManager.Instance.SpawnObjectFromPool($"{nameParticle}", player.position + new Vector3(0, 2, 0), Quaternion.identity,player); 
+		hideParticle.Add(vfx);
+		particlePlayer[numberPlayer] = vfx;
+	}
+	
 #if UNITY_EDITOR
 
 	private void OnDrawGizmos()
