@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: CrateFirework
   clip: {fileID: 8300000, guid: 1afd25694f1f9074cadaabbde520713a, type: 3}
-  volume: 1
+  volume: 1.5
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: CratePickup
   clip: {fileID: 8300000, guid: c831804d3007c8b49931a6a8edd9780b, type: 3}
-  volume: 1
+  volume: 1.3
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: PowerMirorEnd
   clip: {fileID: 8300000, guid: e005006dba0e2524585639a3f6a5a05e, type: 3}
-  volume: 1
+  volume: 2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: PowerSwap
   clip: {fileID: 8300000, guid: 80e67ca0c6db4b64ba5bff9e3b926929, type: 3}
-  volume: 1
+  volume: 2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -300,7 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: PowerDashEnd
   clip: {fileID: 8300000, guid: 537ae5dd59b81ed458cc25cc28624d1e, type: 3}
-  volume: 1
+  volume: 2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -351,7 +351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: MainSound
   clip: {fileID: 8300000, guid: 40bd159d7bdd75642be352482fa5b717, type: 3}
-  volume: 1
+  volume: 0.8
   pitch: 1
   source: {fileID: 0}
   loop: 1
@@ -453,7 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: PowerJumpEnd
   clip: {fileID: 8300000, guid: dc09162e43364374a869edf936d41c61, type: 3}
-  volume: 1
+  volume: 2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: PlayerHit
   clip: {fileID: 8300000, guid: 55d65a65eaf8faa4bbc9a687e68ee9c1, type: 3}
-  volume: 0.3
+  volume: 0.5
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -555,7 +555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: Ice
   clip: {fileID: 8300000, guid: ec2c622cbc7d08f499c8973281068ee1, type: 3}
-  volume: 1
+  volume: 1.5
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -708,7 +708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: CanonOpen
   clip: {fileID: 8300000, guid: 296b2c873d3e4364493b347c5f0cbf9a, type: 3}
-  volume: 1
+  volume: 1.2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -810,6 +810,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: SoftWindLoop
   clip: {fileID: 8300000, guid: 889974370dd8e334b9513b4c88eab2a3, type: 3}
+  volume: 1.5
+  pitch: 1
+  source: {fileID: 0}
+  loop: 1
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &2927225864989890641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7017690212134357018}
+  - component: {fileID: 6487889878686566968}
+  m_Layer: 0
+  m_Name: BGM_Endgame_Loop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7017690212134357018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927225864989890641}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 34
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6487889878686566968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927225864989890641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: Endgame_Loop
+  clip: {fileID: 8300000, guid: 02db01a261a4af843986b2036901ead1, type: 3}
   volume: 1
   pitch: 1
   source: {fileID: 0}
@@ -963,7 +1014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: CardFalse
   clip: {fileID: 8300000, guid: 934b3ea92cf8cc745bbb1016fc59b797, type: 3}
-  volume: 1
+  volume: 1.5
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1116,7 +1167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: VolcanoShaking
   clip: {fileID: 8300000, guid: 97b92c317267c0c48956f76b41bf16bf, type: 3}
-  volume: 1
+  volume: 2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1167,7 +1218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: Button
   clip: {fileID: 8300000, guid: 732859d043fb3824d8c200e61a5ed74e, type: 3}
-  volume: 0.3
+  volume: 0.6
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1335,6 +1386,9 @@ Transform:
   - {fileID: 5440920228598155997}
   - {fileID: 395601378647197199}
   - {fileID: 4849383458511389489}
+  - {fileID: 5730254747982644783}
+  - {fileID: 7017690212134357018}
+  - {fileID: 2450883730839790637}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1536,7 +1590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: SoftStrongWind
   clip: {fileID: 8300000, guid: 2c6ea19c5cb3e1f449f657c3cf850846, type: 3}
-  volume: 1
+  volume: 1.2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1587,7 +1641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: CanonShot
   clip: {fileID: 8300000, guid: 4395e9bb5d85f7d4ab82d3e9a4512b46, type: 3}
-  volume: 1
+  volume: 1.2
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1638,7 +1692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: FreezeOn
   clip: {fileID: 8300000, guid: a46d20a756a0a0945a6b6b787187af0f, type: 3}
-  volume: 1
+  volume: 1.5
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1689,7 +1743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: FreezeOff
   clip: {fileID: 8300000, guid: f8a25e2638983f444b1eefbbf73ecbc6, type: 3}
-  volume: 1
+  volume: 1.5
   pitch: 1
   source: {fileID: 0}
   loop: 0
@@ -1740,7 +1794,109 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: Snow
   clip: {fileID: 8300000, guid: b6bbabf0b1c937f488bf5f4a39ed1c81, type: 3}
-  volume: 0.5
+  volume: 1.5
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &6689385914671673418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5730254747982644783}
+  - component: {fileID: 3560740893349490557}
+  m_Layer: 0
+  m_Name: BGM_Endgame_Jingle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5730254747982644783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689385914671673418}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 33
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3560740893349490557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689385914671673418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: Endgame_Jingle
+  clip: {fileID: 8300000, guid: d9089376a8266d54c9023c099a67f801, type: 3}
+  volume: 1
+  pitch: 1
+  source: {fileID: 0}
+  loop: 0
+  canPlay: 1
+  isEffect: 1
+--- !u!1 &7287974532910361994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2450883730839790637}
+  - component: {fileID: 6317773493712781703}
+  m_Layer: 0
+  m_Name: GAME_Start
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2450883730839790637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7287974532910361994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3006303675828633393}
+  m_RootOrder: 35
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6317773493712781703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7287974532910361994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: GAME_Start
+  clip: {fileID: 8300000, guid: 45c660ca4900d2b4ca603583a0e86235, type: 3}
+  volume: 1
   pitch: 1
   source: {fileID: 0}
   loop: 0

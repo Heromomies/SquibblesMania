@@ -66,22 +66,18 @@ public class PlayerCardState : PlayerBaseState
                 {
                     case 'B':
                         PowerManager.Instance.ActivateDeactivatePower(0, true);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.SwapAnim());
                         ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
                         break;
                     case 'R':
                         PowerManager.Instance.ActivateDeactivatePower(1, true);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.DashAnim());
                         ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
                         break;
                     case 'Y':
                         PowerManager.Instance.ActivateDeactivatePower(2, true);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.JumpAnim());
                         ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
                         break;
                     case 'G':
                         PowerManager.Instance.ActivateDeactivatePower(3, true);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.MirrorAnim());
                         ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
                         break;
                 }
@@ -111,7 +107,6 @@ public class PlayerCardState : PlayerBaseState
                 if (nfcTag.Data.Contains(n.ToString()))
                 {
                     AudioManager.Instance.Play("CardFalse");
-                    Camera.main.DOShakePosition(1, 0.3f);
                     ChangeColorLight(LIGHT_COLOR.COLOR_BLACK, _currentPlayer);
                 }
             }
@@ -203,8 +198,8 @@ public class PlayerCardState : PlayerBaseState
         if (player.stunCount <= 0)
         {
             player.isPlayerStun = false;
-            player.vfxStun.SetActive(false);
-
+            if (player.vfxStun != null) player.vfxStun.SetActive(false);
+            
             if (GameManager.Instance.conditionVictory.mapTheme == ConditionVictory.Theme.Mountain)
             {
                 AudioManager.Instance.Play("FreezeOff");

@@ -88,6 +88,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			{
 				if (particlePlayer[i] != null)
 				{
+					Debug.Log("I'm here");
 					particlePlayer[i].GetComponent<ParticleSystemRenderer>().flip = new Vector3(0,1,0);
 				}
 			}
@@ -115,7 +116,6 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					{
 						case 0 : break;
 						case 1 : players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen], speedPlayer);
-						Debug.Log("I'm here");
 							break;
 					}
 				}
@@ -161,29 +161,46 @@ public class PolarWind : MonoBehaviour, IManageEvent
 				if (Physics.Raycast(players[i].transform.position, _vectorRaycast[_directionChosen], hideRaycastDistance, layerBlocsWhichCanHide))
 				{
 					players[i].isPlayerHide = true;
-					if (particlePlayer[i] != null)
+
+					switch (players[i].playerNumber)
 					{
-						particlePlayer[i].SetActive(false);
-						particlePlayer[i] = null;
+						case 0 : SpawnVFX(0, players[0].transform, "ParticleHideWindIndicator"); break;
+						case 1 : SpawnVFX(1, players[1].transform, "ParticleHideWindIndicator"); break;
+						case 2 : SpawnVFX(2, players[2].transform, "ParticleHideWindIndicator"); break;
+						case 3 : SpawnVFX(3, players[3].transform, "ParticleHideWindIndicator"); break;
 					}
 				}
 				else
 				{
 					players[i].isPlayerHide = false;
 					
-					if (particlePlayer[i] == null)
+					switch (players[i].playerNumber)
 					{
-						GameObject vfx = PoolManager.Instance.SpawnObjectFromPool("ParticleWindIndicator", players[i].transform.position + new Vector3(0, 2, 0), Quaternion.identity, players[i].transform);
-						hideParticle.Add(vfx);
-						particlePlayer[i] = vfx;
-						
-						LaunchEvent();
+						case 0 : SpawnVFX(0, players[0].transform, "ParticleWindIndicator"); break;
+						case 1 : SpawnVFX(1, players[1].transform, "ParticleWindIndicator"); break;
+						case 2 : SpawnVFX(2, players[2].transform, "ParticleWindIndicator"); break;
+						case 3 : SpawnVFX(3, players[3].transform, "ParticleWindIndicator"); break;
 					}
+					
+					LaunchEvent();
 				}
 			}
 		}
 	}
 
+	void SpawnVFX(int numberPlayer, Transform player, string nameParticle)
+	{
+		if (particlePlayer[numberPlayer] != null)
+		{
+			particlePlayer[numberPlayer].SetActive(false);
+			particlePlayer[numberPlayer] = null;
+		}
+		
+		GameObject vfx = PoolManager.Instance.SpawnObjectFromPool($"{nameParticle}", player.position + new Vector3(0, 2, 0), Quaternion.identity,player); 
+		hideParticle.Add(vfx);
+		particlePlayer[numberPlayer] = vfx;
+	}
+	
 #if UNITY_EDITOR
 
 	private void OnDrawGizmos()

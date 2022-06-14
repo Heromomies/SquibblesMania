@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3226517119791555223}
   - component: {fileID: 8398261687759252214}
   - component: {fileID: 918057241538110752}
+  - component: {fileID: 206503887}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -153,6 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af5b90f1abf7a43409c3b43b357bc50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapTarget: {fileID: 0}
   actualUiViewMode:
     uiCircleSelection: []
     uiCamIcon: {fileID: 0}
@@ -186,6 +188,26 @@ MonoBehaviour:
     lastCamIconAngleView: 0
   - lastIndexUiCircleSelection: 0
     lastCamIconAngleView: 0
+--- !u!114 &206503887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226517119791555227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec659ebf1db12184e9e77232a699acc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cinematicbars: {fileID: 0}
+  objectsToDeactivate:
+  - {fileID: 0}
+  - {fileID: 0}
+  speedCam: -2
+  parentCinematic: {fileID: 0}
+  timeCinematic: 5
+  radius: 10
 --- !u!1 &3226517120416600741
 GameObject:
   m_ObjectHideFlags: 0

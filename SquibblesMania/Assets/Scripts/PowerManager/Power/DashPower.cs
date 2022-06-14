@@ -23,7 +23,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
 	
 	private readonly List<Vector3> _vectorRaycast = new List<Vector3> {Vector3.back, Vector3.forward, Vector3.right, Vector3.left};
-	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
+	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	
 	private Camera _cam;
 	private int _distanceDisplayPower = 10;
@@ -69,8 +69,8 @@ public class DashPower : MonoBehaviour, IManagePower
 			PointerEventData p = new PointerEventData(EventSystem.current);
 			p.position = new Vector2(gesture.FocusX, gesture.FocusY);
 
-			raycast.Clear();
-			EventSystem.current.RaycastAll(p, raycast);
+			_raycast.Clear();
+			EventSystem.current.RaycastAll(p, _raycast);
 
 			Ray ray = _cam.ScreenPointToRay(p.position);
 
@@ -171,7 +171,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 					if (distanceBetweenBlockAndPlayerTouched > 1)
 					{
-						switch (distanceBetweenTwoPlayersWhenABlockIsBehind) // inverse distance for the dash, else the player repulsed don't follow the range  
+						switch (distanceBetweenBlockAndPlayerTouched) // inverse distance for the dash, else the player repulsed don't follow the range  
 						{
 							case 1:
 								distanceBetweenTwoPlayersWhenABlockIsBehind = 3;

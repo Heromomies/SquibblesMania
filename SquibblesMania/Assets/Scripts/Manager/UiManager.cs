@@ -25,6 +25,8 @@ public class UiManager : MonoBehaviour
     public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
+    [SerializeField] private Image imagePanelEnd;
+    [SerializeField] private Sprite spritesWinPanel;
     [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
     public static UiManager Instance => _uiManager;
 
@@ -40,6 +42,9 @@ public class UiManager : MonoBehaviour
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
 
+    private static float _timWaitForSecond = 9f;
+    
+    private WaitForSeconds _waitForSecondsJingle = new WaitForSeconds(_timWaitForSecond);
 
     [Serializable]
     public struct UiPlayerStun
@@ -52,7 +57,7 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
-    public void BeginDragSlider(Image circleToMove)
+    public void OnPointerDown(Image circleToMove)
     {
         circleToMove.color = Color.white;
     }
@@ -60,6 +65,11 @@ public class UiManager : MonoBehaviour
     public void OnPointerUp(Image circleToMove)
     {
         circleToMove.color = Color.black;
+        
+        if (sliderNextTurn.value < valueBeforeValidateSlider)
+        {
+            sliderNextTurn.value = 0f;
+        }
     }
     
     public void MoveSliderDemiCircle(Image demiCircleOnTop)
@@ -168,12 +178,24 @@ public class UiManager : MonoBehaviour
             }
         }
     }
+
+    IEnumerator LaunchLoopJingle()
+    {
+        yield return _waitForSecondsJingle;
+        AudioManager.Instance.Play("Endgame_Loop");
+    }
     
     public void WinSetUp(Player.PlayerTeam currentPlayerTeam)
     {
+        AudioManager.Instance.Play("Endgame_Jingle");
+        AudioManager.Instance.Stop("MainSound");
+
+        StartCoroutine(LaunchLoopJingle());
+        
         winPanel.SetActive(true);
         playersUiGlobal.SetActive(false);
-
+        imagePanelEnd.sprite = spritesWinPanel;
+        
         var currentPlayer = GameManager.Instance.currentPlayerTurn;
         PlayerStateManager otherPlayer = null;
         

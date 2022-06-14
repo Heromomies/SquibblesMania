@@ -66,17 +66,12 @@ public class GameManager : MonoBehaviour
         volume.profile.Reset();
     }
     
-    // Start is called before the first frame update
     private void Start()
     {
-        if (MapGeneratorManager.Instance != null)
-        {
-            MapGeneratorManager.Instance.SetupMap();
-        }
-        
+        if (MapGeneratorManager.Instance != null) MapGeneratorManager.Instance.SetupMap();
         for (int i = 0; i < allBlocParents.Count; i++)
         {
-            int randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
+            var randomLocation = Random.Range(minHeightBlocMovement, maxHeightBlocMovement);
             allBlocParents[i].transform.position = new Vector3(allBlocParents[i].transform.position.x, randomLocation, allBlocParents[i].transform.position.z);
         }
         
@@ -211,15 +206,13 @@ public class GameManager : MonoBehaviour
     {
         if (currentPlayerTurn.canSwitch)
         {
-            
             actualCamPreset = camPreSets[countTurn];
-
-            Transform cameraTransform = _cam.transform;
-            Quaternion target = Quaternion.Euler(actualCamPreset.camRot);
-
+           
+            var cameraTransform = _cam.transform;
+            
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
-            cameraTransform.DORotateQuaternion(target, smoothTransitionTime);
+            cameraTransform.DORotate(actualCamPreset.camRot, smoothTransitionTime);
 
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
@@ -241,10 +234,10 @@ public class GameManager : MonoBehaviour
 
     private void SavePreviousCamRotY(int indexCam)
     {
-        Vector3 camEulerAngles = _cam.transform.eulerAngles;
-        Vector3 camPos = _cam.transform.position;
+        var camEulerAngles = _cam.transform.eulerAngles;
+        var camPos = _cam.transform.position;
         
-        CamPreSets previousCamPreSets = previousCamPreSetsList[indexCam];
+        var previousCamPreSets = previousCamPreSetsList[indexCam];
 
         previousCamPreSets.camRot = camEulerAngles;
         previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
@@ -291,15 +284,14 @@ public class GameManager : MonoBehaviour
             currentPlayerTurn.currentCardEffect = null;
         }
         
-        
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
-        count = (count + 1) % camPreSets.Count; 
+        count = (count + 1) % camPreSets.Count;
         CamConfig(count);
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
-
+        Debug.Log(currentPlayerTurn);
         NFCManager.Instance.PlayerChangeTurn();
 
         if (UiManager.Instance.textActionPointPopUp)

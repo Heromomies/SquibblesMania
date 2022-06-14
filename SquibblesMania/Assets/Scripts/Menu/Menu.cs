@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
@@ -12,16 +13,17 @@ public class Menu : MonoBehaviour
     public GameObject mapManager;
     public GameObject characterManager;
     public GameObject panelManager;
+    [SerializeField] private Button buttonRotateUi;
     public PlayerData playerData;
 
     public TextMeshProUGUI textToPulse;
     public RectTransform panelLaunch;
 
     public GameObject uiMenuParent;
-
-    [SerializeField] private float timeInSecondsLeanAlpha = 0.7f;
-    // Start is called before the first frame update
-
+    public Image imageMenuTitle;
+    
+    [SerializeField] private float titleScaleDownTime = 0.3f;
+    
     void Start()
     {
         textToPulse.LeanAlphaTextMeshPro(0f, 1f).setFrom(1f).setLoopPingPong();
@@ -45,7 +47,7 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         startManager.SetActive(false);
         mapManager.SetActive(true);
-
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
     }
 
     public void MapPlay()
@@ -55,6 +57,7 @@ public class Menu : MonoBehaviour
         panelManager.transform.position = panelManager.GetComponent<PageSwiper>().panelLocation;
         mapManager.SetActive(false);
         characterManager.SetActive(true);
+        buttonRotateUi.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -68,6 +71,7 @@ public class Menu : MonoBehaviour
     {
         AudioManager.Instance.Play("Button");
         characterManager.SetActive(false);
+        buttonRotateUi.gameObject.SetActive(true);
         mapManager.SetActive(true);
     }
 
@@ -76,6 +80,8 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         mapManager.SetActive(false);
         startManager.SetActive(true);
+        
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleDownTime);
     }
 
     public void RotateStartMenuUi()
