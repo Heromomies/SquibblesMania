@@ -1582,6 +1582,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2170e14ef757e17409cb20e090b9059b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &710167250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTarget: {fileID: 2081713997}
+  mAlignment_RTL: 514
+  mAlignment_LTR: 514
+  mAlignmentWasRTL: 0
+  mInitializeAlignment: 0
 --- !u!114 &730449686 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7843621773151438543, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
@@ -5589,6 +5606,14 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8313073970273086602, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: mTerm
+      value: TEXT_VolcanicMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313073970273086602, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+      propertyPath: mLocalizeTarget
+      value: 
+      objectReference: {fileID: 710167250}
     - target: {fileID: 8406844074447682570, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5780,6 +5805,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2081713997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7437101338124034482, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
+  m_PrefabInstance: {fileID: 2081713977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2088047725 stripped
