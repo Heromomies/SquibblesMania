@@ -39,6 +39,8 @@ public class UiManager : MonoBehaviour
     [SerializeField] private Vector3 offsetText;
     public Camera uiCam;
 
+    private bool _dragMaxForSound;
+    
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
 
@@ -60,6 +62,7 @@ public class UiManager : MonoBehaviour
     public void OnPointerDown(Image circleToMove)
     {
         circleToMove.color = Color.white;
+        _dragMaxForSound = false;
     }
 
     public void OnPointerUp(Image circleToMove)
@@ -74,12 +77,15 @@ public class UiManager : MonoBehaviour
     
     public void MoveSliderDemiCircle(Image demiCircleOnTop)
     {
-        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        if (sliderNextTurn.value > valueBeforeValidateSlider && !_dragMaxForSound)
         {
+            AudioManager.Instance.Play("GAME_Slider");
+            _dragMaxForSound = true;
             demiCircleOnTop.color = Color.white;
         }
-        else
+        else if(sliderNextTurn.value <= valueBeforeValidateSlider && _dragMaxForSound)
         {
+            _dragMaxForSound = false;
             demiCircleOnTop.color = Color.black;
         }
     }
