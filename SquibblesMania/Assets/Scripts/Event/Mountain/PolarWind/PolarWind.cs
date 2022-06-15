@@ -88,7 +88,6 @@ public class PolarWind : MonoBehaviour, IManageEvent
 			{
 				if (particlePlayer[i] != null)
 				{
-					Debug.Log("I'm here");
 					particlePlayer[i].GetComponent<ParticleSystemRenderer>().flip = new Vector3(0,1,0);
 				}
 			}

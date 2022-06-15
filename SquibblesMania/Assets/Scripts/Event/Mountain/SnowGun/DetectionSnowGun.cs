@@ -20,6 +20,8 @@ public class DetectionSnowGun : MonoBehaviour
          animator.SetBool("isTrigger", true);
          snowGun.animatorSnowGun.SetBool("onHatche", true);
 
+         UiManager.Instance.sliderNextTurn.interactable = false;
+         
          snowGun.shootPlayerTxt.SetActive(true);
          snowGun.goToAntennaTxt.SetActive(false);
       }
@@ -34,6 +36,8 @@ public class DetectionSnowGun : MonoBehaviour
          snowGun.animatorSnowGun.SetBool("onHatche", false);
          
          AudioManager.Instance.Play("CanonOnOff");
+         
+         UiManager.Instance.sliderNextTurn.interactable = true;
          
          snowGun.shootPlayerTxt.SetActive(false);
          snowGun.goToAntennaTxt.SetActive(true);

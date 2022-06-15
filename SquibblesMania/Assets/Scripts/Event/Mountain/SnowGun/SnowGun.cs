@@ -15,12 +15,12 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     [Range(0.0f, 0.1f)] public float speed;
     //[Range(0.0f, 10.0f)] public float speedRotationSnowGun;
-    [Range(0.0f, 10.0f)] public float ySpawn;
+    [Range(0.0f, 20.0f)] public float ySpawn;
     [Range(0.0f, 10.0f)] public float radius;
     public GameObject hatchDetectPlayerNearSnowGun;
     public LayerMask playerLayerMask;
     public LayerMask layerInteractable;
-    
+
     public AnimationCurve curve;
 
     [Header("TEXT SETTINGS")]
@@ -38,6 +38,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     [HideInInspector] public bool canClick;
     private static readonly Vector3 vectorSpawnAntenna = new Vector3(0, 1.05f, 0);
     private const string BreakableIce = "BreakableIce";
+    private float _rotationSnowGun;
     
     private void OnEnable()
     {
@@ -50,6 +51,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
         FingersScript.Instance.AddGesture(SwapTouchGesture);
         
         animatorSnowGun = GetComponent<Animator>();
+        _rotationSnowGun = transform.rotation.y;
         
         ShowEvent();
     }
@@ -144,9 +146,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
                     
                     animatorSnowGun.SetBool("isShooting", true);
                     
-                    StartCoroutine(DelayAnimationOut(animatorSnowGun.GetCurrentAnimatorStateInfo(0).length, listPoint, speed, curve));
-
-                    
                     canClick = false;
                 }
             }
@@ -156,18 +155,13 @@ public class SnowGun : MonoBehaviour, IManageEvent
             }
         }
     }
-
-    IEnumerator DelayAnimationOut(float delay, List<Vector3> point, float s, AnimationCurve animCurve)
-    {
-        yield return new WaitForSeconds(delay * 0.8f);
-
-        GameObject snowBullet = Instantiate(snowPrefab, transform.position, Quaternion.identity);
-        BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(snowBullet, point, s, animCurve);
-    }
-
+    
     void CanonShootSound()
     {
         AudioManager.Instance.Play("CanonShot");
+        
+        var snowBullet = Instantiate(snowPrefab, transform.position, Quaternion.identity);
+        BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(snowBullet, listPoint, speed, curve);
     }
     
     void ClearGun()
@@ -195,12 +189,14 @@ public class SnowGun : MonoBehaviour, IManageEvent
     {
         shootPlayerTxt.SetActive(false);
         
+        UiManager.Instance.sliderNextTurn.interactable = true;
+        
         foreach (var h in _hatchesList)
         {
             h.SetActive(false);
         }
         _hatchesList.Clear();
-        
+        transform.rotation = Quaternion.Euler(0,_rotationSnowGun, 0);
         gameObject.SetActive(false);
     }
 }
