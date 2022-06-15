@@ -24,6 +24,8 @@ public class ColorCustomization : MonoBehaviour
 
     public void SelectColor(bool isForward)
     {
+        AudioManager.Instance.Play("UI_Button_Other");
+       
         if (isForward)
         {
             if (colorID == colors.Count - 1 || otherTeam.GetComponent<ColorCustomization>().colorID == colors.Count - 1 && colorID == colors.Count - 2)

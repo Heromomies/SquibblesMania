@@ -29,6 +29,7 @@ public class CharacterCustomization : MonoBehaviour
 
     public void SelectHat(bool isForward)
     {
+        AudioManager.Instance.Play("UI_Button_Other");
         if (isForward)
         {
             if (hatID == hats.Length - 1 || otherPlayer.hatID == hats.Length - 1 && hatID == hats.Length - 2)

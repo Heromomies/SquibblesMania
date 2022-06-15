@@ -87,6 +87,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void NextPanel()
     {
+        AudioManager.Instance.Play("UI_Button_Other");
         if (currentPage < totalPages)
         {
             Vector3 newLocation = panelLocation;
@@ -109,6 +110,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void PreviousPanel()
     {
+        AudioManager.Instance.Play("UI_Button_Other");
         if (currentPage > 1)
         {
             Vector3 newLocation = panelLocation;
