@@ -5,12 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class PlayerSave : MonoBehaviour
 {
-    public GameObject P1;
-    public GameObject P2;
-    public GameObject P3;
-    public GameObject P4;
-    public GameObject T1;
-    public GameObject T2;
+    [SerializeField]
+    private CharacterCustomization player1;
+    [SerializeField]
+    private CharacterCustomization player2;
+    [SerializeField]
+    private CharacterCustomization player3;
+    [SerializeField]
+    private CharacterCustomization player4;
+    [SerializeField]
+    private ColorCustomization team1;
+    [SerializeField]
+    private ColorCustomization team2;
 
     public PlayerData playerData;
 
@@ -18,21 +24,21 @@ public class PlayerSave : MonoBehaviour
 
     public void SaveData()
     {
-        playerData.P1colorID = T1.GetComponent<ColorCustomization>().colorID;
-        playerData.P1hatID = P1.GetComponent<CharacterCustomization>().hatID;
+        playerData.P1colorID = team1.colorID;
+        playerData.P1hatID = player1.hatID;
 
-        playerData.P2colorID = T2.GetComponent<ColorCustomization>().colorID;
-        playerData.P2hatID = P2.GetComponent<CharacterCustomization>().hatID;
+        playerData.P2colorID = team2.colorID;
+        playerData.P2hatID = player2.hatID;
 
-        playerData.P3colorID = T1.GetComponent<ColorCustomization>().colorID;
-        playerData.P3hatID = P3.GetComponent<CharacterCustomization>().hatID;
+        playerData.P3colorID = team1.colorID;
+        playerData.P3hatID = player3.hatID;
 
-        playerData.P4colorID = T2.GetComponent<ColorCustomization>().colorID;
-        playerData.P4hatID = P4.GetComponent<CharacterCustomization>().hatID;
+        playerData.P4colorID = team2.colorID;
+        playerData.P4hatID = player4.hatID;
 
         mapID = playerData.MapID;
 
-        SceneManager.LoadScene(mapID);
+        SceneManager.LoadScene(mapID, LoadSceneMode.Single);
     }
 
     

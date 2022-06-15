@@ -19,8 +19,10 @@ public class CinematicCamera : MonoBehaviour
     private static float timeCinematicInSeconds = 5f;
     private WaitForSeconds cinematicDurationWaitForSeconds = new WaitForSeconds(timeCinematicInSeconds);
     
-    private CameraButtonManager _cameraButtonManager;
-    private CameraViewModeGesture _cameraViewModeGesture;
+    [SerializeField]
+    private CameraButtonManager cameraButtonManager;
+    [SerializeField]
+    private CameraViewModeGesture cameraViewModeGesture;
     private Vector3 _orbitCam;
 
     
@@ -36,11 +38,9 @@ public class CinematicCamera : MonoBehaviour
     private IEnumerator StartCinematicCoroutine()
     {
         yield return cinematicDelayWaitForSeconds;
-        _cameraButtonManager = GetComponent<CameraButtonManager>();
-        _cameraViewModeGesture = GetComponent<CameraViewModeGesture>();
 
-        _cameraButtonManager.enabled = false;
-        _cameraViewModeGesture.enabled = false;
+        cameraButtonManager.enabled = false;
+        cameraViewModeGesture.enabled = false;
 
         _orbitCam = -Vector3.forward * radius;
         
@@ -84,8 +84,8 @@ public class CinematicCamera : MonoBehaviour
 
         yield return cinematicDurationWaitForSeconds;
 
-        _cameraButtonManager.enabled = true;
-        _cameraViewModeGesture.enabled = true;
+        cameraButtonManager.enabled = true;
+        cameraViewModeGesture.enabled = true;
         
         AudioManager.Instance.Play("MainSound");
         

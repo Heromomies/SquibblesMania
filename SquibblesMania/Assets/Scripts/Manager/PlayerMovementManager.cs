@@ -216,6 +216,7 @@ public class PlayerMovementManager : MonoBehaviour
 									UiManager.Instance.sliderNextTurn.interactable = false;
 									AudioManager.Instance.Play("CubeIsSelected");
 									StartMovingBloc(currentPlayerTurn);
+									if (GameManager.Instance != null) GameManager.Instance.DetectParentBelowPlayers(); 
 								}
 							}
 						}
@@ -423,7 +424,7 @@ public class PlayerMovementManager : MonoBehaviour
 
 	IEnumerator StartBlocMovementCoroutine(float yPos, Vector3 direction)
 	{
-		
+			
 		if (blockParentCurrentlySelected.TryGetComponent(out GroupBlockDetection groupBlocDetection))
 		{
 			var blocParentNewPos = blockParentCurrentlySelected.transform.position;
