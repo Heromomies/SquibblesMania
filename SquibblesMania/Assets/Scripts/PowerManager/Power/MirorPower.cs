@@ -384,9 +384,9 @@ public class MirorPower : MonoBehaviour, IManagePower
 				switch (distanceBetweenTwoPlayers) // inverse distance for the dash, else the player repulsed don't follow the range  
 				{
 					case 1:
-						distanceBetweenTwoPlayers = 3;
+						distanceBetweenTwoPlayers = 2;
 						break;
-					case 3:
+					case 2:
 						distanceBetweenTwoPlayers = 1;
 						break;
 				}

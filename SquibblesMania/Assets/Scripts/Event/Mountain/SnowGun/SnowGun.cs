@@ -172,6 +172,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     void CanRemoveCannon()
     {
+        UiManager.Instance.sliderNextTurn.interactable = true;
+
         animatorSnowGun.SetBool("onHatche", false);
     }
 
@@ -188,8 +190,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
     void SetActiveFalseObject()
     {
         shootPlayerTxt.SetActive(false);
-        
-        UiManager.Instance.sliderNextTurn.interactable = true;
         
         foreach (var h in _hatchesList)
         {
