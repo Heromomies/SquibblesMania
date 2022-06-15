@@ -445,6 +445,11 @@ public class PlayerActionPointCardState : PlayerBaseState
             
         }
 
+        if (player.playerActionPoint == 0)
+        {
+            AudioManager.Instance.Play("UI_EndTurn_Other");
+        }
+        
         player.finalPathFinding.Clear();
         player.walking = false;
         player.playerAnimator.SetBool("isMoving", player.walking);
