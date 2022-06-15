@@ -76,6 +76,7 @@ public class UiManager : MonoBehaviour
     {
         if (sliderNextTurn.value >= valueBeforeValidateSlider)
         {
+            //AudioManager.Instance.Play("GAME_Slider");
             demiCircleOnTop.color = Color.white;
         }
         else

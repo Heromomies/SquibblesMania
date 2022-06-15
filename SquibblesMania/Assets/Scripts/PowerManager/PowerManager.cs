@@ -44,6 +44,7 @@ public class PowerManager : MonoBehaviour
 		}
 		else
 		{
+			AudioManager.Instance.Play("UI_EndTurn_Other");
 			UiManager.Instance.sliderNextTurn.interactable = true;
 		}
 	}
