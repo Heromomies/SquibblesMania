@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal.Internal;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PlayerActionPointCardState : PlayerBaseState
 {
@@ -448,6 +450,8 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (player.playerActionPoint == 0)
         {
             AudioManager.Instance.Play("UI_EndTurn_Other");
+            NFCController.StopPolling();
+            LightController.ShutdownAllLights();
         }
         
         player.finalPathFinding.Clear();

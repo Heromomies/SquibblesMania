@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PowerManager : MonoBehaviour
 {
@@ -46,6 +48,8 @@ public class PowerManager : MonoBehaviour
 		{
 			AudioManager.Instance.Play("UI_EndTurn_Other");
 			UiManager.Instance.sliderNextTurn.interactable = true;
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
 		}
 	}
 	
