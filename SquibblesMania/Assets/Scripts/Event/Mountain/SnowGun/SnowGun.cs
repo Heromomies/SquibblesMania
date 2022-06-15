@@ -187,6 +187,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     
     void SetActiveFalseObject()
     {
+        Debug.Log("I'm here");
         shootPlayerTxt.SetActive(false);
         
         UiManager.Instance.sliderNextTurn.interactable = true;
