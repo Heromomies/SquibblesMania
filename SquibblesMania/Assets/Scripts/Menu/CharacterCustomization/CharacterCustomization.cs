@@ -15,18 +15,13 @@ public class CharacterCustomization : MonoBehaviour
 
     [SerializeField] private Sprite[] hats;
 
-    public GameObject otherPlayer;
+    public CharacterCustomization otherPlayer;
     
 
 
     void Start()
     {
-
-        
-
         SetItem("hats");
-
-        
     }
 
 
@@ -36,7 +31,7 @@ public class CharacterCustomization : MonoBehaviour
     {
         if (isForward)
         {
-            if (hatID == hats.Length - 1 || otherPlayer.GetComponent<CharacterCustomization>().hatID == hats.Length - 1 && hatID == hats.Length - 2)
+            if (hatID == hats.Length - 1 || otherPlayer.hatID == hats.Length - 1 && hatID == hats.Length - 2)
             {
                 hatID = 0;
             }
@@ -45,16 +40,15 @@ public class CharacterCustomization : MonoBehaviour
                 hatID++;
             }
 
-            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
+            if (hatID == otherPlayer.hatID)
             {
                 hatID++;
             }
-
             
         }
         else
         {
-            if (hatID == 0 || otherPlayer.GetComponent<CharacterCustomization>().hatID == 0 && hatID == 1)
+            if (hatID == 0 || otherPlayer.hatID == 0 && hatID == 1)
             {
                 hatID = hats.Length - 1;
             }
@@ -63,12 +57,11 @@ public class CharacterCustomization : MonoBehaviour
                 hatID--;
             }
 
-            if (hatID == otherPlayer.GetComponent<CharacterCustomization>().hatID)
+            if (hatID == otherPlayer.hatID)
             {
                 hatID--;
             }
         }
-
         SetItem("hats");
     }
 
@@ -76,14 +69,9 @@ public class CharacterCustomization : MonoBehaviour
     {
         switch(type)
         {
-            case "hats":
-              hat.GetComponent<Image>().sprite = hats[hatID];
-               
-                break;
-           
-
-                
-                
+             case "hats":
+              hat.sprite = hats[hatID];
+              break;
         }
     }
 
