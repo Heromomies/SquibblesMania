@@ -545,7 +545,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			foreach (Transform playerOnGroupBlock in groupBlocDetection.playersOnGroupBlock)
 			{
-				Vector3 playerOnGroupBlockPos = playerOnGroupBlock.position;
+				var playerOnGroupBlockPos = playerOnGroupBlock.position;
 				playerOnGroupBlock.DOMove(new Vector3(playerOnGroupBlockPos.x, playerOnGroupBlockPos.y + value, playerOnGroupBlockPos.z),
 					_timeInSecondsForBlocMove);
 			}

@@ -240,7 +240,7 @@ public class GameManager : MonoBehaviour
         var previousCamPreSets = previousCamPreSetsList[indexCam];
 
         previousCamPreSets.camRot = camEulerAngles;
-        previousCamPreSets.camPos = new Vector3(Mathf.Round(camPos.x), Mathf.Round(camPos.y), Mathf.Round(camPos.z));
+        previousCamPreSets.camPos = new Vector3(camPos.x, camPos.y, camPos.z);
         previousCamPreSets.presetNumber = camPreSets[indexCam].presetNumber;
         previousCamPreSets.sliderNextTurn = camPreSets[indexCam].sliderNextTurn;
 
@@ -291,7 +291,6 @@ public class GameManager : MonoBehaviour
         
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
-        Debug.Log(currentPlayerTurn);
         NFCManager.Instance.PlayerChangeTurn();
 
         if (UiManager.Instance.textActionPointPopUp)
