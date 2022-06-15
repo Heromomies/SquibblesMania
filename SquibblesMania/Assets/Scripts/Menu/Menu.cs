@@ -12,7 +12,8 @@ public class Menu : MonoBehaviour
     
     public GameObject mapManager;
     public GameObject characterManager;
-    public GameObject panelManager;
+    [SerializeField]
+    private PageSwiper panelManager;
     [SerializeField] private Button buttonRotateUi;
     public PlayerData playerData;
 
@@ -20,7 +21,10 @@ public class Menu : MonoBehaviour
     public RectTransform panelLaunch;
 
     public GameObject uiMenuParent;
-
+    public Image imageMenuTitle;
+    
+    [SerializeField] private float titleScaleDownTime = 0.3f;
+    
     void Start()
     {
         textToPulse.LeanAlphaTextMeshPro(0f, 1f).setFrom(1f).setLoopPingPong();
@@ -44,14 +48,14 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         startManager.SetActive(false);
         mapManager.SetActive(true);
-
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
     }
 
     public void MapPlay()
     {
         AudioManager.Instance.Play("Button");
-        playerData.MapID = panelManager.GetComponent<PageSwiper>().currentPage;
-        panelManager.transform.position = panelManager.GetComponent<PageSwiper>().panelLocation;
+        playerData.MapID = panelManager.currentPage;
+        panelManager.transform.position = panelManager.panelLocation;
         mapManager.SetActive(false);
         characterManager.SetActive(true);
         buttonRotateUi.gameObject.SetActive(false);
@@ -77,6 +81,7 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         mapManager.SetActive(false);
         startManager.SetActive(true);
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleDownTime);
     }
 
     public void RotateStartMenuUi()

@@ -203,7 +203,8 @@ public class CameraViewModeGesture : MonoBehaviour
     /// </summary>
     public void SetUpCameraViewMode(bool isFirstTurn, int index)
     {
-        int actualCamPresetNumber = GameManager.Instance.actualCamPreset.presetNumber;
+        var actualCamPresetNumber = GameManager.Instance.actualCamPreset.presetNumber;
+
         if (isFirstTurn)
         {
             if (actualCamPresetNumber <= 2)

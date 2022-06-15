@@ -79,7 +79,8 @@ public class VolcanoManager : MonoBehaviour
 	{
 		foreach (var m in meteorites)
 		{
-			m.ChangeTurn();
+			if(m.isActiveAndEnabled)
+				m.ChangeTurn();
 		}
 	}
 	

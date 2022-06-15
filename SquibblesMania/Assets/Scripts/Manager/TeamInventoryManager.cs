@@ -143,30 +143,50 @@ public class TeamInventoryManager : MonoBehaviour
 			{
 				colliderFinished = new List<GameObject>(GameManager.Instance.cleanList);
 			}
-
-			foreach (var coll in colliderFinished)
-			{
-				if (TryGetComponent(out Node node))
-				{
-					if (!node.isActive)
-					{
-						colliderFinished.Remove(coll);
-					}
-				}
-			}
 			
 			if (colliderFinished.Count > 0)
 			{
-				var randomBloc = Random.Range(0, colliderFinished.Count);
-				var bloc = colliderFinished[randomBloc].transform;
+				for (int i = 0; i < colliderFinished.Count; i++)
+				{
+					if (!colliderFinished[i].GetComponent<Node>().isActive)
+					{
+						colliderFinished.Remove(colliderFinished[i]);
+					}
+				}
+
+				StartCoroutine(SpawnObject());
+			}
+			else
+			{
+				colliderFinished =  new List<GameObject>(colliderFinishedMax);
 				
-				var blocPos = bloc.position;
+				for (int i = 0; i < colliderFinished.Count; i++)
+				{
+					if (!colliderFinished[i].GetComponent<Node>().isActive)
+					{
+						colliderFinished.Remove(colliderFinished[i]);
+					}
+				}
+
+				Debug.Log("zdçkozkdo");
 				
-				Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
+				StartCoroutine(SpawnObject());
 			}
 
 			colliderFinishedMax = GameManager.Instance.cleanList;
 		}
+	}
+
+	IEnumerator SpawnObject()
+	{
+		yield return new WaitForSeconds(0.2f);
+		
+		var randomBloc = Random.Range(0, colliderFinished.Count);
+		var bloc = colliderFinished[randomBloc].transform;
+		
+		var blocPos = bloc.position;
+				
+		Instantiate(objectToSpawn, new Vector3(blocPos.x, blocPos.y + 1f, blocPos.z), Quaternion.identity, bloc);
 	}
 	
 	private void CheckPlayerTotalItemAcquired(Inventory playerInventory)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
@@ -21,8 +22,17 @@ public class PauseMenu : MonoBehaviour
     private LeanTweenType easeTypePausePanel;
 
     [SerializeField] private float animPanelPauseMoveUITimeInSeconds = 0.3f;
+    
+    public Image imageMenuTitle;
+    
+    [SerializeField] private float titleScaleDownTime = 0.3f;
+    [SerializeField] private float titleScaleUpTime = 0.6f;
+
+    private Menu _menu;
+    
     private void Start()
     {
+	    _menu = GetComponent<Menu>();
 	    _panelPauseAnchorPos = panelPause.anchoredPosition;
     }
 
@@ -42,6 +52,11 @@ public class PauseMenu : MonoBehaviour
 
 			}
 
+			if (imageMenuTitle != null)
+			{
+				LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
+			}
+			
 			SetPanelPauseStateTrue();
 		}
 		else
@@ -53,6 +68,21 @@ public class PauseMenu : MonoBehaviour
 				if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
 				{
 					depthOfField.active = false;
+				}
+			}
+
+			if (_menu != null)
+			{
+				if (imageMenuTitle != null && !_menu.characterManager.activeSelf && !_menu.mapManager.activeSelf)
+				{
+					LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
+				}
+			}
+			else
+			{
+				if (imageMenuTitle != null)
+				{
+					LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
 				}
 			}
 		}
@@ -71,6 +101,7 @@ public class PauseMenu : MonoBehaviour
     public void RotateUi()
     {
 	    AudioManager.Instance.Play("Button");
+	    
         panelPause.transform.rotation *= Quaternion.Euler(0, 0, 180);
     }
 
@@ -99,5 +130,9 @@ public class PauseMenu : MonoBehaviour
     public void AnimScaleDownUi(GameObject uiGameObject)
     {
 	    LeanTween.scale(uiGameObject, Vector3.one, animScaleUITimeInSeconds);
+    }
+    public void PlayButtonSound()
+    {
+	    AudioManager.Instance.Play("Button");
     }
 }
