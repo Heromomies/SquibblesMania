@@ -126,7 +126,8 @@ public class UiManager : MonoBehaviour
         NFCManager.Instance.powerActivated = false;
         PowerManager.Instance.isPlayerInJumpOrSwap = false;
         
-        PlayerStateManager currentPlayer = GameManager.Instance.currentPlayerTurn;
+        var currentPlayer = GameManager.Instance.currentPlayerTurn;
+        currentPlayer.playerActionPoint = 0;
         CameraButtonManager.Instance.isCamRotateButtonPressed = false;
         
         if (currentPlayer.isPlayerStun)
