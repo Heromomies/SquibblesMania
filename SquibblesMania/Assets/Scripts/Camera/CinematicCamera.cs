@@ -27,7 +27,7 @@ public class CinematicCamera : MonoBehaviour
 
     
     private static float cinematicDelayInSeconds = 0.2f;
-    private WaitForSeconds cinematicDelayWaitForSeconds = new WaitForSeconds(cinematicDelayInSeconds);
+    private WaitForSeconds cinematicDelayBeforeStartWaitForSeconds = new WaitForSeconds(cinematicDelayInSeconds);
     private void Awake()
     {
         _cinematic = this;
@@ -37,7 +37,7 @@ public class CinematicCamera : MonoBehaviour
     
     private IEnumerator StartCinematicCoroutine()
     {
-        yield return cinematicDelayWaitForSeconds;
+        yield return cinematicDelayBeforeStartWaitForSeconds;
 
         cameraButtonManager.enabled = false;
         cameraViewModeGesture.enabled = false;

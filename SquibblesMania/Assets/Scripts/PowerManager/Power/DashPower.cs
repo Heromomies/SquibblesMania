@@ -171,7 +171,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 					if (distanceBetweenBlockAndPlayerTouched > 1)
 					{
-						switch (distanceBetweenBlockAndPlayerTouched) // inverse distance for the dash, else the player repulsed don't follow the range  
+						switch (distanceBetweenTwoPlayersWhenABlockIsBehind) // inverse distance for the dash, else the player repulsed don't follow the range  
 						{
 							case 1:
 								distanceBetweenTwoPlayersWhenABlockIsBehind = 3;
