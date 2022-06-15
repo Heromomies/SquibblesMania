@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 421580606493612235}
   - component: {fileID: 3170406380845447596}
-  - component: {fileID: 2069582048358432304}
   - component: {fileID: 32715809579877022}
-  - component: {fileID: 4508533188539664467}
-  m_Layer: 2
+  - component: {fileID: 2549095324603313820}
+  m_Layer: 3
   m_Name: PS_fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4816,49 +4815,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &2069582048358432304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6579980692746243161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec92d91164683ab4db465f3e6e45613b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radiusMin: 2
-  radiusMax: 4
-  layerInteractable:
-    serializedVersion: 2
-    m_Bits: 8
-  ySpawn: 10
-  speed: 0.01
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!199 &32715809579877022
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4925,7 +4881,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!65 &4508533188539664467
+--- !u!65 &2549095324603313820
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4933,8 +4889,8 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6579980692746243161}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Size: {x: 0.7, y: 1, z: 0.7}
   m_Center: {x: 0, y: 0.2, z: 0}

@@ -172,13 +172,14 @@ GameObject:
   m_Component:
   - component: {fileID: 5106096105140318803}
   - component: {fileID: 5106096105140318802}
+  - component: {fileID: 1557384395}
   m_Layer: 0
   m_Name: Cannon_prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5106096105140318803
 Transform:
   m_ObjectHideFlags: 0
@@ -192,6 +193,7 @@ Transform:
   m_Children:
   - {fileID: 4708168334884772346}
   - {fileID: 4708168334585044847}
+  - {fileID: 8221243408211441256}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -214,6 +216,59 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1557384395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5106096105140318800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f29c9730d25704c98388cb1634a8ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snowPrefab: {fileID: 1812055748362360789, guid: 1700756de5227d144a5bb37cefb40a06, type: 3}
+  speed: 0.04
+  ySpawn: 5
+  radius: 8
+  hatchDetectPlayerNearSnowGun: {fileID: 4006827709582687106, guid: 62a5e04692ba9d74dad1e2dd97ced780, type: 3}
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  layerInteractable:
+    serializedVersion: 2
+    m_Bits: 8
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  goToAntennaTxt: {fileID: 0}
+  shootPlayerTxt: {fileID: 0}
+  col: []
+  animatorSnowGun: {fileID: 0}
+  listPoint: []
+  canClick: 0
 --- !u!1 &5340449520683369280
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,4 +445,66 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869260429508333705, guid: 5f46ff11af18f2941b04debd02c08b82, type: 3}
   m_PrefabInstance: {fileID: 199795179234447334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3594207805729367926
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5106096105140318803}
+    m_Modifications:
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.509
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.589
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9030685534717128013, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+      propertyPath: m_Name
+      value: ps_anthena_signal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+--- !u!4 &8221243408211441256 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4897252993203278110, guid: 3684d54787e592643b881363bca58f2c, type: 3}
+  m_PrefabInstance: {fileID: 3594207805729367926}
   m_PrefabAsset: {fileID: 0}

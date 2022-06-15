@@ -114,7 +114,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layer))
 			{
-				if (players.ToList().Contains(hitInfo.collider) && hitInfo.collider.name != GameManager.Instance.name)
+				if (players.ToList().Contains(hitInfo.collider) && hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
 				{
 					NFCManager.Instance.powerActivated = true;
 					
@@ -176,7 +176,6 @@ public class SwapPower : MonoBehaviour, IManagePower
 		}
 		
 		PowerManager.Instance.ActivateDeactivatePower(0, false);
-		PowerManager.Instance.ChangeTurnPlayer();
 	}
 	
 	private void OnDisable()

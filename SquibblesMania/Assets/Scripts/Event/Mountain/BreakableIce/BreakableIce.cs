@@ -34,6 +34,7 @@ public class BreakableIce : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
+                AudioManager.Instance.Play("Ice");
                 BlocModification();
             }
         }

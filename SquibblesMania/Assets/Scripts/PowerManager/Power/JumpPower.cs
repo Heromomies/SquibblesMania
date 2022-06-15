@@ -25,11 +25,14 @@ public class JumpPower : MonoBehaviour, IManagePower
 	public List<Collider> collidersFinished = new List<Collider>();
 
 	[HideInInspector] public List<GameObject> listObjectToSetActiveFalse;
-	private GameObject _particleImpact, _particleImpulse;
+	private GameObject _particleImpact, _particleImpulse, _trailParticle, _particleOnPutCard;
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
-
+	private Transform _objectToMove, _objectToGo;
+	private float _speedLookAt = 3f;
+	private bool _canLook;
+	
 	void OnEnable()
 	{
 		_cam = Camera.main;
@@ -52,8 +55,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 			_particleImpulse.SetActive(false);
 			_particleImpulse = null;
 		}
-		
-		
+
 		DisplayPower();
 	}
 
@@ -73,9 +75,11 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 
-				player.gameObject.layer = 0;
-				
-				var posHitInfo = hitInfo.transform.position;
+				_objectToMove = tCurrentPlayerTurn;
+				_objectToGo = hitInfo.transform;
+				_canLook = true;
+
+				var posHitInfo = hitInfo.transform.position + new Vector3(0,0.5f,0); 
 
 				var playerPos = tCurrentPlayerTurn.position;
 				
@@ -90,20 +94,31 @@ public class JumpPower : MonoBehaviour, IManagePower
 
 				_particleImpulse = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpulse", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 				
+				_trailParticle = PoolManager.Instance.SpawnObjectFromPool("ParticleTrailJump", _objectToMove.position + new Vector3(0,-0.75f,0), Quaternion.identity, _objectToMove);
+
+				AudioManager.Instance.Play("PowerJumpEnd");
+				
 				BezierAlgorithm.Instance.ObjectJumpWithBezierCurve(tCurrentPlayerTurn.gameObject, listPoint, speedAnimationCurve, curve);
 				
 				var hitInfoTransform = hitInfo.transform.GetComponentInParent<GroupBlockDetection>().transform;
 
+				if (_particleOnPutCard != null)
+				{
+					_particleOnPutCard.SetActive(false);
+					_particleOnPutCard = null;
+				}
+				
 				if (Physics.Raycast(hitInfo.transform.position, Vector3.down, out var hitInfoTwo, Mathf.Infinity))
 				{
 					player.currentBlocPlayerOn = hitInfoTwo.transform;
+					player.gameObject.layer = 0;
 					if (hitInfoTwo.collider.CompareTag("Platform"))
 					{
-						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform));
+						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform, true));
 					}
 					else
 					{
-						ClearPower();
+						StartCoroutine(WaitPlayerOnBlocBeforeSitDownHim(hitInfoTransform, false));
 					}
 				}
 			}
@@ -114,11 +129,23 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 	}
 
-	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform)
+	private void Update()
 	{
-		yield return new WaitForSeconds(0.8f);
+		if (_canLook)
+		{
+			var lookPos = _objectToGo.position - _objectToMove.position;
+			lookPos.y = 0;
+			var rotation = Quaternion.LookRotation(lookPos);
+			_objectToMove.rotation = Quaternion.Slerp(_objectToMove.rotation, rotation, Time.deltaTime * _speedLookAt);
+		}
+	}
+	
+	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform, bool onPlatform)
+	{
+		yield return new WaitForSeconds(0.5f);
 		
 		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
+		_canLook = false;
 		
 		yield return new WaitForSeconds(1f);
 
@@ -126,14 +153,20 @@ public class JumpPower : MonoBehaviour, IManagePower
 				
 		_particleImpact = PoolManager.Instance.SpawnObjectFromPool("ParticleJumpImpact", GameManager.Instance.currentPlayerTurn.transform.position, Quaternion.identity, null);
 		
-		var hitPosition = hitInfoTransform.position;
-		
-		if (hitPosition.y - 1 >= GameManager.Instance.minHeightBlocMovement)
+		if(_trailParticle != null)
+			_trailParticle.SetActive(false);
+
+		if (onPlatform)
 		{
-			hitInfoTransform.DOMove(new Vector3(hitPosition.x,
-				hitPosition.y -1, hitPosition.z), speedBloc);
-		}
+			var hitPosition = hitInfoTransform.position;
 		
+			if (hitPosition.y - 1 >= GameManager.Instance.minHeightBlocMovement)
+			{
+				hitInfoTransform.DOMove(new Vector3(hitPosition.x,
+					hitPosition.y -1, hitPosition.z), speedBloc);
+			}
+		}
+
 		ClearPower();
 	}
 
@@ -143,6 +176,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = tPosPower;
 
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerJump", tPosPower + new Vector3(0,-0.45f,0), Quaternion.Euler(-90f,0,0), null);
+		
 		// ReSharper disable once Unity.PreferNonAllocApi
 		collidersMin = Physics.OverlapSphere(tPosPower, radiusMin, layerInteractable); // Detect bloc around the object
 		// ReSharper disable once Unity.PreferNonAllocApi
@@ -197,6 +232,12 @@ public class JumpPower : MonoBehaviour, IManagePower
 		{
 			collidersMin[i] = null;
 		}
+
+		if (_particleOnPutCard != null)
+		{
+			_particleOnPutCard.SetActive(false);
+			_particleOnPutCard = null;
+		}
 		
 		collidersFinished.Clear();
 		listObjectToSetActiveFalse.Clear();
@@ -205,6 +246,5 @@ public class JumpPower : MonoBehaviour, IManagePower
 		GameManager.Instance.PlayerMoving();
 		
 		PowerManager.Instance.ActivateDeactivatePower(2, false);
-		PowerManager.Instance.ChangeTurnPlayer();
 	}
 }

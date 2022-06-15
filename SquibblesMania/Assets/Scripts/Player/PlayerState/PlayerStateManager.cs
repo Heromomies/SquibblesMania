@@ -120,7 +120,6 @@ public class PlayerStateManager : Player
 	{
 		if (CurrentState != null)
 		{
-			CurrentState.ExitState(this);
 			//Switch current state to the new "state"
 			CurrentState = state;
 

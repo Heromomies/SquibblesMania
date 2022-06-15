@@ -6,9 +6,11 @@ using DigitalRubyShared;
 using I2.Loc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
 {
@@ -16,11 +18,15 @@ public class UiManager : MonoBehaviour
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     [HideInInspector]
-    public GameObject buttonNextTurn;
+    public Slider sliderNextTurn;
 
-    [Header("WIN PANEL")] public GameObject winPanel;
+    [Header("WIN PANEL")] 
+    public float valueBeforeValidateSlider;
+    public GameObject winPanel;
     public GameObject textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
+    [SerializeField] private Image imagePanelEnd;
+    [SerializeField] private Sprite spritesWinPanel;
     [SerializeField] private SquipyAnimTween winSquipyAnimTween, looseSquipyAnimTween;
     public static UiManager Instance => _uiManager;
 
@@ -35,11 +41,11 @@ public class UiManager : MonoBehaviour
 
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
+
+    private static float _timWaitForSecond = 9f;
     
-    [Header("CAMERA BUTTONS")]
-    public List<Button> buttonsCameraManager;
-    
-    
+    private WaitForSeconds _waitForSecondsJingle = new WaitForSeconds(_timWaitForSecond);
+
     [Serializable]
     public struct UiPlayerStun
     {
@@ -51,17 +57,67 @@ public class UiManager : MonoBehaviour
         _uiManager = this;
     }
 
+    public void OnPointerDown(Image circleToMove)
+    {
+        circleToMove.color = Color.white;
+    }
+
+    public void OnPointerUp(Image circleToMove)
+    {
+        circleToMove.color = Color.black;
+        
+        if (sliderNextTurn.value < valueBeforeValidateSlider)
+        {
+            sliderNextTurn.value = 0f;
+        }
+    }
+    
+    public void MoveSliderDemiCircle(Image demiCircleOnTop)
+    {
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        {
+            demiCircleOnTop.color = Color.white;
+        }
+        else
+        {
+            demiCircleOnTop.color = Color.black;
+        }
+    }
+    
+    public void MoveSliderCircleToMove(Image circleToMove)
+    {
+        circleToMove.color = Color.white;
+    }
+    
+    public void EndDragSliderCircleToMove(Image circleToMove) // When we change the value of the slider
+    {
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        {
+            NextTurn();
+        }
+        
+        circleToMove.color = Color.black;
+        sliderNextTurn.value = 0f;
+    }
+    
+    public void EndDragSliderDemiCircle(Image demiCircleOnTop) // When we change the value of the slider
+    {
+        demiCircleOnTop.color = Color.black;
+    }
+    
     private void Start()
     {
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(GameObject buttonNextTurnPlayer)
+    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
     {
-        buttonNextTurn = buttonNextTurnPlayer;
+        sliderNextTurn = buttonNextTurnPlayer;
+        sliderNextTurn.gameObject.SetActive(true);
     }
 
-    public void ButtonNextTurn()
+
+    public void NextTurn()
     {
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
@@ -79,9 +135,10 @@ public class UiManager : MonoBehaviour
             currentPlayer.stunCount--;
             currentPlayer.stunCount = (int)Mathf.Clamp( currentPlayer.stunCount, 0, Mathf.Infinity);
         }
-        
+        sliderNextTurn.gameObject.SetActive(false);
         currentPlayer.canSwitch = true;
         currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
+       
     }
 
     public void LoadScene(string sceneName)
@@ -95,8 +152,7 @@ public class UiManager : MonoBehaviour
 
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-        buttonNextTurn.SetActive(setActiveGameObject);
-            
+
         if (actualCamPresetNumber <= 2)
         {
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
@@ -122,12 +178,24 @@ public class UiManager : MonoBehaviour
             }
         }
     }
+
+    IEnumerator LaunchLoopJingle()
+    {
+        yield return _waitForSecondsJingle;
+        AudioManager.Instance.Play("Endgame_Loop");
+    }
     
     public void WinSetUp(Player.PlayerTeam currentPlayerTeam)
     {
+        AudioManager.Instance.Play("Endgame_Jingle");
+        AudioManager.Instance.Stop("MainSound");
+
+        StartCoroutine(LaunchLoopJingle());
+        
         winPanel.SetActive(true);
         playersUiGlobal.SetActive(false);
-
+        imagePanelEnd.sprite = spritesWinPanel;
+        
         var currentPlayer = GameManager.Instance.currentPlayerTurn;
         PlayerStateManager otherPlayer = null;
         

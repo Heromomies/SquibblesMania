@@ -22,6 +22,7 @@ public class MapGeneratorManager : MonoBehaviour
     public static MapGeneratorManager Instance => _mapGeneratorManager;
 
 
+    [SerializeField] private int minNumberBlocParentChildEndZone = 3;
     private void Awake()
     {
         _mapGeneratorManager = this;
@@ -85,7 +86,7 @@ public class MapGeneratorManager : MonoBehaviour
                 {
                     if (GameManager.Instance.conditionVictory.endZoneSpawnPoints.Count < endZoneSpawnPointsCount)
                     {
-                        if (!GameManager.Instance.conditionVictory.endZoneSpawnPoints.Contains(blocParent.transform) && blocParent.transform.childCount >= 2)
+                        if (!GameManager.Instance.conditionVictory.endZoneSpawnPoints.Contains(blocParent.transform) && blocParent.transform.childCount >= minNumberBlocParentChildEndZone)
                             GameManager.Instance.conditionVictory.endZoneSpawnPoints.Add(blocParent.transform);
                     }
                     
@@ -107,6 +108,14 @@ public class MapGeneratorManager : MonoBehaviour
                 GameManager.Instance.cleanList.Add(blocChild.gameObject);
             }
 
+            if (TryGetComponent(out Node node))
+            {
+                if (node.isSpawnPoint)
+                {
+                    GameManager.Instance.cleanList.Remove(blocChild.gameObject);
+                }
+            }
+            
             SetUpPlayerSpawnPoints(blocChild);
         }
     }
