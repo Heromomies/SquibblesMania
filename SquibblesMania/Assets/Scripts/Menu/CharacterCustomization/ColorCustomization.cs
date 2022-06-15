@@ -13,8 +13,8 @@ public class ColorCustomization : MonoBehaviour
 
     public List<Sprite> colors = new List<Sprite>();
     
-
-    public GameObject otherTeam;
+    [SerializeField]
+    private ColorCustomization otherTeam;
     // Start is called before the first frame update
 
     void Start()
@@ -28,7 +28,7 @@ public class ColorCustomization : MonoBehaviour
        
         if (isForward)
         {
-            if (colorID == colors.Count - 1 || otherTeam.GetComponent<ColorCustomization>().colorID == colors.Count - 1 && colorID == colors.Count - 2)
+            if (colorID == colors.Count - 1 || otherTeam.colorID == colors.Count - 1 && colorID == colors.Count - 2)
             {
                 colorID = 0;
             }
@@ -37,7 +37,7 @@ public class ColorCustomization : MonoBehaviour
                 colorID++;
             }
 
-            if (colorID == otherTeam.GetComponent<ColorCustomization>().colorID)
+            if (colorID == otherTeam.colorID)
             {
                 colorID++;
             }
@@ -47,7 +47,7 @@ public class ColorCustomization : MonoBehaviour
         }
         else
         {
-            if (colorID == 0 || otherTeam.GetComponent<ColorCustomization>().colorID == 0 && colorID == 1)
+            if (colorID == 0 || otherTeam.colorID == 0 && colorID == 1)
             {
                 colorID = colors.Count - 1;
             }
@@ -56,7 +56,7 @@ public class ColorCustomization : MonoBehaviour
                 colorID--;
             }
 
-            if (colorID == otherTeam.GetComponent<ColorCustomization>().colorID)
+            if (colorID == otherTeam.colorID)
             {
                 colorID--;
             }
