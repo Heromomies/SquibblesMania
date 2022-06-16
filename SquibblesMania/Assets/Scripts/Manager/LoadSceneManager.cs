@@ -16,8 +16,16 @@ public class LoadSceneManager : MonoBehaviour
     [SerializeField] private float timerInSecondsAlphaBlend = 0.5f;
     void Awake()
     {
-        _loadSceneManager = this;
-        DontDestroyOnLoad(loadingScreen.transform.parent);
+        if (_loadSceneManager == null)
+        {
+            _loadSceneManager = this;
+            DontDestroyOnLoad(loadingScreen.transform.parent);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
     }
     
 
@@ -38,5 +46,5 @@ public class LoadSceneManager : MonoBehaviour
         LeanTween.alphaCanvas(loadingScreen, 0, timerInSecondsAlphaBlend).setOnComplete(SetLoadingScreenToFalse);
     }
 
-    void SetLoadingScreenToFalse() => loadingScreen.gameObject.SetActive(false);
+   private void SetLoadingScreenToFalse() => loadingScreen.gameObject.SetActive(false);
 }
