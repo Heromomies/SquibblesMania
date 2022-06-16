@@ -37,8 +37,8 @@ public class PlayerSave : MonoBehaviour
         playerData.P4hatID = player4.hatID;
 
         mapID = playerData.MapID;
-
-        SceneManager.LoadScene(mapID, LoadSceneMode.Single);
+        
+        LoadSceneManager.Instance.LoadScene(mapID);
     }
 
     

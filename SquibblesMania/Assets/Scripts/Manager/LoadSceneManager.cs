@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,15 +11,20 @@ public class LoadSceneManager : MonoBehaviour
     public static LoadSceneManager Instance => _loadSceneManager;
 
     [SerializeField]
-    private GameObject loadingScreen;
+    private CanvasGroup loadingScreen;
+
+    [SerializeField] private float timerInSecondsAlphaBlend = 0.5f;
     void Awake()
     {
         _loadSceneManager = this;
+        DontDestroyOnLoad(loadingScreen.transform.parent);
     }
+    
 
     public void LoadScene(int sceneIndex)
     {
-        loadingScreen.SetActive(true);
+        loadingScreen.gameObject.SetActive(true);
+        LeanTween.alphaCanvas(loadingScreen, 1, timerInSecondsAlphaBlend);
         AsyncOperation loadSceneAsync = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Single);
         StartCoroutine(SceneLoadingCoroutine(loadSceneAsync));
     }
@@ -29,6 +35,8 @@ public class LoadSceneManager : MonoBehaviour
         {
             yield return null;
         }
-        loadingScreen.SetActive(false);
+        LeanTween.alphaCanvas(loadingScreen, 0, timerInSecondsAlphaBlend).setOnComplete(SetLoadingScreenToFalse);
     }
+
+    void SetLoadingScreenToFalse() => loadingScreen.gameObject.SetActive(false);
 }
