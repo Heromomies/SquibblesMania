@@ -61,7 +61,7 @@ public class Menu : MonoBehaviour
         buttonRotateUi.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
+ 
     public void QuitApp()
     {
         AudioManager.Instance.Play("Button");
