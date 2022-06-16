@@ -67,22 +67,22 @@ public class PlayerCardState : PlayerBaseState
                     case 'B':
                         PowerManager.Instance.ActivateDeactivatePower(0, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.SwapAnim());
+                       //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.SwapAnim());
                         break;
                     case 'R':
                         PowerManager.Instance.ActivateDeactivatePower(1, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.DashAnim());
+                        //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.DashAnim());
                         break;
                     case 'Y':
                         PowerManager.Instance.ActivateDeactivatePower(2, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.JumpAnim());
+                        //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.JumpAnim());
                         break;
                     case 'G':
                         PowerManager.Instance.ActivateDeactivatePower(3, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
-                        PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.MirrorAnim());
+                        //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.MirrorAnim());
                         break;
                 }
             }
