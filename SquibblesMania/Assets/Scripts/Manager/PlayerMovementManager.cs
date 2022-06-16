@@ -6,6 +6,8 @@ using DigitalRubyShared;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PlayerMovementManager : MonoBehaviour
 {
@@ -286,6 +288,12 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void EndMovingBloc()
 	{
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
+		{
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
+		}
+		
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
 		_isBlocSelected = false;
