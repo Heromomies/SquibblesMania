@@ -230,7 +230,7 @@ public class DashPower : MonoBehaviour, IManagePower
 
 		AudioManager.Instance.Play("PowerDashEnd");
 		NFCManager.Instance.powerActivated = true;
-
+		
 		ClearPower();
 	}
 

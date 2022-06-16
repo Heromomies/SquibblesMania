@@ -40,11 +40,11 @@ public class PowerManager : MonoBehaviour
 			case 3: powers[3].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
 		}
 
-		if (activePower)
+		if (activePower && !NFCManager.Instance.powerActivated)
 		{
 			UiManager.Instance.sliderNextTurn.interactable = false;
 		}
-		else
+		else if(activePower == false && NFCManager.Instance.powerActivated)
 		{
 			AudioManager.Instance.Play("UI_EndTurn_Other");
 			UiManager.Instance.sliderNextTurn.interactable = true;
