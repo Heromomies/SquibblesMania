@@ -40,7 +40,7 @@ public class TeamInventoryManager : MonoBehaviour
 	[SerializeField] private LeanTweenType easeScaleType;
 
 
-	private static float _timeBeforeSpawnItems = 0.5f;
+	private static float _timeBeforeSpawnItems = 0.7f;
 	private WaitForSeconds _waitForSecondsSpawnItems = new WaitForSeconds(_timeBeforeSpawnItems);
 	private	void Awake()
 	{

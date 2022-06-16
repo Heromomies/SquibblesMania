@@ -38,7 +38,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
     [HideInInspector] public bool canClick;
     private static readonly Vector3 vectorSpawnAntenna = new Vector3(0, 1.05f, 0);
     private const string BreakableIce = "BreakableIce";
-    private float _rotationSnowGun;
+    public float rotationSnowGun;
     
     private void OnEnable()
     {
@@ -51,8 +51,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
         FingersScript.Instance.AddGesture(SwapTouchGesture);
         
         animatorSnowGun = GetComponent<Animator>();
-        _rotationSnowGun = transform.rotation.y;
-        
+
         ShowEvent();
     }
 
@@ -172,8 +171,6 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
     void CanRemoveCannon()
     {
-        UiManager.Instance.sliderNextTurn.interactable = true;
-
         animatorSnowGun.SetBool("onHatche", false);
     }
 
@@ -186,6 +183,11 @@ public class SnowGun : MonoBehaviour, IManageEvent
     {
         AudioManager.Instance.Play("CanonOpen");
     }
+
+    void SetActiveTrueSlider()
+    {
+        UiManager.Instance.sliderNextTurn.interactable = true;
+    }
     
     void SetActiveFalseObject()
     {
@@ -196,7 +198,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
             h.SetActive(false);
         }
         _hatchesList.Clear();
-        transform.rotation = Quaternion.Euler(0,_rotationSnowGun, 0);
+        transform.rotation = Quaternion.Euler(0,rotationSnowGun, 0);
         gameObject.SetActive(false);
     }
 }
