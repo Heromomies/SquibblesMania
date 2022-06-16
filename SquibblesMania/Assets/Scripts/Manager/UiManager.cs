@@ -20,6 +20,7 @@ public class UiManager : MonoBehaviour
     [HideInInspector]
     public Slider sliderNextTurn;
 
+    [HideInInspector] public Image imgPlayerTeam;
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
