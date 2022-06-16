@@ -65,11 +65,10 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	public void LaunchEvent() // Launch the bullet's function
 	{
-		var psGo = Instantiate(particleSystemExplosion.gameObject, new Vector3(volcanoTransform.position.x,
+		var psGo = Instantiate(particleSystemExplosion, new Vector3(volcanoTransform.position.x,
 			volcanoTransform.position.y + 1, volcanoTransform.position.z), Quaternion.identity);
-
-		particleSystemExplosion = psGo.GetComponent<ParticleSystem>();
-		StartCoroutine(DeactivateParticle(particleSystemExplosion.time, particleSystemExplosion.gameObject));
+		
+		StartCoroutine(DeactivateParticle(psGo.time, psGo.gameObject));
 
 		_animVolcano.enabled = true;
 		InvokeRepeating(nameof(LaunchBullet), 0.5f, repeatRate);

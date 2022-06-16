@@ -38,7 +38,10 @@ public class TeamInventoryManager : MonoBehaviour
 	[SerializeField] private Vector3 scaleSizeTween = new Vector3(1.3f, 1.3f, 1.3f);
 	[SerializeField] private float timeInSecondsScaleTween = 0.5f;
 	[SerializeField] private LeanTweenType easeScaleType;
-	
+
+
+	private static float _timeBeforeSpawnItems = 0.5f;
+	private WaitForSeconds _waitForSecondsSpawnItems = new WaitForSeconds(_timeBeforeSpawnItems);
 	private	void Awake()
 	{
 		_teamInventoryManager = this;
@@ -167,8 +170,6 @@ public class TeamInventoryManager : MonoBehaviour
 						colliderFinished.Remove(colliderFinished[i]);
 					}
 				}
-
-				Debug.Log("zdçkozkdo");
 				
 				StartCoroutine(SpawnObject());
 			}
@@ -179,7 +180,7 @@ public class TeamInventoryManager : MonoBehaviour
 
 	IEnumerator SpawnObject()
 	{
-		yield return new WaitForSeconds(0.2f);
+		yield return _waitForSecondsSpawnItems;
 		
 		var randomBloc = Random.Range(0, colliderFinished.Count);
 		var bloc = colliderFinished[randomBloc].transform;
