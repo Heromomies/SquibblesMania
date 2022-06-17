@@ -12,6 +12,8 @@ public class Menu : MonoBehaviour
     
     public GameObject mapManager;
     public GameObject characterManager;
+    public GameObject creditsManager;
+    
     [SerializeField]
     private PageSwiper panelManager;
     [SerializeField] private Button buttonRotateUi;
@@ -61,6 +63,12 @@ public class Menu : MonoBehaviour
         buttonRotateUi.gameObject.SetActive(false);
     }
 
+    public void ActiveCredits()
+    {
+        AudioManager.Instance.Play("Button");
+        LeanTween.scale(imageMenuTitle.gameObject, Vector3.zero, titleScaleDownTime);
+        creditsManager.SetActive(true);
+    }
  
     public void QuitApp()
     {
@@ -81,6 +89,7 @@ public class Menu : MonoBehaviour
         AudioManager.Instance.Play("Button");
         mapManager.SetActive(false);
         startManager.SetActive(true);
+        creditsManager.SetActive(false);
         LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleDownTime);
     }
 
