@@ -39,6 +39,9 @@ public class SnowGun : MonoBehaviour, IManageEvent
     private static readonly Vector3 vectorSpawnAntenna = new Vector3(0, 1.05f, 0);
     private const string BreakableIce = "BreakableIce";
     public float rotationSnowGun;
+    private DetectionSnowGun _detectionSnowGun;
+    private static float _timeWaitBeforeSpawnAntenna = 0.5f;
+    private WaitForSeconds _waitSpawnAntenna = new WaitForSeconds(_timeWaitBeforeSpawnAntenna);
     
     private void OnEnable()
     {
@@ -65,37 +68,44 @@ public class SnowGun : MonoBehaviour, IManageEvent
         // ReSharper disable once Unity.PreferNonAllocApi
         col = Physics.OverlapSphere(transform.position, radius, layerInteractable); // Detect bloc around the object
 
-        foreach (var c in col)
+        StartCoroutine(SpawnAntenna());
+    }
+
+    IEnumerator SpawnAntenna()
+    {
+        yield return _waitSpawnAntenna;
+        for (int i = 0; i < col.Length; i++)
         {
-            if (c.TryGetComponent(out Node node))
+            if (col[i].TryGetComponent(out Node node))
             {
                 if (!node.isActive)
                 {
-                    col.ToList().Remove(c);
+                    col.ToList().Remove(col[i]);
                 }
             }
             else
             {
-                if(c.TryGetComponent(out GameObject p))
+                if(col[i].TryGetComponent(out GameObject p))
                 {
                     if (p.name == BreakableIce)
                     {
-                        col.ToList().Remove(c);
+                        col.ToList().Remove(col[i]);
                     }
                 }
             }
         }
-        
+
         var randomNumber = Random.Range(0, col.Length);
 
         GameObject go = Instantiate(hatchDetectPlayerNearSnowGun, col[randomNumber].transform.position + vectorSpawnAntenna, Quaternion.identity, col[randomNumber].transform);
-        go.GetComponent<DetectionSnowGun>().snowGun = this;
+        _detectionSnowGun = go.GetComponent<DetectionSnowGun>();
+        _detectionSnowGun.snowGun = this;
             
         goToAntennaTxt.SetActive(true);
         
         _hatchesList.Add(go);
-    }
-
+    }    
+    
 #if UNITY_EDITOR
 
     private void OnDrawGizmos()
@@ -192,6 +202,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
     void SetActiveFalseObject()
     {
         shootPlayerTxt.SetActive(false);
+        
+        _detectionSnowGun.OnAntennaRemove();    
         
         foreach (var h in _hatchesList)
         {
