@@ -19,8 +19,8 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public Slider sliderNextTurn;
-
-    [HideInInspector] public Image imgPlayerTeam;
+    [SerializeField]
+    private Image[] iconPlayerTeam;
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
@@ -117,10 +117,15 @@ public class UiManager : MonoBehaviour
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
+    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer, PlayerStateManager currentPlayer)
     {
         sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
+
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+            iconPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
+        else
+            iconPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
     }
 
 

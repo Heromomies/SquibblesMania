@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,12 +22,12 @@ public class PlayerSave : MonoBehaviour
     public PlayerData playerData;
 
     public int mapID;
-
+    
     public void SaveData()
     {
         playerData.P1colorID = team1.colorID;
         playerData.P1hatID = player1.hatID;
-
+        
         playerData.P2colorID = team2.colorID;
         playerData.P2hatID = player2.hatID;
 
@@ -35,7 +36,7 @@ public class PlayerSave : MonoBehaviour
 
         playerData.P4colorID = team2.colorID;
         playerData.P4hatID = player4.hatID;
-
+        
         mapID = playerData.MapID;
         
         LoadSceneManager.Instance.LoadScene(mapID);
