@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
       }
   }
   
-    void SetUpPlayers()
+   private void SetUpPlayers()
     {
         SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID] );
         Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
         Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
-    void StartGame()
+   private void StartGame()
     {
         //Choose Randomly a player to start
 
@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    void CamConfig(int countTurn)
+    private void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
