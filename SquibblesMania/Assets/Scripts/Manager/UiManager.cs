@@ -20,7 +20,7 @@ public class UiManager : MonoBehaviour
     [HideInInspector]
     public Slider sliderNextTurn;
     [SerializeField]
-    private Image[] imgPlayerTeam;
+    private Image[] iconPlayerTeam;
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
@@ -123,9 +123,9 @@ public class UiManager : MonoBehaviour
         sliderNextTurn.gameObject.SetActive(true);
 
         if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
-            imgPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
+            iconPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
         else
-            imgPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
+            iconPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
     }
 
 

@@ -61,6 +61,8 @@ public class BreakableIce : MonoBehaviour
         _node.isActive = false;
         _nodeMeshRenderer.enabled = false;
         _nodeCollider.enabled = false;
+        GameManager.Instance.cleanList.Remove(_node.gameObject);
+        
         RespawnIce();
     }
     
@@ -71,5 +73,6 @@ public class BreakableIce : MonoBehaviour
         _node.isActive = true;
         _nodeMeshRenderer.enabled = true;
         _nodeCollider.enabled = true;
+        GameManager.Instance.cleanList.Add(_node.gameObject);
     }
 }

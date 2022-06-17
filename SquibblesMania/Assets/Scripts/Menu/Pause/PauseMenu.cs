@@ -73,7 +73,7 @@ public class PauseMenu : MonoBehaviour
 
 			if (_menu != null)
 			{
-				if (imageMenuTitle != null && !_menu.characterManager.activeSelf && !_menu.mapManager.activeSelf)
+				if (imageMenuTitle != null && !_menu.characterManager.activeSelf && !_menu.mapManager.activeSelf && !_menu.creditsManager.activeSelf)
 				{
 					LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
 				}
