@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
         CamConfig(count);
-        NFCManager.Instance.PlayerChangeTurn();
+        NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
     }
 
     public void SetUpPlayerMaterial(PlayerStateManager player, int playerNumber)
@@ -297,7 +297,7 @@ public class GameManager : MonoBehaviour
         
         CamConfig(count);
         
-        NFCManager.Instance.PlayerChangeTurn();
+        NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
 
         if (UiManager.Instance.textActionPointPopUp)
         {
