@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     private List<Sprite> imgPlayerTeams = new List<Sprite>();
     private void Awake()
     {
-        Application.targetFrameRate = 40;
+        Application.targetFrameRate = 60;
         _gameManager = this;
         volume.profile.Reset();
     }
