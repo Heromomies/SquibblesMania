@@ -50,7 +50,6 @@ public class PowerManager : MonoBehaviour
 		}
 		else if (activePower == false && !NFCManager.Instance.powerActivated)
 		{
-			AudioManager.Instance.Play("UI_EndTurn_Other");
 			UiManager.Instance.sliderNextTurn.interactable = true;
 		}
 	}
