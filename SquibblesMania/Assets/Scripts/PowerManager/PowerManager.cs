@@ -46,11 +46,20 @@ public class PowerManager : MonoBehaviour
 		}
 		else if(activePower == false && NFCManager.Instance.powerActivated)
 		{
+			EndTurn();
+		}
+		else if (activePower == false && !NFCManager.Instance.powerActivated)
+		{
 			AudioManager.Instance.Play("UI_EndTurn_Other");
 			UiManager.Instance.sliderNextTurn.interactable = true;
-			NFCController.StopPolling();
-			LightController.ShutdownAllLights();
 		}
 	}
-	
+
+	void EndTurn()
+	{
+		AudioManager.Instance.Play("UI_EndTurn_Other");
+		UiManager.Instance.sliderNextTurn.interactable = true;
+		NFCController.StopPolling();
+		LightController.ShutdownAllLights();
+	}
 }
