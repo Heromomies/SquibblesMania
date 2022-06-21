@@ -153,16 +153,7 @@ public class UiManager : MonoBehaviour
         currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
        
     }
-
-    public void LoadScene(string sceneName)
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        textTeamOne.SetActive(false);
-        textTeamTwo.SetActive(false);
-    }
-
-
+    
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
 
