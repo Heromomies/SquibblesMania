@@ -42,16 +42,22 @@ public class DetectionSnowGun : MonoBehaviour
    {
       if (other.CompareTag("Player"))
       {
-         snowGun.canClick = false;
-         animator.SetBool("isTrigger", false);
-         snowGun.animatorSnowGun.SetBool("onHatche", false);
-         
-         AudioManager.Instance.Play("CanonOnOff");
-        
-         UiManager.Instance.sliderNextTurn.interactable = true;
-         
-         snowGun.shootPlayerTxt.SetActive(false);
-         snowGun.goToAntennaTxt.SetActive(true);
+         OnAntennaRemove();
       }
    }
+
+   public void OnAntennaRemove()
+   {
+      snowGun.canClick = false;
+      animator.SetBool("isTrigger", false);
+      snowGun.animatorSnowGun.SetBool("onHatche", false);
+         
+      AudioManager.Instance.Play("CanonOnOff");
+        
+      UiManager.Instance.sliderNextTurn.interactable = true;
+         
+      snowGun.shootPlayerTxt.SetActive(false);
+      snowGun.goToAntennaTxt.SetActive(true);
+   }
+   
 }

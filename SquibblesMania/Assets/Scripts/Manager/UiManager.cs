@@ -19,7 +19,8 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public Slider sliderNextTurn;
-
+    [SerializeField]
+    private Image[] iconPlayerTeam;
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
@@ -39,6 +40,8 @@ public class UiManager : MonoBehaviour
     [SerializeField] private Vector3 offsetText;
     public Camera uiCam;
 
+    private bool _dragMaxForSound;
+    
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
 
@@ -60,6 +63,7 @@ public class UiManager : MonoBehaviour
     public void OnPointerDown(Image circleToMove)
     {
         circleToMove.color = Color.white;
+        _dragMaxForSound = false;
     }
 
     public void OnPointerUp(Image circleToMove)
@@ -74,13 +78,15 @@ public class UiManager : MonoBehaviour
     
     public void MoveSliderDemiCircle(Image demiCircleOnTop)
     {
-        if (sliderNextTurn.value >= valueBeforeValidateSlider)
+        if (sliderNextTurn.value > valueBeforeValidateSlider && !_dragMaxForSound)
         {
-            //AudioManager.Instance.Play("GAME_Slider");
+            AudioManager.Instance.Play("GAME_Slider");
+            _dragMaxForSound = true;
             demiCircleOnTop.color = Color.white;
         }
-        else
+        else if(sliderNextTurn.value <= valueBeforeValidateSlider && _dragMaxForSound)
         {
+            _dragMaxForSound = false;
             demiCircleOnTop.color = Color.black;
         }
     }
@@ -111,10 +117,15 @@ public class UiManager : MonoBehaviour
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
+    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer, PlayerStateManager currentPlayer)
     {
         sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
+
+        if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
+            iconPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
+        else
+            iconPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
     }
 
 

@@ -29,10 +29,8 @@ public class JumpPower : MonoBehaviour, IManagePower
 	private PanGestureRecognizer SwapTouchGesture { get; set; }
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
-	private Transform _objectToMove, _objectToGo;
-	private float _speedLookAt = 3f;
-	private bool _canLook;
-	
+	private Transform _objectToMove;
+
 	void OnEnable()
 	{
 		_cam = Camera.main;
@@ -76,8 +74,6 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var tCurrentPlayerTurn = player.transform;
 
 				_objectToMove = tCurrentPlayerTurn;
-				_objectToGo = hitInfo.transform;
-				_canLook = true;
 
 				var posHitInfo = hitInfo.transform.position + new Vector3(0,0.5f,0); 
 
@@ -129,23 +125,11 @@ public class JumpPower : MonoBehaviour, IManagePower
 		}
 	}
 
-	private void Update()
-	{
-		if (_canLook)
-		{
-			var lookPos = _objectToGo.position - _objectToMove.position;
-			lookPos.y = 0;
-			var rotation = Quaternion.LookRotation(lookPos);
-			_objectToMove.rotation = Quaternion.Slerp(_objectToMove.rotation, rotation, Time.deltaTime * _speedLookAt);
-		}
-	}
-	
 	IEnumerator WaitPlayerOnBlocBeforeSitDownHim(Transform hitInfoTransform, bool onPlatform)
 	{
 		yield return new WaitForSeconds(0.5f);
 		
 		GameManager.Instance.currentPlayerTurn.gameObject.layer = 6;
-		_canLook = false;
 		
 		yield return new WaitForSeconds(1f);
 

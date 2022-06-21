@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PowerManager : MonoBehaviour
 {
@@ -38,15 +40,25 @@ public class PowerManager : MonoBehaviour
 			case 3: powers[3].gameObject.SetActive(activePower); isPlayerInJumpOrSwap = false; break;
 		}
 
-		if (activePower)
+		if (activePower && !NFCManager.Instance.powerActivated)
 		{
 			UiManager.Instance.sliderNextTurn.interactable = false;
 		}
-		else
+		else if(activePower == false && NFCManager.Instance.powerActivated)
 		{
-			AudioManager.Instance.Play("UI_EndTurn_Other");
+			EndTurn();
+		}
+		else if (activePower == false && !NFCManager.Instance.powerActivated)
+		{
 			UiManager.Instance.sliderNextTurn.interactable = true;
 		}
 	}
-	
+
+	void EndTurn()
+	{
+		AudioManager.Instance.Play("UI_EndTurn_Other");
+		UiManager.Instance.sliderNextTurn.interactable = true;
+		NFCController.StopPolling();
+		LightController.ShutdownAllLights();
+	}
 }

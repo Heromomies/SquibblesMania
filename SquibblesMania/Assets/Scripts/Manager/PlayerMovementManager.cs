@@ -6,11 +6,13 @@ using DigitalRubyShared;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 
 public class PlayerMovementManager : MonoBehaviour
 {
-	public LongPressGestureRecognizer LongPressBlocMovementGesture { get; private set; }
-	public TapGestureRecognizer TapGestureRecognizer { get; private set; }
+	private LongPressGestureRecognizer LongPressBlocMovementGesture { get; set; }
+	private TapGestureRecognizer TapGestureRecognizer { get; set; }
 	[Header("TOUCH SETTINGS")] public LayerMask ghostLayerMask;
 	public LayerMask blocLayerMask;
 	[Range(0.0f, 1.0f)] public float longPressureDurationSeconds;
@@ -28,10 +30,10 @@ public class PlayerMovementManager : MonoBehaviour
 	[Header("BLOC SETTINGS")] [SerializeField]
 	private float movementBlocAmount = 1f;
 
-	[SerializeField] private float minimalDistanceToMoveBloc = 50f;
+	[SerializeField] private float minimalDistanceToMoveBloc = 5f;
 	private Vector3 _blocParentCurrentlySelectedPos; 
 	[SerializeField]
-	private bool _isBlocSelected;
+	private bool isBlocSelected;
 	private Vector3 _lastDirectionBloc;
 	private float _timeInSecondsForBlocMove = 0.4f;
 	private readonly WaitForSeconds _timeInSecondsBetweenBlocMovement = new WaitForSeconds(0.3f);
@@ -228,11 +230,11 @@ public class PlayerMovementManager : MonoBehaviour
 			//If press is currently executing
 			else if (gesture.State == GestureRecognizerState.Executing)
 			{
-				if (_isBlocSelected && _canTouchBloc && blockParentCurrentlySelected != null)
+				if (isBlocSelected && _canTouchBloc && blockParentCurrentlySelected != null)
 				{
 					_touchPos = new Vector3(gesture.DeltaX, gesture.DeltaY, 0);
 					BlocMovement(_touchPos);
-					_isBlocSelected = false;
+					isBlocSelected = false;
 				}
 			}
 			//If press is ended
@@ -243,7 +245,14 @@ public class PlayerMovementManager : MonoBehaviour
 				UiManager.Instance.sliderNextTurn.interactable = true;
 				_canTouchBloc = true;
 			}
-		
+			//Reset preview bloc mesh
+			else if (gesture.State == GestureRecognizerState.Failed || gesture.State == GestureRecognizerState.Possible)
+			{
+				if (_nextBlocDownMeshPos.Count > 0 || _nextBlocUpMeshPos.Count > 0)
+				{
+					ResetBlocPreviewMesh();
+				}
+			}
 		}
 	}
 
@@ -258,7 +267,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void StartMovingBloc(PlayerStateManager currentPlayerTurn)
 	{
 		_blockCurrentlySelected = _hit.collider.gameObject;
-		_isBlocSelected = true;
+		isBlocSelected = true;
 		var currentPlayer = currentPlayerTurn.transform;
 		blockParentCurrentlySelected = _blockCurrentlySelected.transform.parent;
 		UiManager.Instance.totalCurrentActionPoint = currentPlayerTurn.playerActionPoint;
@@ -286,9 +295,15 @@ public class PlayerMovementManager : MonoBehaviour
 
 	private void EndMovingBloc()
 	{
+		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
+		{
+			NFCController.StopPolling();
+			LightController.ShutdownAllLights();
+		}
+		
 		ResetPreviewPathObjects();
 		ResetBlocPreviewMesh();
-		_isBlocSelected = false;
+		isBlocSelected = false;
 		_touchPos = Vector3.zero;
 		hasStopMovingBloc = false;
 		_blockCurrentlySelected = null;
@@ -408,7 +423,7 @@ public class PlayerMovementManager : MonoBehaviour
 	private void BlocMovement(Vector3 touchPos)
 	{
 		var direction = touchPos.normalized;
-		if (_isBlocSelected)
+		if (isBlocSelected)
 		{
 			StartCoroutine(StartBlocMovementCoroutine(touchPos.y, direction));
 		}
@@ -480,14 +495,14 @@ public class PlayerMovementManager : MonoBehaviour
 			ResetPreviewPathObjects();
 			_touchPos = Vector3.zero;
 			hasStopMovingBloc = false;
-			_isBlocSelected = true;
+			isBlocSelected = true;
 			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && !blockParentCurrentlySelected)
 			{
+				AudioManager.Instance.Play("UI_EndTurn_Other");
 				EndMovingBloc();
 			}
 			GameManager.Instance.PlayerMoving();
 		}
-		
 	}
 	
 	

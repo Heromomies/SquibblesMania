@@ -73,7 +73,7 @@ public class PauseMenu : MonoBehaviour
 
 			if (_menu != null)
 			{
-				if (imageMenuTitle != null && !_menu.characterManager.activeSelf && !_menu.mapManager.activeSelf)
+				if (imageMenuTitle != null && !_menu.characterManager.activeSelf && !_menu.mapManager.activeSelf && !_menu.creditsManager.activeSelf)
 				{
 					LeanTween.scale(imageMenuTitle.gameObject, Vector3.one, titleScaleUpTime);	
 				}
@@ -95,7 +95,7 @@ public class PauseMenu : MonoBehaviour
 	/// <param name="sceneIndex"></param>
 	public void LoadScene(int sceneIndex)
 	{
-		SceneManager.LoadScene(sceneIndex, LoadSceneMode.Single);
+		LoadSceneManager.Instance.LoadScene(sceneIndex);
 	}
 
     public void RotateUi()

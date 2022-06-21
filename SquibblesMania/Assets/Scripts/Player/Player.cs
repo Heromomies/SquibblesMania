@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Player : MonoBehaviour
@@ -21,7 +22,7 @@ public class Player : MonoBehaviour
     public bool isPlayerHide;
     public bool canSwitch = true;
     public GameObject currentCardEffect;
-        
+    public Sprite spritePlayerTeam;
     [HideInInspector] public GameObject vfxStun;
     public Rigidbody playerRigidbody;
     [Header("RESPAWN PARAMETERS")] public Transform playerRespawnPoint;

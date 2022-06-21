@@ -38,7 +38,10 @@ public class TeamInventoryManager : MonoBehaviour
 	[SerializeField] private Vector3 scaleSizeTween = new Vector3(1.3f, 1.3f, 1.3f);
 	[SerializeField] private float timeInSecondsScaleTween = 0.5f;
 	[SerializeField] private LeanTweenType easeScaleType;
-	
+
+
+	private static float _timeBeforeSpawnItems = 0.7f;
+	private WaitForSeconds _waitForSecondsSpawnItems = new WaitForSeconds(_timeBeforeSpawnItems);
 	private	void Awake()
 	{
 		_teamInventoryManager = this;
@@ -118,18 +121,11 @@ public class TeamInventoryManager : MonoBehaviour
 			}
 			else if (inventory[1].objectAcquired > inventory[0].objectAcquired) // Team 2 is before Team 1
 			{
-				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStructMax[1].Collider = Physics.OverlapSphere(players[1].transform.position, radiusMax, layerInteractable);
-				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStructMax[3].Collider = Physics.OverlapSphere(players[3].transform.position, radiusMax, layerInteractable);
-
-				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStructMax[0].Collider = Physics.OverlapSphere(players[0].transform.position, radiusMin, layerInteractable);
-				// ReSharper disable once Unity.PreferNonAllocApi
-				colliderStructMax[2].Collider = Physics.OverlapSphere(players[2].transform.position, radiusMin, layerInteractable);
-				
 				for (int i = 0; i < players.Count; i++)
 				{
+					// ReSharper disable once Unity.PreferNonAllocApi
+					colliderStructMax[i].Collider = Physics.OverlapSphere(players[i].transform.position, radiusMax, layerInteractable);
+					
 					for (int j = 0; j < colliderStructMax[i].Collider.Length; j++)
 					{
 						if (colliderFinished.Contains(colliderStructMax[i].Collider[j].gameObject))
@@ -167,8 +163,6 @@ public class TeamInventoryManager : MonoBehaviour
 						colliderFinished.Remove(colliderFinished[i]);
 					}
 				}
-
-				Debug.Log("zdçkozkdo");
 				
 				StartCoroutine(SpawnObject());
 			}
@@ -179,7 +173,7 @@ public class TeamInventoryManager : MonoBehaviour
 
 	IEnumerator SpawnObject()
 	{
-		yield return new WaitForSeconds(0.2f);
+		yield return _waitForSecondsSpawnItems;
 		
 		var randomBloc = Random.Range(0, colliderFinished.Count);
 		var bloc = colliderFinished[randomBloc].transform;

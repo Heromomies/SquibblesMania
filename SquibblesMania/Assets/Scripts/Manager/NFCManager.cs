@@ -41,6 +41,8 @@ public class NFCManager : MonoBehaviour
 	[HideInInspector] public bool displacementActivated;
 	[HideInInspector] public int changeColor;
 	[HideInInspector] public int indexPlayer;
+	private static float _timeBeforeChangeTurn = 0.4f;
+	private WaitForSeconds _waitBeforeChangeTurn = new WaitForSeconds(_timeBeforeChangeTurn);
 
 	#endregion
 
@@ -62,11 +64,12 @@ public class NFCManager : MonoBehaviour
 
 	#endregion
 
-	public void PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
+	public IEnumerator PlayerChangeTurn() // When we change the turn of the player, the color and the antenna who can detect change too
 	{
+		yield return _waitBeforeChangeTurn;
 		if (GameManager.Instance.currentPlayerTurn.isPlayerStun)
 		{
-			return;
+			yield break;
 		}
 		
 		StopAllCoroutines();

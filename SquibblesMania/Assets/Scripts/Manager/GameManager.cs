@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public Slider sliderNextTurn;
+       [HideInInspector] public Image imgPlayerTeam;
     }
     
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
@@ -58,10 +59,11 @@ public class GameManager : MonoBehaviour
     public List<Material> colors = new List<Material>();
     public GameObject spawnPointSpriteParent;
     public List<Color> playerColors = new List<Color>();
-    
+    [SerializeField]
+    private List<Sprite> imgPlayerTeams = new List<Sprite>();
     private void Awake()
     {
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = 60;
         _gameManager = this;
         volume.profile.Reset();
     }
@@ -118,7 +120,7 @@ public class GameManager : MonoBehaviour
       
     }
 
-  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat)
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat, Sprite imgPlayerTeam)
   {
       if (player.playerRespawnPoint.TryGetComponent(out Node playerNodeSpawnPoint))
       {
@@ -126,6 +128,7 @@ public class GameManager : MonoBehaviour
           SetSpriteSpawnPlayerPoint(player, playerNodeSpawnPoint, playerCustomMat);
           player.indicatorPlayerRenderer.gameObject.SetActive(false);
           player.playerMesh.material = playerCustomMat;
+          player.spritePlayerTeam = imgPlayerTeam;
       }
   }
 
@@ -164,22 +167,22 @@ public class GameManager : MonoBehaviour
       }
   }
   
-    void SetUpPlayers()
+   private void SetUpPlayers()
     {
-        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID] );
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID], imgPlayerTeams[playerData.P1colorID]);
         Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
-        
-        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, colors[playerData.P2colorID]);
+   
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, colors[playerData.P2colorID], imgPlayerTeams[playerData.P2colorID]);
         Instantiate(hats[playerData.P2hatID], players[1].playerHat.transform.position, players[1].playerHat.transform.rotation).transform.parent = players[1].playerHat.transform; ;
 
-        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, colors[playerData.P3colorID] );
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, colors[playerData.P3colorID], imgPlayerTeams[playerData.P3colorID]);
         Instantiate(hats[playerData.P3hatID], players[2].playerHat.transform.position, players[2].playerHat.transform.rotation).transform.parent = players[2].playerHat.transform; ;
         
-        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, colors[playerData.P4colorID]);
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, colors[playerData.P4colorID], imgPlayerTeams[playerData.P4colorID]);
         Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
-    void StartGame()
+   private void StartGame()
     {
         //Choose Randomly a player to start
 
@@ -188,7 +191,7 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
         CamConfig(count);
-        NFCManager.Instance.PlayerChangeTurn();
+        NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
     }
 
     public void SetUpPlayerMaterial(PlayerStateManager player, int playerNumber)
@@ -202,7 +205,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    void CamConfig(int countTurn)
+    private void CamConfig(int countTurn)
     {
         if (currentPlayerTurn.canSwitch)
         {
@@ -215,7 +218,7 @@ public class GameManager : MonoBehaviour
             cameraTransform.DORotate(actualCamPreset.camRot, smoothTransitionTime);
 
             //UI SWITCH
-            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
+            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn, currentPlayerTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
             
             //Register Previous Cam View Mode
@@ -287,11 +290,14 @@ public class GameManager : MonoBehaviour
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count;
-        CamConfig(count);
         
+        //Change player turn state
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
-        NFCManager.Instance.PlayerChangeTurn();
+        
+        CamConfig(count);
+        
+        NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
 
         if (UiManager.Instance.textActionPointPopUp)
         {
