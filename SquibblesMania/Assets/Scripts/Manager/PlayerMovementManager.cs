@@ -297,7 +297,6 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
 		{
-			AudioManager.Instance.Play("UI_EndTurn_Other");
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
 		}
@@ -499,11 +498,11 @@ public class PlayerMovementManager : MonoBehaviour
 			isBlocSelected = true;
 			if (GameManager.Instance.currentPlayerTurn.playerActionPoint <= 0 && !blockParentCurrentlySelected)
 			{
+				AudioManager.Instance.Play("UI_EndTurn_Other");
 				EndMovingBloc();
 			}
 			GameManager.Instance.PlayerMoving();
 		}
-		
 	}
 	
 	
