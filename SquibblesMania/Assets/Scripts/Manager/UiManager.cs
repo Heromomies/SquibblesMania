@@ -165,9 +165,9 @@ public class UiManager : MonoBehaviour
     
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-
         if (actualCamPresetNumber <= 2)
         {
+           
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
@@ -184,6 +184,7 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
+                
                 case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
                 case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
