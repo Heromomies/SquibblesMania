@@ -66,6 +66,11 @@ public class UiManager : MonoBehaviour
         _dragMaxForSound = false;
     }
 
+    public void ResetValueNextTurn()
+    {
+        sliderNextTurn.value = 0f;
+    }
+    
     public void OnPointerUp(Image circleToMove)
     {
         circleToMove.color = Color.black;
