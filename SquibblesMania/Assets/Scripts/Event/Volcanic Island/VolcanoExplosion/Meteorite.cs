@@ -17,7 +17,7 @@ public class Meteorite : MonoBehaviour
 	private const string UntaggedString = "Untagged";
 	private const string PlatformString = "Platform";
 	private const float DelayDeactivate = 0.5f;
-	
+	private static Vector3 _meteorite = new Vector3(1500, -1500, 1500);
 	
 	private void Start()
 	{
@@ -30,6 +30,9 @@ public class Meteorite : MonoBehaviour
 		{
 			var node = _particleFireToDelete.GetComponentInParent<Node>();
 			node.isActive = true;
+			
+			Debug.Log(node.isActive, node);
+			
 			_particleFireToDelete.gameObject.SetActive(false);
 			node.gameObject.layer = 3;
 			if (node.colorBloc == Node.ColorBloc.None)
@@ -58,29 +61,34 @@ public class Meteorite : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("Player"))
 		{
-			AudioManager.Instance.Play("Stun");
-
 			var player = other.gameObject.GetComponent<PlayerStateManager>();
-			player.vfxStun = PoolManager.Instance.SpawnObjectFromPool("StunVFX", other.transform.position + new Vector3(0, 1, 0), Quaternion.identity, other.transform);
+			if (!player.isPlayerStun)
+			{
+				AudioManager.Instance.Play("Stun");
+				
+				player.vfxStun = PoolManager.Instance.SpawnObjectFromPool("StunVFX", other.transform.position + new Vector3(0, 1, 0), Quaternion.identity, other.transform);
 			
-			PlayerStateEventManager.Instance.PlayerStunTriggerEnter(player, 1);
+				PlayerStateEventManager.Instance.PlayerStunTriggerEnter(player, 1);
 			
-			if (GameManager.Instance.currentPlayerTurn.isPlayerStun) 
-			{ 
-				PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+				if (GameManager.Instance.currentPlayerTurn.isPlayerStun) 
+				{ 
+					PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
+				}
 			}
-
+			
 			StartCoroutine(SetActiveFalseBullet(0.01f));
 		}
 		else
 		{
 			StartCoroutine(SetActiveFalseBullet(2f));
 
-			if (other.gameObject.GetComponent<Node>() != null)
+			var otherNode = other.gameObject.GetComponent<Node>();
+			
+			if (otherNode != null)
 			{
 				VolcanoManager.Instance.meteorites.Add(this);
 				
-				other.gameObject.GetComponent<Node>().isActive = false;
+				otherNode.isActive = false;
 			
 				transform.parent = other.transform;
 				_turn = GameManager.Instance.turnCount;
@@ -90,19 +98,19 @@ public class Meteorite : MonoBehaviour
 				transform.rotation = new Quaternion(0,0,0,0);
 				stopRotating = true;
 
-				var transformPlayer = transform.position;
+				var posPlayer = transform.position;
 			
-				GameObject explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", transformPlayer, Quaternion.identity, null);
+				var explosionPS = PoolManager.Instance.SpawnObjectFromPool("ExplosionVFXMeteorite", posPlayer, Quaternion.identity, null);
 				StartCoroutine(DeactivateParticle(2f, explosionPS));
 				
 				var otherPosition = other.transform.position;
-				GameObject firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
+				var firePS = PoolManager.Instance.SpawnObjectFromPool("FireVFXMeteorite",
 					new Vector3(otherPosition.x, otherPosition.y + 1.25f, otherPosition.z), Quaternion.identity, other.transform);
 				_particleFireToDelete = firePS;
 			
 				_rb.constraints = RigidbodyConstraints.FreezeAll;
 			
-				transform.position = new Vector3(otherPosition.x, transformPlayer.y -0.1f, otherPosition.z);
+				transform.position = new Vector3(otherPosition.x, posPlayer.y -0.1f, otherPosition.z);
 
 				transform.rotation = other.transform.rotation;
 			}
@@ -118,7 +126,7 @@ public class Meteorite : MonoBehaviour
 	IEnumerator SetActiveFalseBullet(float seconds)
 	{
 		yield return new WaitForSeconds(seconds);
-		gameObject.transform.position = new Vector3(1500,-1500, 1500);
+		gameObject.transform.position = _meteorite;
 		_rb.constraints = RigidbodyConstraints.FreezeAll;
 	}
 }
