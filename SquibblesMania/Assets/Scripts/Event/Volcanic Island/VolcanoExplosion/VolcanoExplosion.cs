@@ -52,6 +52,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 			if (cubeOnMap[placeOfCube].layer != 7)
 			{
 				GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
+				cubeOnMap.Remove(cubeOnMap[placeOfCube]);
 				RandomEvent(placeOfCube);
 			}
 			else
