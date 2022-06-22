@@ -34,7 +34,11 @@ public class PlayerStateEventManager : MonoBehaviour
         {
             ONPlayerStunTriggerEnter(player, stunCount);
         }
-        NFCController.StopPolling();
-        LightController.ShutdownAllLights();
+
+        if (player == GameManager.Instance.currentPlayerTurn)
+        {
+            NFCController.StopPolling();
+            LightController.ShutdownAllLights();
+        }
     }
 }
