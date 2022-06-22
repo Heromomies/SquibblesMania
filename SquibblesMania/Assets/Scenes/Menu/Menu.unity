@@ -2142,23 +2142,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 238853715}
   m_CullTransparentMesh: 1
---- !u!114 &264509660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mTarget: {fileID: 1859099769}
-  mAlignment_RTL: 514
-  mAlignment_LTR: 514
-  mAlignmentWasRTL: 0
-  mInitializeAlignment: 0
 --- !u!1 &286906394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2364,6 +2347,9 @@ MonoBehaviour:
   panelLaunch: {fileID: 889857440}
   uiMenuParent: {fileID: 358527914}
   imageMenuTitle: {fileID: 700105426}
+  rotated: 0
+  swipeManager: {fileID: 1564276347}
+  firstPanelPosition: {x: 0, y: 0, z: 0}
   titleScaleDownTime: 0.3
 --- !u!114 &297253620
 MonoBehaviour:
@@ -2397,7 +2383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 570239834}
+  mTarget: {fileID: 795832813}
   mAlignment_RTL: 514
   mAlignment_LTR: 514
   mAlignmentWasRTL: 0
@@ -3136,7 +3122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Isla volc\xE1nica"
+  m_text: "\xCEle Volcanique"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -3643,7 +3629,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Monta\xF1a Nevada"
+  m_text: "Montagne enneig\xE9e"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -4606,7 +4592,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Templo Perdido
+  m_text: Temple Perdu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -4992,9 +4978,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Re\xFAne las <sprite=2> para construir el <sprite=0>.\n \xA1El <sprite=1>
-    puede entrar en erupci\xF3n en cualquier momento! \n\n\xA1Huye de la isla tan
-    pronto como puedas! "
+  m_text: "R\xE9cup\xE9rez les <sprite=2>  pour construire le <sprite=0>.\n Le <sprite=1>
+    peut entrer en \xE9ruption \xE0 tout moment ! \n\nFuyez l'\xEEle le plus vite
+    possible! "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -5021,7 +5007,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.95
+  m_fontSize: 26
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6988,7 +6974,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Templo Perdido
+  m_text: Temple Perdu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -7377,7 +7363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 388350637}
+  mTarget: {fileID: 992766963}
   mAlignment_RTL: 514
   mAlignment_LTR: 514
   mAlignmentWasRTL: 0
@@ -9286,7 +9272,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pulse para empezar
+  m_text: Appuyez pour commencer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -9558,7 +9544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Isla volc\xE1nica"
+  m_text: "\xCEle Volcanique"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -12597,7 +12583,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Devolver
+  m_text: Retour
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -14780,7 +14766,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1533236883
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15091,6 +15077,9 @@ MonoBehaviour:
   totalPages: 4
   currentPage: 1
   transitionf: 0
+  Menu: {fileID: 297253619}
+  fakeFirstPanel: {fileID: 2078638131}
+  fakeLastPanel: {fileID: 1109257681}
 --- !u!1 &1568457838
 GameObject:
   m_ObjectHideFlags: 0
@@ -18369,17 +18358,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 686ec388f544a694f86dfe3f510c52c1, type: 3}
---- !u!114 &1859099769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7920435760259620239, guid: 686ec388f544a694f86dfe3f510c52c1, type: 3}
-  m_PrefabInstance: {fileID: 1859099768}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1867512909
 GameObject:
   m_ObjectHideFlags: 0
@@ -19225,7 +19203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mapa
+  m_text: Carte
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -19410,7 +19388,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Exploraci\xF3n Submarina"
+  m_text: Exploration Sous-Marine
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -21388,9 +21366,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Re\xFAne las <sprite=2> para construir el <sprite=0>.\nUtiliza los diferentes
-    elementos del mapa para tu ventaja, \npero ten cuidado con el viento!\n\n\xA1Huye
-    de la isla tan pronto como puedas! "
+  m_text: "R\xE9cup\xE9rez les <sprite=2> pour construire le <sprite=0>. \nUtilisez
+    les diff\xE9rents \xE9l\xE9ments de la map \xE0 votre avantage, mais attention
+    au vent !\n\nFuyez l'\xEEle le plus vite possible ! "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -21417,7 +21395,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.75
+  m_fontSize: 23.95
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
