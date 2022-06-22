@@ -56,6 +56,7 @@ public class PowerManager : MonoBehaviour
 
 	void EndTurn()
 	{
+		Debug.Log("Power end turn");
 		AudioManager.Instance.Play("UI_EndTurn_Other");
 		UiManager.Instance.sliderNextTurn.interactable = true;
 		NFCController.StopPolling();

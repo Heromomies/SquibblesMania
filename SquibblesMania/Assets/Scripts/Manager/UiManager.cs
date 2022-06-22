@@ -98,7 +98,7 @@ public class UiManager : MonoBehaviour
     
     public void EndDragSliderCircleToMove(Image circleToMove) // When we change the value of the slider
     {
-        if (sliderNextTurn.value >= valueBeforeValidateSlider && !NFCManager.Instance.newCardDetected)
+        if (sliderNextTurn.value >= valueBeforeValidateSlider)
         {
             NextTurn();
         }
