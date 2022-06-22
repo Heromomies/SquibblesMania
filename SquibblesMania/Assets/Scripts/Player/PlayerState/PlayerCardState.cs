@@ -46,7 +46,8 @@ public class PlayerCardState : PlayerBaseState
         {
             NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
             NFCManager.Instance.newCardDetected = true;
-
+            UiManager.Instance.ResetValueNextTurn();
+            
             if (nfcTag.Data.Contains("1"))
             {
                 TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
