@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
@@ -136,6 +138,9 @@ public class UiManager : MonoBehaviour
 
     public void NextTurn()
     {
+        NFCController.StopPolling();
+        LightController.ShutdownAllLights();
+        
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;

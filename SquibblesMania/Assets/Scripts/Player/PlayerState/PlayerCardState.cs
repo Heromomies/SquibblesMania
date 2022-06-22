@@ -209,7 +209,7 @@ public class PlayerCardState : PlayerBaseState
             }
 
             player.indicatorPlayerRenderer.gameObject.SetActive(true);
-            NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
+            NFCManager.Instance.PlayerChangeTurn();
         }
         else
         {
