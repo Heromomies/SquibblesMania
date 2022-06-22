@@ -294,12 +294,13 @@ public class GameManager : MonoBehaviour
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count;
        
+        CamConfig(count);
         
         //Change player turn state
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
         
-        CamConfig(count);
+      
         
         NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
 
