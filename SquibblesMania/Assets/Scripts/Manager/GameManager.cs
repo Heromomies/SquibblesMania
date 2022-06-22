@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
             
             //Smooth Transition
             cameraTransform.DOMove(actualCamPreset.camPos, smoothTransitionTime);
-            cameraTransform.DORotate(actualCamPreset.camRot, smoothTransitionTime);
+            cameraTransform.DORotateQuaternion(Quaternion.Euler(actualCamPreset.camRot), smoothTransitionTime);
 
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn, currentPlayerTurn);
