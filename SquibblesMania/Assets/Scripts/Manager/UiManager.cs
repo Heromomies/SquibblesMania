@@ -134,7 +134,6 @@ public class UiManager : MonoBehaviour
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
-        NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
         PowerManager.Instance.isPlayerInJumpOrSwap = false;
         

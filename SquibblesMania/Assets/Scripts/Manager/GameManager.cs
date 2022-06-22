@@ -220,6 +220,7 @@ public class GameManager : MonoBehaviour
             //UI SWITCH
             UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn, currentPlayerTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
+           
             
             //Register Previous Cam View Mode
             if (turnCount <= 4)
@@ -279,17 +280,20 @@ public class GameManager : MonoBehaviour
         {
             VolcanoManager.Instance.ChangeTurnVolcano();
         }
+
+        if (!NFCManager.Instance.newCardDetected) turnCount++;
+        NFCManager.Instance.newCardDetected = false;
         
-        turnCount++;
         if (currentPlayerTurn.currentCardEffect)
         {
             currentPlayerTurn.currentCardEffect.SetActive(false);
             currentPlayerTurn.currentCardEffect = null;
         }
-        
+       
         SavePreviousCamRotY(count);
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count;
+       
         
         //Change player turn state
         currentPlayerTurn = players[playerNumberTurn];
