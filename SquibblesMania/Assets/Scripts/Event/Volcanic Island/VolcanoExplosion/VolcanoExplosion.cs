@@ -49,15 +49,12 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
 			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite);
-			if (cubeOnMap[placeOfCube].layer != 7)
+			
+			if (cubeOnMap[placeOfCube].layer != 7 && !cubeOnMap[placeOfCube].GetComponentInChildren<Ressources>())
 			{
 				GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
 				cubeOnMap.Remove(cubeOnMap[placeOfCube]);
 				RandomEvent(placeOfCube);
-			}
-			else
-			{
-				i--;
 			}
 		}
 
