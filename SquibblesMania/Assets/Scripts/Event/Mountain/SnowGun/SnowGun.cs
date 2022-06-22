@@ -31,6 +31,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
 	[HideInInspector] public Animator animatorSnowGun;
 	[HideInInspector] public List<Vector3> listPoint = new List<Vector3>();
+	[HideInInspector] public bool activated;
 	private List<GameObject> _hatchesList = new List<GameObject>();
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
@@ -137,6 +138,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 			{
 				if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
 				{
+					activated = true;
 					var posHitInfo = hitInfo.transform.position;
 
 					var childToMove = transform.GetChild(1);
@@ -210,7 +212,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 		{
 			h.SetActive(false);
 		}
-
+		
 		_hatchesList.Clear();
 		transform.rotation = Quaternion.Euler(0, rotationSnowGun, 0);
 		gameObject.SetActive(false);

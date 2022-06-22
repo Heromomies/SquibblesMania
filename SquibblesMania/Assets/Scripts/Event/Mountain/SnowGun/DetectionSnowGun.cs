@@ -55,9 +55,19 @@ public class DetectionSnowGun : MonoBehaviour
       AudioManager.Instance.Play("CanonOnOff");
         
       UiManager.Instance.sliderNextTurn.interactable = true;
-         
+
       snowGun.shootPlayerTxt.SetActive(false);
-      snowGun.goToAntennaTxt.SetActive(true);
+      
+      if (snowGun.activated)
+      {
+         snowGun.goToAntennaTxt.SetActive(false);
+         snowGun.activated = false;
+      }
+      else
+      {
+         snowGun.goToAntennaTxt.SetActive(true);
+      }
+     
    }
    
 }
