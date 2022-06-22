@@ -1002,7 +1002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventToTest:
-  - {fileID: 1263104351}
+  - {fileID: 1198056434}
 --- !u!114 &355057695 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5590946608553874431, guid: b169e6203919eba409ba79abfd758b43, type: 3}
@@ -1037,6 +1037,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1236012610}
     m_Modifications:
+    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
+      propertyPath: dangerousness
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
+      propertyPath: levelOfDanger
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: events.Array.data[0]
       value: 
@@ -5152,14 +5160,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7843621773803105195, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 355057695}
-    - target: {fileID: 7843621773803105195, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadScene
-      objectReference: {fileID: 0}
     - target: {fileID: 7843621773840529713, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5477,16 +5477,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7843621774987291458, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 355057695}
-    - target: {fileID: 7843621774987291458, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 7843621774987291458, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: VolcanoScene
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7843621775045906341, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
       propertyPath: m_fontColor.b

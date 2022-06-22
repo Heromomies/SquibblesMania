@@ -10,8 +10,10 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 {
 	[Header("EVENT SETTINGS")]
 	[Range(0f, 10f)] public float speedBloc;
-
-	public Transform volcanoTransform;
+	
+	private static float _timeBeforeSetActiveFalseLava = 1f;
+	private WaitForSeconds _waitTimeBeforeSetActiveFalseLaval = new WaitForSeconds(_timeBeforeSetActiveFalseLava);
+	private List<Transform> _blocParentPlayer;
 	
 	[Space]
 	[Header("CONDITIONS DANGEROUSNESS")]
@@ -48,21 +50,24 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 				
 				var col = blocParent[randomNumber].transform.position;
 
-				var blocParentPlayer = blocParent[randomNumber].GetComponent<GroupBlockDetection>().playersOnGroupBlock;
-				
+				if (blocParent[randomNumber].TryGetComponent(out GroupBlockDetection groupBlockDetection))
+				{
+					_blocParentPlayer = groupBlockDetection.playersOnGroupBlock;
+				}
+
 				if (Math.Abs(col.y - blocHeight) > 0.1f)
 				{
 					col = new Vector3(col.x, blocHeight, col.z);
 					blocParent[randomNumber].transform.DOMove(col, speedBloc);
 					
-					for (int j = 0; j < blocParentPlayer.Count; j++)
+					for (int j = 0; j < _blocParentPlayer.Count; j++)
 					{				
-						var blocParentPlayerPos = blocParent[randomNumber].GetComponent<GroupBlockDetection>().playersOnGroupBlock[j].transform.position;
+						var blocParentPlayerPos = _blocParentPlayer[j].transform.position;
 
 						if (blocParent[randomNumber].transform.position.y < blocHeight)
 						{
 							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, col.y + blocParentPlayerPos.y + 1f, blocParentPlayerPos.z);
-							blocParentPlayer[j].transform.DOMove(blocParentPlayerPos, speedBloc); 
+							_blocParentPlayer[j].transform.DOMove(blocParentPlayerPos, speedBloc); 
 						}
 					}
 				}
@@ -81,10 +86,8 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	}
 	IEnumerator SetActiveFalseBullet()
 	{
-		GameObject obj = PoolManager.Instance.SpawnObjectFromPool("ParticleLavaProjection", volcanoTransform.position, Quaternion.Euler(-90,0,0), null);
-
-		yield return new WaitForSeconds(1f);
-		obj.SetActive(false);
+		yield return _waitTimeBeforeSetActiveFalseLaval;
+		
 		gameObject.SetActive(false);
 	}
 	public void LaunchEvent()

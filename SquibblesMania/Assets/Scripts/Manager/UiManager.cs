@@ -66,6 +66,11 @@ public class UiManager : MonoBehaviour
         _dragMaxForSound = false;
     }
 
+    public void ResetValueNextTurn()
+    {
+        sliderNextTurn.value = 0f;
+    }
+    
     public void OnPointerUp(Image circleToMove)
     {
         circleToMove.color = Color.black;
@@ -134,7 +139,6 @@ public class UiManager : MonoBehaviour
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
-        NFCManager.Instance.newCardDetected = false;
         NFCManager.Instance.powerActivated = false;
         PowerManager.Instance.isPlayerInJumpOrSwap = false;
         
@@ -153,16 +157,7 @@ public class UiManager : MonoBehaviour
         currentPlayer.CurrentState.ExitState(GameManager.Instance.currentPlayerTurn);
        
     }
-
-    public void LoadScene(string sceneName)
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        textTeamOne.SetActive(false);
-        textTeamTwo.SetActive(false);
-    }
-
-
+    
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
 

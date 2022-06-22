@@ -46,7 +46,8 @@ public class PlayerCardState : PlayerBaseState
         {
             NFCManager.Instance.charCards = nfcTag.Data.ToCharArray();
             NFCManager.Instance.newCardDetected = true;
-
+            UiManager.Instance.ResetValueNextTurn();
+            
             if (nfcTag.Data.Contains("1"))
             {
                 TestClickButtonLaunchEvent.Instance.LaunchMeteoriteOnPlayer();
@@ -60,36 +61,34 @@ public class PlayerCardState : PlayerBaseState
             if (nfcTag.Data.Contains("=") || nfcTag.Data.Contains("<") || nfcTag.Data.Contains(";"))
             {
                 AudioManager.Instance.Play("CardTrue");
-
+                GameManager.Instance.turnCount++;
                 GameManager.Instance.currentPlayerTurn.SwitchState(GameManager.Instance.currentPlayerTurn.PlayerPowerCardState);
                 switch (NFCManager.Instance.charCards[1]) // Check the letter of the card for the color and launch the appropriate power
                 {
                     case 'B':
                         PowerManager.Instance.ActivateDeactivatePower(0, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_BLUE, _currentPlayer);
-                       //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.SwapAnim());
                         break;
                     case 'R':
                         PowerManager.Instance.ActivateDeactivatePower(1, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_RED, _currentPlayer);
-                        //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.DashAnim());
+                        
                         break;
                     case 'Y':
                         PowerManager.Instance.ActivateDeactivatePower(2, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_YELLOW, _currentPlayer);
-                        //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.JumpAnim());
+                       
                         break;
                     case 'G':
                         PowerManager.Instance.ActivateDeactivatePower(3, true);
                         ChangeColorLight(LIGHT_COLOR.COLOR_GREEN, _currentPlayer);
-                        //PowerAnimation.Instance.StartCoroutine(PowerAnimation.Instance.MirrorAnim());
                         break;
                 }
             }
             else if (nfcTag.Data.Contains("3") || nfcTag.Data.Contains("4") || nfcTag.Data.Contains("5"))
             {
                 AudioManager.Instance.Play("CardTrue");
-
+                GameManager.Instance.turnCount++;
                 _maxNumberOfTheCard = NFCManager.Instance.charCards[0] - '0';
 
                 NFCManager.Instance.numberOfTheCard = NFCManager.Instance.charCards[0] - '0';

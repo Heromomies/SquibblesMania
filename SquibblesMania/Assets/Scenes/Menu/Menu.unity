@@ -1422,6 +1422,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115708406}
   m_CullTransparentMesh: 1
+--- !u!114 &118722102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTarget: {fileID: 2145513332}
+  mAlignment_RTL: 258
+  mAlignment_LTR: 258
+  mAlignmentWasRTL: 0
+  mInitializeAlignment: 0
 --- !u!1 &119107007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1767,10 +1784,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 42.85
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -2125,6 +2142,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 238853715}
   m_CullTransparentMesh: 1
+--- !u!114 &264509660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTarget: {fileID: 1859099769}
+  mAlignment_RTL: 514
+  mAlignment_LTR: 514
+  mAlignmentWasRTL: 0
+  mInitializeAlignment: 0
 --- !u!1 &286906394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,7 +2397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 795832813}
+  mTarget: {fileID: 570239834}
   mAlignment_RTL: 514
   mAlignment_LTR: 514
   mAlignmentWasRTL: 0
@@ -3102,7 +3136,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xCEle Volcanique"
+  m_text: "Isla volc\xE1nica"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -3609,7 +3643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Montagne enneig\xE9e"
+  m_text: "Monta\xF1a Nevada"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -4572,7 +4606,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Temple Perdu
+  m_text: Templo Perdido
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -4911,6 +4945,7 @@ GameObject:
   - component: {fileID: 606197513}
   - component: {fileID: 606197515}
   - component: {fileID: 606197514}
+  - component: {fileID: 606197516}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4957,9 +4992,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "R\xE9cup\xE9rez les <sprite=2>  pour construire le <sprite=0>. Le <sprite=1>
-    peut entrer en \xE9ruption \xE0 tout moment ! \n\nFuyez l'\xEEle le plus vite
-    possible! \n"
+  m_text: "Re\xFAne las <sprite=2> para construir el <sprite=0>.\n \xA1El <sprite=1>
+    puede entrar en erupci\xF3n en cualquier momento! \n\n\xA1Huye de la isla tan
+    pronto como puedas! "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -4986,10 +5021,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 23.95
   m_fontSizeBase: 25
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -5036,6 +5071,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606197512}
   m_CullTransparentMesh: 1
+--- !u!114 &606197516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606197512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344445a89b4f74a0e9a0a766903df87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTerm: TEXT_MapDescription01
+  mTermSecondary: 
+  PrimaryTermModifier: 0
+  SecondaryTermModifier: 0
+  TermPrefix: 
+  TermSuffix: 
+  LocalizeOnAwake: 1
+  IgnoreRTL: 0
+  MaxCharactersInRTL: 0
+  IgnoreNumbersInRTL: 1
+  CorrectAlignmentForRTL: 1
+  AddSpacesToJoinedLanguages: 0
+  AllowLocalizedParameters: 1
+  AllowParameters: 1
+  TranslatedObjects: []
+  LocalizeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AlwaysForceLocalize: 0
+  LocalizeCallBack:
+    Target: {fileID: 0}
+    MethodName: 
+  mGUI_ShowReferences: 0
+  mGUI_ShowTems: 1
+  mGUI_ShowCallback: 0
+  mLocalizeTarget: {fileID: 862579601}
+  mLocalizeTargetName: I2.Loc.LocalizeTarget_TextMeshPro_UGUI
 --- !u!1 &611637677
 GameObject:
   m_ObjectHideFlags: 0
@@ -5332,10 +5406,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 54.8
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -6914,7 +6988,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Temple Perdu
+  m_text: Templo Perdido
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -7303,7 +7377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 992766963}
+  mTarget: {fileID: 388350637}
   mAlignment_RTL: 514
   mAlignment_LTR: 514
   mAlignmentWasRTL: 0
@@ -7765,6 +7839,23 @@ MonoBehaviour:
   timeInSecondsScaleAnim: 0.4
   scaleEaseType: 19
   scaleDesired: {x: 1, y: 1, z: 1}
+--- !u!114 &862579601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTarget: {fileID: 606197514}
+  mAlignment_RTL: 258
+  mAlignment_LTR: 258
+  mAlignmentWasRTL: 0
+  mInitializeAlignment: 0
 --- !u!1 &867904644
 GameObject:
   m_ObjectHideFlags: 0
@@ -9195,7 +9286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Appuyez pour commencer
+  m_text: Pulse para empezar
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -9467,7 +9558,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xCEle Volcanique"
+  m_text: "Isla volc\xE1nica"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -9835,10 +9926,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 54.8
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -10233,7 +10324,7 @@ MonoBehaviour:
   m_fontSize: 25
   m_fontSizeBase: 25
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -11250,7 +11341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ab606793a67349be805c13febeba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 335811938}
+  mTarget: {fileID: 1753888786}
   mAlignment_RTL: 514
   mAlignment_LTR: 514
   mAlignmentWasRTL: 0
@@ -12506,7 +12597,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Retour
+  m_text: Devolver
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -13355,7 +13446,7 @@ MonoBehaviour:
   m_fontSize: 25
   m_fontSizeBase: 25
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -16120,10 +16211,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 54.8
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -16254,10 +16345,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 42.85
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -16483,10 +16574,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 54.8
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -16634,10 +16725,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 54.8
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -18278,6 +18369,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 686ec388f544a694f86dfe3f510c52c1, type: 3}
+--- !u!114 &1859099769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7920435760259620239, guid: 686ec388f544a694f86dfe3f510c52c1, type: 3}
+  m_PrefabInstance: {fileID: 1859099768}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1867512909
 GameObject:
   m_ObjectHideFlags: 0
@@ -18890,10 +18992,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 54.8
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -19123,7 +19225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Carte
+  m_text: Mapa
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -19308,7 +19410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Exploration Sous-Marine
+  m_text: "Exploraci\xF3n Submarina"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -19857,10 +19959,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 42.85
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -20992,10 +21094,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 42.85
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -21239,6 +21341,7 @@ GameObject:
   - component: {fileID: 2145513331}
   - component: {fileID: 2145513333}
   - component: {fileID: 2145513332}
+  - component: {fileID: 2145513334}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -21285,8 +21388,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "R\xE9cup\xE9rez les <sprite=2> pour construire le <sprite=0>. Une avalanche
-    peut tomber \xE0 tout moment !\n\nFuyez l'\xEEle le plus vite possible ! "
+  m_text: "Re\xFAne las <sprite=2> para construir el <sprite=0>.\nUtiliza los diferentes
+    elementos del mapa para tu ventaja, \npero ten cuidado con el viento!\n\n\xA1Huye
+    de la isla tan pronto como puedas! "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
   m_sharedMaterial: {fileID: -119418704824224247, guid: 176187fd81d56a247b055296cf1a99e6, type: 2}
@@ -21313,10 +21417,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 22.75
   m_fontSizeBase: 25
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -21363,6 +21467,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145513330}
   m_CullTransparentMesh: 1
+--- !u!114 &2145513334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145513330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344445a89b4f74a0e9a0a766903df87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTerm: TEXT_MapDescription02
+  mTermSecondary: 
+  PrimaryTermModifier: 0
+  SecondaryTermModifier: 0
+  TermPrefix: 
+  TermSuffix: 
+  LocalizeOnAwake: 1
+  IgnoreRTL: 0
+  MaxCharactersInRTL: 0
+  IgnoreNumbersInRTL: 1
+  CorrectAlignmentForRTL: 1
+  AddSpacesToJoinedLanguages: 0
+  AllowLocalizedParameters: 1
+  AllowParameters: 1
+  TranslatedObjects: []
+  LocalizeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AlwaysForceLocalize: 0
+  LocalizeCallBack:
+    Target: {fileID: 0}
+    MethodName: 
+  mGUI_ShowReferences: 0
+  mGUI_ShowTems: 1
+  mGUI_ShowCallback: 0
+  mLocalizeTarget: {fileID: 118722102}
+  mLocalizeTargetName: I2.Loc.LocalizeTarget_TextMeshPro_UGUI
 --- !u!1 &2146280489
 GameObject:
   m_ObjectHideFlags: 0

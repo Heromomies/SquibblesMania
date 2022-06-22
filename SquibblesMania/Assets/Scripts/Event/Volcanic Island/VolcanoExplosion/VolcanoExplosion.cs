@@ -24,7 +24,7 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 
 	private Animator _animVolcano;
 	private const string BlackBoxString = "BlackBlock";
-	
+	private static Vector3 _vectorMeteorite = new Vector3(1, 1, 1);
 	
 	[Header("CONDITIONS DANGEROUSNESS")] public Conditions[] conditionsDangerousness;
 
@@ -49,14 +49,12 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		for (int i = 0; i < conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite; i++)
 		{
 			int placeOfCube = Random.Range(0, cubeOnMap.Count - conditionsDangerousness[VolcanoManager.Instance.dangerousness].numberOfMeteorite);
-			if (cubeOnMap[placeOfCube].layer != 7)
+			
+			if (cubeOnMap[placeOfCube].layer != 7 && !cubeOnMap[placeOfCube].GetComponentInChildren<Ressources>())
 			{
 				GameManager.Instance.cleanList.Remove(cubeOnMap[placeOfCube]);
+				cubeOnMap.Remove(cubeOnMap[placeOfCube]);
 				RandomEvent(placeOfCube);
-			}
-			else
-			{
-				i--;
 			}
 		}
 
@@ -115,14 +113,17 @@ public class VolcanoExplosion : MonoBehaviour, IManageEvent
 		var positionVol = volcanoTransform.position;
 		var vo = CalculateVelocity(cubeTouched[0].transform.position - transform.position, positionVol,
 			speed); // Add the velocity to make an effect of parabola for the bullets
-		transform.rotation = Quaternion.LookRotation(vo + new Vector3(1, 1, 1));
+		transform.rotation = Quaternion.LookRotation(vo + _vectorMeteorite);
 
 		var obj = PoolManager.Instance.SpawnObjectFromPool("Meteorite", positionVol, Quaternion.identity, bulletParent);
 		PoolManager.Instance.SpawnObjectFromPool("ParticleLavaProjection", positionVol, Quaternion.identity, bulletParent);
-		obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-		obj.GetComponent<Rigidbody>().velocity = vo;
 
-		obj.GetComponent<Meteorite>().stopRotating = false;
+		obj.TryGetComponent(out Rigidbody rb);
+		rb.constraints = RigidbodyConstraints.None;
+		rb.velocity = vo;
+
+		obj.TryGetComponent(out Meteorite meteorite);
+		meteorite.stopRotating = false;
 
 		AudioManager.Instance.Play("FireballStart");
 
