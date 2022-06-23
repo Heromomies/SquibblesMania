@@ -24,6 +24,11 @@ public class Menu : MonoBehaviour
 
     public GameObject uiMenuParent;
     public Image imageMenuTitle;
+
+    public bool rotated = false;
+    public GameObject swipeManager;
+    public Vector3 firstPanelPosition;
+    
     
     [SerializeField] private float titleScaleDownTime = 0.3f;
     
@@ -97,6 +102,19 @@ public class Menu : MonoBehaviour
     {
         AudioManager.Instance.Play("Button");
         uiMenuParent.transform.rotation *= Quaternion.Euler(0, 0, 180);
+
+        if(rotated == false)
+        {
+            rotated = true;
+        }
+        else
+        {
+            rotated = false;
+        }
+        firstPanelPosition = new Vector3(640, 512, 0);
+        swipeManager.transform.position = firstPanelPosition;
+        panelManager.currentPage = 1;
+        panelManager.panelLocation = firstPanelPosition; 
     }
 
 }

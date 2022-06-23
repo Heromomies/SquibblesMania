@@ -12,11 +12,19 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public int currentPage = 1;
     public bool transitionf;
 
+    public Menu menu;
+
+    [SerializeField]
+    private Transform fakeFirstPanel;
+    [SerializeField]
+    private Transform fakeLastPanel;
+
     
     // Start is called before the first frame update
     void Start()
     {
         panelLocation = transform.position;
+        
     }
 
     // Update is called once per frame
@@ -28,36 +36,35 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public void OnEndDrag(PointerEventData data)
     {
         float percentage = (data.pressPosition.x - data.position.x) / Screen.width;
-        if(Mathf.Abs(percentage) >= percentThreshold)
+        if (Mathf.Abs(percentage) >= percentThreshold && menu.rotated == false)
         {
             Vector3 newLocation = panelLocation;
-            if(percentage > 0 && currentPage < totalPages)
+            if (percentage > 0 && currentPage < totalPages)
             {
                 newLocation += new Vector3(-Screen.width, 0, 0);
                 currentPage++;
-            }else if (percentage > 0 && currentPage == totalPages)
+            } else if (percentage > 0 && currentPage == totalPages)
             {
                 int returnToFirst;
                 returnToFirst = totalPages - 1;
                 newLocation -= new Vector3(returnToFirst * -Screen.width, 0, 0);
                 currentPage = 1;
-                transform.position = new Vector3(1920, 512, 0);
+                transform.position = fakeFirstPanel.position;
                 StartCoroutine(SmoothMove(transform.position, newLocation, easing));
-                
+
                 panelLocation = newLocation;
             }
-            
-            
-            if(percentage < 0 && currentPage > 1)
+
+            if (percentage < 0 && currentPage > 1)
             {
                 newLocation += new Vector3(Screen.width, 0, 0);
                 currentPage--;
-            }else if (percentage < 0 && currentPage == 1)
+            } else if (percentage < 0 && currentPage == 1)
             {
                 int returnToLast;
                 returnToLast = totalPages - 1;
                 newLocation += new Vector3(returnToLast * -Screen.width, 0, 0);
-                currentPage = totalPages; 
+                currentPage = totalPages;
                 transform.position = new Vector3(-4480, 512, 0);
                 StartCoroutine(SmoothMove(transform.position, newLocation, easing));
                 panelLocation = newLocation;
@@ -65,7 +72,60 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
-        else
+        else if (menu.rotated == false)
+        {
+            StartCoroutine(SmoothMove(transform.position, panelLocation, easing));
+        }
+
+
+        if (Mathf.Abs(percentage) >= percentThreshold && menu.rotated == true)
+        {
+            Vector3 newLocation = panelLocation;
+            if (percentage < 0 && currentPage < totalPages)
+            {
+                newLocation += new Vector3(Screen.width, 0, 0);
+                currentPage++;
+            }
+
+            
+
+            else if (percentage < 0 && currentPage == totalPages)
+            {
+                int returnToFirst;
+                returnToFirst = totalPages - 1;
+                newLocation -= new Vector3(returnToFirst * Screen.width, 0, 0);
+                currentPage = 1;
+                transform.position = fakeFirstPanel.position;
+                StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+
+                panelLocation = newLocation;
+            }
+
+
+            if (percentage > 0 && currentPage > 1)
+            {
+                newLocation += new Vector3(-Screen.width, 0, 0);
+                currentPage--;
+
+            }
+
+            else if (percentage > 0 && currentPage == 1)
+            {
+                Debug.Log("test");
+                     int returnToLast;
+                     returnToLast = totalPages - 1;
+                     newLocation += new Vector3(returnToLast * Screen.width, 0, 0);
+                     currentPage = totalPages;
+                     transform.position = new Vector3(4480, 512, 0) + new Vector3(Screen.width, 0, 0);
+                     StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+                     panelLocation = newLocation;
+
+
+            }
+                StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+        }
+        else if(menu.rotated == true)
         {
             StartCoroutine(SmoothMove(transform.position, panelLocation, easing));
         }
@@ -88,7 +148,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public void NextPanel()
     {
         AudioManager.Instance.Play("UI_Button_Other");
-        if (currentPage < totalPages)
+        if (currentPage < totalPages && menu.rotated == false)
         {
             Vector3 newLocation = panelLocation;
             newLocation += new Vector3(-Screen.width, 0, 0);
@@ -96,13 +156,37 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
-        else{
+        else if (menu.rotated == false)
+        {
             int returnToFirst;
             returnToFirst = totalPages - 1;
             Vector3 newLocation = panelLocation;
             newLocation -= new Vector3(returnToFirst * -Screen.width, 0, 0);
             currentPage = 1;
-            transform.position = new Vector3(1920,512, 0);
+            transform.position = fakeFirstPanel.position;
+            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+            
+        }
+        
+
+        if (currentPage < totalPages && menu.rotated == true)
+        {
+            Vector3 newLocation = panelLocation;
+            newLocation += new Vector3(Screen.width, 0, 0);
+            currentPage++;
+            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+           
+        }
+        else if (menu.rotated == true)
+        {
+            int returnToFirst;
+            returnToFirst = totalPages - 1;
+            Vector3 newLocation = panelLocation;
+            newLocation -= new Vector3(returnToFirst * Screen.width, 0, 0);
+            currentPage = 1;
+            transform.position = fakeFirstPanel.position;
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
@@ -111,7 +195,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public void PreviousPanel()
     {
         AudioManager.Instance.Play("UI_Button_Other");
-        if (currentPage > 1)
+        if (currentPage > 1 && menu.rotated == false)
         {
             Vector3 newLocation = panelLocation;
             newLocation += new Vector3(Screen.width, 0, 0);
@@ -119,7 +203,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
-        else
+        else if(menu.rotated == false)
         {
             int returnToLast;
             returnToLast = totalPages - 1;
@@ -127,6 +211,29 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             newLocation += new Vector3(returnToLast * -Screen.width, 0, 0);
             currentPage = totalPages;
             transform.position = new Vector3(-4480, 512, 0);
+            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+        }
+
+
+
+        if (currentPage > 1 && menu.rotated == true)
+        {
+            Vector3 newLocation = panelLocation;
+            newLocation += new Vector3(-Screen.width, 0, 0);
+            currentPage--;
+            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            panelLocation = newLocation;
+            
+        }
+        else if (menu.rotated == true)
+        {
+            int returnToLast;
+            returnToLast = totalPages - 1;
+            Vector3 newLocation = panelLocation;
+            newLocation += new Vector3(returnToLast * Screen.width, 0, 0);
+            currentPage = totalPages;
+            transform.position = new Vector3(4480, 512, 0) + new Vector3(Screen.width, 0, 0);
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;
         }
