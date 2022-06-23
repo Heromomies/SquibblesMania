@@ -29,10 +29,10 @@ public class DashPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 5;
 	private float _distV1, _distV2, _distV3, _distV4;
-	private GameObject _particleToDeactivate;
+	private GameObject _particleToDeactivate, _particleOnPutCard;
 	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
 	private Vector3 _heightWhenDash = new Vector3(0, 0.5f, 0);
-	
+	private Vector3 _vectorCard = new Vector3(0,-0.45f,0);
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -82,6 +82,12 @@ public class DashPower : MonoBehaviour, IManagePower
 				var hitInfoPos = hitInfo.collider.transform.position;
 				var quat = Quaternion.Euler(0,0,0);
 
+				if (_particleOnPutCard != null)
+				{
+					_particleOnPutCard.SetActive(false);
+					_particleOnPutCard = null;
+				}
+				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
 					DashDirection(2, hitInfoPos); // Right
@@ -250,7 +256,11 @@ public class DashPower : MonoBehaviour, IManagePower
 		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 		baseSpawnRaycastTransform.position = new Vector3(posPlayer.x, posPlayer.y + _distanceDisplayDash, posPlayer.z);
 		raycastPlayer.position = baseSpawnRaycastTransform.position;
-
+		
+		transform.position = posPlayer;
+		
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerDash", posPlayer + _vectorCard, Quaternion.Euler(-90f,0,0), null);
+		
 		for (int i = 0; i < displayPower.Length; i++)
 		{
 			var rot = 0f;
@@ -425,6 +435,12 @@ public class DashPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower() // Clear the power
 	{
+		if (_particleOnPutCard != null)
+		{
+			_particleOnPutCard.SetActive(false);
+			_particleOnPutCard = null;
+		}
+		
 		StartCoroutine(CoroutineDeactivateParticle());
 	}
 

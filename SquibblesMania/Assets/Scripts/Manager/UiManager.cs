@@ -128,18 +128,19 @@ public class UiManager : MonoBehaviour
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer, PlayerStateManager currentPlayer)
+    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
     {
         sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
+    }
 
+    public void SwitchIconPlayerTeam( PlayerStateManager currentPlayer)
+    {
         if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
             iconPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
         else
             iconPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
     }
-
-
     public void NextTurn()
     {
         NFCController.StopPolling();

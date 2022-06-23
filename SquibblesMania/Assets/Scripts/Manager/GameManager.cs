@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
             cameraTransform.DORotateQuaternion(Quaternion.Euler(actualCamPreset.camRot), smoothTransitionTime);
 
             //UI SWITCH
-            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn, currentPlayerTurn);
+            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
            
             
@@ -300,8 +300,8 @@ public class GameManager : MonoBehaviour
         //Change player turn state
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
-        
-      
+
+        UiManager.Instance.SwitchIconPlayerTeam(currentPlayerTurn);
         
         NFCManager.Instance.PlayerChangeTurn();
 
