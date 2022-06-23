@@ -64,6 +64,12 @@ public class DetectionSnowGun : MonoBehaviour
       }
    }
 
+   public void RemoveAntenna()
+   {
+      animator.SetBool("isTrigger", false);
+      snowGun.animatorSnowGun.SetBool("onHatche", false);
+   }
+   
    public void OnAntennaRemove()
    {
       for (int i = 0; i < players.Length; i++)
@@ -72,9 +78,7 @@ public class DetectionSnowGun : MonoBehaviour
          GameManager.Instance.SetUpPlayerMaterial(playerStateManager, playerStateManager.playerNumber);
       }
       snowGun.canClick = false;
-      animator.SetBool("isTrigger", false);
-      snowGun.animatorSnowGun.SetBool("onHatche", false);
-         
+
       AudioManager.Instance.Play("CanonOnOff");
         
       UiManager.Instance.sliderNextTurn.interactable = true;

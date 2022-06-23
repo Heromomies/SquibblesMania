@@ -202,6 +202,11 @@ public class SnowGun : MonoBehaviour, IManageEvent
 		UiManager.Instance.sliderNextTurn.interactable = true;
 	}
 
+	void RemoveAntenna()
+	{
+		_detectionSnowGun.RemoveAntenna();
+	}
+	
 	void SetActiveFalseObject()
 	{
 		shootPlayerTxt.SetActive(false);
