@@ -31,7 +31,8 @@ public class DashPower : MonoBehaviour, IManagePower
 	private float _distV1, _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
 	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
-
+	private Vector3 _heightWhenDash = new Vector3(0, 0.5f, 0);
+	
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -119,7 +120,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	#region Dash Direction
 
 	//Update method of the long press gesture
-	public void DashDirection(int numberDirectionVector, Vector3 transformToGo) // When we clicked on button
+	private void DashDirection(int numberDirectionVector, Vector3 posToGo) // When we clicked on button
 	{
 		var position = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = position;
@@ -134,7 +135,7 @@ public class DashPower : MonoBehaviour, IManagePower
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						transformToGo + new Vector3(0,0.5f,0), dashSpeed);
+						posToGo + _heightWhenDash, dashSpeed);
 					ActiveParticle();
 				}
 			}
@@ -215,7 +216,7 @@ public class DashPower : MonoBehaviour, IManagePower
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					transformToGo + new Vector3(0,0.5f,0), dashSpeed);
+					posToGo + _heightWhenDash, dashSpeed);
 				
 				ActiveParticle();
 			}
@@ -223,7 +224,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				transformToGo + new Vector3(0,0.5f,0), dashSpeed);
+				posToGo +_heightWhenDash, dashSpeed);
 			
 			ActiveParticle();
 		}
