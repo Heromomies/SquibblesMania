@@ -47,9 +47,10 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private int _distanceDisplayPower = 10;
 	private int _distanceDisplayDash = 3;
 	private float _distV2, _distV3, _distV4;
-	private GameObject _particleToDeactivate;
+	private GameObject _particleToDeactivate, _particleOnPutCard;
 	private GameObject _particleToDeactivateZombie;
 	private Vector3 _heightWhenDash = new Vector3(0, 0.5f, 0);
+	private Vector3 _vectorCard = new Vector3(0,-0.45f,0);
 	
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
@@ -210,6 +211,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitShowPath.collider.transform.position;
 				var quat = Quaternion.Euler(0,0,0);
+
+				if (_particleOnPutCard != null)
+				{
+					_particleOnPutCard.SetActive(false);
+					_particleOnPutCard = null;
+				}
 				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
@@ -472,8 +479,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 		players = null;
 
 		var t = transform;
-		t.position = GameManager.Instance.currentPlayerTurn.transform.position;
+		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
+		t.position = posPlayer;
 
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerMirror", posPlayer + _vectorCard, Quaternion.Euler(-90f,0,0), null);
+
+		
 		// ReSharper disable once Unity.PreferNonAllocApi
 		players = Physics.OverlapSphere(t.position, rangeDetectionPlayer, layerPlayer);
 
@@ -605,6 +616,12 @@ public class MirorPower : MonoBehaviour, IManagePower
 			{
 				GameManager.Instance.SetUpPlayerMaterial(p.GetComponent<PlayerStateManager>(), p.GetComponent<PlayerStateManager>().playerNumber);
 			}
+		}
+		
+		if (_particleOnPutCard != null)
+		{
+			_particleOnPutCard.SetActive(false);
+			_particleOnPutCard = null;
 		}
 		
 		if (NFCManager.Instance.powerActivated)
