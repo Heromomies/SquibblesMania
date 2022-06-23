@@ -67,7 +67,6 @@ public class DetectionSnowGun : MonoBehaviour
       {
          snowGun.goToAntennaTxt.SetActive(true);
       }
-     
    }
    
 }
