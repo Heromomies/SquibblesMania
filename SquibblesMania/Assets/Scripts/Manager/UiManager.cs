@@ -26,6 +26,8 @@ public class UiManager : MonoBehaviour
     [SerializeField] private float sliderAnimTimeInSeconds = 0.5f;
     [SerializeField]
     private Image[] iconPlayerTeam;
+    [SerializeField]
+    private Image[] iconPlayerHat;
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
@@ -140,8 +142,21 @@ public class UiManager : MonoBehaviour
             iconPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
         else
             iconPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
+
+
     }
-    public void NextTurn()
+
+    public void SwitchIconPlayerHat(PlayerStateManager currentPlayer)
+    {
+        switch (GameManager.Instance.actualCamPreset.presetNumber)
+        {
+            case 1: iconPlayerHat[0].sprite = currentPlayer.spritePlayerHat; break;
+            case 2: iconPlayerHat[0].sprite = currentPlayer.spritePlayerHat; break;
+            case 3: iconPlayerHat[1].sprite = currentPlayer.spritePlayerHat; break;
+            case 4: iconPlayerHat[1].sprite = currentPlayer.spritePlayerHat; break;
+        }
+    }
+public void NextTurn()
     {
         NFCController.StopPolling();
         LightController.ShutdownAllLights();

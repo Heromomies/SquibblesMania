@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public bool canSwitch = true;
     public GameObject currentCardEffect;
     public Sprite spritePlayerTeam;
+    public Sprite spritePlayerHat;
     [HideInInspector] public GameObject vfxStun;
     public Rigidbody playerRigidbody;
     [Header("RESPAWN PARAMETERS")] public Transform playerRespawnPoint;
