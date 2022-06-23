@@ -304,6 +304,7 @@ public class PlayerMovementManager : MonoBehaviour
 		{
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
+			UiManager.Instance.AnimSliderNextTurn();
 		}
 		
 		ResetPreviewPathObjects();
