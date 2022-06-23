@@ -66,6 +66,7 @@ public class Menu : MonoBehaviour
         mapManager.SetActive(false);
         characterManager.SetActive(true);
         buttonRotateUi.gameObject.SetActive(false);
+        uiMenuParent.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     public void ActiveCredits()
