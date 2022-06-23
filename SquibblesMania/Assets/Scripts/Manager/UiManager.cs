@@ -16,11 +16,14 @@ using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
 {
-    //Manager for simple button Ui
+ 
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     [HideInInspector]
     public Slider sliderNextTurn;
+
+    [SerializeField] private float sliderAnimScaleUp = 1.5f;
+    [SerializeField] private float sliderAnimTimeInSeconds = 0.5f;
     [SerializeField]
     private Image[] iconPlayerTeam;
     [Header("WIN PANEL")] 
@@ -43,6 +46,7 @@ public class UiManager : MonoBehaviour
     public Camera uiCam;
 
     private bool _dragMaxForSound;
+    
     
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
@@ -191,6 +195,11 @@ public class UiManager : MonoBehaviour
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
+    }
+
+    public void AnimSliderNextTurn()
+    { 
+        LeanTween.scale(sliderNextTurn.gameObject, Vector3.one * sliderAnimScaleUp, sliderAnimTimeInSeconds).setEase(LeanTweenType.easeInOutQuad).setLoopPingPong(1);
     }
 
     IEnumerator LaunchLoopJingle()

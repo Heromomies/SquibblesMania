@@ -305,6 +305,7 @@ public class PlayerMovementManager : MonoBehaviour
 			UiManager.Instance.sliderNextTurn.interactable = true;
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
+			UiManager.Instance.AnimSliderNextTurn();
 		}
 		
 		ResetPreviewPathObjects();
