@@ -59,6 +59,11 @@ public class PowerManager : MonoBehaviour
 		AudioManager.Instance.Play("UI_EndTurn_Other");
 		UiManager.Instance.sliderNextTurn.interactable = true;
 		UiManager.Instance.AnimSliderNextTurn();
+		ResetPollingAndLights();
+	}
+
+	public void ResetPollingAndLights()
+	{
 		NFCController.StopPolling();
 		LightController.ShutdownAllLights();
 	}

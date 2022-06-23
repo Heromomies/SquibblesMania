@@ -126,11 +126,11 @@ public class DashPower : MonoBehaviour, IManagePower
 
 		if (Physics.Raycast(transform.position, _vectorRaycast[numberDirectionVector], out var hit, dashRange)) // launch the raycast
 		{
-			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0)
+			if (hit.collider.gameObject.layer == 3 || hit.collider.gameObject.layer == 0 || hit.collider.gameObject.layer == 15)
 			{
 				var distance = Vector3.Distance(position, hit.collider.transform.position);
 				distance = (int) distance;
-				
+
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(

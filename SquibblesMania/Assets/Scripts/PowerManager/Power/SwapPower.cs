@@ -166,7 +166,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 		
 		for (int i = 0; i < players.Length; i++)
 		{
-			GameManager.Instance.SetUpPlayerMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
+			players[i].TryGetComponent(out PlayerStateManager playerStateManager);
+			GameManager.Instance.SetUpPlayerMaterial(playerStateManager, playerStateManager.playerNumber);
 		}
 
 		if (_playerTwo != null && _playerOne != null)
