@@ -204,6 +204,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 			if (Physics.Raycast(ray, out var hitShowPath, Mathf.Infinity, layerShowPath))
 			{
+				PowerManager.Instance.ResetPollingAndLights();
+
 				var playerPos = GameManager.Instance.currentPlayerTurn.transform.position;
 				var hitInfoPos = hitShowPath.collider.transform.position;
 				var quat = Quaternion.Euler(0,0,0);
