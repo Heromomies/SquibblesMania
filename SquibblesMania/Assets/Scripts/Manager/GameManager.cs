@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
   
     public int turnCount;
     [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
+
+    [SerializeField] private Camera[] otherCams;
     public CameraViewModeGesture cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public Slider sliderNextTurn;
-       [HideInInspector] public Image imgPlayerTeam;
     }
     
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
@@ -378,8 +379,8 @@ public class GameManager : MonoBehaviour
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-     
         UiManager.Instance.WinSetUp(playerTeam);
+        foreach (var cam in otherCams) cam.gameObject.SetActive(false);
     }
 
     private void OnApplicationQuit()
