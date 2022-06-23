@@ -49,7 +49,8 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private float _distV2, _distV3, _distV4;
 	private GameObject _particleToDeactivate;
 	private GameObject _particleToDeactivateZombie;
-
+	private Vector3 _heightWhenDash = new Vector3(0, 0.5f, 0);
+	
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
 	[Serializable]
@@ -212,28 +213,28 @@ public class MirorPower : MonoBehaviour, IManagePower
 				
 				if (playerPos.x < hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
-					MirrorDirection(2); // Right
+					MirrorDirection(2, hitInfoPos); // Right
 					quat = Quaternion.Euler(0,90f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.x > hitInfoPos.x && Math.Abs(playerPos.z - hitInfoPos.z) < 0.1f)
 				{
-					MirrorDirection(3); // Left
+					MirrorDirection(3, hitInfoPos); // Left
 					quat = Quaternion.Euler(0,-90f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.z > hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
-					MirrorDirection(0); // Down
+					MirrorDirection(0, hitInfoPos); // Down
 					quat = Quaternion.Euler(0,180f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
 
 				if (playerPos.z < hitInfoPos.z && Math.Abs(playerPos.x - hitInfoPos.x) < 0.1f)
 				{
-					MirrorDirection(1); // Up
+					MirrorDirection(1, hitInfoPos); // Up
 					quat = Quaternion.Euler(0,0f,0);
 					GameManager.Instance.currentPlayerTurn.gameObject.transform.rotation = quat;
 				}
@@ -247,7 +248,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 
 	#region MirorDirection
 
-	private void MirrorDirection(int directionIndex) // When we clicked on button
+	private void MirrorDirection(int directionIndex, Vector3 posToGo) // When we clicked on button
 	{
 		var currentPlayer = GameManager.Instance.currentPlayerTurn;
 		var currentPlayerTransform = currentPlayer.transform;
@@ -264,7 +265,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 				if (distance <= 3.5f)
 				{
 					GameManager.Instance.currentPlayerTurn.transform.DOMove(
-						playerPos + _vectorRaycast[directionIndex] * (distance - 1), mirrorPlayerSpeed);
+						posToGo +_heightWhenDash, mirrorPlayerSpeed);
 				}
 			}
 			else if (hit.collider.gameObject.layer == 6) // When the raycast touch another player
@@ -340,13 +341,13 @@ public class MirorPower : MonoBehaviour, IManagePower
 			else if (hit.collider.gameObject.layer == 0)
 			{
 				GameManager.Instance.currentPlayerTurn.transform.DOMove(
-					playerPos + _vectorRaycast[directionIndex] * mirrorRange, mirrorPlayerSpeed);
+					posToGo +_heightWhenDash, mirrorPlayerSpeed);
 			}
 		}
 		else // If they are no bloc or players on his path, dash from 3
 		{
 			GameManager.Instance.currentPlayerTurn.transform.DOMove(
-				playerPos + _vectorRaycast[directionIndex] * mirrorRange, mirrorPlayerSpeed);
+				posToGo +_heightWhenDash, mirrorPlayerSpeed);
 		}
 
 		AudioManager.Instance.Play("PowerMirorEnd");
