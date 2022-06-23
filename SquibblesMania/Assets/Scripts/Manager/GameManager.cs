@@ -62,6 +62,8 @@ public class GameManager : MonoBehaviour
     public List<Color> playerColors = new List<Color>();
     [SerializeField]
     private List<Sprite> imgPlayerTeams = new List<Sprite>();
+    [SerializeField]
+    private List<Sprite> imgPlayerHat = new List<Sprite>();
     private void Awake()
     {
         Application.targetFrameRate = 60;
@@ -121,7 +123,7 @@ public class GameManager : MonoBehaviour
       
     }
 
-  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat, Sprite imgPlayerTeam)
+  private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat, Sprite imgPlayerTeam, Sprite imgPlayerHat)
   {
       if (player.playerRespawnPoint.TryGetComponent(out Node playerNodeSpawnPoint))
       {
@@ -130,6 +132,7 @@ public class GameManager : MonoBehaviour
           player.indicatorPlayerRenderer.gameObject.SetActive(false);
           player.playerMesh.material = playerCustomMat;
           player.spritePlayerTeam = imgPlayerTeam;
+          player.spritePlayerHat = imgPlayerHat;
       }
   }
 
@@ -170,16 +173,16 @@ public class GameManager : MonoBehaviour
   
    private void SetUpPlayers()
     {
-        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID], imgPlayerTeams[playerData.P1colorID]);
+        SetPlayerTeam(players[0], Player.PlayerTeam.TeamOne, colors[playerData.P1colorID], imgPlayerTeams[playerData.P1colorID], imgPlayerHat[playerData.P1hatID]);
         Instantiate(hats[playerData.P1hatID], players[0].playerHat.transform.position, players[0].playerHat.transform.rotation).transform.parent = players[0].playerHat.transform;
    
-        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, colors[playerData.P2colorID], imgPlayerTeams[playerData.P2colorID]);
+        SetPlayerTeam(players[1], Player.PlayerTeam.TeamTwo, colors[playerData.P2colorID], imgPlayerTeams[playerData.P2colorID], imgPlayerHat[playerData.P2hatID]);
         Instantiate(hats[playerData.P2hatID], players[1].playerHat.transform.position, players[1].playerHat.transform.rotation).transform.parent = players[1].playerHat.transform; ;
 
-        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, colors[playerData.P3colorID], imgPlayerTeams[playerData.P3colorID]);
+        SetPlayerTeam(players[2], Player.PlayerTeam.TeamOne, colors[playerData.P3colorID], imgPlayerTeams[playerData.P3colorID], imgPlayerHat[playerData.P3hatID]);
         Instantiate(hats[playerData.P3hatID], players[2].playerHat.transform.position, players[2].playerHat.transform.rotation).transform.parent = players[2].playerHat.transform; ;
         
-        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, colors[playerData.P4colorID], imgPlayerTeams[playerData.P4colorID]);
+        SetPlayerTeam(players[3], Player.PlayerTeam.TeamTwo, colors[playerData.P4colorID], imgPlayerTeams[playerData.P4colorID], imgPlayerHat[playerData.P4hatID]);
         Instantiate(hats[playerData.P4hatID], players[3].playerHat.transform.position, players[3].playerHat.transform.rotation).transform.parent = players[3].playerHat.transform;
     }
 
@@ -193,6 +196,9 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
         CamConfig(count);
        NFCManager.Instance.PlayerChangeTurn();
+        UiManager.Instance.SwitchIconPlayerTeam(currentPlayerTurn);
+        UiManager.Instance.SwitchIconPlayerHat(currentPlayerTurn);
+
     }
 
     public void SetUpPlayerMaterial(PlayerStateManager player, int playerNumber)
@@ -302,7 +308,8 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
 
         UiManager.Instance.SwitchIconPlayerTeam(currentPlayerTurn);
-        
+        UiManager.Instance.SwitchIconPlayerHat(currentPlayerTurn);
+
         NFCManager.Instance.PlayerChangeTurn();
 
         if (UiManager.Instance.textActionPointPopUp)
