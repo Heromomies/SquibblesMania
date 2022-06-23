@@ -10,15 +10,20 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
 {
-    //Manager for simple button Ui
+ 
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     [HideInInspector]
     public Slider sliderNextTurn;
+
+    [SerializeField] private float sliderAnimScaleUp = 1.5f;
+    [SerializeField] private float sliderAnimTimeInSeconds = 0.5f;
     [SerializeField]
     private Image[] iconPlayerTeam;
     [Header("WIN PANEL")] 
@@ -41,6 +46,7 @@ public class UiManager : MonoBehaviour
     public Camera uiCam;
 
     private bool _dragMaxForSound;
+    
     
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
@@ -136,6 +142,9 @@ public class UiManager : MonoBehaviour
 
     public void NextTurn()
     {
+        NFCController.StopPolling();
+        LightController.ShutdownAllLights();
+        
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
@@ -160,9 +169,9 @@ public class UiManager : MonoBehaviour
     
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-
         if (actualCamPresetNumber <= 2)
         {
+           
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
@@ -179,12 +188,18 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
+                
                 case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
                 case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
             }
         }
+    }
+
+    public void AnimSliderNextTurn()
+    { 
+        LeanTween.scale(sliderNextTurn.gameObject, Vector3.one * sliderAnimScaleUp, sliderAnimTimeInSeconds).setEase(LeanTweenType.easeInOutQuad).setLoopPingPong(1);
     }
 
     IEnumerator LaunchLoopJingle()

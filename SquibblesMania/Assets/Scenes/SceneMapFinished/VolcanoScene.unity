@@ -863,6 +863,11 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 3226517119791555221, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
   m_PrefabInstance: {fileID: 206503884}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &206503886 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7421729194184876933, guid: 4ffe34fca67a17b4d97ec3d67220c006, type: 3}
+  m_PrefabInstance: {fileID: 206503884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &221350273 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7843621775167499384, guid: 127b4f5f3cb66e146a69319d83d2ad08, type: 3}
@@ -1037,14 +1042,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1236012610}
     m_Modifications:
-    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
-      propertyPath: dangerousness
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
-      propertyPath: levelOfDanger
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2252317347802425190, guid: ec475df6d4ae6d64d9e01f66d9b8e4d0, type: 3}
       propertyPath: events.Array.data[0]
       value: 
@@ -6921,6 +6918,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: otherCams.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: cameraViewModeGesture
       value: 
       objectReference: {fileID: 1323351295}
@@ -7012,6 +7013,14 @@ PrefabInstance:
       propertyPath: cleanList.Array.data[9]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: otherCams.Array.data[0]
+      value: 
+      objectReference: {fileID: 206503886}
+    - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
+      propertyPath: otherCams.Array.data[1]
+      value: 
+      objectReference: {fileID: 574966958}
     - target: {fileID: 3429993922607711532, guid: 7d5aca32e856d9d4f87aad4b7f2e9133, type: 3}
       propertyPath: allBlocks.Array.data[10]
       value: 
@@ -8178,6 +8187,10 @@ PrefabInstance:
       propertyPath: raycastPlayer
       value: 
       objectReference: {fileID: 142818256}
+    - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
+      propertyPath: layerInteractable.m_Bits
+      value: 32776
+      objectReference: {fileID: 0}
     - target: {fileID: 6899493095702370965, guid: 1ff2c3d9da6a52541aedda32cd1678ce, type: 3}
       propertyPath: baseSpawnRaycastTransform
       value: 

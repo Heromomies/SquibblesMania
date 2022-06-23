@@ -22,6 +22,7 @@ public class PlayerStateEventManager : MonoBehaviour
 
     public void PlayerStunTextTriggerEnter(int actualCamPreset, bool isSetActive)
     {
+       
         if (ONPlayerStunTextTriggerEnter != null)
         {
             ONPlayerStunTextTriggerEnter(actualCamPreset, isSetActive);

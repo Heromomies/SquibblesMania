@@ -147,7 +147,12 @@ public class PlayerMovementManager : MonoBehaviour
 				
 			}
 
+		}
 
+		if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask))
+		{
+			var bloctouch = _hit.transform.gameObject.GetComponent<Node>();
+			Debug.Log("Bloc is active : " + bloctouch.isActive, bloctouch.gameObject);
 		}
 	}
 
@@ -297,8 +302,10 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
 		{
+			UiManager.Instance.sliderNextTurn.interactable = true;
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
+			UiManager.Instance.AnimSliderNextTurn();
 		}
 		
 		ResetPreviewPathObjects();

@@ -70,6 +70,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerPowerPath))
 			{
 				NFCManager.Instance.powerActivated = true;
+				PowerManager.Instance.ResetPollingAndLights();
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 

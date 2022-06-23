@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
   
     public int turnCount;
     [Header("CAMERA PARAMETERS")] [SerializeField] private Camera _cam;
+
+    [SerializeField] private Camera[] otherCams;
     public CameraViewModeGesture cameraViewModeGesture;
     public CamPreSets actualCamPreset;
    
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour
         [Space(2f)] public Vector3 camPos;
         public Vector3 camRot;
         public Slider sliderNextTurn;
-       [HideInInspector] public Image imgPlayerTeam;
     }
     
     [Header("VICTORY CONDITIONS")] public bool isConditionVictory;
@@ -191,7 +192,7 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
         CamConfig(count);
-        NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
+       NFCManager.Instance.PlayerChangeTurn();
     }
 
     public void SetUpPlayerMaterial(PlayerStateManager player, int playerNumber)
@@ -294,14 +295,15 @@ public class GameManager : MonoBehaviour
         cameraViewModeGesture.SavePreviousViewModeGesture(count);
         count = (count + 1) % camPreSets.Count;
        
+        CamConfig(count);
         
         //Change player turn state
         currentPlayerTurn = players[playerNumberTurn];
         currentPlayerTurn.StartState();
         
-        CamConfig(count);
+      
         
-        NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
+        NFCManager.Instance.PlayerChangeTurn();
 
         if (UiManager.Instance.textActionPointPopUp)
         {
@@ -377,8 +379,8 @@ public class GameManager : MonoBehaviour
     public void PlayerTeamWin(Player.PlayerTeam playerTeam)
     {
         StartCoroutine(NFCManager.Instance.ColorOneByOneAllTheAntennas());
-     
         UiManager.Instance.WinSetUp(playerTeam);
+        foreach (var cam in otherCams) cam.gameObject.SetActive(false);
     }
 
     private void OnApplicationQuit()
