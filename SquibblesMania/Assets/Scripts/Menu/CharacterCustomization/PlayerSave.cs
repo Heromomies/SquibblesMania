@@ -40,6 +40,7 @@ public class PlayerSave : MonoBehaviour
         mapID = playerData.MapID;
         
         LoadSceneManager.Instance.LoadScene(mapID);
+        gameObject.SetActive(false);
     }
 
     
