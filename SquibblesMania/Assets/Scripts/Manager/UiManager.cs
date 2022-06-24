@@ -31,7 +31,7 @@ public class UiManager : MonoBehaviour
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
-    public GameObject textTeamOne, textTeamTwo;
+    public TextMeshProUGUI textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
     [SerializeField] private Image imagePanelEnd;
     [SerializeField] private Sprite spritesWinPanel;
@@ -130,7 +130,7 @@ public class UiManager : MonoBehaviour
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer)
+    public void SwitchUiSliderForPlayer(Slider buttonNextTurnPlayer)
     {
         sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
@@ -257,13 +257,15 @@ public void NextTurn()
         {
             if (currentPlayerTeam == Player.PlayerTeam.TeamOne)
             {
-                textTeamOne.SetActive(true);
+                textTeamOne.gameObject.SetActive(true);
+                textTeamOne.color = currentPlayer.playerColor;
                 winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
                 looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;
             }
             else
             {
-                textTeamTwo.SetActive(true);
+                textTeamTwo.gameObject.SetActive(true);
+                textTeamOne.color = currentPlayer.playerColor;
                 winPanel.transform.rotation *= Quaternion.Euler(0,0,180f);
                 winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
                 looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;

@@ -131,7 +131,8 @@ public class GameManager : MonoBehaviour
           SetSpriteSpawnPlayerPoint(player, playerNodeSpawnPoint, playerCustomMat);
           player.indicatorPlayerRenderer.gameObject.SetActive(false);
           player.playerMesh.material = playerCustomMat;
-          player.spritePlayerTeam = imgPlayerTeam;
+          player.spritePlayerTeam = imgPlayerTeam;
+
           player.spritePlayerHat = imgPlayerHat;
       }
   }
@@ -195,7 +196,7 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn = players[numberPlayerToStart];
         currentPlayerTurn.StartState();
         CamConfig(count);
-       NFCManager.Instance.PlayerChangeTurn();
+        NFCManager.Instance.PlayerChangeTurn();
         UiManager.Instance.SwitchIconPlayerTeam(currentPlayerTurn);
         UiManager.Instance.SwitchIconPlayerHat(currentPlayerTurn);
 
@@ -225,7 +226,7 @@ public class GameManager : MonoBehaviour
             cameraTransform.DORotateQuaternion(Quaternion.Euler(actualCamPreset.camRot), smoothTransitionTime);
 
             //UI SWITCH
-            UiManager.Instance.SwitchUiForPlayer(actualCamPreset.sliderNextTurn);
+            UiManager.Instance.SwitchUiSliderForPlayer(actualCamPreset.sliderNextTurn);
             CameraButtonManager.Instance.SetUpUiCamPreset();
            
             
@@ -308,8 +309,10 @@ public class GameManager : MonoBehaviour
         currentPlayerTurn.StartState();
 
         UiManager.Instance.SwitchIconPlayerTeam(currentPlayerTurn);
-        UiManager.Instance.SwitchIconPlayerHat(currentPlayerTurn);
-
+        UiManager.Instance.SwitchIconPlayerHat(currentPlayerTurn);
+
+
+
         NFCManager.Instance.PlayerChangeTurn();
 
         if (UiManager.Instance.textActionPointPopUp)
