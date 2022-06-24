@@ -60,12 +60,14 @@ public class DetectionSnowGun : MonoBehaviour
    {
       if (other.CompareTag("Player"))
       {
+         snowGun.animatorSnowGun.SetBool("onHatche", false);
          OnAntennaRemove();
       }
    }
 
    public void RemoveAntenna()
    {
+      Debug.Log("here");
       animator.SetBool("isTrigger", false);
       snowGun.animatorSnowGun.SetBool("onHatche", false);
    }
