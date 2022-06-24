@@ -23,7 +23,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 	private GameObject _playerToSwap;
 	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo, _particleOnPutCard;
 	private Vector3 _pos;
-	private Vector3 _vectorCard = new Vector3(0,-0.45f,0);
+	private Vector3 _particleCardOffset = new Vector3(0,-0.45f,0);
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
 	[HideInInspector] public Collider[] players;
@@ -72,7 +72,7 @@ public class SwapPower : MonoBehaviour, IManagePower
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = tPosPower;
 		
-		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerSwap", tPosPower + _vectorCard, Quaternion.Euler(-90f,0,0), null);
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerSwap", tPosPower + _particleCardOffset, Quaternion.Euler(-90f,0,0), null);
 		
 		_playerOne = GameManager.Instance.currentPlayerTurn.gameObject.GetComponent<Collider>();
 
