@@ -32,7 +32,7 @@ public class DashPower : MonoBehaviour, IManagePower
 	private GameObject _particleToDeactivate, _particleOnPutCard;
 	private WaitForSeconds _waitParticles = new WaitForSeconds(0.1f);
 	private Vector3 _heightWhenDash = new Vector3(0, 0.5f, 0);
-	private Vector3 _vectorCard = new Vector3(0,-0.45f,0);
+	private Vector3 _particleCardOffset = new Vector3(0,-0.45f,0);
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
 
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
@@ -259,7 +259,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		
 		transform.position = posPlayer;
 		
-		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerDash", posPlayer + _vectorCard, Quaternion.Euler(-90f,0,0), null);
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerDash", posPlayer + _particleCardOffset, Quaternion.Euler(-90f,0,0), null);
 		
 		for (int i = 0; i < displayPower.Length; i++)
 		{

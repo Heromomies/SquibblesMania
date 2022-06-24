@@ -133,7 +133,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     IEnumerator SmoothMove(Vector3 startpos, Vector3 endpos, float seconds)
     {
-        
+        menu.blockRotate = true;
         float t = 0f;
         
         while (t <= 1.0)
@@ -143,6 +143,10 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             
             yield return null;
         }
+
+        menu.blockRotate = false;
+
+        
     }
 
     public void NextPanel()

@@ -50,7 +50,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 	private GameObject _particleToDeactivate, _particleOnPutCard;
 	private GameObject _particleToDeactivateZombie;
 	private Vector3 _heightWhenDash = new Vector3(0, 0.5f, 0);
-	private Vector3 _vectorCard = new Vector3(0,-0.45f,0);
+	private Vector3 _particleCardOffset = new Vector3(0,-0.45f,0);
 	
 	[Header("DISPLAY POWER TRANSFORM")] public Conditions[] displayPower;
 
@@ -482,7 +482,7 @@ public class MirorPower : MonoBehaviour, IManagePower
 		var posPlayer = GameManager.Instance.currentPlayerTurn.transform.position;
 		t.position = posPlayer;
 
-		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerMirror", posPlayer + _vectorCard, Quaternion.Euler(-90f,0,0), null);
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerMirror", posPlayer + _particleCardOffset, Quaternion.Euler(-90f,0,0), null);
 
 		
 		// ReSharper disable once Unity.PreferNonAllocApi
