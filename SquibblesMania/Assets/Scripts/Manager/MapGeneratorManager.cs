@@ -33,7 +33,6 @@ public class MapGeneratorManager : MonoBehaviour
     {
         var indexMap = Random.Range(0, mapPrefabsList.Count);
         var map = Instantiate(mapPrefabsList[indexMap], mapSpawnPos, Quaternion.identity);
-        Debug.Log(map.name);
         SetUpBlocParents(map);
         if (CameraButtonManager.Instance != null) CameraButtonManager.Instance.target = map.transform;
         if (GameManager.Instance != null) GameManager.Instance.cameraViewModeGesture.mapTarget = map.transform;
