@@ -12,7 +12,7 @@ public class PlayerStateManager : Player
 	private readonly PlayerCardState _playerCardState = new PlayerCardState();
 	public readonly PlayerPowerCardState PlayerPowerCardState = new PlayerPowerCardState();
 
-	[Header("PLAYER BLOCKS VIEW")] public Transform currentBlocPlayerOn;
+	[Header("PLAYER BLOCKS PARAMETERS")] public Transform currentBlocPlayerOn;
 	public Transform currentTouchBloc;
 	public List<Transform> finalPathFinding = new List<Transform>();
 	public bool walking;

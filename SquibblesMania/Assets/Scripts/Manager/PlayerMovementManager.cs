@@ -148,12 +148,6 @@ public class PlayerMovementManager : MonoBehaviour
 			}
 
 		}
-
-		if (Physics.Raycast(TouchRay(gesture), out _hit, Mathf.Infinity, blocLayerMask))
-		{
-			var bloctouch = _hit.transform.gameObject.GetComponent<Node>();
-			Debug.Log("Bloc is active : " + bloctouch.isActive, bloctouch.gameObject);
-		}
 	}
 
 	private bool TouchBlocNotInPreviewPath(GestureRecognizer gesture, PlayerStateManager currentPlayer)
