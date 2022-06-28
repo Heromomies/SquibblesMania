@@ -450,7 +450,6 @@ public class PlayerActionPointCardState : PlayerBaseState
         if (player.playerActionPoint == 0)
         {
             AudioManager.Instance.Play("UI_EndTurn_Other");
-            UiManager.Instance.AnimSliderNextTurn();
             NFCController.StopPolling();
             LightController.ShutdownAllLights();
         }
