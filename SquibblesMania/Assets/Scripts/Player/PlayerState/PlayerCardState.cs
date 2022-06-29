@@ -214,7 +214,6 @@ public class PlayerCardState : PlayerBaseState
         else
         {
             PlayerStateEventManager.Instance.PlayerStunTextTriggerEnter(GameManager.Instance.actualCamPreset.presetNumber, true);
-            UiManager.Instance.AnimSliderNextTurn();
             NFCController.StopPolling();
             LightController.ShutdownAllLights();
         }

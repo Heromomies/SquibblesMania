@@ -21,9 +21,7 @@ public class UiManager : MonoBehaviour
     private static UiManager _uiManager;
     [HideInInspector]
     public Slider sliderNextTurn;
-
-    [SerializeField] private float sliderAnimScaleUp = 1.5f;
-    [SerializeField] private float sliderAnimTimeInSeconds = 0.5f;
+    
     [SerializeField]
     private Image[] iconPlayerTeam;
     [SerializeField]
@@ -213,11 +211,6 @@ public void NextTurn()
         }
     }
 
-    public void AnimSliderNextTurn()
-    { 
-        LeanTween.scale(sliderNextTurn.gameObject, Vector3.one * sliderAnimScaleUp, sliderAnimTimeInSeconds).setEase(LeanTweenType.easeInOutQuad).setLoopPingPong(1);
-    }
-
     IEnumerator LaunchLoopJingle()
     {
         yield return _waitForSecondsJingle;
@@ -242,16 +235,12 @@ public void NextTurn()
         {
             if (player.playerTeam != currentPlayerTeam)
             {
-                otherPlayer = player;
+                otherPlayer = player; 
                 break;
             }
-                
         }
         
-        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
-        {
-            depthOfField.active = true;
-        }
+        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField)) depthOfField.active = true;
 
         if (otherPlayer != null)
         {
