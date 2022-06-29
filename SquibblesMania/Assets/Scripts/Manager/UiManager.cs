@@ -10,21 +10,26 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Wizama.Hardware.Antenna;
+using Wizama.Hardware.Light;
 using TouchPhase = UnityEngine.TouchPhase;
 
 public class UiManager : MonoBehaviour
 {
-    //Manager for simple button Ui
+ 
     [Header("MANAGER UI")]
     private static UiManager _uiManager;
     [HideInInspector]
     public Slider sliderNextTurn;
+    
     [SerializeField]
     private Image[] iconPlayerTeam;
+    [SerializeField]
+    private Image[] iconPlayerHat;
     [Header("WIN PANEL")] 
     public float valueBeforeValidateSlider;
     public GameObject winPanel;
-    public GameObject textTeamOne, textTeamTwo;
+    public TextMeshProUGUI textTeamOne, textTeamTwo;
     [SerializeField] private GameObject playersUiGlobal;
     [SerializeField] private Image imagePanelEnd;
     [SerializeField] private Sprite spritesWinPanel;
@@ -41,6 +46,7 @@ public class UiManager : MonoBehaviour
     public Camera uiCam;
 
     private bool _dragMaxForSound;
+    
     
     [Header("STUN TEXT PARAMETERS")]
     [SerializeField] private UiPlayerStun[] uiPlayerStuns;
@@ -122,20 +128,37 @@ public class UiManager : MonoBehaviour
         PlayerStateEventManager.Instance.ONPlayerStunTextTriggerEnter += StunTextPopUp;
     }
 
-    public void SwitchUiForPlayer(Slider buttonNextTurnPlayer, PlayerStateManager currentPlayer)
+    public void SwitchUiSliderForPlayer(Slider buttonNextTurnPlayer)
     {
         sliderNextTurn = buttonNextTurnPlayer;
         sliderNextTurn.gameObject.SetActive(true);
+    }
 
+    public void SwitchIconPlayerTeam( PlayerStateManager currentPlayer)
+    {
         if (GameManager.Instance.actualCamPreset.presetNumber <= 2)
             iconPlayerTeam[0].sprite = currentPlayer.spritePlayerTeam;
         else
             iconPlayerTeam[1].sprite = currentPlayer.spritePlayerTeam;
+
+
     }
 
-
-    public void NextTurn()
+    public void SwitchIconPlayerHat(PlayerStateManager currentPlayer)
     {
+        switch (GameManager.Instance.actualCamPreset.presetNumber)
+        {
+            case 1: iconPlayerHat[0].sprite = currentPlayer.spritePlayerHat; break;
+            case 2: iconPlayerHat[0].sprite = currentPlayer.spritePlayerHat; break;
+            case 3: iconPlayerHat[1].sprite = currentPlayer.spritePlayerHat; break;
+            case 4: iconPlayerHat[1].sprite = currentPlayer.spritePlayerHat; break;
+        }
+    }
+public void NextTurn()
+    {
+        NFCController.StopPolling();
+        LightController.ShutdownAllLights();
+        
         AudioManager.Instance.Play("ButtonNextTurn");
         NFCManager.Instance.numberOfTheCard = 0;
         NFCManager.Instance.displacementActivated = false;
@@ -160,9 +183,9 @@ public class UiManager : MonoBehaviour
     
     private void StunTextPopUp(int actualCamPresetNumber, bool setActiveGameObject)
     {
-
         if (actualCamPresetNumber <= 2)
         {
+           
             uiPlayerStuns[0].playerStunTextParent.SetActive(setActiveGameObject);
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
@@ -179,6 +202,7 @@ public class UiManager : MonoBehaviour
             Transform spriteArrow;
             switch (GameManager.Instance.currentPlayerTurn.playerNumber)
             {
+                
                 case 1: spriteArrow = uiPlayerStuns[1].arrowSprite[1]; 
                     spriteArrow.gameObject.SetActive(setActiveGameObject); break;
                 case 3: spriteArrow = uiPlayerStuns[1].arrowSprite[0];
@@ -211,28 +235,26 @@ public class UiManager : MonoBehaviour
         {
             if (player.playerTeam != currentPlayerTeam)
             {
-                otherPlayer = player;
+                otherPlayer = player; 
                 break;
             }
-                
         }
         
-        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField))
-        {
-            depthOfField.active = true;
-        }
+        if (GameManager.Instance.volume.profile.TryGet(out DepthOfField depthOfField)) depthOfField.active = true;
 
         if (otherPlayer != null)
         {
             if (currentPlayerTeam == Player.PlayerTeam.TeamOne)
             {
-                textTeamOne.SetActive(true);
+                textTeamOne.gameObject.SetActive(true);
+                textTeamOne.color = currentPlayer.playerColor;
                 winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
                 looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;
             }
             else
             {
-                textTeamTwo.SetActive(true);
+                textTeamTwo.gameObject.SetActive(true);
+                textTeamOne.color = currentPlayer.playerColor;
                 winPanel.transform.rotation *= Quaternion.Euler(0,0,180f);
                 winSquipyAnimTween.imgSquipy.color = currentPlayer.playerColor;
                 looseSquipyAnimTween.imgSquipy.color = otherPlayer.playerColor;

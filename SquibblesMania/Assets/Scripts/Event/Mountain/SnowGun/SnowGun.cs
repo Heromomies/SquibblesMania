@@ -31,6 +31,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 
 	[HideInInspector] public Animator animatorSnowGun;
 	[HideInInspector] public List<Vector3> listPoint = new List<Vector3>();
+	[HideInInspector] public bool activated;
 	private List<GameObject> _hatchesList = new List<GameObject>();
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
@@ -42,7 +43,8 @@ public class SnowGun : MonoBehaviour, IManageEvent
 	private DetectionSnowGun _detectionSnowGun;
 	private static float _timeWaitBeforeSpawnAntenna = 0.5f;
 	private WaitForSeconds _waitSpawnAntenna = new WaitForSeconds(_timeWaitBeforeSpawnAntenna);
-
+	private GameObject _blocOnSpawnAntenna;
+	private int _randomNumber;
 	private void OnEnable()
 	{
 		SwapTouchGesture = new PanGestureRecognizer();
@@ -85,20 +87,22 @@ public class SnowGun : MonoBehaviour, IManageEvent
 			}
 		}
 
-		var randomNumber = Random.Range(0, col.Length);
+		_randomNumber = Random.Range(0, col.Length);
 
-		if (col[randomNumber].TryGetComponent(out Node no))
+		if (col[_randomNumber].TryGetComponent(out Node no))
 		{
 			if (no.isActive)
 			{
-				var go = Instantiate(hatchDetectPlayerNearSnowGun, col[randomNumber].transform.position + vectorSpawnAntenna, Quaternion.identity,
-					col[randomNumber].transform);
-				_detectionSnowGun = go.GetComponent<DetectionSnowGun>();
+				_blocOnSpawnAntenna = Instantiate(hatchDetectPlayerNearSnowGun, col[_randomNumber].transform.position + vectorSpawnAntenna, Quaternion.identity,
+					col[_randomNumber].transform);
+				_detectionSnowGun = _blocOnSpawnAntenna.GetComponent<DetectionSnowGun>();
 				_detectionSnowGun.snowGun = this;
 
+				GameManager.Instance.cleanList.Remove(col[_randomNumber].gameObject);
+				
 				goToAntennaTxt.SetActive(true);
 
-				_hatchesList.Add(go);
+				_hatchesList.Add(_blocOnSpawnAntenna);
 			}
 			else
 			{
@@ -137,6 +141,7 @@ public class SnowGun : MonoBehaviour, IManageEvent
 			{
 				if (hitInfo.collider.name != GameManager.Instance.currentPlayerTurn.name)
 				{
+					activated = true;
 					var posHitInfo = hitInfo.transform.position;
 
 					var childToMove = transform.GetChild(1);
@@ -200,6 +205,11 @@ public class SnowGun : MonoBehaviour, IManageEvent
 		UiManager.Instance.sliderNextTurn.interactable = true;
 	}
 
+	void RemoveAntenna()
+	{
+		_detectionSnowGun.RemoveAntenna();
+	}
+	
 	void SetActiveFalseObject()
 	{
 		shootPlayerTxt.SetActive(false);
@@ -210,7 +220,9 @@ public class SnowGun : MonoBehaviour, IManageEvent
 		{
 			h.SetActive(false);
 		}
-
+		
+		GameManager.Instance.cleanList.Add(col[_randomNumber].gameObject);
+		
 		_hatchesList.Clear();
 		transform.rotation = Quaternion.Euler(0, rotationSnowGun, 0);
 		gameObject.SetActive(false);

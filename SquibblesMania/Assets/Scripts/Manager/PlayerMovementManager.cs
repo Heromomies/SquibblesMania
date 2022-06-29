@@ -147,7 +147,6 @@ public class PlayerMovementManager : MonoBehaviour
 				
 			}
 
-
 		}
 	}
 
@@ -297,6 +296,7 @@ public class PlayerMovementManager : MonoBehaviour
 	{
 		if (GameManager.Instance.currentPlayerTurn.playerActionPoint == 0)
 		{
+			UiManager.Instance.sliderNextTurn.interactable = true;
 			NFCController.StopPolling();
 			LightController.ShutdownAllLights();
 		}

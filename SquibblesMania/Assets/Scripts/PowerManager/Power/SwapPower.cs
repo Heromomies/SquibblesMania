@@ -21,14 +21,15 @@ public class SwapPower : MonoBehaviour, IManagePower
 	public Material matToChange;
 
 	private GameObject _playerToSwap;
-	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo;
+	private GameObject _particleToDeactivatePlayerOne, _particleToDeactivatePlayerTwo, _particleOnPutCard;
 	private Vector3 _pos;
+	private Vector3 _particleCardOffset = new Vector3(0,-0.45f,0);
 	private Collider _playerOne, _playerTwo;
 	private Camera _cam;
 	[HideInInspector] public Collider[] players;
 	private readonly List<RaycastResult> raycast = new List<RaycastResult>();
 	public PanGestureRecognizer SwapTouchGesture { get; private set; }
-
+	
 	private void Awake()
 	{
 		_cam = Camera.main;
@@ -68,6 +69,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 		// ReSharper disable once Unity.PreferNonAllocApi
 		players = Physics.OverlapSphere(transform.position, range, layer);
 
+		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
+		transform.position = tPosPower;
+		
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerSwap", tPosPower + _particleCardOffset, Quaternion.Euler(-90f,0,0), null);
+		
 		_playerOne = GameManager.Instance.currentPlayerTurn.gameObject.GetComponent<Collider>();
 
 		for (int i = 0; i < players.Length; i++)
@@ -152,6 +158,11 @@ public class SwapPower : MonoBehaviour, IManagePower
 	
 	public void ClearPower()
 	{
+		if (_particleOnPutCard != null)
+		{
+			_particleOnPutCard.SetActive(false);
+			_particleOnPutCard = null;
+		}
 		
 		SwapTouchGesture.StateUpdated -= PlayerTouchGestureUpdated;
 
@@ -166,7 +177,8 @@ public class SwapPower : MonoBehaviour, IManagePower
 		
 		for (int i = 0; i < players.Length; i++)
 		{
-			GameManager.Instance.SetUpPlayerMaterial(players[i].GetComponent<PlayerStateManager>(), players[i].GetComponent<PlayerStateManager>().playerNumber);
+			players[i].TryGetComponent(out PlayerStateManager playerStateManager);
+			GameManager.Instance.SetUpPlayerMaterial(playerStateManager, playerStateManager.playerNumber);
 		}
 
 		if (_playerTwo != null && _playerOne != null)

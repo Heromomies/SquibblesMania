@@ -23,8 +23,8 @@ public class PlayerCardState : PlayerBaseState
     public override void EnterState(PlayerStateManager player)
     {
         //Turn of player x
-        
         _currentPlayer = player;
+        
         if (player.isPlayerStun && player.stunCount > 0)
         {
             PlayerIsStun(player);
@@ -209,7 +209,7 @@ public class PlayerCardState : PlayerBaseState
             }
 
             player.indicatorPlayerRenderer.gameObject.SetActive(true);
-            NFCManager.Instance.StartCoroutine(NFCManager.Instance.PlayerChangeTurn());
+            NFCManager.Instance.PlayerChangeTurn();
         }
         else
         {

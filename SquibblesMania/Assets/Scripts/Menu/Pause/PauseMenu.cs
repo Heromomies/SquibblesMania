@@ -96,6 +96,7 @@ public class PauseMenu : MonoBehaviour
 	public void LoadScene(int sceneIndex)
 	{
 		LoadSceneManager.Instance.LoadScene(sceneIndex);
+		UiManager.Instance.winPanel.SetActive(false);
 	}
 
     public void RotateUi()

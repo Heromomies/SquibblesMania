@@ -14,7 +14,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 	private static float _timeBeforeSetActiveFalseLava = 1f;
 	private WaitForSeconds _waitTimeBeforeSetActiveFalseLaval = new WaitForSeconds(_timeBeforeSetActiveFalseLava);
 	private List<Transform> _blocParentPlayer;
-	
+	private float _posPlayerToAdd = 1.5f;
 	[Space]
 	[Header("CONDITIONS DANGEROUSNESS")]
 	
@@ -48,17 +48,17 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 			{
 				var blocHeight = Random.Range(GameManager.Instance.minHeightBlocMovement, GameManager.Instance.maxHeightBlocMovement);
 				
-				var col = blocParent[randomNumber].transform.position;
+				var blocParentPos = blocParent[randomNumber].transform.position;
 
 				if (blocParent[randomNumber].TryGetComponent(out GroupBlockDetection groupBlockDetection))
 				{
 					_blocParentPlayer = groupBlockDetection.playersOnGroupBlock;
 				}
 
-				if (Math.Abs(col.y - blocHeight) > 0.1f)
+				if (Math.Abs(blocParentPos.y - blocHeight) > 0.1f)
 				{
-					col = new Vector3(col.x, blocHeight, col.z);
-					blocParent[randomNumber].transform.DOMove(col, speedBloc);
+					blocParentPos = new Vector3(blocParentPos.x, blocHeight, blocParentPos.z);
+					blocParent[randomNumber].transform.DOMove(blocParentPos, speedBloc);
 					
 					for (int j = 0; j < _blocParentPlayer.Count; j++)
 					{				
@@ -66,7 +66,7 @@ public class EarthQuakeEvent : MonoBehaviour, IManageEvent
 
 						if (blocParent[randomNumber].transform.position.y < blocHeight)
 						{
-							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, col.y + blocParentPlayerPos.y + 1f, blocParentPlayerPos.z);
+							blocParentPlayerPos = new Vector3(blocParentPlayerPos.x, blocParentPos.y +_posPlayerToAdd, blocParentPlayerPos.z);
 							_blocParentPlayer[j].transform.DOMove(blocParentPlayerPos, speedBloc); 
 						}
 					}

@@ -114,8 +114,7 @@ public class PolarWind : MonoBehaviour, IManageEvent
 					switch (distBetweenBlocAndPlayer)
 					{
 						case 0 : break;
-						case 1 : players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen], speedPlayer);
-							break;
+						case 1 : players[i].transform.DOMove(players[i].transform.position + -_vectorRaycast[_directionChosen], speedPlayer); break;
 					}
 				}
 				else if(!players[i].isPlayerHide)

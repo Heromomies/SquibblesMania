@@ -30,7 +30,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 	private Camera _cam;
 	private readonly List<RaycastResult> _raycast = new List<RaycastResult>();
 	private Transform _objectToMove;
-
+	private Vector3 _particleCardOffset = new Vector3(0,-0.45f,0);
 	void OnEnable()
 	{
 		_cam = Camera.main;
@@ -70,6 +70,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 			if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, layerPowerPath))
 			{
 				NFCManager.Instance.powerActivated = true;
+				PowerManager.Instance.ResetPollingAndLights();
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 
@@ -160,7 +161,7 @@ public class JumpPower : MonoBehaviour, IManagePower
 		var tPosPower = GameManager.Instance.currentPlayerTurn.transform.position;
 		transform.position = tPosPower;
 
-		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerJump", tPosPower + new Vector3(0,-0.45f,0), Quaternion.Euler(-90f,0,0), null);
+		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerJump", tPosPower + _particleCardOffset, Quaternion.Euler(-90f,0,0), null);
 		
 		// ReSharper disable once Unity.PreferNonAllocApi
 		collidersMin = Physics.OverlapSphere(tPosPower, radiusMin, layerInteractable); // Detect bloc around the object
