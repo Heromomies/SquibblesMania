@@ -353,6 +353,7 @@ public class GameManager : MonoBehaviour
             {
                 currentPlayerNode.isActive = true;
                 currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+                Debug.Log(currentPlayerNode.name, currentPlayerNode);
             }
            
             Ray ray = new Ray(player.transform.position, -transform.up);
@@ -374,8 +375,6 @@ public class GameManager : MonoBehaviour
                 groupBlockDetection.playersOnGroupBlock.Add(player.transform);
             }
         }
-        
-        
     }
 
     public void PlayerMoving()
