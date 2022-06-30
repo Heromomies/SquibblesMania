@@ -258,6 +258,7 @@ public class DashPower : MonoBehaviour, IManagePower
 		raycastPlayer.position = baseSpawnRaycastTransform.position;
 		
 		transform.position = posPlayer;
+		transform.position = posPlayer;
 		
 		_particleOnPutCard = PoolManager.Instance.SpawnObjectFromPool("ParticleDisplayPowerDash", posPlayer + _particleCardOffset, Quaternion.Euler(-90f,0,0), null);
 		

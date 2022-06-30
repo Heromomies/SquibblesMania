@@ -74,9 +74,15 @@ public class JumpPower : MonoBehaviour, IManagePower
 				var player = GameManager.Instance.currentPlayerTurn;
 				var tCurrentPlayerTurn = player.transform;
 
+				if (player.currentBlocPlayerOn.TryGetComponent(out Node currentPlayerNode))
+				{
+					currentPlayerNode.isActive = true;
+					currentPlayerNode.GetComponentInParent<GroupBlockDetection>().playersOnGroupBlock.Remove(player.transform);
+				}
+				
 				_objectToMove = tCurrentPlayerTurn;
 
-				var posHitInfo = hitInfo.transform.position + new Vector3(0,0.5f,0); 
+				var posHitInfo = hitInfo.transform.position + new Vector3(0,0.5f,0);
 
 				var playerPos = tCurrentPlayerTurn.position;
 				
