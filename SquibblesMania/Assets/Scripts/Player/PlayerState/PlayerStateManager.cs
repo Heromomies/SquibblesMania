@@ -32,8 +32,6 @@ public class PlayerStateManager : Player
 	{
 		//Assign the player to a list for know on what block group is currently on
 		playerMovementManager = PlayerMovementManager.Instance;
-		
-		GameManager.Instance.DetectParentBelowPlayers();
 		PlayerStateEventManager.Instance.ONPlayerStunTriggerEnter += StunPlayer;
 	}
 

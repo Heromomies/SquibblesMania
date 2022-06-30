@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
             }
         }
         SetUpPlayers();
-      
+        DetectParentBelowPlayers();
     }
 
   private void SetPlayerTeam(PlayerStateManager player, Player.PlayerTeam playerTeam, Material playerCustomMat, Sprite imgPlayerTeam, Sprite imgPlayerHat)
